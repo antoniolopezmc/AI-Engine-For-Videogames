@@ -6,182 +6,155 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class IADeVProject extends ApplicationAdapter {
-   private Texture dropImage;
-   private Texture bucketImage;
-   private Sound dropSound;
-   private Music rainMusic;
-   private SpriteBatch batch;
-   private OrthographicCamera camera;
-   private Rectangle bucket;
-   private Rectangle raindrop;
-   private Array<Rectangle> raindrops;
-   private long lastDropTime;
-   
-   private Set<Object> selectedObjects;		// Lista de objetos seleccionados
+	
+	private SpriteBatch batch;
+	private OrthographicCamera camera;
+	
+	private Sprite bucket;
+	private Sprite raindrop;
 
-   @Override
-   public void create() {
-	   selectedObjects = new HashSet<Object>();
-	   
-      // load the images for the droplet and the bucket, 64x64 pixels each
-      dropImage = new Texture(Gdx.files.internal("droplet.png"));
-      bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+	private Set<Object> selectedObjects; // Lista de objetos seleccionados
 
-      // load the drop sound effect and the rain background "music"
-//      dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-//      rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-//
-//      // start the playback of the background music immediately
-//      rainMusic.setLooping(true);
-//      rainMusic.play();
+	private float rotationSpeed;
 
-      // create the camera and the SpriteBatch
-      camera = new OrthographicCamera();
-      camera.setToOrtho(false, 800, 480);
-      batch = new SpriteBatch();
+	@Override
+	public void create() {
+		rotationSpeed = 0.5f;
+		selectedObjects = new HashSet<Object>();
 
-      // create a Rectangle to logically represent the bucket
-      bucket = new Rectangle();
-      bucket.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-      bucket.y = 20; // bottom left corner of the bucket is 20 pixels above the bottom screen edge
-      bucket.width = 64;
-      bucket.height = 64;
-      
-      raindrop = new Rectangle();
-      raindrop.x = MathUtils.random(0, 800-64);
-      raindrop.y = 200;
-      raindrop.width = 64;
-      raindrop.height = 64;
+		// load the images for the droplet and the bucket, 64x64 pixels each
+		raindrop = new Sprite(new Texture(Gdx.files.internal("droplet.png")));
+		raindrop.setPosition(0,0);
+		
+		bucket = new Sprite(new Texture(Gdx.files.internal("bucket.png")));
+		bucket.setPosition(50, 50);
+		
+		float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
 
-      // create the raindrops array and spawn the first raindrop
-      raindrops = new Array<Rectangle>();
-      spawnRaindrop();
-   }
+        // Constructs a new OrthographicCamera, using the given viewport width and height
+        // Height is multiplied by aspect ratio.
+        camera = new OrthographicCamera(w, h);
 
-   private void spawnRaindrop() {
-      Rectangle raindrop = new Rectangle();
-      raindrop.x = MathUtils.random(0, 800-64);
-      raindrop.y = 480;
-      raindrop.width = 64;
-      raindrop.height = 64;
-      raindrops.add(raindrop);
-      lastDropTime = TimeUtils.nanoTime();
-   }
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.update();
 
-   @Override
-   public void render() {
-      // clear the screen with a dark blue color. The
-      // arguments to glClearColor are the red, green
-      // blue and alpha component in the range [0,1]
-      // of the color to be used to clear the screen.
-      Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch = new SpriteBatch();
+	}
+	
+	@Override
+	public void render() {
+		handleInput();
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
-      // tell the camera to update its matrices.
-      camera.update();
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-      // tell the SpriteBatch to render in the
-      // coordinate system specified by the camera.
-      batch.setProjectionMatrix(camera.combined);
+		// begin a new batch and draw the bucket and
+		// all drops
+		batch.begin();
+		bucket.draw(batch);
+		raindrop.draw(batch);
+		batch.end();
 
-      // begin a new batch and draw the bucket and
-      // all drops
-      batch.begin();
-      batch.draw(bucketImage, bucket.x, bucket.y);
-      batch.draw(dropImage, raindrop.x, raindrop.y);
-//      for(Rectangle raindrop: raindrops) {
-//         batch.draw(dropImage, raindrop.x, raindrop.y);
-//      }
-      batch.end();
+		// process user input
+		if (Gdx.input.isTouched()) {
+			Vector3 touchPos = new Vector3();
+			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+			camera.unproject(touchPos);
 
-      // process user input
-      if(Gdx.input.isTouched()) {
-         Vector3 touchPos = new Vector3();
-         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-         camera.unproject(touchPos);
-         
-         if (touchPos.x >= bucket.x && touchPos.x <= (bucket.x + bucket.width) && 
-        		 touchPos.y >= bucket.y && touchPos.y <= (bucket.y + bucket.height)) {
-        	 
-        	 addToSelectedList(bucket);
-         }
-         
-         if (touchPos.x >= raindrop.x && touchPos.x <= (raindrop.x + raindrop.width) && 
-        		 touchPos.y >= raindrop.y && touchPos.y <= (raindrop.y + raindrop.height)) {
-        	 
-        	 addToSelectedList(raindrop);
-         }
-        
-         System.out.println("\n--------------\nSelected objects:");
-         for (Object obj : selectedObjects) {
-			if (obj instanceof Rectangle) {
-				Rectangle rec = (Rectangle) obj;
-				System.out.println("x = " + rec.x + " - y = " + rec.y);
+			if (bucket.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
+				addToSelectedList(bucket);
+			}
+
+			if (raindrop.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
+				addToSelectedList(raindrop);
+			}
+
+			System.out.println("\n--------------\nSelected objects:");
+			for (Object obj : selectedObjects) {
+				if (obj instanceof Sprite){
+					Sprite sprite = (Sprite)obj;
+					System.out.println(sprite.getX() + " - " + sprite.getY());					
+				}
 			}
 		}
-      }
-      
-      
-      
-      if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-      if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
+	}
 
-      // make sure the bucket stays within the screen bounds
-      if(bucket.x < 0) bucket.x = 0;
-      if(bucket.x > 800 - 64) bucket.x = 800 - 64;
+	private void handleInput() {
+//		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+//			camera.zoom += 0.02;
+//		}
+//		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+//			camera.zoom -= 0.02;
+//		}
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+			camera.translate(-3, 0, 0);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+			camera.translate(3, 0, 0);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+			camera.translate(0, -3, 0);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+			camera.translate(0, 3, 0);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			camera.rotate(-rotationSpeed, 0, 0, 1);
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+			camera.rotate(rotationSpeed, 0, 0, 1);
+		}
 
-//      // check if we need to create a new raindrop
-//      if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
+//		camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 1);
 //
-//      // move the raindrops, remove any that are beneath the bottom edge of
-//      // the screen or that hit the bucket. In the later case we play back
-//      // a sound effect as well.
-//      Iterator<Rectangle> iter = raindrops.iterator();
-//      while(iter.hasNext()) {
-//         Rectangle raindrop = iter.next();
-//         raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-//         if(raindrop.y + 64 < 0) iter.remove();
-//         if(raindrop.overlaps(bucket)) {
-//            //dropSound.play();
-//            iter.remove();
-//         }
-//      }
-   }
-   
-   /**
-    * Método que comprueba que si el usuario mantiene el botón CONTROL-IZQUIERDO presionado
-    * para añadir de la lista de objetos seleccionados (o limpiar la lista), el objeto que acaba de seleccionar
-    * @param obj
-    */
-   private void addToSelectedList(Object obj) {
-	   if (!Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-  		 selectedObjects.clear();
-       } 
-  	 	
-	   selectedObjects.add(obj);
-   }
+//		float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
+//		float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
+//
+//		camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f,
+//				100 - effectiveViewportWidth / 2f);
+//		camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f,
+//				100 - effectiveViewportHeight / 2f);
+	}
 
-   @Override
-   public void dispose() {
-      // dispose of all the native resources
-      dropImage.dispose();
-      bucketImage.dispose();
-//      dropSound.dispose();
-//      rainMusic.dispose();
-      batch.dispose();
-   }
+	/**
+	 * Método que comprueba que si el usuario mantiene el botón
+	 * CONTROL-IZQUIERDO presionado para añadir de la lista de objetos
+	 * seleccionados (o limpiar la lista), el objeto que acaba de seleccionar
+	 * 
+	 * @param obj
+	 */
+	private void addToSelectedList(Object obj) {
+		if (!Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
+			selectedObjects.clear();
+		}
+
+		selectedObjects.add(obj);
+	}
+
+	@Override
+	public void dispose() {
+		// dispose of all the native resources
+		bucket.getTexture().dispose();
+		raindrop.getTexture().dispose();
+        batch.dispose();
+	}
 }
