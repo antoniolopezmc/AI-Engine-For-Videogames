@@ -2,25 +2,21 @@ package com.mygdx.iadevproject;
 
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.g3d.particles.ResourceData.AssetData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
+import com.mygdx.iadevproject.modelo.Character;
 
 public class IADeVProject extends ApplicationAdapter {
 	
@@ -33,17 +29,22 @@ public class IADeVProject extends ApplicationAdapter {
 	private Set<Object> selectedObjects; // Lista de objetos seleccionados
 
 	private float rotationSpeed;
+	
+	private Sprite cs;
+	private Character c;
 
 	@Override
 	public void create() {
 		rotationSpeed = 0.5f;
 		selectedObjects = new HashSet<Object>();
-
-		// load the images for the droplet and the bucket, 64x64 pixels each
-		raindrop = new Sprite(new Texture(Gdx.files.internal("droplet.png")));
-		raindrop.setPosition(0,0);
 		
-		bucket = new Sprite(new Texture(Gdx.files.internal("bucket.png")));
+		// load the images for the droplet and the bucket, 64x64 pixels each
+		raindrop = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+		raindrop.setPosition(0,0);
+		raindrop.setOriginCenter(); // IMPORTANTE --> Poner el centro de rotación en el centro de la figura.
+		raindrop.setRotation(-10); // IMPORTANTE --> -10 --> Rota 10 grados a la derecha (con respecto a la vertical/eje y)
+		
+		bucket = new Sprite(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
 		bucket.setPosition(50, 50);
 		
 		float w = Gdx.graphics.getWidth();
@@ -57,6 +58,24 @@ public class IADeVProject extends ApplicationAdapter {
         camera.update();
 
         batch = new SpriteBatch();
+        
+        // Creamos el personaje.
+        c = new Character();
+        c.setHeight(64.0f);
+        c.setWidth(64.0f);
+        c.setMaxRotation(30.0f);
+        c.setMaxSpeed(50.0f);
+        c.setOrientation(0.0f);
+        c.setPosition(new Vector3(200.0f,200.0f,0.0f));
+        c.setRotation(30.0f);
+        c.setSatisfactionRadius(45.0f);
+        c.setVelocity(new Vector3(2500.0f,2500.0f,0.0f));
+        c.addToListBehaviour(new Wander_NoAccelerated());
+        
+        cs = new Sprite(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        cs.setOriginCenter();
+        cs.setBounds(c.getPosition().x, c.getPosition().y, c.getWidth(), c.getHeight());
+        cs.setRotation(c.getOrientation());
 	}
 	
 	@Override
@@ -72,8 +91,13 @@ public class IADeVProject extends ApplicationAdapter {
 		batch.begin();
 		bucket.draw(batch);
 		raindrop.draw(batch);
+		cs.draw(batch);
 		batch.end();
 
+		c.applyBehaviour(null);
+		
+		System.out.println(c.getPosition().x + " - " + c.getPosition().y);
+		
 		// process user input
 		if (Gdx.input.isTouched()) {
 			Vector3 touchPos = new Vector3();

@@ -11,7 +11,7 @@ public class Steering_NoAcceleratedUnifMov extends Steering {
 
 	// Representa el vector velocidad.
 	private Vector3 velocity;
-	// Es un escalar que representa la velocidad angular.
+	// Es un escalar que representa la velocidad angular. 
 	private float rotation;
 	
 	/**
