@@ -30,28 +30,14 @@ public class IADeVProject extends ApplicationAdapter {
 
 	private Set<Object> selectedObjects; // Lista de objetos seleccionados
 
-	private float rotationSpeed;
 	
-	private Sprite cs;
 	private Character c;
-	
-	private Sprite cs2;
 	private Character c2;
 
 	@Override
 	public void create() {
-		
-		rotationSpeed = 0.5f;
+	
 		selectedObjects = new HashSet<Object>();
-		
-		// load the images for the droplet and the bucket, 64x64 pixels each
-		raindrop = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-		raindrop.setPosition(0,0);
-		raindrop.setOriginCenter(); // IMPORTANTE --> Poner el centro de rotación en el centro de la figura.
-		raindrop.setRotation(-90); // IMPORTANTE --> -10 --> Rota 10 grados a la derecha (con respecto a la vertical/eje y)
-		
-		bucket = new Sprite(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-		bucket.setPosition(50, 50);
 		
 		float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -66,30 +52,16 @@ public class IADeVProject extends ApplicationAdapter {
         batch = new SpriteBatch();
         
         // Creamos el personaje.
-        c = new Character();
-        c.setHeight(64.0f);
-        c.setWidth(64.0f);
-        c.setOrientation(0.0f);
-        c.setPosition(new Vector3(200.0f,200.0f,0.0f));
+        c = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        c.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        c.setRotation(0.0f);
         c.addToListBehaviour(new Wander_NoAccelerated(50.0f, 10.0f));
         
-        cs = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        cs.setOriginCenter();
-        cs.setBounds(c.getPosition().x, c.getPosition().y, c.getWidth(), c.getHeight());
-        cs.setRotation(c.getOrientation());
-        
         // Creamos otro personaje.
-        c2 = new Character();
-        c2.setHeight(64.0f);
-        c2.setWidth(64.0f);
-        c2.setOrientation(0.0f);
-        c2.setPosition(new Vector3(450.0f,450.0f,0.0f));
+        c2 = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        c.setBounds(450.0f, 450.0f, 64.0f, 64.0f);
+        c2.setRotation(0.0f);
         c2.addToListBehaviour(new Arrive_NoAccelerated(80.0f, 10.0f, 1.0f));
-        
-        cs2 = new Sprite(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        cs2.setOriginCenter();
-        cs2.setBounds(c2.getPosition().x, c2.getPosition().y, c2.getWidth(), c2.getHeight());
-        cs2.setRotation(c2.getOrientation());
 	}
 	
 	@Override
@@ -100,28 +72,14 @@ public class IADeVProject extends ApplicationAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        c.applyBehaviour(null);
-		
-		cs.setBounds(c.getPosition().x, c.getPosition().y, c.getWidth(), c.getHeight());
-        cs.setRotation(c.getOrientation());
-        
+        c.applyBehaviour(null);       
         c2.applyBehaviour(c);
-		
-		cs2.setBounds(c2.getPosition().x, c2.getPosition().y, c2.getWidth(), c2.getHeight());
-        cs2.setRotation(c2.getOrientation());
 
-		// begin a new batch and draw the bucket and
-		// all drops
+		// begin a new batch and draw the bucket and all drops
 		batch.begin();
-		//bucket.draw(batch);
-		//raindrop.draw(batch);
-		cs.draw(batch);
-		cs2.draw(batch);
+		c.draw(batch);
+		c2.draw(batch);
 		batch.end();
-        
-        //camera.position.set(c.getPosition());
-		
-//		System.out.println(c.getPosition().x + " - " + c.getPosition().y);
 		
 		// process user input
 		if (Gdx.input.isTouched()) {
@@ -202,8 +160,8 @@ public class IADeVProject extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		bucket.getTexture().dispose();
-		raindrop.getTexture().dispose();
+		c.getTexture().dispose();
+		c2.getTexture().dispose();
         batch.dispose();
 	}
 }

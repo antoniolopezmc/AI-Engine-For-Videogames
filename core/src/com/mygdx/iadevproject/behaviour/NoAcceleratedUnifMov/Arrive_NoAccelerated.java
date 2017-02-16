@@ -73,7 +73,7 @@ public class Arrive_NoAccelerated implements Behaviour {
 		}
 		
 		// Modificamos la orientación del personaje (source) para que mire hacia el objetivo (en función del vector velocidad que acabamos de calcular).
-		source.setOrientation(source.getNewOrientation(output));
+		source.setRotation(source.getNewOrientation(output));
 		
 		// La rotación (velocidad angular) del steering se pone a 0.
 		output.setRotation(0);

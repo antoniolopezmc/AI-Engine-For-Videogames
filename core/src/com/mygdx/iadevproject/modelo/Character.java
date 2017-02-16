@@ -3,6 +3,7 @@ package com.mygdx.iadevproject.modelo;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -13,92 +14,31 @@ import com.mygdx.iadevproject.steering.*;
  * 
  * Clase que representa a un personaje del videojuego.
  */
-public class Character {
+public class Character extends Sprite {
 	
-	// Ancho y alto.
-	private float width,height;
-	// Velocidad máxima a la que puede ir el personaje.
-	
-	// Vector posición de 3 componentes.
-	private Vector3 position;
-	// Ángulo de orientación del personaje CON RESPECTO AL EJE VERTICAL. ------> MUY MUY MUY MUY IMPORTANTE -> ESTE ÁNGULO ESTÁ EN GRADOS.
-	private float orientation;
 	// Vector velocidad de 3 componenetes.
 	private Vector3 velocity;
 	// Escalar que representa la velocidad angular.
-	private float rotation;
+	// EXTREMADAMENTE IMPORTANTE -> Lo que en la clase Sprite se llama 'rotation', es realmente lo que nosotros llamamos 'orientación'.
+	private float angularRotation;
 	// Lista de posibles comportamientos del personaje.
 	private List<Behaviour> listBehaviour;
 	
 	/**
 	 * Constructor por defecto.
 	 */
-	public Character() {
+	public Character(Texture texture) {
+		super(texture);
 		listBehaviour = new LinkedList<Behaviour>();
 	}
 	
-	/**
-	 * Método 'get' para el atributo 'width'.
-	 * @return la anchura del personaje.
-	 */
-	public float getWidth() {
-		return width;
-	}
-	
-	/**
-	 * Método 'set' para el atributo 'width'.
-	 * @param width La anchura del personaje.
-	 */
-	public void setWidth(float width) {
-		this.width = width;
-	}
-	
-	/**
-	 * Método 'get' para el atributo 'height'.
-	 * @return La altura del personaje.
-	 */
-	public float getHeight() {
-		return height;
-	}
-	
-	/**
-	 * Método 'set' para el atributo 'height'.
-	 * @param height La altura del personaje.
-	 */
-	public void setHeight(float height) {
-		this.height = height;
-	}
-
-	/**
-	 * Método 'get' para el atributo 'position'.
-	 * @return Vector posición del personaje.
-	 */
 	public Vector3 getPosition() {
-		return position;
+		return new Vector3(this.getX(), this.getY(), 0.0f);
 	}
 	
-	/**
-	 * Método 'set' para el atributo 'position'.
-	 * @param position Vector posición del personaje.
-	 */
 	public void setPosition(Vector3 position) {
-		this.position = position;
-	}
-	
-	/**
-	 * Método 'get' para el atributo 'orientation'.
-	 * @return Ángulo de orientación del personaje con respecto al eje vertical.
-	 */
-	public float getOrientation() {
-		return orientation;
-	}
-	
-	/**
-	 * Método 'set' para el atributo 'orientation'.
-	 * @param orientation Ángulo de orientación del personaje con respecto al eje vertical.
-	 */
-	public void setOrientation(float orientation) {
-		this.orientation = orientation;
+		this.setX(position.x);
+		this.setY(position.y);
 	}
 	
 	/**
@@ -121,16 +61,16 @@ public class Character {
 	 * Método 'get' para el atributo 'rotation'.
 	 * @return La velocidad angular del personaje.
 	 */
-	public float getRotation() {
-		return rotation;
+	public float getAngularRotation() {
+		return angularRotation;
 	}
 	
 	/**
 	 * Método 'set' para el atributo 'rotation'.
 	 * @param rotation La velocidad angular del personaje.
 	 */
-	public void setRotation(float rotation) {
-		this.rotation = rotation;
+	public void setAngularRotation(float angularRotation) {
+		this.angularRotation = angularRotation;
 	}
 	
 	/**
@@ -171,10 +111,11 @@ public class Character {
 				// LA CLAVE DEL EXITO. ESTO YA ESTA PROBADO Y FUNCIONA -----> -x, y
 				return (float) Math.toDegrees(MathUtils.atan2(-newSteering.getVelocity().x, newSteering.getVelocity().y));
 			} else {
-				return this.orientation;
+				// IMPORTANTE -> En la librería se llama 'Rotation', pero es realmente lo que nosotros llamamos 'orientación'.
+				return this.getRotation();
 			}
 		}
-		return this.orientation;
+		return this.getRotation();
 	}
 	
 	// **********************************************************************************************
@@ -202,11 +143,11 @@ public class Character {
 				
 				// Modificamos la posición del personaje.
 				Vector3 velPRODtime = new Vector3(newSteering.getVelocity().x * time, newSteering.getVelocity().y * time, newSteering.getVelocity().z * time);
-				this.setPosition(this.position.add(velPRODtime));
+				this.setPosition(this.getPosition().add(velPRODtime));
 				
 				//Modificamos la orientación del personaje.
 				float rotPRODtime = newSteering.getRotation() * time;
-				this.setOrientation(this.orientation + rotPRODtime);
+				this.setRotation(this.getRotation() + rotPRODtime);
 				
 			} else if (steering instanceof Steering_AcceleratedUnifMov) {
 				Steering_AcceleratedUnifMov newSteering = (Steering_AcceleratedUnifMov) steering;
@@ -215,11 +156,11 @@ public class Character {
 				
 				// Modificamos la posición del personaje.
 				Vector3 velPRODtime = new Vector3(this.getVelocity().x * time, this.getVelocity().y * time, this.getVelocity().z * time);
-				this.setPosition(this.position.add(velPRODtime));
+				this.setPosition(this.getPosition().add(velPRODtime));
 				
 				// Modificamos la orientación del personaje.
 				float rotPRODtime = this.getRotation() * time;
-				this.setOrientation(this.orientation + rotPRODtime);
+				this.setRotation(this.getRotation() + rotPRODtime);
 				
 				// Modificamos la velocidad del personaje.
 				Vector3 linPRODtime = new Vector3(newSteering.getLineal().x * time, newSteering.getLineal().y * time, newSteering.getLineal().z * time);
@@ -227,7 +168,7 @@ public class Character {
 				
 				// Modificamos la rotación (velocidad angular) del personaje.
 				float angPRODtime = newSteering.getAngular() * time;
-				this.setRotation(this.rotation + angPRODtime);
+				this.setAngularRotation(this.angularRotation + angPRODtime);
 			}
 		}
 	}
