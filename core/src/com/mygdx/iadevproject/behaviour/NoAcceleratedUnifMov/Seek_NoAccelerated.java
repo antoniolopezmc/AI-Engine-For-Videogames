@@ -7,6 +7,20 @@ import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
 import com.mygdx.iadevproject.modelo.Character;
 
 public class Seek_NoAccelerated implements Behaviour {
+	
+	private float maxSpeed;
+	
+	public Seek_NoAccelerated (float maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
 
 	@Override
 	public Steering getSteering(Character source, Character target) {
@@ -17,12 +31,11 @@ public class Seek_NoAccelerated implements Behaviour {
 		Vector3 copy = new Vector3(target.getPosition());
 		Vector3 finalVelocity = copy.sub(source.getPosition()).nor();
 		
-		finalVelocity.x = finalVelocity.x * source.getMaxSpeed();
-		finalVelocity.y = finalVelocity.y * source.getMaxSpeed();
-		finalVelocity.z = finalVelocity.z * source.getMaxSpeed(); 
+		finalVelocity.x = finalVelocity.x * this.maxSpeed;
+		finalVelocity.y = finalVelocity.y * this.maxSpeed;
+		finalVelocity.z = finalVelocity.z * this.maxSpeed; 
 		output.setVelocity(finalVelocity);
 		
-		//TODO ¿Por qué se modifica el personaje dentro de este método? ¿Eso no lo hace ya el 'update' de la clase 'Character'?
 		// Modificamos la orientación del personaje (source) para que mire hacia el objetivo (en función del vector velocidad que acabamos de calcular).
 		source.setOrientation(source.getNewOrientation(output));
 				

@@ -2,6 +2,7 @@ package com.mygdx.iadevproject.modelo;
 
 import java.util.*;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -13,20 +14,10 @@ import com.mygdx.iadevproject.steering.*;
  * Clase que representa a un personaje del videojuego.
  */
 public class Character {
-
-	// ----> Ya veremos donde se pone esto.
-	// La clase personaje va a disponer de una semilla aleatoria para los casos en los que haga falta generar valores aleatorios.
-	public static Random aletorio = new Random();
 	
 	// Ancho y alto.
 	private float width,height;
 	// Velocidad máxima a la que puede ir el personaje.
-	private float maxSpeed;
-	// Velocidad angular máxima a la que puede ir el personaje.
-	private float maxRotation;
-	//TODO ¿Esto se pone aquí o se pone como un atributo del comportamiento tipo 'Arrive'? (porque realmente solo se va a usar en ese caso).
-	// Radio de satisfacción del personaje.
-	private float satisfactionRadius;
 	
 	// Vector posición de 3 componentes.
 	private Vector3 position;
@@ -76,54 +67,6 @@ public class Character {
 	 */
 	public void setHeight(float height) {
 		this.height = height;
-	}
-	
-	/**
-	 * Método 'get' para el atributo 'maxSpeed'.
-	 * @return La velocidad máxima a la que puede ir el personaje.
-	 */
-	public float getMaxSpeed() {
-		return maxSpeed;
-	}
-
-	/**
-	 * Método 'set' para el atributo 'maxSpeed'.
-	 * @param maxSpeed La velocidad máxima a la que puede ir el personaje.
-	 */
-	public void setMaxSpeed(float maxSpeed) {
-		this.maxSpeed = maxSpeed;
-	}
-
-	/**
-	 * Método 'get' para el atributo 'maxRotation'.
-	 * @return La velocidad angular máxima a la que puede ir el personaje.
-	 */
-	public float getMaxRotation() {
-		return maxRotation;
-	}
-
-	/**
-	 * Método 'set' para el atributo 'maxRotation'.
-	 * @param maxRotation La velocidad angular máxima a la que puede ir el personaje.
-	 */
-	public void setMaxRotation(float maxRotation) {
-		this.maxRotation = maxRotation;
-	}
-	
-	/**
-	 * Método 'get' para el atributo 'satisfactionRadius'.
-	 * @return El radio de satisfacción del personaje.
-	 */
-	public float getSatisfactionRadius() {
-		return satisfactionRadius;
-	}
-
-	/**
-	 * Método 'set' para el atributo 'satisfactionRadius'.
-	 * @param satisfactionRadius El radio de satisfacción del personaje.
-	 */
-	public void setSatisfactionRadius(float satisfactionRadius) {
-		this.satisfactionRadius = satisfactionRadius;
 	}
 
 	/**
@@ -225,8 +168,8 @@ public class Character {
 		if (steering instanceof Steering_NoAcceleratedUnifMov) {
 			Steering_NoAcceleratedUnifMov newSteering = (Steering_NoAcceleratedUnifMov) steering;
 			if (newSteering.getSpeed() > 0) {
-				// --------> Si algo no va bien, pensar en esto. (En las coordenadas).
-				return (float) Math.toDegrees(MathUtils.atan2(newSteering.getVelocity().x, newSteering.getVelocity().y));
+				// LA CLAVE DEL EXITO. ESTO YA ESTA PROBADO Y FUNCIONA -----> -x, y
+				return (float) Math.toDegrees(MathUtils.atan2(-newSteering.getVelocity().x, newSteering.getVelocity().y));
 			} else {
 				return this.orientation;
 			}
@@ -242,7 +185,7 @@ public class Character {
 	// Este método me lo he inventado. DISCUTIR.
 	public void applyBehaviour (Character target) {
 		// Como ejemplo se va a coger el primer elemento de la lista de comportamientos.
-		this.update(this.listBehaviour.get(0).getSteering(this, target), (float) 1/10);
+		this.update(this.listBehaviour.get(0).getSteering(this, target), Gdx.graphics.getDeltaTime());
 	}
 	// **********************************************************************************************
 	
@@ -288,5 +231,4 @@ public class Character {
 			}
 		}
 	}
-
 }

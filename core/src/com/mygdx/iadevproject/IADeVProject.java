@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.*;
 import com.mygdx.iadevproject.modelo.Character;
+import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
 
 public class IADeVProject extends ApplicationAdapter {
 
@@ -39,6 +40,7 @@ public class IADeVProject extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+		
 		rotationSpeed = 0.5f;
 		selectedObjects = new HashSet<Object>();
 		
@@ -67,14 +69,9 @@ public class IADeVProject extends ApplicationAdapter {
         c = new Character();
         c.setHeight(64.0f);
         c.setWidth(64.0f);
-        c.setMaxRotation(10.0f);
-        c.setMaxSpeed(10.0f);
-        c.setOrientation(10.0f);
-        c.setPosition(new Vector3(0.0f,200.0f,0.0f));
-        c.setRotation(0.0f);
-        c.setSatisfactionRadius(45.0f);
-        c.setVelocity(new Vector3(0.0000002f,0.0000002f,0.0f));
-        c.addToListBehaviour(new Wander_NoAccelerated());
+        c.setOrientation(0.0f);
+        c.setPosition(new Vector3(200.0f,200.0f,0.0f));
+        c.addToListBehaviour(new Wander_NoAccelerated(50.0f, 10.0f));
         
         cs = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         cs.setOriginCenter();
@@ -85,16 +82,11 @@ public class IADeVProject extends ApplicationAdapter {
         c2 = new Character();
         c2.setHeight(64.0f);
         c2.setWidth(64.0f);
-        c2.setMaxRotation(10.0f);
-        c2.setMaxSpeed(5.0f);
         c2.setOrientation(0.0f);
         c2.setPosition(new Vector3(450.0f,450.0f,0.0f));
-        c2.setRotation(0.0f);
-        c2.setSatisfactionRadius(45.0f);
-        c2.setVelocity(new Vector3(0.0000002f,0.0000002f,0.0f));
-        c2.addToListBehaviour(new Flee_NoAccelerated());
+        c2.addToListBehaviour(new Arrive_NoAccelerated(80.0f, 10.0f, 1.0f));
         
-        cs2 = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        cs2 = new Sprite(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         cs2.setOriginCenter();
         cs2.setBounds(c2.getPosition().x, c2.getPosition().y, c2.getWidth(), c2.getHeight());
         cs2.setRotation(c2.getOrientation());
@@ -108,7 +100,7 @@ public class IADeVProject extends ApplicationAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        c.applyBehaviour(c2);
+        c.applyBehaviour(null);
 		
 		cs.setBounds(c.getPosition().x, c.getPosition().y, c.getWidth(), c.getHeight());
         cs.setRotation(c.getOrientation());
@@ -126,12 +118,10 @@ public class IADeVProject extends ApplicationAdapter {
 		cs.draw(batch);
 		cs2.draw(batch);
 		batch.end();
-
-		
         
         //camera.position.set(c.getPosition());
 		
-		System.out.println(c.getPosition().x + " - " + c.getPosition().y);
+//		System.out.println(c.getPosition().x + " - " + c.getPosition().y);
 		
 		// process user input
 		if (Gdx.input.isTouched()) {
@@ -158,12 +148,12 @@ public class IADeVProject extends ApplicationAdapter {
 	}
 
 	private void handleInput() {
-//		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//			camera.zoom += 0.02;
-//		}
-//		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-//			camera.zoom -= 0.02;
-//		}
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			camera.zoom += 0.02;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+			camera.zoom -= 0.02;
+		}
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			camera.translate(-3, 0, 0);
 		}
@@ -176,12 +166,12 @@ public class IADeVProject extends ApplicationAdapter {
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			camera.translate(0, 3, 0);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			camera.rotate(-rotationSpeed, 0, 0, 1);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-			camera.rotate(rotationSpeed, 0, 0, 1);
-		}
+//		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+//			camera.rotate(-rotationSpeed, 0, 0, 1);
+//		}
+//		if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+//			camera.rotate(rotationSpeed, 0, 0, 1);
+//		}
 
 //		camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 1);
 //

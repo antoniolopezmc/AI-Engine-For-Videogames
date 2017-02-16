@@ -8,6 +8,20 @@ import com.mygdx.iadevproject.modelo.Character;
 
 public class Flee_NoAccelerated implements Behaviour {
 
+	private float maxSpeed;
+	
+	public Flee_NoAccelerated (float maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
 	@Override
 	public Steering getSteering(Character source, Character target) {
 		// Creamos el 'Steering' que será devuelto.
@@ -17,11 +31,11 @@ public class Flee_NoAccelerated implements Behaviour {
 		Vector3 copy = new Vector3(source.getPosition());
 		Vector3 finalVelocity = copy.sub(target.getPosition()).nor();
 		
-		finalVelocity.x = finalVelocity.x * source.getMaxSpeed();
-		finalVelocity.y = finalVelocity.y * source.getMaxSpeed();
-		finalVelocity.z = finalVelocity.z * source.getMaxSpeed(); 
+		finalVelocity.x = finalVelocity.x * this.maxSpeed;
+		finalVelocity.y = finalVelocity.y * this.maxSpeed;
+		finalVelocity.z = finalVelocity.z * this.maxSpeed; 
 		output.setVelocity(finalVelocity);
-				
+		
 		// Modificamos la orientación del personaje (source) para que mire hacia el objetivo (en función del vector velocidad que acabamos de calcular).
 		source.setOrientation(source.getNewOrientation(output));
 				
