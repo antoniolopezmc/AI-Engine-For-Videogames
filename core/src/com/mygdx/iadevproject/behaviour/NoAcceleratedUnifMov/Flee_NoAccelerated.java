@@ -14,7 +14,9 @@ public class Flee_NoAccelerated implements Behaviour {
 		Steering_NoAcceleratedUnifMov output = new Steering_NoAcceleratedUnifMov();
 				
 		// Calculamos el atributo 'velocity'.
-		Vector3 finalVelocity = source.getPosition().sub(target.getPosition()).nor();
+		Vector3 copy = new Vector3(source.getPosition());
+		Vector3 finalVelocity = copy.sub(target.getPosition()).nor();
+		
 		finalVelocity.x = finalVelocity.x * source.getMaxSpeed();
 		finalVelocity.y = finalVelocity.y * source.getMaxSpeed();
 		finalVelocity.z = finalVelocity.z * source.getMaxSpeed(); 

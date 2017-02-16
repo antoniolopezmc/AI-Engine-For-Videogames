@@ -12,14 +12,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.particles.ResourceData.AssetData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.*;
 import com.mygdx.iadevproject.modelo.Character;
 
 public class IADeVProject extends ApplicationAdapter {
-	
+
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	
@@ -32,6 +33,9 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	private Sprite cs;
 	private Character c;
+	
+	private Sprite cs2;
+	private Character c2;
 
 	@Override
 	public void create() {
@@ -42,7 +46,7 @@ public class IADeVProject extends ApplicationAdapter {
 		raindrop = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
 		raindrop.setPosition(0,0);
 		raindrop.setOriginCenter(); // IMPORTANTE --> Poner el centro de rotación en el centro de la figura.
-		raindrop.setRotation(-10); // IMPORTANTE --> -10 --> Rota 10 grados a la derecha (con respecto a la vertical/eje y)
+		raindrop.setRotation(-90); // IMPORTANTE --> -10 --> Rota 10 grados a la derecha (con respecto a la vertical/eje y)
 		
 		bucket = new Sprite(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
 		bucket.setPosition(50, 50);
@@ -63,19 +67,37 @@ public class IADeVProject extends ApplicationAdapter {
         c = new Character();
         c.setHeight(64.0f);
         c.setWidth(64.0f);
-        c.setMaxRotation(30.0f);
-        c.setMaxSpeed(50.0f);
-        c.setOrientation(0.0f);
-        c.setPosition(new Vector3(200.0f,200.0f,0.0f));
-        c.setRotation(30.0f);
+        c.setMaxRotation(10.0f);
+        c.setMaxSpeed(10.0f);
+        c.setOrientation(10.0f);
+        c.setPosition(new Vector3(0.0f,200.0f,0.0f));
+        c.setRotation(0.0f);
         c.setSatisfactionRadius(45.0f);
-        c.setVelocity(new Vector3(2500.0f,2500.0f,0.0f));
+        c.setVelocity(new Vector3(0.0000002f,0.0000002f,0.0f));
         c.addToListBehaviour(new Wander_NoAccelerated());
         
-        cs = new Sprite(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        cs = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         cs.setOriginCenter();
         cs.setBounds(c.getPosition().x, c.getPosition().y, c.getWidth(), c.getHeight());
         cs.setRotation(c.getOrientation());
+        
+        // Creamos otro personaje.
+        c2 = new Character();
+        c2.setHeight(64.0f);
+        c2.setWidth(64.0f);
+        c2.setMaxRotation(10.0f);
+        c2.setMaxSpeed(5.0f);
+        c2.setOrientation(0.0f);
+        c2.setPosition(new Vector3(450.0f,450.0f,0.0f));
+        c2.setRotation(0.0f);
+        c2.setSatisfactionRadius(45.0f);
+        c2.setVelocity(new Vector3(0.0000002f,0.0000002f,0.0f));
+        c2.addToListBehaviour(new Flee_NoAccelerated());
+        
+        cs2 = new Sprite(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        cs2.setOriginCenter();
+        cs2.setBounds(c2.getPosition().x, c2.getPosition().y, c2.getWidth(), c2.getHeight());
+        cs2.setRotation(c2.getOrientation());
 	}
 	
 	@Override
@@ -85,16 +107,29 @@ public class IADeVProject extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        c.applyBehaviour(c2);
+		
+		cs.setBounds(c.getPosition().x, c.getPosition().y, c.getWidth(), c.getHeight());
+        cs.setRotation(c.getOrientation());
+        
+        c2.applyBehaviour(c);
+		
+		cs2.setBounds(c2.getPosition().x, c2.getPosition().y, c2.getWidth(), c2.getHeight());
+        cs2.setRotation(c2.getOrientation());
 
 		// begin a new batch and draw the bucket and
 		// all drops
 		batch.begin();
-		bucket.draw(batch);
-		raindrop.draw(batch);
+		//bucket.draw(batch);
+		//raindrop.draw(batch);
 		cs.draw(batch);
+		cs2.draw(batch);
 		batch.end();
 
-		c.applyBehaviour(null);
+		
+        
+        //camera.position.set(c.getPosition());
 		
 		System.out.println(c.getPosition().x + " - " + c.getPosition().y);
 		

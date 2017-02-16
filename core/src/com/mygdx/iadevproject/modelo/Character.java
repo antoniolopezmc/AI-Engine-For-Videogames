@@ -226,7 +226,7 @@ public class Character {
 			Steering_NoAcceleratedUnifMov newSteering = (Steering_NoAcceleratedUnifMov) steering;
 			if (newSteering.getSpeed() > 0) {
 				// --------> Si algo no va bien, pensar en esto. (En las coordenadas).
-				return (float) Math.toDegrees(MathUtils.atan2(-newSteering.getVelocity().x, newSteering.getVelocity().z));
+				return (float) Math.toDegrees(MathUtils.atan2(newSteering.getVelocity().x, newSteering.getVelocity().y));
 			} else {
 				return this.orientation;
 			}
