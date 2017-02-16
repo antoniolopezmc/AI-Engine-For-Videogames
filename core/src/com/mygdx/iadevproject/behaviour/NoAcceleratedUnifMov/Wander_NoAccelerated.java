@@ -40,7 +40,7 @@ public class Wander_NoAccelerated implements Behaviour {
 		Steering_NoAcceleratedUnifMov output = new Steering_NoAcceleratedUnifMov();
 
 		float randomDif = (aletorio.nextFloat() - aletorio.nextFloat()) * this.maxRotation;
-		float finalOrientation = source.getRotation() + randomDif;
+		float finalOrientation = source.getOrientation() + randomDif;
 		
 		// IMPORTANTE -> Al girar a la derecha, el ángulo es negativo (según libgdx). Sin embargo, en el plano, al ir hacia la derecha, ambas coordenadas del vector velocidad deben ser positivas.
 		//				Por eso, se pone un signo menos en el seno.
@@ -54,7 +54,7 @@ public class Wander_NoAccelerated implements Behaviour {
 		System.out.println(newVectorVelocity.x + " -- " + newVectorVelocity.y);
 		
 		// Modificamos la orientación del personaje (source) para que mire hacia el objetivo (en función del vector velocidad que acabamos de calcular).
-		source.setRotation(source.getNewOrientation(output));
+		source.setOrientation(source.getNewOrientation(output));
 						
 		// La rotación (velocidad angular) del steering se pone a 0.
 		output.setRotation(0);

@@ -20,13 +20,10 @@ public class Character extends Sprite {
 	private Vector3 velocity;
 	// Escalar que representa la velocidad angular.
 	// EXTREMADAMENTE IMPORTANTE -> Lo que en la clase Sprite se llama 'rotation', es realmente lo que nosotros llamamos 'orientación'.
-	private float angularRotation;
+	private float rotation_angularSpeed;
 	// Lista de posibles comportamientos del personaje.
 	private List<Behaviour> listBehaviour;
 	
-	/**
-	 * Constructor por defecto.
-	 */
 	public Character(Texture texture) {
 		super(texture);
 		listBehaviour = new LinkedList<Behaviour>();
@@ -39,6 +36,14 @@ public class Character extends Sprite {
 	public void setPosition(Vector3 position) {
 		this.setX(position.x);
 		this.setY(position.y);
+	}
+	
+	public float getOrientation() {
+		return this.getRotation();
+	}
+	
+	public void setOrientation(float orientation) {
+		this.setRotation(orientation);
 	}
 	
 	/**
@@ -58,19 +63,19 @@ public class Character extends Sprite {
 	}
 	
 	/**
-	 * Método 'get' para el atributo 'rotation'.
+	 * Método 'get' para el atributo 'rotation_angularSpeed'.
 	 * @return La velocidad angular del personaje.
 	 */
-	public float getAngularRotation() {
-		return angularRotation;
+	public float getRotation_angularSpeed() {
+		return rotation_angularSpeed;
 	}
 	
 	/**
-	 * Método 'set' para el atributo 'rotation'.
+	 * Método 'set' para el atributo 'rotation_angularSpeed'.
 	 * @param rotation La velocidad angular del personaje.
 	 */
-	public void setAngularRotation(float angularRotation) {
-		this.angularRotation = angularRotation;
+	public void setRotation_angularSpeed(float rotation_angularSpeed) {
+		this.rotation_angularSpeed = rotation_angularSpeed;
 	}
 	
 	/**
@@ -111,11 +116,10 @@ public class Character extends Sprite {
 				// LA CLAVE DEL EXITO. ESTO YA ESTA PROBADO Y FUNCIONA -----> -x, y
 				return (float) Math.toDegrees(MathUtils.atan2(-newSteering.getVelocity().x, newSteering.getVelocity().y));
 			} else {
-				// IMPORTANTE -> En la librería se llama 'Rotation', pero es realmente lo que nosotros llamamos 'orientación'.
-				return this.getRotation();
+				return this.getOrientation();
 			}
 		}
-		return this.getRotation();
+		return this.getOrientation();
 	}
 	
 	// **********************************************************************************************
@@ -147,7 +151,7 @@ public class Character extends Sprite {
 				
 				//Modificamos la orientación del personaje.
 				float rotPRODtime = newSteering.getRotation() * time;
-				this.setRotation(this.getRotation() + rotPRODtime);
+				this.setOrientation(this.getOrientation() + rotPRODtime);
 				
 			} else if (steering instanceof Steering_AcceleratedUnifMov) {
 				Steering_AcceleratedUnifMov newSteering = (Steering_AcceleratedUnifMov) steering;
@@ -159,8 +163,8 @@ public class Character extends Sprite {
 				this.setPosition(this.getPosition().add(velPRODtime));
 				
 				// Modificamos la orientación del personaje.
-				float rotPRODtime = this.getRotation() * time;
-				this.setRotation(this.getRotation() + rotPRODtime);
+				float rotPRODtime = this.getRotation_angularSpeed() * time;
+				this.setOrientation(this.getOrientation() + rotPRODtime);
 				
 				// Modificamos la velocidad del personaje.
 				Vector3 linPRODtime = new Vector3(newSteering.getLineal().x * time, newSteering.getLineal().y * time, newSteering.getLineal().z * time);
@@ -168,7 +172,7 @@ public class Character extends Sprite {
 				
 				// Modificamos la rotación (velocidad angular) del personaje.
 				float angPRODtime = newSteering.getAngular() * time;
-				this.setAngularRotation(this.angularRotation + angPRODtime);
+				this.setRotation_angularSpeed(this.rotation_angularSpeed + angPRODtime);
 			}
 		}
 	}
