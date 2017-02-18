@@ -10,6 +10,8 @@ import com.mygdx.iadevproject.modelo.Character;
 public class Wander_NoAccelerated implements Behaviour {
 	
 	private static Random aletorio = new Random();
+	// TODO Ver si esto es cierto.
+	// Máxima velocidad angular.
 	private float maxSpeed;
 	private float maxRotation;
 	
@@ -51,7 +53,7 @@ public class Wander_NoAccelerated implements Behaviour {
 		newVectorVelocity.y = newVectorVelocity.y * this.maxSpeed;
 		newVectorVelocity.z = newVectorVelocity.z * this.maxSpeed;
 		output.setVelocity(newVectorVelocity);
-		System.out.println(newVectorVelocity.x + " -- " + newVectorVelocity.y);
+		//System.out.println(newVectorVelocity.x + " -- " + newVectorVelocity.y);
 		
 		// Modificamos la orientación del personaje (source) para que mire hacia el objetivo (en función del vector velocidad que acabamos de calcular).
 		source.setOrientation(source.getNewOrientation(output));

@@ -10,12 +10,15 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.particles.ResourceData.AssetData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Align_Accelerated;
+import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.*;
 import com.mygdx.iadevproject.modelo.Character;
 import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
@@ -24,6 +27,7 @@ public class IADeVProject extends ApplicationAdapter {
 
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
+	private BitmapFont font;
 	
 	private Sprite bucket;
 	private Sprite raindrop;
@@ -31,8 +35,8 @@ public class IADeVProject extends ApplicationAdapter {
 	private Set<Object> selectedObjects; // Lista de objetos seleccionados
 
 	
-	private Character c;
-	private Character c2;
+	private Character gota;
+	private Character cubo;
 
 	@Override
 	public void create() {
@@ -50,18 +54,20 @@ public class IADeVProject extends ApplicationAdapter {
         camera.update();
 
         batch = new SpriteBatch();
+        font = new BitmapFont();
         
         // Creamos el personaje.
-        c = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        c.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
-        c.setRotation(0.0f);
-        c.addToListBehaviour(new Wander_NoAccelerated(50.0f, 10.0f));
+        gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota.setBounds(450.0f, 450.0f, 64.0f, 64.0f);
+        gota.setOrientation(0.0f);
+        gota.addToListBehaviour(new Wander_NoAccelerated(80.0f, 5.0f));
         
         // Creamos otro personaje.
-        c2 = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        c.setBounds(450.0f, 450.0f, 64.0f, 64.0f);
-        c2.setRotation(0.0f);
-        c2.addToListBehaviour(new Arrive_NoAccelerated(80.0f, 10.0f, 1.0f));
+        cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        cubo.setOrientation(0.0f);
+        cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
+        cubo.addToListBehaviour(new Align_Accelerated(15.0f, 10.0f, 20.0f, 40.0f, 1.0f));
 	}
 	
 	@Override
@@ -72,13 +78,15 @@ public class IADeVProject extends ApplicationAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        c.applyBehaviour(null);       
-        c2.applyBehaviour(c);
+        //gota.applyBehaviour(null);       
+        cubo.applyBehaviour(gota);
 
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
-		c.draw(batch);
-		c2.draw(batch);
+		gota.draw(batch);
+		cubo.draw(batch);
+		font.draw(batch, "Velocidad : " + cubo.getVelocity().x + " - " + cubo.getVelocity().y, cubo.getPosition().x, cubo.getPosition().y - 10);
+		font.draw(batch, "Orientación: " + gota.getOrientation(), gota.getPosition().x, gota.getPosition().y - 25);
 		batch.end();
 		
 		// process user input
@@ -160,8 +168,8 @@ public class IADeVProject extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		// dispose of all the native resources
-		c.getTexture().dispose();
-		c2.getTexture().dispose();
+		gota.getTexture().dispose();
+		cubo.getTexture().dispose();
         batch.dispose();
 	}
 }

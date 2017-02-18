@@ -52,11 +52,13 @@ public class Arrive_NoAccelerated implements Behaviour {
 		finalVelocity = finalVelocity.sub(source.getPosition());
 		output.setVelocity(finalVelocity);
 		
-		//TODO ¿Por qué se compara con la velocidad? ¿Qué sentido tiene eso?
-		// Comprobamos si estamos fuera o dentro del radio de satisfacción del objetivo.
+		// Comprobamos si EL MÓDULO DEL VECTOR (DE MOMENTO, LA DIFERENCIA ENTRE AMBAS POSICIONES) está fuera o dentro del radio de satisfacción del objetivo.
 		if (output.getSpeed() < this.satisfactionTargetRadius) {
 			// Si esta dentro, entonces ya no tenemos que hacer ningún movimiento.
-			return null;
+			// Vector de velocidad 0, por tanto el objeto se para.
+			output.setVelocity(new Vector3(0.0f, 0.0f, 0.0f));
+			output.setRotation(0);
+			return output;
 		}
 		
 		// Si está fuera, nos debemos mover hacía nuestro objetivo, pero nos gustaría que ese desplazamiento fuera en el tiempo indicado.

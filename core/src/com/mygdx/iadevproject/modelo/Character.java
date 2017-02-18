@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.steering.*;
+import com.sun.xml.internal.txw2.IllegalSignatureException;
 
 /**
  * 
@@ -24,8 +25,14 @@ public class Character extends Sprite {
 	// Lista de posibles comportamientos del personaje.
 	private List<Behaviour> listBehaviour;
 	
+	public Character() {
+		this.setOriginCenter();
+		listBehaviour = new LinkedList<Behaviour>();
+	}
+	
 	public Character(Texture texture) {
 		super(texture);
+		this.setOriginCenter();
 		listBehaviour = new LinkedList<Behaviour>();
 	}
 	
@@ -39,11 +46,21 @@ public class Character extends Sprite {
 	}
 	
 	public float getOrientation() {
-		return this.getRotation();
+		// IMPORTANTE -> Para obtener la orientación, se llama al método del padre. El de 'this' está sobreescrito para evitar confusiones con los nombres.
+		return super.getRotation();
 	}
 	
 	public void setOrientation(float orientation) {
-		this.setRotation(orientation);
+		// IMPORTANTE -> Para obtener la orientación, se llama al método del padre. El de 'this' está sobreescrito para evitar confusiones con los nombres.
+		super.setRotation(orientation);
+	}
+	
+	public float getRotation() {
+		throw new IllegalSignatureException("Este no es el método al que tienes que llamar. ¡Te estás liando!");
+	}
+	
+	public void setRotation(float rotation) {
+		throw new IllegalSignatureException("Este no es el método al que tienes que llamar. ¡Te estás liando!");
 	}
 	
 	/**
@@ -140,40 +157,48 @@ public class Character extends Sprite {
 	 * @param time Parámetro tiempo. Indica el tiempo transcurrido entre un frame y en siguiente.
 	 */
 	public void update(Steering steering, float time) {
-		if (steering != null) {
-			if (steering instanceof Steering_NoAcceleratedUnifMov) {
-				Steering_NoAcceleratedUnifMov newSteering = (Steering_NoAcceleratedUnifMov) steering;
-				// Si el Steering es de tipo uniforme no acelerado, se modifica la posición y orientación del personaje en función de la velocidad y rotación del Steering.
-				
-				// Modificamos la posición del personaje.
-				Vector3 velPRODtime = new Vector3(newSteering.getVelocity().x * time, newSteering.getVelocity().y * time, newSteering.getVelocity().z * time);
-				this.setPosition(this.getPosition().add(velPRODtime));
-				
-				//Modificamos la orientación del personaje.
-				float rotPRODtime = newSteering.getRotation() * time;
-				this.setOrientation(this.getOrientation() + rotPRODtime);
-				
-			} else if (steering instanceof Steering_AcceleratedUnifMov) {
-				Steering_AcceleratedUnifMov newSteering = (Steering_AcceleratedUnifMov) steering;
-				// Si el Steering es de tipo uniforme acelerado, se modifica la posición y orientación del personaje en función de la velocidad y rotación del personaje
-				//		y la velocidad y rotación del personaje en función de la aceleración lineal y angular del Steering.
-				
-				// Modificamos la posición del personaje.
-				Vector3 velPRODtime = new Vector3(this.getVelocity().x * time, this.getVelocity().y * time, this.getVelocity().z * time);
-				this.setPosition(this.getPosition().add(velPRODtime));
-				
-				// Modificamos la orientación del personaje.
-				float rotPRODtime = this.getRotation_angularSpeed() * time;
-				this.setOrientation(this.getOrientation() + rotPRODtime);
-				
-				// Modificamos la velocidad del personaje.
-				Vector3 linPRODtime = new Vector3(newSteering.getLineal().x * time, newSteering.getLineal().y * time, newSteering.getLineal().z * time);
-				this.setVelocity(this.velocity.add(linPRODtime));
-				
-				// Modificamos la rotación (velocidad angular) del personaje.
-				float angPRODtime = newSteering.getAngular() * time;
-				this.setRotation_angularSpeed(this.rotation_angularSpeed + angPRODtime);
-			}
+		// --> Si en algún momento 'steering' vale null, da igual porque tampoco entraría a ninguno de los ifs.
+		if (steering instanceof Steering_NoAcceleratedUnifMov) {
+			Steering_NoAcceleratedUnifMov newSteering = (Steering_NoAcceleratedUnifMov) steering;
+			// Si el Steering es de tipo uniforme no acelerado, se modifica la posición y orientación del personaje en función de la velocidad y rotación del Steering.
+			
+			// Modificamos la posición del personaje.
+			Vector3 velPRODtime = new Vector3(newSteering.getVelocity().x * time, newSteering.getVelocity().y * time, newSteering.getVelocity().z * time);
+			this.setPosition(this.getPosition().add(velPRODtime));
+			
+			//Modificamos la orientación del personaje.
+			float rotPRODtime = newSteering.getRotation() * time;
+			this.setOrientation(this.getOrientation() + rotPRODtime);
+			
+		} else if (steering instanceof Steering_AcceleratedUnifMov) {
+			Steering_AcceleratedUnifMov newSteering = (Steering_AcceleratedUnifMov) steering;
+			// Si el Steering es de tipo uniforme acelerado, se modifica la posición y orientación del personaje en función de la velocidad y rotación del personaje
+			//		y la velocidad y rotación del personaje en función de la aceleración lineal y angular del Steering.
+			
+			// Modificamos la posición del personaje.
+			Vector3 velPRODtime = new Vector3(this.getVelocity().x * time, this.getVelocity().y * time, this.getVelocity().z * time);
+			this.setPosition(this.getPosition().add(velPRODtime));
+			
+			// Modificamos la orientación del personaje.
+			float rotPRODtime = this.getRotation_angularSpeed() * time;
+			this.setOrientation(this.getOrientation() + rotPRODtime);
+			
+			// Modificamos la velocidad del personaje.
+			Vector3 linPRODtime = new Vector3(newSteering.getLineal().x * time, newSteering.getLineal().y * time, newSteering.getLineal().z * time);
+			this.setVelocity(this.velocity.add(linPRODtime));
+			
+			// Modificamos la rotación (velocidad angular) del personaje.
+			float angPRODtime = newSteering.getAngular() * time;
+			this.setRotation_angularSpeed(this.rotation_angularSpeed + angPRODtime);
 		}
 	}
+	
+//	public static void main(String[] args) {
+//		Character c = new Character();
+//		c.setOrientation(50);
+//		c.setRotation_angularSpeed(56);
+//		System.out.println("Orientación del personaje: " + c.getOrientation());
+//		System.out.println("Rotación del personaje (velocidad angular): " + c.getRotation_angularSpeed());
+//		System.out.println("Orientación del personaje (esto debe reventar): " + c.getRotation());
+//	}
 }

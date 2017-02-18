@@ -79,6 +79,6 @@ public class Steering_NoAcceleratedUnifMov extends Steering {
 	 * @return Módulo del vector velocidad.
 	 */
 	public float getSpeed() {
-		return (float) Math.sqrt(Math.pow(velocity.x, 2.0) + Math.pow(velocity.y, 2.0) + Math.pow(velocity.z, 2.0));
+		return this.velocity.len();
 	}	
 }
