@@ -21,6 +21,7 @@ import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.VelocityMatching_Accelerated;
+import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Wander_Accelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.*;
 import com.mygdx.iadevproject.modelo.Character;
 import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
@@ -69,7 +70,7 @@ public class IADeVProject extends ApplicationAdapter {
         cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
         cubo.setOrientation(0.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
-        cubo.addToListBehaviour(new VelocityMatching_Accelerated(80.0f, 0.1f));
+        cubo.addToListBehaviour(new Seek_Accelerated(80.0f, 50.0f));
 	}
 	
 	@Override
