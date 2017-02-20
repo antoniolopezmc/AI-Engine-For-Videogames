@@ -9,17 +9,27 @@ import com.mygdx.iadevproject.modelo.Character;
 public class Seek_Accelerated implements Behaviour {
 
 	private float maxAcceleration;
+	private float maxSpeed;
 	
-	public Seek_Accelerated (float maxAcceleration) {
+	public Seek_Accelerated (float maxAcceleration, float maxSpeed) {
+		this.maxAcceleration = maxAcceleration;
+		this.maxSpeed = maxSpeed;
+	}
+
+	public float getMaxAcceleration() {
+		return maxAcceleration;
+	}
+
+	public void setMaxAcceleration(float maxAcceleration) {
 		this.maxAcceleration = maxAcceleration;
 	}
 
 	public float getMaxSpeed() {
-		return maxAcceleration;
+		return maxSpeed;
 	}
 
-	public void setMaxSpeed(float maxAcceleration) {
-		this.maxAcceleration = maxAcceleration;
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
 	}
 
 	@Override
@@ -31,11 +41,26 @@ public class Seek_Accelerated implements Behaviour {
 		Vector3 copy = new Vector3(target.getPosition());
 		Vector3 finalLineal = copy.sub(source.getPosition()).nor();
 		
-		finalLineal.x = finalLineal.x * this.maxAcceleration;
-		finalLineal.y = finalLineal.y * this.maxAcceleration;
-		finalLineal.z = finalLineal.z * this.maxAcceleration; 
-		output.setLineal(finalLineal);
-				
+		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Millington.
+		// --> Versión de Millington: el personaje no se para nunca
+		// --> Versión de Reynolds: el personaje se para
+		boolean reynolds = false;
+		if (reynolds) { 
+			// Versión de Craig W. Reynolds
+			finalLineal.x = finalLineal.x * this.maxSpeed;
+			finalLineal.y = finalLineal.y * this.maxSpeed;
+			finalLineal.z = finalLineal.z * this.maxSpeed;
+			output.setLineal(finalLineal.sub(source.getVelocity()));
+			
+		} else {
+			// Versión de Ian Millington
+			finalLineal.x = finalLineal.x * this.maxAcceleration;
+			finalLineal.y = finalLineal.y * this.maxAcceleration;
+			finalLineal.z = finalLineal.z * this.maxAcceleration; 
+			output.setLineal(finalLineal);		
+		}
+		
+		
 		// La aceleración angular del steering se pone a 0.
 		output.setAngular(0);
 				

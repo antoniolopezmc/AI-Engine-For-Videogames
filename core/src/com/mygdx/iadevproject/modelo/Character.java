@@ -33,7 +33,7 @@ public class Character extends Sprite {
 	public Character(Texture texture) {
 		super(texture);
 		this.setOriginCenter();
-		listBehaviour = new LinkedList<Behaviour>();
+		listBehaviour = new LinkedList<Behaviour>(); 
 	}
 	
 	public Vector3 getPosition() {
@@ -169,6 +169,10 @@ public class Character extends Sprite {
 			//Modificamos la orientación del personaje.
 			float rotPRODtime = newSteering.getRotation() * time;
 			this.setOrientation(this.getOrientation() + rotPRODtime);
+			
+			
+			// IMPORTANTE --> MODIFICAMOS LA VELOCIDAD PARA INDICAR LA VELOCIDAD QUE LLEVA EL PERSONAJE, NADA MÁS!!
+			this.setVelocity(new Vector3(newSteering.getVelocity()));
 			
 		} else if (steering instanceof Steering_AcceleratedUnifMov) {
 			Steering_AcceleratedUnifMov newSteering = (Steering_AcceleratedUnifMov) steering;
