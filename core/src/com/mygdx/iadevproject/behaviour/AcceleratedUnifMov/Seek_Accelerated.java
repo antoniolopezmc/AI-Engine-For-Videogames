@@ -9,11 +9,9 @@ import com.mygdx.iadevproject.modelo.Character;
 public class Seek_Accelerated implements Behaviour {
 
 	private float maxAcceleration;
-	private float maxSpeed;
 	
-	public Seek_Accelerated (float maxAcceleration, float maxSpeed) {
+	public Seek_Accelerated (float maxAcceleration) {
 		this.maxAcceleration = maxAcceleration;
-		this.maxSpeed = maxSpeed;
 	}
 
 	public float getMaxAcceleration() {
@@ -22,14 +20,6 @@ public class Seek_Accelerated implements Behaviour {
 
 	public void setMaxAcceleration(float maxAcceleration) {
 		this.maxAcceleration = maxAcceleration;
-	}
-
-	public float getMaxSpeed() {
-		return maxSpeed;
-	}
-
-	public void setMaxSpeed(float maxSpeed) {
-		this.maxSpeed = maxSpeed;
 	}
 
 	@Override
@@ -41,15 +31,15 @@ public class Seek_Accelerated implements Behaviour {
 		Vector3 copy = new Vector3(target.getPosition());
 		Vector3 finalLineal = copy.sub(source.getPosition()).nor();
 		
-		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Millington.
+		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Reynolds.
 		// --> Versión de Millington: el personaje no se para nunca
 		// --> Versión de Reynolds: el personaje se para
-		boolean reynolds = false;
+		boolean reynolds = true;
 		if (reynolds) { 
 			// Versión de Craig W. Reynolds
-			finalLineal.x = finalLineal.x * this.maxSpeed;
-			finalLineal.y = finalLineal.y * this.maxSpeed;
-			finalLineal.z = finalLineal.z * this.maxSpeed;
+			finalLineal.x = finalLineal.x * this.maxAcceleration;
+			finalLineal.y = finalLineal.y * this.maxAcceleration;
+			finalLineal.z = finalLineal.z * this.maxAcceleration;
 			output.setLineal(finalLineal.sub(source.getVelocity()));
 			
 		} else {

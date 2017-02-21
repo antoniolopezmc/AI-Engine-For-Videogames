@@ -169,10 +169,6 @@ public class Character extends Sprite {
 			float rotPRODtime = newSteering.getRotation() * time;
 			this.setOrientation(this.getOrientation() + rotPRODtime);
 			
-			
-			// IMPORTANTE --> MODIFICAMOS LA VELOCIDAD PARA INDICAR LA VELOCIDAD QUE LLEVA EL PERSONAJE, NADA MÁS!!
-			this.setVelocity(new Vector3(newSteering.getVelocity()));
-			
 		} else if (steering instanceof Steering_AcceleratedUnifMov) {
 			Steering_AcceleratedUnifMov newSteering = (Steering_AcceleratedUnifMov) steering;
 			// Si el Steering es de tipo uniforme acelerado, se modifica la posición y orientación del personaje en función de la velocidad y rotación del personaje
