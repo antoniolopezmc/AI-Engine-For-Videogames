@@ -13,18 +13,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.particles.ResourceData.AssetData;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Align_Accelerated;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Seek_Accelerated;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.VelocityMatching_Accelerated;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Wander_Accelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.*;
 import com.mygdx.iadevproject.modelo.Character;
-import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
 
 public class IADeVProject extends ApplicationAdapter {
 

@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.steering.*;
-import com.sun.xml.internal.txw2.IllegalSignatureException;
 
 /**
  * 
@@ -56,11 +55,11 @@ public class Character extends Sprite {
 	}
 	
 	public float getRotation() {
-		throw new IllegalSignatureException("Este no es el método al que tienes que llamar. ¡Te estás liando!");
+		throw new IllegalAccessError("Este no es el método al que tienes que llamar. ¡Te estás liando!");
 	}
 	
 	public void setRotation(float rotation) {
-		throw new IllegalSignatureException("Este no es el método al que tienes que llamar. ¡Te estás liando!");
+		throw new IllegalAccessError("Este no es el método al que tienes que llamar. ¡Te estás liando!");
 	}
 	
 	/**
