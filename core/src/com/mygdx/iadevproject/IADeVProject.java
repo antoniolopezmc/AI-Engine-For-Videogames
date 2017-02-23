@@ -16,6 +16,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
+import com.mygdx.iadevproject.behaviour.Delegated.Face;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.modelo.Character;
 
 public class IADeVProject extends ApplicationAdapter {
@@ -23,12 +25,8 @@ public class IADeVProject extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private BitmapFont font;
-	
-	private Sprite bucket;
-	private Sprite raindrop;
 
 	private Set<Object> selectedObjects; // Lista de objetos seleccionados
-
 	
 	private Character gota;
 	private Character cubo;
@@ -54,16 +52,16 @@ public class IADeVProject extends ApplicationAdapter {
         // Creamos el personaje.
         gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota.setBounds(10.0f, 450.0f, 64.0f, 64.0f);
-        gota.setOrientation(0.0f);
+        gota.setOrientation(-90.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
-        gota.addToListBehaviour(new Flee_Accelerated(10.0f));
+        gota.addToListBehaviour(new Wander_NoAccelerated(10.0f, 10.0f));
         
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
         cubo.setOrientation(-90.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
-        cubo.addToListBehaviour(new AntiAlign_Accelerated(80.0f, 10.0f, 1.0f, 2.0f, 1.0f));
+        cubo.addToListBehaviour(new Face(120.0f, 50.0f, 1.0f, 2.0f, 1.0f));
 	}
 	
 	@Override
@@ -74,7 +72,7 @@ public class IADeVProject extends ApplicationAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        //gota.applyBehaviour(cubo);       
+        //gota.applyBehaviour(null);       
         cubo.applyBehaviour(gota);
 
 		// begin a new batch and draw the bucket and all drops
@@ -92,12 +90,12 @@ public class IADeVProject extends ApplicationAdapter {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touchPos);
 
-			if (bucket.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
-				addToSelectedList(bucket);
+			if (cubo.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
+				addToSelectedList(cubo);
 			}
 
-			if (raindrop.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
-				addToSelectedList(raindrop);
+			if (gota.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
+				addToSelectedList(gota);
 			}
 
 			System.out.println("\n--------------\nSelected objects:");
@@ -119,15 +117,27 @@ public class IADeVProject extends ApplicationAdapter {
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			camera.translate(-3, 0, 0);
+//			float x = gota.getPosition().x - 3;
+//			float y = gota.getPosition().y;
+//			gota.setPosition(x, y);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			camera.translate(3, 0, 0);
+//			float x = gota.getPosition().x + 3;
+//			float y = gota.getPosition().y;
+//			gota.setPosition(x, y);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 			camera.translate(0, -3, 0);
+//			float x = gota.getPosition().x;
+//			float y = gota.getPosition().y - 3;
+//			gota.setPosition(x, y);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			camera.translate(0, 3, 0);
+//			float x = gota.getPosition().x;
+//			float y = gota.getPosition().y + 3;
+//			gota.setPosition(x, y);
 		}
 //		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 //			camera.rotate(-rotationSpeed, 0, 0, 1);
