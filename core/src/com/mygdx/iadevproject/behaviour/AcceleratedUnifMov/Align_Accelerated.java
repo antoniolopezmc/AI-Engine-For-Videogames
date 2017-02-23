@@ -83,7 +83,9 @@ public class Align_Accelerated implements Behaviour {
 		
 		// Comprobamos si estamos dentro del radio interior.
 		if (rotationSize < targetRadius) {
-			return null;
+			output.setAngular(0);
+			output.setLineal(new Vector3(0,0,0));
+			return output;
 		}
 		
 		// Si estamos fuera del radio exterior, entonces usamos la máxima rotacion.

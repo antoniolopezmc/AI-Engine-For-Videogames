@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
 import com.mygdx.iadevproject.behaviour.Delegated.Face;
+import com.mygdx.iadevproject.behaviour.Delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.behaviour.Delegated.Wander_Delegated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.modelo.Character;
@@ -60,9 +61,9 @@ public class IADeVProject extends ApplicationAdapter {
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
-        cubo.setOrientation(-90.0f);
-        cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
-        cubo.addToListBehaviour(new Wander_Delegated(20.0f, 10.0f, 1.0f, 2.0f, 1.0f, 30.0f, 10.0f, 10.0f, 10.0f, 10.0f));
+        cubo.setOrientation(0.0f);
+        cubo.setVelocity(new Vector3(10.0f, 10.0f, 0));
+        cubo.addToListBehaviour(new LookingWhereYouGoing(50.0f, 50.0f, 1.0f, 2.0f, 1.0f));
 	}
 	
 	@Override
