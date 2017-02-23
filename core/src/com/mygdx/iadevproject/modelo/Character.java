@@ -135,10 +135,9 @@ public class Character extends Sprite {
 			if (newSteering.getSpeed() > 0) {
 				// LA CLAVE DEL EXITO. ESTO YA ESTA PROBADO Y FUNCIONA -----> -x, y
 				return (float) Math.toDegrees(MathUtils.atan2(-newSteering.getVelocity().x, newSteering.getVelocity().y));
-			} else {
-				return this.getOrientation();
 			}
 		}
+		
 		return this.getOrientation();
 	}
 	

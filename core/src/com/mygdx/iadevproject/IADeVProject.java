@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
 import com.mygdx.iadevproject.behaviour.Delegated.Face;
+import com.mygdx.iadevproject.behaviour.Delegated.Wander_Delegated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.modelo.Character;
 
@@ -61,7 +62,7 @@ public class IADeVProject extends ApplicationAdapter {
         cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
         cubo.setOrientation(-90.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
-        cubo.addToListBehaviour(new Face(120.0f, 50.0f, 1.0f, 2.0f, 1.0f));
+        cubo.addToListBehaviour(new Wander_Delegated(20.0f, 10.0f, 1.0f, 2.0f, 1.0f, 30.0f, 10.0f, 10.0f, 10.0f, 10.0f));
 	}
 	
 	@Override
@@ -73,7 +74,7 @@ public class IADeVProject extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         //gota.applyBehaviour(null);       
-        cubo.applyBehaviour(gota);
+        cubo.applyBehaviour(null);
 
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
