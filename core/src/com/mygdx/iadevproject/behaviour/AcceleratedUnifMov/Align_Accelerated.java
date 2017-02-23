@@ -6,13 +6,10 @@ import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.modelo.Character;
 
-
-// TODO Parece que no funciona.
 public class Align_Accelerated implements Behaviour {
 	
 	// Máxima aceleración angular.
 	private float maxAngularAcceleration;
-	// TODO Ver si esto es correcto.
 	// Máxima rotación -> Velocidad angular.
 	private float maxRotation;
 	// Ángulo interior. --> MUY IMPORTANTE: En este comportamiento, targetRadius es un ángulo.
@@ -77,7 +74,7 @@ public class Align_Accelerated implements Behaviour {
 		// Obtenemos la diferencia de las orientaciones entre el objetivo y la fuente. EN GRADOS.
 		float rotation = target.getOrientation() - source.getOrientation();
 
-		// Map to Range (0, 360)
+		// Map to Range (-pi, pi)
 		if (Math.abs(rotation) > 180) {
 			rotation = Math.abs(rotation) - 360;
 		}

@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject.behaviour.AcceleratedUnifMov;
+package com.mygdx.iadevproject.behaviour.Delegated;
 
 import java.util.Random;
 

@@ -15,11 +15,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Align_Accelerated;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Flee_Accelerated;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Seek_Accelerated;
-import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.VelocityMatching_Accelerated;
-import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.*;
+import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
 import com.mygdx.iadevproject.modelo.Character;
 
 public class IADeVProject extends ApplicationAdapter {
@@ -65,9 +61,9 @@ public class IADeVProject extends ApplicationAdapter {
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
-        cubo.setOrientation(-180.0f);
+        cubo.setOrientation(-90.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
-        cubo.addToListBehaviour(new Align_Accelerated(80.0f, 10.0f, 1.0f, 2.0f, 1.0f));
+        cubo.addToListBehaviour(new AntiAlign_Accelerated(80.0f, 10.0f, 1.0f, 2.0f, 1.0f));
 	}
 	
 	@Override

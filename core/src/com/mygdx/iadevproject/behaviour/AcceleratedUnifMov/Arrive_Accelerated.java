@@ -8,7 +8,6 @@ import com.mygdx.iadevproject.modelo.Character;
 
 public class Arrive_Accelerated implements Behaviour {
 	
-	// TODO Ver si esto es correcto.
 	// Máxima aceleración lineal. (Módulo del vector aceleración).
 	private float maxAcceleration;
 	private float maxSpeed;
