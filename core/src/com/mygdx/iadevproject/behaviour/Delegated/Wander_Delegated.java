@@ -8,7 +8,7 @@ import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.modelo.Character;
 
-public class Wander_Accelerated implements Behaviour {
+public class Wander_Delegated extends Face implements Behaviour {
 
 	private static Random aletorio = new Random();
 	
@@ -24,14 +24,23 @@ public class Wander_Accelerated implements Behaviour {
 	private float maxAcceleration;
 	
 	/**
-	 * Constructor.
+	 * Constructor. Primeros 5 parámetros significan lo mismo que los del Align
+	 * 
+	 * @param maxAngularAcceleration
+	 * @param maxRotation
+	 * @param targetRadius
+	 * @param slowRadius
+	 * @param timeToTarget
 	 * @param wanderOffset - Distancia desde el personaje hasta el Facing.
 	 * @param wanderRadius - Radio del círculo del Facing.
 	 * @param wanderRate - Máximo grado que puede girar.
 	 * @param wanderOrientation - Orientación actual del personaje.
 	 * @param maxAcceleration - Máxima aceleración.
 	 */
-	public Wander_Accelerated(float wanderOffset, float wanderRadius, float wanderRate, float wanderOrientation, float maxAcceleration) {
+	public Wander_Delegated(float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget,
+			float wanderOffset, float wanderRadius, float wanderRate, float wanderOrientation, float maxAcceleration) {
+		super(maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
+		
 		this.wanderOffset = wanderOffset;
 		this.wanderRadius = wanderRadius;
 		this.wanderRate = wanderRate;
@@ -95,35 +104,40 @@ public class Wander_Accelerated implements Behaviour {
 		sourceOrientationVector.y *= this.wanderOffset;
 		sourceOrientationVector.z *= this.wanderOffset;
 		
-		Vector3 targetVector = new Vector3();
-		targetVector.x = source.getPosition().x + sourceOrientationVector.x;
-		targetVector.y = source.getPosition().y + sourceOrientationVector.y;
-		targetVector.z = source.getPosition().z + sourceOrientationVector.z;
+		Vector3 targetPosition = new Vector3();
+		targetPosition.x = source.getPosition().x + sourceOrientationVector.x;
+		targetPosition.y = source.getPosition().y + sourceOrientationVector.y;
+		targetPosition.z = source.getPosition().z + sourceOrientationVector.z;
 		
 		// Calculamos la locacización del objetivo
 		Vector3 targetOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(targetOrientation)), (float) Math.cos(Math.toRadians(targetOrientation)), 0.0f);
 		
-		targetVector.x += this.wanderRadius * targetOrientationVector.x;
-		targetVector.y += this.wanderRadius * targetOrientationVector.y;
-		targetVector.z += this.wanderRadius * targetOrientationVector.z;
+		targetPosition.x += this.wanderRadius * targetOrientationVector.x;
+		targetPosition.y += this.wanderRadius * targetOrientationVector.y;
+		targetPosition.z += this.wanderRadius * targetOrientationVector.z;
 		
 		// 2.- Delegamos en el Behaviour Face:
-		// Face face = new Face();
-		// Steering output = face.getSteering(source, target);
-		
-		// Como no tenemos implementado el Face, creo un steering nuevo
-		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
-		
-		// Creamos el vector lineal como el vector de la orientación del personaje multiplicado por la máxima aceleración
-		Vector3 lineal = new Vector3((float) -Math.sin(Math.toRadians(source.getOrientation())), (float) Math.cos(Math.toRadians(source.getOrientation())), 0.0f);
-		lineal.x *= this.maxAcceleration;
-		lineal.y *= this.maxAcceleration;
-		lineal.z *= this.maxAcceleration;
-		
-		output.setLineal(lineal);
-		output.setAngular(0);
-		
-		return output;
+		Character targetExplicit = new Character();
+		targetExplicit.setPosition(targetPosition);
+		Steering steering = super.getSteering(source, targetExplicit);
+
+		// Comprobamos que el steering que produce el Face sea de tipo
+		// acelerado. Si no lo es, no hacemos nada.
+		if (steering instanceof Steering_AcceleratedUnifMov) {
+			Steering_AcceleratedUnifMov output = (Steering_AcceleratedUnifMov) steering;
+			
+			// Creamos el vector lineal como el vector de la orientación del personaje multiplicado por la máxima aceleración
+			Vector3 lineal = new Vector3((float) -Math.sin(Math.toRadians(source.getOrientation())), (float) Math.cos(Math.toRadians(source.getOrientation())), 0.0f);
+			lineal.x *= this.maxAcceleration;
+			lineal.y *= this.maxAcceleration;
+			lineal.z *= this.maxAcceleration;
+			
+			output.setLineal(lineal);
+			
+			return steering;	
+		} else {
+			return null;
+		}
 	}
 
 }
