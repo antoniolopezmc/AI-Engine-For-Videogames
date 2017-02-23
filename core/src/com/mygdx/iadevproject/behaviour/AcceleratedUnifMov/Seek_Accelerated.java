@@ -34,7 +34,8 @@ public class Seek_Accelerated implements Behaviour {
 		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Reynolds.
 		// --> Versión de Millington: el personaje no se para nunca
 		// --> Versión de Reynolds: el personaje se para
-		boolean reynolds = true;
+		//TODO Preguntar a Luis Daniel. Reynolds es una basura.
+		boolean reynolds = false;
 		if (reynolds) { 
 			// Versión de Craig W. Reynolds
 			finalLineal.x = finalLineal.x * this.maxAcceleration;
