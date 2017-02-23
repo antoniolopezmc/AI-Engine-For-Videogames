@@ -74,16 +74,20 @@ public class Align_Accelerated implements Behaviour {
 		// Obtenemos la diferencia de las orientaciones entre el objetivo y la fuente. EN GRADOS.
 		float rotation = target.getOrientation() - source.getOrientation();
 
-		// Map to Range (-pi, pi)
-		if (Math.abs(rotation) > 180) {
-			rotation = Math.abs(rotation) - 360;
-		}
+		// Map to Range. (0, 360)
+		if (Math.abs(rotation) >= 180) {
+			if (rotation > 0) {
+				rotation = rotation - 360;
+			} else {
+				rotation = rotation + 360;
+			}			
+		} 
 		
 		float rotationSize = Math.abs(rotation);
 		
 		// Comprobamos si estamos dentro del radio interior.
 		if (rotationSize < targetRadius) {
-			output.setAngular(0);
+			output.setAngular(-source.getRotation_angularSpeed());
 			output.setLineal(new Vector3(0,0,0));
 			return output;
 		}

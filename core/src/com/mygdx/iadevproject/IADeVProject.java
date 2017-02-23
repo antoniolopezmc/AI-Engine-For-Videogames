@@ -54,16 +54,16 @@ public class IADeVProject extends ApplicationAdapter {
         // Creamos el personaje.
         gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota.setBounds(10.0f, 450.0f, 64.0f, 64.0f);
-        gota.setOrientation(-90.0f);
+        gota.setOrientation(10.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota.addToListBehaviour(new Wander_NoAccelerated(10.0f, 10.0f));
         
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
-        cubo.setOrientation(0.0f);
+        cubo.setOrientation(175.0f);
         cubo.setVelocity(new Vector3(10.0f, 10.0f, 0));
-        cubo.addToListBehaviour(new LookingWhereYouGoing(50.0f, 50.0f, 1.0f, 2.0f, 1.0f));
+        cubo.addToListBehaviour(new Face(50.0f, 50.0f, 1.0f, 2.0f, 1.0f));
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ public class IADeVProject extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         //gota.applyBehaviour(null);       
-        cubo.applyBehaviour(null);
+        cubo.applyBehaviour(gota);
 
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
