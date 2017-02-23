@@ -15,9 +15,9 @@ public class Align_Accelerated implements Behaviour {
 	// TODO Ver si esto es correcto.
 	// Máxima rotación -> Velocidad angular.
 	private float maxRotation;
-	// Radio interior.
+	// Ángulo interior. --> MUY IMPORTANTE: En este comportamiento, targetRadius es un ángulo.
 	private float targetRadius;
-	// Radio exterior.
+	// Ángulo exterior. --> MUY IMPORTANTE: En este comportamiento, slowRadius es un ángulo.
 	private float slowRadius;
 	private float timeToTarget;
 
@@ -76,9 +76,12 @@ public class Align_Accelerated implements Behaviour {
 		
 		// Obtenemos la diferencia de las orientaciones entre el objetivo y la fuente. EN GRADOS.
 		float rotation = target.getOrientation() - source.getOrientation();
+
+		// Map to Range (0, 360)
+		if (Math.abs(rotation) > 180) {
+			rotation = Math.abs(rotation) - 360;
+		}
 		
-		// Ahora, debemos mapear/transformar el resultado al rango (-180, 180) y quedarnos con el valor absoluto del resultado.
-		rotation = (rotation % 360) - 180; 
 		float rotationSize = Math.abs(rotation);
 		
 		// Comprobamos si estamos dentro del radio interior.

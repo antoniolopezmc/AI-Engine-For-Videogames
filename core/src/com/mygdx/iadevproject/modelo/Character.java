@@ -51,7 +51,11 @@ public class Character extends Sprite {
 	
 	public void setOrientation(float orientation) {
 		// IMPORTANTE -> Para obtener la orientación, se llama al método del padre. El de 'this' está sobreescrito para evitar confusiones con los nombres.
-		super.setRotation(orientation);
+		float realOrientation = orientation % 360;
+		
+		if (realOrientation < 0) { realOrientation += 360; }
+		
+		super.setRotation(realOrientation);
 	}
 	
 	public float getRotation() {

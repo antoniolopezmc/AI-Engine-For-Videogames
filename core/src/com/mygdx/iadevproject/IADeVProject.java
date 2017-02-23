@@ -65,9 +65,9 @@ public class IADeVProject extends ApplicationAdapter {
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
-        cubo.setOrientation(0.0f);
+        cubo.setOrientation(-180.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
-        cubo.addToListBehaviour(new Align_Accelerated(80.0f, 10.0f, 20.0f, 40.0f, 1.0f));
+        cubo.addToListBehaviour(new Align_Accelerated(80.0f, 10.0f, 1.0f, 2.0f, 1.0f));
 	}
 	
 	@Override
@@ -86,6 +86,7 @@ public class IADeVProject extends ApplicationAdapter {
 		gota.draw(batch);
 		cubo.draw(batch);
 		font.draw(batch, "Velocidad : " + cubo.getVelocity().x + " - " + cubo.getVelocity().y, cubo.getPosition().x, cubo.getPosition().y - 10);
+		font.draw(batch, "Orientación: " + cubo.getOrientation(), cubo.getPosition().x, cubo.getPosition().y - 25);
 		font.draw(batch, "Orientación: " + gota.getOrientation(), gota.getPosition().x, gota.getPosition().y - 25);
 		batch.end();
 		
