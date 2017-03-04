@@ -2,22 +2,30 @@ package com.mygdx.iadevproject;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
+import com.mygdx.iadevproject.behaviour.Delegated.Evade;
 import com.mygdx.iadevproject.behaviour.Delegated.Face;
 import com.mygdx.iadevproject.behaviour.Delegated.LookingWhereYouGoing;
+import com.mygdx.iadevproject.behaviour.Delegated.PathFollowingWithoutPathOffset;
+import com.mygdx.iadevproject.behaviour.Delegated.Persue;
 import com.mygdx.iadevproject.behaviour.Delegated.Wander_Delegated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.modelo.Character;
@@ -32,6 +40,9 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	private Character gota;
 	private Character cubo;
+	
+	ShapeRenderer renderer;
+	List<Vector3> listaDePuntos;
 
 	@Override
 	public void create() {
@@ -56,14 +67,24 @@ public class IADeVProject extends ApplicationAdapter {
         gota.setBounds(10.0f, 450.0f, 64.0f, 64.0f);
         gota.setOrientation(10.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
-        gota.addToListBehaviour(new Wander_NoAccelerated(10.0f, 10.0f));
+        gota.addToListBehaviour(new Evade(20.0f, 1.0f));
         
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        cubo.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        cubo.setBounds(20.0f, 20.0f, 64.0f, 64.0f);
         cubo.setOrientation(175.0f);
         cubo.setVelocity(new Vector3(10.0f, 10.0f, 0));
-        cubo.addToListBehaviour(new Face(50.0f, 50.0f, 1.0f, 2.0f, 1.0f));
+        listaDePuntos = new LinkedList<Vector3>();
+        listaDePuntos.add(new Vector3(20.0f, 20.0f, 0));
+        listaDePuntos.add(new Vector3(160.0f, 200.0f, 0));
+        listaDePuntos.add(new Vector3(280.0f, 20.0f, 0));
+        listaDePuntos.add(new Vector3(400.0f, 200.0f, 0));
+        listaDePuntos.add(new Vector3(520.0f, 20.0f, 0));
+        cubo.addToListBehaviour(new PathFollowingWithoutPathOffset(5.0f, listaDePuntos, 100.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+        
+        
+        renderer = new ShapeRenderer();
+        
 	}
 	
 	@Override
@@ -74,8 +95,8 @@ public class IADeVProject extends ApplicationAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        //gota.applyBehaviour(null);       
-        cubo.applyBehaviour(gota);
+        //gota.applyBehaviour(cubo);       
+        cubo.applyBehaviour(null);
 
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
@@ -86,6 +107,13 @@ public class IADeVProject extends ApplicationAdapter {
 		font.draw(batch, "Orientación: " + gota.getOrientation(), gota.getPosition().x, gota.getPosition().y - 25);
 		batch.end();
 		
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(Color.RED);
+		for (Vector3 punto : listaDePuntos) {
+			renderer.circle(punto.x, punto.y, 2);
+		}
+		renderer.end();
+		
 		// process user input
 		if (Gdx.input.isTouched()) {
 			Vector3 touchPos = new Vector3();
@@ -95,7 +123,7 @@ public class IADeVProject extends ApplicationAdapter {
 			if (cubo.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
 				addToSelectedList(cubo);
 			}
-
+			
 			if (gota.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) {
 				addToSelectedList(gota);
 			}
