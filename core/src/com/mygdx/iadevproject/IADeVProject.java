@@ -91,7 +91,10 @@ public class IADeVProject extends ApplicationAdapter {
 	public void render() {
 		handleInput();
         camera.update();
+        // Estas 2 lineas sirven para que los objetos dibujados actualicen su posición cuando se mueva la cámara. (Que se muevan también).
         batch.setProjectionMatrix(camera.combined);
+        renderer.setProjectionMatrix(camera.combined);
+
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
