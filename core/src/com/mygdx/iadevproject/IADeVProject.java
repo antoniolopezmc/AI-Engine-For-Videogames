@@ -18,6 +18,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
@@ -115,6 +117,12 @@ public class IADeVProject extends ApplicationAdapter {
 		for (Vector3 punto : listaDePuntos) {
 			renderer.circle(punto.x, punto.y, 2);
 		}
+		
+		renderer.end();
+		
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(Color.CYAN);
+		renderer.rect(cubo.getBoundingRectangle().x, cubo.getBoundingRectangle().y, cubo.getBoundingRectangle().width, cubo.getBoundingRectangle().height);
 		renderer.end();
 		
 		// process user input
