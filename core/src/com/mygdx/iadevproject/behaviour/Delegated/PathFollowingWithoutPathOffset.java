@@ -9,7 +9,7 @@ import com.mygdx.iadevproject.modelo.Character;
 import com.mygdx.iadevproject.steering.Steering;
 
 
-// TODO Esto funciona. Los he probado con el Seek NO ACELERADO y funciona. Con el Seek acelerado el punto se va a tomar por culo (porque el cambio de velocidad no es inmediato).
+// TODO Esto funciona. Los he probado con el Seek NO ACELERADO y funciona. Con el Seek acelerado el personaje se va a tomar por culo (porque el cambio de velocidad no es inmediato).
 // TODO Preguntárselo a Luis Daniel.
 public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements Behaviour {
 
