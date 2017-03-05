@@ -4,9 +4,9 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
+import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
-import com.mygdx.iadevproject.modelo.Character;
 
 public class Wander_Delegated extends Face implements Behaviour {
 

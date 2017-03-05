@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject.modelo;
+package com.mygdx.iadevproject.model;
 
 import java.util.*;
 
@@ -24,13 +24,18 @@ public class Character extends Sprite {
 	// Lista de posibles comportamientos del personaje.
 	private List<Behaviour> listBehaviour;
 	
+	private float minBoxLength; // Longitud mínima de la caja de detección
+	private float maxSpeed; 	// Máxima velocidad a la que puede ir el personaje, independientemente de su steering.
+	
 	public Character() {
+		this.maxSpeed = 50.0f; // Por defecto, el personaje puede ir a una velocidad máxima de 15m/s
 		this.setOriginCenter();
 		listBehaviour = new LinkedList<Behaviour>();
 	}
 	
 	public Character(Texture texture) {
 		super(texture);
+		this.maxSpeed = 15.0f; // Por defecto, el personaje puede ir a una velocidad máxima de 15m/s
 		this.setOriginCenter();
 		listBehaviour = new LinkedList<Behaviour>(); 
 	}
@@ -79,6 +84,14 @@ public class Character extends Sprite {
 	 * @param velocity Vector velocidad del personaje.
 	 */
 	public void setVelocity(Vector3 velocity) {
+//		if (velocity.len() > maxSpeed) { 
+//			// Si la velocidad que nos pasan como parámetro tiene un módulo mayor que la máxima velocidad 
+//			// a la que puede ir el personaje, la establecemos a la máxima velocidad
+//			velocity.nor();
+//			velocity.x *= maxSpeed;
+//			velocity.y *= maxSpeed;
+//			velocity.x *= maxSpeed;
+//		}
 		this.velocity = velocity;
 	}
 	
@@ -122,7 +135,70 @@ public class Character extends Sprite {
 		this.listBehaviour.add(behaviour);
 	}
 	
+	/**
+	 * Método que obtiene la longitud mínima de la caja de detección.
+	 * @return - Longitud mínima de la caja de detección.
+	 */
+	public float getMinBoxLength() {
+		return minBoxLength;
+	}
+
+	/**
+	 * Método que establece la longitud mínima de la caja de detección.
+	 * @param minBoxLength - Nueva longitud mínima.
+	 */
+	public void setMinBoxLength(float minBoxLength) {
+		this.minBoxLength = minBoxLength;
+	}
 	
+	/**
+	 * Método que devuelve la velocidad a la que va el personaje. Si el personaje tiene un steering uniforme,
+	 * al no tener consciencia a la velocidad que va (pues se modifica solamente la posición y la orientación con este tipo de steering)
+	 * este método devuelve que tiene velocidad 0.
+	 * @return - Velocidad a la que va el personaje.
+	 */
+	public float getSpeed() {
+		if (this.velocity == null) return 0.0f;
+		return this.velocity.len();
+	}
+
+	/**
+	 * Método que devuelve la máxima velocidad a la que puede ir el personaje.
+	 * @return - Máxima velocidad del personaje.
+	 */
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	/** 
+	 * Método que establece la velocidad máxima a un personaje.
+	 * @param maxSpeed - Nueva velocidad máxima.
+	 */
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+	
+	/**
+	 * Método que obtiene el radio que recubre al personaje.
+	 * @return - Radio que recubre el obstáculo.
+	 */
+	public float getBoundingRadius() {
+		//TODO Lo he calculado como el 70% del máximo de los lados del rectángulo que lo recubre.
+		//TODO CONSULTAR CON ANTONIO A VER QUÉ LE PARECE
+		
+		float maxEdge = Math.max(this.getBoundingRectangle().getHeight(), this.getBoundingRectangle().getWidth());
+		return (float) maxEdge * 0.7f;
+	}
+
+	/** 
+	 * Método que calcula el centro de masa del personaje
+	 * @return - Centro de masa del personaje
+	 */
+	public Vector3 getCenterOfMass() {
+		return new Vector3(this.getX() + this.getWidth()/2, this.getY() + this.getHeight()/2, 0.0f);
+	}
+	
+
 	// MÉTODOS.
 	/**
 	 * Método que devuleve la nueva orientación del personaje, a partir de la orientación actual y del steering elegido.

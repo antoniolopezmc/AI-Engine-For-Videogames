@@ -2,9 +2,9 @@ package com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
+import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
-import com.mygdx.iadevproject.modelo.Character;
 
 public class Seek_NoAccelerated implements Behaviour {
 	

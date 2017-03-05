@@ -1,7 +1,7 @@
 package com.mygdx.iadevproject.behaviour;
 
+import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.steering.Steering;
-import com.mygdx.iadevproject.modelo.Character;
 
 /**
  * 

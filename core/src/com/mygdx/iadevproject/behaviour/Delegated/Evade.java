@@ -3,7 +3,7 @@ package com.mygdx.iadevproject.behaviour.Delegated;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Flee_Accelerated;
-import com.mygdx.iadevproject.modelo.Character;
+import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.steering.Steering;
 
 public class Evade extends Flee_Accelerated implements Behaviour {

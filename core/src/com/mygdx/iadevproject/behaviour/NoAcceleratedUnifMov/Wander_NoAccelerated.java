@@ -4,8 +4,8 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
+import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.steering.*;
-import com.mygdx.iadevproject.modelo.Character;
 
 public class Wander_NoAccelerated implements Behaviour {
 	
