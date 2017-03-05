@@ -61,9 +61,9 @@ public class Separation implements Behaviour {
 		output.setAngular(0);
 		
 		// Recorremos la lista de objetivos.
-		for (Character character : targets) {
+		for (Character character : this.targets) {
 			// Comprobamos si el objetivo está a la distancia adecuada para ser tenido en cuenta.
-			Vector3 direction = new Vector3(target.getPosition());
+			Vector3 direction = new Vector3(character.getPosition());
 			direction = direction.sub(source.getPosition());
 			float distance = direction.len();
 			if (distance < this.threshold) {
