@@ -5,21 +5,30 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.*;
 
 public class Separation implements Behaviour {
 	
 	private Character source;
-	private List<Character> targets; // Lista de objetivos.
+	private List<WorldObject> targets; // Lista de objetivos.
 	private float threshold; // Distancia máxima para tener en cuenta un objetivo.
 	private float decayCoefficient;
 	private float maxAcceleration; // Aceleración máxima del personaje.
 
-	public List<Character> getTargets() {
+	public Separation(Character source, float maxAcceleration, List<WorldObject> targets, float threshold, float decayCoefficient) {
+		this.source = source;
+		this.targets = targets;
+		this.threshold = threshold;
+		this.decayCoefficient = decayCoefficient;
+		this.maxAcceleration = maxAcceleration;
+	}
+	
+	public List<WorldObject> getTargets() {
 		return targets;
 	}
 
-	public void setTargets(List<Character> targets) {
+	public void setTargets(List<WorldObject> targets) {
 		this.targets = targets;
 	}
 
@@ -47,14 +56,6 @@ public class Separation implements Behaviour {
 		this.maxAcceleration = maxAcceleration;
 	}
 
-	public Separation(Character source, float maxAcceleration, List<Character> targets, float threshold, float decayCoefficient) {
-		this.source = source;
-		this.targets = targets;
-		this.threshold = threshold;
-		this.decayCoefficient = decayCoefficient;
-		this.maxAcceleration = maxAcceleration;
-	}
-
 	@Override
 	public Steering getSteering() {
 		// Creamos el steering que será devuelto.
@@ -63,7 +64,7 @@ public class Separation implements Behaviour {
 		output.setAngular(0);
 		
 		// Recorremos la lista de objetivos.
-		for (Character character : this.targets) {
+		for (WorldObject character : this.targets) {
 			// Comprobamos si el objetivo está a la distancia adecuada para ser tenido en cuenta.
 			Vector3 direction = new Vector3(character.getPosition());
 			direction = direction.sub(this.source.getPosition());

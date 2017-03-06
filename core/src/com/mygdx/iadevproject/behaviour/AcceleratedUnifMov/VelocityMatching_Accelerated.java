@@ -3,12 +3,14 @@ package com.mygdx.iadevproject.behaviour.AcceleratedUnifMov;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class VelocityMatching_Accelerated implements Behaviour {
 
-	private Character source, target;
+	private Character source;
+	private WorldObject target;
 	// Máxima aceleración del personaje
 	private float maxAcceleration;
 	// Tiempo en alcanzar la velocidad del objetivo
@@ -16,16 +18,32 @@ public class VelocityMatching_Accelerated implements Behaviour {
 	
 	/**
 	 * Constructor.
-	 * @param maxAcceleration - Máxima aceleración del personaje.
-	 * @param timeToTarget - Tiempo en alcanzar la velocidad del objetivo.
+	 * @param maxAcceleration Máxima aceleración del personaje.
+	 * @param timeToTarget Tiempo en alcanzar la velocidad del objetivo.
 	 */
-	public VelocityMatching_Accelerated (Character source, Character target, float maxAcceleration, float timeToTarget) {
+	public VelocityMatching_Accelerated (Character source, WorldObject target, float maxAcceleration, float timeToTarget) {
 		this.source = source;
 		this.target = target;
 		this.maxAcceleration = maxAcceleration;
 		this.timeToTarget = timeToTarget;
 	}
-	
+
+	public Character getSource() {
+		return source;
+	}
+
+	public void setSource(Character source) {
+		this.source = source;
+	}
+
+	public WorldObject getTarget() {
+		return target;
+	}
+
+	public void setTarget(WorldObject target) {
+		this.target = target;
+	}
+
 	/**
 	 * Método 'get' para la aceleración máxima.
 	 * @return - Aceleración máxima del personaje.

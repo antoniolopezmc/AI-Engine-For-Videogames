@@ -37,10 +37,11 @@ import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
+import com.mygdx.iadevproject.model.WorldObject;
 
 public class IADeVProject extends ApplicationAdapter {
 	
-	public static List<Character> worldsObstacles; // Lista de obstáculos del mundo
+	public static List<WorldObject> worldsObstacles; // Lista de obstáculos del mundo
 	
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -59,7 +60,7 @@ public class IADeVProject extends ApplicationAdapter {
 	public void create() {
 	
 		selectedObjects = new HashSet<Object>();
-		worldsObstacles = new LinkedList<Character>();
+		worldsObstacles = new LinkedList<WorldObject>();
 		
 		float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -85,13 +86,15 @@ public class IADeVProject extends ApplicationAdapter {
         cubo.setBounds(-10.0f, -10.0f, 64.0f, 64.0f);
         cubo.setOrientation(90.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
+        cubo.setMaxSpeed(50.0f);
         listaDePuntos = new LinkedList<Vector3>();
         listaDePuntos.add(new Vector3(20.0f, 20.0f, 0));
         listaDePuntos.add(new Vector3(160.0f, 200.0f, 0));
         listaDePuntos.add(new Vector3(280.0f, 20.0f, 0));
         listaDePuntos.add(new Vector3(400.0f, 200.0f, 0));
         listaDePuntos.add(new Vector3(520.0f, 20.0f, 0));
-        cubo.addToListBehaviour(new PathFollowingWithoutPathOffset(cubo, 5.0f, listaDePuntos, 100.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+        Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        cubo.addToListBehaviour(new Seek_Accelerated(cubo, obs1, 1000.0f));
         
 //        cubo.addToListBehaviour(new LookingWhereYouGoing(cubo, 20.0f, 50.0f, 0.0f, 10.0f, 1.0f));
         renderer = new ShapeRenderer();
@@ -99,7 +102,7 @@ public class IADeVProject extends ApplicationAdapter {
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
         
         
-        Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+       
         obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
         Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs2.setBounds(180.0f, 100.0f, 64.0f, 64.0f);
@@ -139,7 +142,7 @@ public class IADeVProject extends ApplicationAdapter {
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
 		
-		for (Character obs : worldsObstacles) {
+		for (WorldObject obs : worldsObstacles) {
 			obs.draw(batch);
 		}
 		
@@ -169,7 +172,7 @@ public class IADeVProject extends ApplicationAdapter {
 		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
 		//renderer.rect(cubo.getBoundingRectangle().x, cubo.getBoundingRectangle().y, cubo.getBoundingRectangle().width, cubo.getBoundingRectangle().height);
 		
-		for (Character obs : worldsObstacles) {
+		for (WorldObject obs : worldsObstacles) {
 			renderer.circle(obs.getCenterOfMass().x, obs.getCenterOfMass().y, obs.getBoundingRadius());
 		}
 		renderer.end();

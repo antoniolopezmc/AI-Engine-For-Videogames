@@ -3,19 +3,36 @@ package com.mygdx.iadevproject.behaviour.AcceleratedUnifMov;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class Seek_Accelerated implements Behaviour {
 
-	// Visiblidad protegida para que puedan utilizarlo los hijos de la clase
-	protected Character source, target;
+	private Character source;
+	private WorldObject target;
 	private float maxAcceleration;
 	
-	public Seek_Accelerated (Character source, Character target, float maxAcceleration) {
+	public Seek_Accelerated (Character source, WorldObject target, float maxAcceleration) {
 		this.source = source;
 		this.target = target;
 		this.maxAcceleration = maxAcceleration;
+	}
+
+	public Character getSource() {
+		return source;
+	}
+
+	public void setSource(Character source) {
+		this.source = source;
+	}
+
+	public WorldObject getTarget() {
+		return target;
+	}
+
+	public void setTarget(WorldObject target) {
+		this.target = target;
 	}
 
 	public float getMaxAcceleration() {
@@ -54,7 +71,6 @@ public class Seek_Accelerated implements Behaviour {
 			finalLineal.z = finalLineal.z * this.maxAcceleration; 
 			output.setLineal(finalLineal);		
 		}
-		
 		
 		// La aceleración angular del steering se pone a 0.
 		output.setAngular(0);

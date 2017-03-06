@@ -5,17 +5,20 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
+
+// TODO IMPORTANTE -> PROBAR. HE CAMBIADO EL TIPO DE TARGETS.
 
 public class CollisionAvoidance implements Behaviour {
 	private final float INFINITY = Float.MAX_VALUE; // Constante que representa el número infinito
 	
 	private Character source;
-	private List<Character> targets; // Lista de objetivos a evitar
+	private List<WorldObject> targets; // Lista de objetivos a evitar
 	private float maxAcceleration;	 // Máxima aceleración
 	
-	public CollisionAvoidance(Character source, List<Character> targets, float maxAcceleration) {
+	public CollisionAvoidance(Character source, List<WorldObject> targets, float maxAcceleration) {
 		this.source = source;
 		this.targets = targets;
 		this.maxAcceleration = maxAcceleration;
@@ -33,7 +36,7 @@ public class CollisionAvoidance implements Behaviour {
 		
 		// Almacenan el objetivo con el que evitar chocar y algunos datos que necesitaremos
 		// para poder evitar el choque.
-		Character firstTarget = null;
+		WorldObject firstTarget = null;
 		float firstMinSeparation = 0.0f;
 		float firstDistance = 0.0f;
 		float firstSumRadius = 0.0f;
@@ -41,7 +44,7 @@ public class CollisionAvoidance implements Behaviour {
 //		Vector3 firstRelativeVel = null;
 		
 		// Recorremos los posibles objetivos 
-		for (Character tar : targets) {
+		for (WorldObject tar : targets) {
 			
 			// Calculamos el tiempo de colisión
 			Vector3 relativePos = new Vector3(tar.getCenterOfMass());

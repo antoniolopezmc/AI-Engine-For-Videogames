@@ -3,12 +3,14 @@ package com.mygdx.iadevproject.behaviour.AcceleratedUnifMov;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.*;
 
 public class Arrive_Accelerated implements Behaviour {
 	
-	private Character source, target;
+	private Character source;
+	private WorldObject target;
 	// Máxima aceleración lineal. (Módulo del vector aceleración).
 	private float maxAcceleration;
 	private float maxSpeed;
@@ -18,7 +20,7 @@ public class Arrive_Accelerated implements Behaviour {
 	private float slowRadious;
 	private float timeToTarget;
 
-	public Arrive_Accelerated(Character source, Character target, float maxAcceleration, float maxSpeed, float targetRadious, float slowRadious, float timeToTarget) {
+	public Arrive_Accelerated(Character source, WorldObject target, float maxAcceleration, float maxSpeed, float targetRadious, float slowRadious, float timeToTarget) {
 		this.source = source;
 		this.target = target;
 		this.maxAcceleration = maxAcceleration;
@@ -27,7 +29,23 @@ public class Arrive_Accelerated implements Behaviour {
 		this.slowRadious = slowRadious;
 		this.timeToTarget = timeToTarget;
 	}
-	
+
+	public Character getSource() {
+		return source;
+	}
+
+	public void setSource(Character source) {
+		this.source = source;
+	}
+
+	public WorldObject getTarget() {
+		return target;
+	}
+
+	public void setTarget(WorldObject target) {
+		this.target = target;
+	}
+
 	public float getMaxAcceleration() {
 		return maxAcceleration;
 	}

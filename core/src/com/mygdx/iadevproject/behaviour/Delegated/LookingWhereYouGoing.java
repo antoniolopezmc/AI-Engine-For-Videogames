@@ -5,8 +5,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
+
+//TODO IMPORTANTE -> PROBAR.
 
 public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour {
 
@@ -19,18 +22,18 @@ public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour
 		// 1.- Calcular el objetivo al que alinearse
 		
 		// Si la velocidad es cero, no cambianos nada. Estamos mirando al objetivo
-		if (source.getVelocity().len() == 0.0f) {
+		if (super.getSource().getVelocity().len() == 0.0f) {
 			Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 			output.setAngular(0);
 			output.setLineal(new Vector3(0,0,0));
 			return output;
 		}
 		
-		Character explicitTarget = new Character();
-		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-source.getVelocity().x, source.getVelocity().y)));
+		WorldObject explicitTarget = new Character();
+		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-super.getSource().getVelocity().x, super.getSource().getVelocity().y)));
 		
 		// Establecemos como objetivo, el objetivo calculado
-		target = explicitTarget;
+		super.setTarget(explicitTarget);
 		return super.getSteering();
 	}
 

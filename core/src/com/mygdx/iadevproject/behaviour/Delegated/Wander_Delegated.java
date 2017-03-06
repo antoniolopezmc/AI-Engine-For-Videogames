@@ -5,8 +5,11 @@ import java.util.Random;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
+
+//TODO IMPORTANTE -> PROBAR.
 
 public class Wander_Delegated extends Face implements Behaviour {
 
@@ -31,11 +34,11 @@ public class Wander_Delegated extends Face implements Behaviour {
 	 * @param targetRadius
 	 * @param slowRadius
 	 * @param timeToTarget
-	 * @param wanderOffset - Distancia desde el personaje hasta el Facing.
-	 * @param wanderRadius - Radio del círculo del Facing.
-	 * @param wanderRate - Máximo grado que puede girar.
-	 * @param wanderOrientation - Orientación actual del personaje.
-	 * @param maxAcceleration - Máxima aceleración.
+	 * @param wanderOffset Distancia desde el personaje hasta el Facing.
+	 * @param wanderRadius Radio del círculo del Facing.
+	 * @param wanderRate Máximo grado que puede girar.
+	 * @param wanderOrientation Orientación actual del personaje.
+	 * @param maxAcceleration Máxima aceleración.
 	 */
 	public Wander_Delegated(Character source, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget,
 			float wanderOffset, float wanderRadius, float wanderRate, float wanderOrientation, float maxAcceleration) {
@@ -96,18 +99,18 @@ public class Wander_Delegated extends Face implements Behaviour {
 		this.wanderOrientation += (aletorio.nextFloat() - aletorio.nextFloat()) * this.wanderRate;
 		
 		// Calculamos la orientación del objetivo
-		float targetOrientation = this.wanderOrientation + source.getOrientation();
+		float targetOrientation = this.wanderOrientation + super.getSource().getOrientation();
 		
 		// Calculamos el centro del círculo Wander
-		Vector3 sourceOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(source.getOrientation())), (float) Math.cos(Math.toRadians(source.getOrientation())), 0.0f);
+		Vector3 sourceOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
 		sourceOrientationVector.x *= this.wanderOffset;
 		sourceOrientationVector.y *= this.wanderOffset;
 		sourceOrientationVector.z *= this.wanderOffset;
 		
 		Vector3 targetPosition = new Vector3();
-		targetPosition.x = source.getPosition().x + sourceOrientationVector.x;
-		targetPosition.y = source.getPosition().y + sourceOrientationVector.y;
-		targetPosition.z = source.getPosition().z + sourceOrientationVector.z;
+		targetPosition.x = super.getSource().getPosition().x + sourceOrientationVector.x;
+		targetPosition.y = super.getSource().getPosition().y + sourceOrientationVector.y;
+		targetPosition.z = super.getSource().getPosition().z + sourceOrientationVector.z;
 		
 		// Calculamos la locacización del objetivo
 		Vector3 targetOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(targetOrientation)), (float) Math.cos(Math.toRadians(targetOrientation)), 0.0f);
@@ -117,10 +120,10 @@ public class Wander_Delegated extends Face implements Behaviour {
 		targetPosition.z += this.wanderRadius * targetOrientationVector.z;
 		
 		// 2.- Delegamos en el Behaviour Face:
-		Character targetExplicit = new Character();
+		WorldObject targetExplicit = new Character();
 		targetExplicit.setPosition(targetPosition);
 		// Establecemos como objetivo el objetivo calculado.
-		target = targetExplicit;
+		super.setTarget(targetExplicit);
 		Steering steering = super.getSteering();
 
 		// Comprobamos que el steering que produce el Face sea de tipo
@@ -129,7 +132,7 @@ public class Wander_Delegated extends Face implements Behaviour {
 			Steering_AcceleratedUnifMov output = (Steering_AcceleratedUnifMov) steering;
 			
 			// Creamos el vector lineal como el vector de la orientación del personaje multiplicado por la máxima aceleración
-			Vector3 lineal = new Vector3((float) -Math.sin(Math.toRadians(source.getOrientation())), (float) Math.cos(Math.toRadians(source.getOrientation())), 0.0f);
+			Vector3 lineal = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
 			lineal.x *= this.maxAcceleration;
 			lineal.y *= this.maxAcceleration;
 			lineal.z *= this.maxAcceleration;

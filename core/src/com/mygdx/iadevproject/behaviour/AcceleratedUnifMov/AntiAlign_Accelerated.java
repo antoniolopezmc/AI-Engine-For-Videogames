@@ -3,12 +3,14 @@ package com.mygdx.iadevproject.behaviour.AcceleratedUnifMov;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class AntiAlign_Accelerated implements Behaviour {
 
-	private Character source, target;
+	private Character source;
+	private WorldObject target;
 	// Máxima aceleración angular.
 	private float maxAngularAcceleration;
 	// Máxima rotación -> Velocidad angular.
@@ -17,10 +19,25 @@ public class AntiAlign_Accelerated implements Behaviour {
 	private float targetRadius;
 	// Ángulo exterior. --> MUY IMPORTANTE: En este comportamiento, slowRadius es un ángulo.
 	private float slowRadius;
-	private float timeToTarget;
-	
+	private float timeToTarget;	
 
-	public AntiAlign_Accelerated(Character source, Character target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
+	public Character getSource() {
+		return source;
+	}
+
+	public void setSource(Character source) {
+		this.source = source;
+	}
+
+	public WorldObject getTarget() {
+		return target;
+	}
+
+	public void setTarget(WorldObject target) {
+		this.target = target;
+	}
+
+	public AntiAlign_Accelerated(Character source, WorldObject target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
 		this.source = source;
 		this.target = target;
 		this.maxAngularAcceleration = maxAngularAcceleration;
@@ -73,50 +90,50 @@ public class AntiAlign_Accelerated implements Behaviour {
 	@Override
 	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
-				Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
-				
-				// Obtenemos la diferencia de las orientaciones entre el objetivo y la fuente. EN GRADOS.
-				float rotation = ((target.getOrientation() + 180) % 360) - source.getOrientation();
+		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
+		
+		// Obtenemos la diferencia de las orientaciones entre el objetivo y la fuente. EN GRADOS.
+		float rotation = ((target.getOrientation() + 180) % 360) - source.getOrientation();
 
-				// Map to Range. (0, 360)
-				if (Math.abs(rotation) >= 180) {
-					if (rotation > 0) {
-						rotation = rotation - 360;
-					} else {
-						rotation = rotation + 360;
-					}			
-				} 
-				
-				float rotationSize = Math.abs(rotation);
-				
-				// Comprobamos si estamos dentro del radio interior.
-				if (rotationSize < targetRadius) {
-					output.setAngular(-source.getRotation_angularSpeed());
-					output.setLineal(new Vector3(0,0,0));
-					return output;
-				}
-				
-				// Si estamos fuera del radio exterior, entonces usamos la máxima rotacion.
-				float targetRotation;
-				if (rotationSize > slowRadius) {
-					targetRotation = maxRotation;
-				// Sino, escalamos.
-				} else {
-					targetRotation = maxRotation * rotationSize / slowRadius;
-				}
-				
-				targetRotation = targetRotation * rotation / rotationSize;
-				
-				output.setAngular((targetRotation - source.getRotation_angularSpeed()) / timeToTarget);
-				
-				float angularAcceleration = Math.abs(output.getAngular());
-				if (angularAcceleration > maxAngularAcceleration) {
-					output.setAngular(output.getAngular() / angularAcceleration * maxAngularAcceleration);
-				}
-				
-				output.setLineal(new Vector3(0,0,0));
-				
-				return output;
+		// Map to Range. (0, 360)
+		if (Math.abs(rotation) >= 180) {
+			if (rotation > 0) {
+				rotation = rotation - 360;
+			} else {
+				rotation = rotation + 360;
+			}			
+		} 
+		
+		float rotationSize = Math.abs(rotation);
+		
+		// Comprobamos si estamos dentro del radio interior.
+		if (rotationSize < targetRadius) {
+			output.setAngular(-source.getRotation_angularSpeed());
+			output.setLineal(new Vector3(0,0,0));
+			return output;
+		}
+		
+		// Si estamos fuera del radio exterior, entonces usamos la máxima rotacion.
+		float targetRotation;
+		if (rotationSize > slowRadius) {
+			targetRotation = maxRotation;
+		// Sino, escalamos.
+		} else {
+			targetRotation = maxRotation * rotationSize / slowRadius;
+		}
+		
+		targetRotation = targetRotation * rotation / rotationSize;
+		
+		output.setAngular((targetRotation - source.getRotation_angularSpeed()) / timeToTarget);
+		
+		float angularAcceleration = Math.abs(output.getAngular());
+		if (angularAcceleration > maxAngularAcceleration) {
+			output.setAngular(output.getAngular() / angularAcceleration * maxAngularAcceleration);
+		}
+		
+		output.setLineal(new Vector3(0,0,0));
+		
+		return output;
 	}
 
 }

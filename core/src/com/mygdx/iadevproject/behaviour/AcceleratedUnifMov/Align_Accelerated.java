@@ -2,14 +2,15 @@ package com.mygdx.iadevproject.behaviour.AcceleratedUnifMov;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
+import com.mygdx.iadevproject.model.*;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class Align_Accelerated implements Behaviour {
 	
-	// Visiblidad protegida para que puedan utilizarlo los hijos de la clase
-	protected Character source, target;
+	private Character source;
+	private WorldObject target;
 	// Máxima aceleración angular.
 	private float maxAngularAcceleration;
 	// Máxima rotación -> Velocidad angular.
@@ -20,7 +21,7 @@ public class Align_Accelerated implements Behaviour {
 	private float slowRadius;
 	private float timeToTarget;
 
-	public Align_Accelerated(Character source, Character target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
+	public Align_Accelerated(Character source, WorldObject target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
 		this.source = source;
 		this.target = target;
 		this.maxAngularAcceleration = maxAngularAcceleration;
@@ -30,6 +31,22 @@ public class Align_Accelerated implements Behaviour {
 		this.timeToTarget = timeToTarget;
 	}
 	
+	public Character getSource() {
+		return source;
+	}
+
+	public void setSource(Character source) {
+		this.source = source;
+	}
+
+	public WorldObject getTarget() {
+		return target;
+	}
+
+	public void setTarget(WorldObject target) {
+		this.target = target;
+	}
+
 	public float getMaxAngularAcceleration() {
 		return maxAngularAcceleration;
 	}
@@ -91,7 +108,7 @@ public class Align_Accelerated implements Behaviour {
 		
 		// Comprobamos si estamos dentro del radio interior.
 		if (rotationSize < targetRadius) {
-			output.setAngular(-source.getRotation_angularSpeed());
+			output.setAngular(-source.getRotation_angularSpeed()); //TODO Revisar. Al final en ningún sitio hemos puesto -source...
 			output.setLineal(new Vector3(0,0,0));
 			return output;
 		}

@@ -3,22 +3,40 @@ package com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
 
 public class Arrive_NoAccelerated implements Behaviour {
 	
-	private Character source, target;
+	private Character source;
+	private WorldObject target;
 	private float maxSpeed;
 	private float satisfactionTargetRadius;
 	private float timeToTarget;
 	
-	public Arrive_NoAccelerated (Character source, Character target, float maxSpeed, float satisfactionTargetRadius, float timeToTarget) {
+	public Arrive_NoAccelerated (Character source, WorldObject target, float maxSpeed, float satisfactionTargetRadius, float timeToTarget) {
 		this.source = source;
 		this.target = target;
 		this.maxSpeed = maxSpeed;
 		this.satisfactionTargetRadius = satisfactionTargetRadius;
 		this.timeToTarget = timeToTarget;
+	}
+
+	public Character getSource() {
+		return source;
+	}
+
+	public void setSource(Character source) {
+		this.source = source;
+	}
+
+	public WorldObject getTarget() {
+		return target;
+	}
+
+	public void setTarget(WorldObject target) {
+		this.target = target;
 	}
 
 	public float getMaxSpeed() {
