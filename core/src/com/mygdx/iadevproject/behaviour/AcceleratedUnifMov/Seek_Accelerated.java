@@ -8,9 +8,13 @@ import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class Seek_Accelerated implements Behaviour {
 
+	// Visiblidad protegida para que puedan utilizarlo los hijos de la clase
+	protected Character source, target;
 	private float maxAcceleration;
 	
-	public Seek_Accelerated (float maxAcceleration) {
+	public Seek_Accelerated (Character source, Character target, float maxAcceleration) {
+		this.source = source;
+		this.target = target;
 		this.maxAcceleration = maxAcceleration;
 	}
 
@@ -23,13 +27,13 @@ public class Seek_Accelerated implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 				
 		// Calculamos el atributo 'lineal'.
-		Vector3 copy = new Vector3(target.getPosition());
-		Vector3 finalLineal = copy.sub(source.getPosition()).nor();
+		Vector3 copy = new Vector3(this.target.getPosition());
+		Vector3 finalLineal = copy.sub(this.source.getPosition()).nor();
 		
 		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Reynolds.
 		// --> Versión de Millington: el personaje no se para nunca

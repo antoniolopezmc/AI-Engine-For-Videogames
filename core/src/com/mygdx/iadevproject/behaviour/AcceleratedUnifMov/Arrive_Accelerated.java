@@ -8,6 +8,7 @@ import com.mygdx.iadevproject.steering.*;
 
 public class Arrive_Accelerated implements Behaviour {
 	
+	private Character source, target;
 	// Máxima aceleración lineal. (Módulo del vector aceleración).
 	private float maxAcceleration;
 	private float maxSpeed;
@@ -17,7 +18,9 @@ public class Arrive_Accelerated implements Behaviour {
 	private float slowRadious;
 	private float timeToTarget;
 
-	public Arrive_Accelerated(float maxAcceleration, float maxSpeed, float targetRadious, float slowRadious, float timeToTarget) {
+	public Arrive_Accelerated(Character source, Character target, float maxAcceleration, float maxSpeed, float targetRadious, float slowRadious, float timeToTarget) {
+		this.source = source;
+		this.target = target;
 		this.maxAcceleration = maxAcceleration;
 		this.maxSpeed = maxSpeed;
 		this.targetRadious = targetRadious;
@@ -66,7 +69,7 @@ public class Arrive_Accelerated implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 		

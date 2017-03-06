@@ -11,8 +11,8 @@ public class Persue extends Seek_Accelerated implements Behaviour {
 	// Tiempo máximo de predicción. En segundos.
 	private float maxPrediction;
 	
-	public Persue(float maxAcceleration, float maxPrediction) {
-		super(maxAcceleration);
+	public Persue(Character source, Character target, float maxAcceleration, float maxPrediction) {
+		super(source, target, maxAcceleration);
 		this.maxPrediction = maxPrediction;
 	}
 	
@@ -25,7 +25,7 @@ public class Persue extends Seek_Accelerated implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Calculamos los datos necesarios para poder llamar al 'getSteering' del Seek. (Llamada a super).
 		// IMPORTANTE -> Como tenemos que hacer una predicción, se creará un personaje ficticio. Ese personaje será lo que se pase realmente al 'getSteering' del Seek.
 		
@@ -55,8 +55,16 @@ public class Persue extends Seek_Accelerated implements Behaviour {
 		float finalPositionZ = target.getPosition().z + target.getVelocity().z * prediction;
 		characterPrediction.setPosition(new Vector3(finalPositionX, finalPositionY, finalPositionZ));
 		
-		return super.getSteering(source, characterPrediction);
+		// Almacenamos el objetivo principal para poder llamar al método del padre con el 'explicitTarget'
+		// y no perder el objetivo principal.
+		Character aux = target;
+		target = characterPrediction;
+		// Llamamos al 'getSteering' del padre
+		Steering output = super.getSteering();
+		// Recuperamos el objetivo principal
+		target = aux;
 		
+		// Devolvemos el steering calculado
+		return output;
 	}
-
 }

@@ -8,6 +8,7 @@ import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class AntiAlign_Accelerated implements Behaviour {
 
+	private Character source, target;
 	// Máxima aceleración angular.
 	private float maxAngularAcceleration;
 	// Máxima rotación -> Velocidad angular.
@@ -19,7 +20,9 @@ public class AntiAlign_Accelerated implements Behaviour {
 	private float timeToTarget;
 	
 
-	public AntiAlign_Accelerated(float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
+	public AntiAlign_Accelerated(Character source, Character target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
+		this.source = source;
+		this.target = target;
 		this.maxAngularAcceleration = maxAngularAcceleration;
 		this.maxRotation = maxRotation;
 		this.targetRadius = targetRadius;
@@ -68,7 +71,7 @@ public class AntiAlign_Accelerated implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 				Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 				

@@ -8,6 +8,7 @@ import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class VelocityMatching_Accelerated implements Behaviour {
 
+	private Character source, target;
 	// Máxima aceleración del personaje
 	private float maxAcceleration;
 	// Tiempo en alcanzar la velocidad del objetivo
@@ -18,7 +19,9 @@ public class VelocityMatching_Accelerated implements Behaviour {
 	 * @param maxAcceleration - Máxima aceleración del personaje.
 	 * @param timeToTarget - Tiempo en alcanzar la velocidad del objetivo.
 	 */
-	public VelocityMatching_Accelerated (float maxAcceleration, float timeToTarget) {
+	public VelocityMatching_Accelerated (Character source, Character target, float maxAcceleration, float timeToTarget) {
+		this.source = source;
+		this.target = target;
 		this.maxAcceleration = maxAcceleration;
 		this.timeToTarget = timeToTarget;
 	}
@@ -56,20 +59,20 @@ public class VelocityMatching_Accelerated implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 						
 		// Calculamos el atributo 'lineal' como diferencia de las velocidades entre el personajey el objetivo.
-		Vector3 copy = new Vector3(target.getVelocity());;
-		Vector3 finalLineal = copy.sub(source.getVelocity());
+		Vector3 copy = new Vector3(this.target.getVelocity());;
+		Vector3 finalLineal = copy.sub(this.source.getVelocity());
 				
 		finalLineal.x = finalLineal.x / this.timeToTarget;
 		finalLineal.y = finalLineal.y / this.timeToTarget;
 		finalLineal.z = finalLineal.z / this.timeToTarget;
 		
 		// Si la aceleración es superior a la aceleración máxima, entonces normalizamos y establecemos la máxima aceleración.
-		if (finalLineal.len() > maxAcceleration) {
+		if (finalLineal.len() > this.maxAcceleration) {
 			finalLineal = finalLineal.nor();
 			
 			finalLineal.x = finalLineal.x * this.maxAcceleration;

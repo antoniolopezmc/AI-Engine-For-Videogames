@@ -9,12 +9,14 @@ import com.mygdx.iadevproject.steering.*;
 
 public class Wander_NoAccelerated implements Behaviour {
 	
+	private Character source;
 	private static Random aletorio = new Random();
 	// Máxima velocidad lineal (módulo de velocity).
 	private float maxSpeed;
 	private float maxRotation;
 	
-	public Wander_NoAccelerated (float maxSpeed, float maxRotation) {
+	public Wander_NoAccelerated (Character source, float maxSpeed, float maxRotation) {
+		this.source = source;
 		this.maxSpeed = maxSpeed;
 		this.maxRotation = maxRotation;
 	}
@@ -36,12 +38,12 @@ public class Wander_NoAccelerated implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 		Steering_NoAcceleratedUnifMov output = new Steering_NoAcceleratedUnifMov();
 
 		float randomDif = (aletorio.nextFloat() - aletorio.nextFloat()) * this.maxRotation;
-		float finalOrientation = source.getOrientation() + randomDif;
+		float finalOrientation = this.source.getOrientation() + randomDif;
 		
 		// IMPORTANTE -> Al girar a la derecha, el ángulo es negativo (según libgdx). Sin embargo, en el plano, al ir hacia la derecha, ambas coordenadas del vector velocidad deben ser positivas.
 		//				Por eso, se pone un signo menos en el seno.
@@ -54,7 +56,7 @@ public class Wander_NoAccelerated implements Behaviour {
 		output.setVelocity(newVectorVelocity);
 		
 		// Modificamos la orientación del personaje (source) para que mire hacia el objetivo (en función del vector velocidad que acabamos de calcular).
-		source.setOrientation(source.getNewOrientation(output));
+		this.source.setOrientation(this.source.getNewOrientation(output));
 						
 		// La rotación (velocidad angular) del steering se pone a 0.
 		output.setRotation(0);

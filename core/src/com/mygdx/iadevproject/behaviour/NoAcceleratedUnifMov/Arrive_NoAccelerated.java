@@ -8,11 +8,14 @@ import com.mygdx.iadevproject.steering.Steering_NoAcceleratedUnifMov;
 
 public class Arrive_NoAccelerated implements Behaviour {
 	
+	private Character source, target;
 	private float maxSpeed;
 	private float satisfactionTargetRadius;
 	private float timeToTarget;
 	
-	public Arrive_NoAccelerated (float maxSpeed, float satisfactionTargetRadius, float timeToTarget) {
+	public Arrive_NoAccelerated (Character source, Character target, float maxSpeed, float satisfactionTargetRadius, float timeToTarget) {
+		this.source = source;
+		this.target = target;
 		this.maxSpeed = maxSpeed;
 		this.satisfactionTargetRadius = satisfactionTargetRadius;
 		this.timeToTarget = timeToTarget;
@@ -43,13 +46,13 @@ public class Arrive_NoAccelerated implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 		Steering_NoAcceleratedUnifMov output = new Steering_NoAcceleratedUnifMov();
 		
 		// Calculamos el atributo 'velocity'.
-		Vector3 finalVelocity = new Vector3(target.getPosition()); 
-		finalVelocity = finalVelocity.sub(source.getPosition());
+		Vector3 finalVelocity = new Vector3(this.target.getPosition()); 
+		finalVelocity = finalVelocity.sub(this.source.getPosition());
 		output.setVelocity(finalVelocity);
 		
 		// Comprobamos si EL MÓDULO DEL VECTOR (DE MOMENTO, LA DIFERENCIA ENTRE AMBAS POSICIONES) está fuera o dentro del radio de satisfacción del objetivo.
@@ -75,7 +78,7 @@ public class Arrive_NoAccelerated implements Behaviour {
 		}
 		
 		// Modificamos la orientación del personaje (source) para que mire hacia el objetivo (en función del vector velocidad que acabamos de calcular).
-		source.setOrientation(source.getNewOrientation(output));
+		this.source.setOrientation(this.source.getNewOrientation(output));
 		
 		// La rotación (velocidad angular) del steering se pone a 0.
 		output.setRotation(0);

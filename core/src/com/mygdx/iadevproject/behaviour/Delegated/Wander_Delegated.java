@@ -37,9 +37,9 @@ public class Wander_Delegated extends Face implements Behaviour {
 	 * @param wanderOrientation - Orientación actual del personaje.
 	 * @param maxAcceleration - Máxima aceleración.
 	 */
-	public Wander_Delegated(float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget,
+	public Wander_Delegated(Character source, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget,
 			float wanderOffset, float wanderRadius, float wanderRate, float wanderOrientation, float maxAcceleration) {
-		super(maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
+		super(source, null, maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
 		
 		this.wanderOffset = wanderOffset;
 		this.wanderRadius = wanderRadius;
@@ -89,7 +89,7 @@ public class Wander_Delegated extends Face implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// 1.- Calculamos el objetivo hacia donde mirar
 		
 		// Actualizamos la orientación del wander
@@ -119,7 +119,9 @@ public class Wander_Delegated extends Face implements Behaviour {
 		// 2.- Delegamos en el Behaviour Face:
 		Character targetExplicit = new Character();
 		targetExplicit.setPosition(targetPosition);
-		Steering steering = super.getSteering(source, targetExplicit);
+		// Establecemos como objetivo el objetivo calculado.
+		target = targetExplicit;
+		Steering steering = super.getSteering();
 
 		// Comprobamos que el steering que produce el Face sea de tipo
 		// acelerado. Si no lo es, no hacemos nada.

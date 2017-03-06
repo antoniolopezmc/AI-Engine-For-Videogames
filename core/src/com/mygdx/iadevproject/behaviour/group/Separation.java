@@ -9,6 +9,7 @@ import com.mygdx.iadevproject.steering.*;
 
 public class Separation implements Behaviour {
 	
+	private Character source;
 	private List<Character> targets; // Lista de objetivos.
 	private float threshold; // Distancia máxima para tener en cuenta un objetivo.
 	private float decayCoefficient;
@@ -46,7 +47,8 @@ public class Separation implements Behaviour {
 		this.maxAcceleration = maxAcceleration;
 	}
 
-	public Separation(float maxAcceleration, List<Character> targets, float threshold, float decayCoefficient) {
+	public Separation(Character source, float maxAcceleration, List<Character> targets, float threshold, float decayCoefficient) {
+		this.source = source;
 		this.targets = targets;
 		this.threshold = threshold;
 		this.decayCoefficient = decayCoefficient;
@@ -54,7 +56,7 @@ public class Separation implements Behaviour {
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el steering que será devuelto.
 		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 		output.setLineal(new Vector3(0,0,0));
@@ -64,7 +66,7 @@ public class Separation implements Behaviour {
 		for (Character character : this.targets) {
 			// Comprobamos si el objetivo está a la distancia adecuada para ser tenido en cuenta.
 			Vector3 direction = new Vector3(character.getPosition());
-			direction = direction.sub(source.getPosition());
+			direction = direction.sub(this.source.getPosition());
 			float distance = direction.len();
 			if (distance < this.threshold) {
 				// Calculamos la fuerza de repulsión.

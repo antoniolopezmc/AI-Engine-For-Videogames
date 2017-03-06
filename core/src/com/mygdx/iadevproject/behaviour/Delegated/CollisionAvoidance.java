@@ -11,16 +11,18 @@ import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 public class CollisionAvoidance implements Behaviour {
 	private final float INFINITY = Float.MAX_VALUE; // Constante que representa el número infinito
 	
+	private Character source;
 	private List<Character> targets; // Lista de objetivos a evitar
 	private float maxAcceleration;	 // Máxima aceleración
 	
-	public CollisionAvoidance(float maxAcceleration, List<Character> targets) {
-		this.maxAcceleration = maxAcceleration;
+	public CollisionAvoidance(Character source, List<Character> targets, float maxAcceleration) {
+		this.source = source;
 		this.targets = targets;
+		this.maxAcceleration = maxAcceleration;
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 		
@@ -81,7 +83,7 @@ public class CollisionAvoidance implements Behaviour {
 			// Comprobamos si chocaremos exactamente o estamos ya chocando, para calcular el steering 
 			// sobre la posición actual o sobre la posición futura:
 			if (firstMinSeparation <= 0 || firstDistance <= firstSumRadius) {
-				return (new Evade(this.maxAcceleration, shortestTime)).getSteering(source, firstTarget);
+				return (new Evade(source, firstTarget, this.maxAcceleration, shortestTime)).getSteering();
 			}
 		}
 		

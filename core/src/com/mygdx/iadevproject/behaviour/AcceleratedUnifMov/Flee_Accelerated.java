@@ -8,9 +8,13 @@ import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class Flee_Accelerated implements Behaviour {
 	
+	// Visiblidad protegida para que puedan utilizarlo los hijos de la clase
+	protected Character source, target;
 	private float maxAcceleration;
 
-	public Flee_Accelerated(float maxAcceleration) {
+	public Flee_Accelerated(Character source, Character target, float maxAcceleration) {
+		this.source = source;
+		this.target = target;
 		this.maxAcceleration = maxAcceleration;
 	}
 
@@ -23,13 +27,13 @@ public class Flee_Accelerated implements Behaviour {
 	}
 	
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
 		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 				
 		// Calculamos el atributo 'lineal'.
-		Vector3 copy = new Vector3(source.getPosition());
-		Vector3 finalLineal = copy.sub(target.getPosition()).nor();
+		Vector3 copy = new Vector3(this.source.getPosition());
+		Vector3 finalLineal = copy.sub(this.target.getPosition()).nor();
 		
 		// El personaje se aleja a la máxima aceleración fijada (la velocidad cada vez es mayor).
 		finalLineal.x = finalLineal.x * this.maxAcceleration;

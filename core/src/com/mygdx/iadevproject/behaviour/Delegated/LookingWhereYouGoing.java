@@ -10,12 +10,12 @@ import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour {
 
-	public LookingWhereYouGoing(float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
-		super(maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
+	public LookingWhereYouGoing(Character source, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
+		super(source, null, maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// 1.- Calcular el objetivo al que alinearse
 		
 		// Si la velocidad es cero, no cambianos nada. Estamos mirando al objetivo
@@ -29,7 +29,9 @@ public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour
 		Character explicitTarget = new Character();
 		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-source.getVelocity().x, source.getVelocity().y)));
 		
-		return super.getSteering(source, explicitTarget);
+		// Establecemos como objetivo, el objetivo calculado
+		target = explicitTarget;
+		return super.getSteering();
 	}
 
 }

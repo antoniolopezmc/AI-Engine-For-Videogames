@@ -38,8 +38,8 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 		this.modo = modo;
 	}
 
-	public PathFollowingWithoutPathOffset(float maxAcceleration, List<Vector3> pointsList, float radius, int modo) {
-		super(maxAcceleration);
+	public PathFollowingWithoutPathOffset(Character source, float maxAcceleration, List<Vector3> pointsList, float radius, int modo) {
+		super(source, null, maxAcceleration);
 		this.pointsList = new LinkedList<Vector3>(pointsList); // IMPORTANTE -> Como la lista se va a modificar, almacenamos una copia.
 		this.radius = radius;
 		this.modo = modo;
@@ -47,7 +47,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		if (!this.pointsList.isEmpty()) {
 			Vector3 nextTarget = this.pointsList.get(0); // Consultamos el primer elemento de la lista (el punto donde tenemos que ir).
 			
@@ -84,13 +84,16 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 				float finalPositionZ = nextTarget.z;
 				fakeCharacter.setPosition(new Vector3(finalPositionX, finalPositionY, finalPositionZ));
 				
-				return super.getSteering(source, fakeCharacter);
+				// Establecemos como objectivo el 'fakeCharacter'
+				target = fakeCharacter;
+				return super.getSteering();
 			}
 		}
 		
 		// Si la lista está vacía, es que ya no quedan más puntos a donde ir. Por tanto, no hacemos nada.
 		//		Esto es equivalente a obtener el Steering entre el pensonaje y él mismo.
-		return super.getSteering(source, source);
+		target = source;
+		return super.getSteering();
 		
 	}
 

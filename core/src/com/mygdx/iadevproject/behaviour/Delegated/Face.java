@@ -9,12 +9,12 @@ import com.mygdx.iadevproject.steering.Steering;
 
 public class Face extends Align_Accelerated implements Behaviour {
 
-	public Face(float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
-		super(maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
+	public Face(Character source, Character target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
+		super(source, target, maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
 	}
 
 	@Override
-	public Steering getSteering(Character source, Character target) {
+	public Steering getSteering() {
 		// 1.- Calcular el objetivo al que alinearse
 		
 		// Calcular la dirección hacia el objetivo
@@ -29,7 +29,17 @@ public class Face extends Align_Accelerated implements Behaviour {
 		Character explicitTarget = new Character();
 		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-direction.x, direction.y)));
 		
-		return super.getSteering(source, explicitTarget);
+		// Almacenamos el objetivo principal para poder llamar al método del padre con el 'explicitTarget'
+		// y no perder el objetivo principal.
+		Character aux = target;
+		target = explicitTarget;
+		// Llamamos al 'getSteering' del padre
+		Steering output = super.getSteering();
+		// Recuperamos el objetivo principal
+		target = aux;
+		
+		// Devolvemos el steering calculado
+		return output;
 	}
 
 }

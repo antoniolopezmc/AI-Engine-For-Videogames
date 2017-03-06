@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
 import com.mygdx.iadevproject.behaviour.Delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.behaviour.Delegated.Evade;
@@ -30,6 +31,9 @@ import com.mygdx.iadevproject.behaviour.Delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.behaviour.Delegated.PathFollowingWithoutPathOffset;
 import com.mygdx.iadevproject.behaviour.Delegated.Persue;
 import com.mygdx.iadevproject.behaviour.Delegated.Wander_Delegated;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Arrive_NoAccelerated;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Flee_NoAccelerated;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -73,25 +77,28 @@ public class IADeVProject extends ApplicationAdapter {
         // Creamos el personaje.
         gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota.setBounds(100.0f, 410.0f, 64.0f, 64.0f);
-        gota.setOrientation(10.0f);
+        gota.setOrientation(30.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
-        gota.addToListBehaviour(new Seek_Accelerated(2.0f));
         
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        cubo.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
-        cubo.setOrientation(175.0f);
-        cubo.setVelocity(new Vector3(10.0f, 10.0f, 0));
+        cubo.setBounds(-10.0f, -10.0f, 64.0f, 64.0f);
+        cubo.setOrientation(90.0f);
+        cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
         listaDePuntos = new LinkedList<Vector3>();
         listaDePuntos.add(new Vector3(20.0f, 20.0f, 0));
         listaDePuntos.add(new Vector3(160.0f, 200.0f, 0));
         listaDePuntos.add(new Vector3(280.0f, 20.0f, 0));
         listaDePuntos.add(new Vector3(400.0f, 200.0f, 0));
         listaDePuntos.add(new Vector3(520.0f, 20.0f, 0));
-        cubo.addToListBehaviour(new PathFollowingWithoutPathOffset(5.0f, listaDePuntos, 100.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+        cubo.addToListBehaviour(new PathFollowingWithoutPathOffset(cubo, 5.0f, listaDePuntos, 100.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
         
+//        cubo.addToListBehaviour(new LookingWhereYouGoing(cubo, 20.0f, 50.0f, 0.0f, 10.0f, 1.0f));
         renderer = new ShapeRenderer();
                 
+        gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
+        
+        
         Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
         Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -112,7 +119,7 @@ public class IADeVProject extends ApplicationAdapter {
         collision.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
         collision.setOrientation(10.0f);
         collision.setVelocity(new Vector3(-10.0f, -10.0f, 0));
-        collision.addToListBehaviour(new CollisionAvoidance(80.0f, worldsObstacles));
+        collision.addToListBehaviour(new CollisionAvoidance(collision, worldsObstacles, 80.0f));
 	}
 	
 	@Override
@@ -125,9 +132,9 @@ public class IADeVProject extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        //gota.applyBehaviour(cubo);       
-//        cubo.applyBehaviour(null);
-        collision.applyBehaviour(null);
+//        gota.applyBehaviour();       
+        cubo.applyBehaviour();
+//        collision.applyBehaviour();
         
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();

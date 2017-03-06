@@ -1,6 +1,5 @@
 package com.mygdx.iadevproject.behaviour;
 
-import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.steering.Steering;
 
 /**
@@ -10,10 +9,8 @@ import com.mygdx.iadevproject.steering.Steering;
 public interface Behaviour {
 
 	/**
-	 * Método que recibe 2 personajes y devuelve el Steering concreto según el tipo de comportamiento.
-	 * @param source Objeto que representa al origen.
-	 * @param target Objeto que representa al objetivo.
+	 * Método que devuelve el Steering concreto según el tipo de comportamiento.
 	 * @return El Steering concreto creado según el tipo de comportamiento.
 	 */
-	Steering getSteering(Character source, Character target);
+	Steering getSteering();
 }

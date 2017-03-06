@@ -223,9 +223,9 @@ public class Character extends Sprite {
 	 * @param target Personaje objetico sobre el que se aplicará el comportamiento.
 	 */
 	// Este método me lo he inventado. DISCUTIR.
-	public void applyBehaviour (Character target) {
+	public void applyBehaviour () {
 		// Como ejemplo se va a coger el primer elemento de la lista de comportamientos.
-		this.update(this.listBehaviour.get(0).getSteering(this, target), Gdx.graphics.getDeltaTime());
+		this.update(this.listBehaviour.get(0).getSteering(), Gdx.graphics.getDeltaTime());
 	}
 	// **********************************************************************************************
 	
