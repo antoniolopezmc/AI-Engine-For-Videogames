@@ -18,6 +18,8 @@ public class Character extends WorldObject {
 	
 	// Lista de posibles comportamientos del personaje.
 	private List<Behaviour> listBehaviour;
+	// Atributo que indica si el personaje forma parte de una formación. Por defecto está a false.
+	private boolean inFormation;
 	
 	// CONSTRUCTORES.
 	public Character() {
@@ -64,7 +66,15 @@ public class Character extends WorldObject {
 	public void addToListBehaviour(Behaviour behaviour) {
 		this.listBehaviour.add(behaviour);
 	}
-	
+
+	public boolean isInFormation() {
+		return inFormation;
+	}
+
+	public void setInFormation(boolean inFormation) {
+		this.inFormation = inFormation;
+	}
+
 	// MÉTODOS.
 	/**
 	 * Método que devuleve la nueva orientación del personaje, a partir de la orientación actual y del steering elegido.
@@ -89,9 +99,18 @@ public class Character extends WorldObject {
 	 * @param target Personaje objetico sobre el que se aplicará el comportamiento.
 	 */
 	// Este método me lo he inventado. DISCUTIR.
-	public void applyBehaviour () {
+	public void applyBehaviour () { // TODO En este método es donde se implementará la parte del árbitro. Aunque sea otro behavior más, mejor poner como otro atributo, porque será único.
 		// Como ejemplo se va a coger el primer elemento de la lista de comportamientos.
-		this.update(this.listBehaviour.get(0).getSteering(), Gdx.graphics.getDeltaTime());
+		this.applyBehaviour(this.listBehaviour.get(0));
+	}
+	
+	// Aplicar un determinado comportamiento a un personaje. Este comportamiento se le pasa como parámetro.
+	public void applyBehaviour (Behaviour behaviour) {
+		// Si el personaje forma parte de una formación, su comportamiento será el de la formación.
+		// 		No podrá comportarse como él quiera.
+		if (!this.inFormation) {
+			this.update(behaviour.getSteering(), Gdx.graphics.getDeltaTime());
+		}		
 	}
 	// **********************************************************************************************
 	

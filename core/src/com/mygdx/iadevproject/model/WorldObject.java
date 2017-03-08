@@ -25,6 +25,7 @@ public abstract class WorldObject extends Sprite {
 	// CONSTRUCTORES.
 	public WorldObject() {
 		super();
+		this.maxSpeed = Float.MAX_VALUE; // Si no establecemos una velocidad máxima, no hay valocidad máxima.
 		this.setOriginCenter();
 	}
 	
@@ -42,6 +43,7 @@ public abstract class WorldObject extends Sprite {
 	
 	public WorldObject(Texture texture) {
 		super(texture);
+		this.maxSpeed = Float.MAX_VALUE; // Si no establecemos una velocidad máxima, no hay valocidad máxima.
 		this.setOriginCenter();
 	}
 	
@@ -94,7 +96,7 @@ public abstract class WorldObject extends Sprite {
 	public void setVelocity(Vector3 velocity) {
 		Vector3 vel = new Vector3(velocity);
 		if (vel.len() > maxSpeed) { 
-			// Si la velocidad que nos pasan como parámetro tiene un módulo mayor que la máxima velocidad 
+			// Si la velocidad que nos pasan como parámetro tiene un módulo mayor que la máxima velocidad
 			// a la que puede ir el personaje, la establecemos a la máxima velocidad
 			vel = vel.nor();
 			vel.x *= maxSpeed;
