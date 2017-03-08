@@ -22,22 +22,26 @@ public abstract class Formation extends Character {
 	// 		Estos métodos nos permitirá realizar un tratamiento/procesamiento especial a los personajes cuando sean añadidos y eliminados.
 	public Formation(float maxAcceleration) {
 		super();
+		this.maxAcceleration = maxAcceleration;
 		this.charactersList = new LinkedList<Character>();
 	}
 	
 	// CUIDADO -> No confundir la velocidad máxima de la formación con la velocidad máxima de cada uno de sus integrantes.
 	public Formation(float maxAcceleration, float maxSpeed) {
 		super(maxSpeed);
+		this.maxAcceleration = maxAcceleration;
 		this.charactersList = new LinkedList<Character>();
 	}
 	
 	public Formation(float maxAcceleration, float maxSpeed, Texture texture) {
 		super(maxSpeed, texture);
+		this.maxAcceleration = maxAcceleration;
 		this.charactersList = new LinkedList<Character>();
 	}
 	
 	public Formation(float maxAcceleration, Texture texture) {
 		super(texture);
+		this.maxAcceleration = maxAcceleration;
 	}
 
 	// GETs y SETs.
