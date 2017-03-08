@@ -106,7 +106,7 @@ public class Character extends WorldObject {
 	
 	// Aplicar un determinado comportamiento a un personaje. Este comportamiento se le pasa como parámetro.
 	public void applyBehaviour (Behaviour behaviour) {
-		// Si el personaje forma parte de una formación, su comportamiento será el de la formación.
+		// Si el personaje forma parte de una formación, sus comportamientos propios no serán tenidos en cuenta.
 		// 		No podrá comportarse como él quiera.
 		if (!this.inFormation) {
 			this.update(behaviour.getSteering(), Gdx.graphics.getDeltaTime());

@@ -14,9 +14,4 @@ public interface Behaviour {
 	 */
 	Steering getSteering();
 	
-	/**
-	 * Método que devuelve el objetivo u objetivos del comportamiento.
-	 * @return Aquello que el comportamiento considera como 'objetivo'.
-	 */
-	Object getTarget();
 }
