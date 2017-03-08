@@ -22,7 +22,7 @@ public class Face extends Align_Accelerated implements Behaviour {
 		
 		// Calcular la dirección hacia el objetivo
 		Vector3 direction = new Vector3(this.getTarget().getPosition());
-		direction = direction.sub(this.getTarget().getPosition());
+		direction = direction.sub(this.getSource().getPosition());
 		
 		// Si la dirección es cero, no cambianos nada. Estamos mirando al objetivo
 		if (direction.len() == 0.0f) {
