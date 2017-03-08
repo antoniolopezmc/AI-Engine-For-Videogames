@@ -56,7 +56,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 			
 			// Calculamos la dirección (el vector) y distancia entre la fuente y el siguiente objetivo (el punto donde tenemos que ir).
 			Vector3 direction = new Vector3(nextTarget);
-			direction = direction.sub(super.getSource().getPosition());
+			direction = direction.sub(this.getSource().getPosition());
 			float distance = direction.len(); // Módulo del vector 'direction'.
 			
 			// Si la distancia hasta el siguiente objetivo es menor que el radio, eso quiere decir que ya hemos llegado al punto deseado.
@@ -88,14 +88,14 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 				fakeCharacter.setPosition(new Vector3(finalPositionX, finalPositionY, finalPositionZ));
 				
 				// Establecemos como objectivo el 'fakeCharacter'
-				super.setTarget(fakeCharacter);
+				this.setTarget(fakeCharacter);
 				return super.getSteering();
 			}
 		}
 		
 		// Si la lista está vacía, es que ya no quedan más puntos a donde ir. Por tanto, no hacemos nada.
 		//		Esto es equivalente a obtener el Steering entre el pensonaje y él mismo.
-		super.setTarget(super.getSource());
+		this.setTarget(this.getSource());
 		return super.getSteering();
 		
 	}

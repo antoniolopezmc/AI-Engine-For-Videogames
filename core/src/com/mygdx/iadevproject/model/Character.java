@@ -129,7 +129,8 @@ public class Character extends WorldObject {
 			
 			// Modificamos la velocidad del personaje.
 			Vector3 linPRODtime = new Vector3(newSteering.getLineal().x * time, newSteering.getLineal().y * time, newSteering.getLineal().z * time);
-			this.setVelocity(this.getVelocity().add(linPRODtime));
+			// TODO Revisar. Esto me da mala espina. El add ya te esta modificando el vector velocidad (aunque luego hagas el set y se regule en función de la velocidad máxima).
+			this.setVelocity(this.getVelocity().add(linPRODtime)); 
 			
 			// Modificamos la rotación (velocidad angular) del personaje.
 			float angPRODtime = newSteering.getAngular() * time;

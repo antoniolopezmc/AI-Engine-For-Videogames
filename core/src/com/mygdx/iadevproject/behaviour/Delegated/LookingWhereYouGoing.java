@@ -22,7 +22,7 @@ public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour
 		// 1.- Calcular el objetivo al que alinearse
 		
 		// Si la velocidad es cero, no cambianos nada. Estamos mirando al objetivo
-		if (super.getSource().getVelocity().len() == 0.0f) {
+		if (this.getSource().getVelocity().len() == 0.0f) {
 			Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 			output.setAngular(0);
 			output.setLineal(new Vector3(0,0,0));
@@ -30,10 +30,10 @@ public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour
 		}
 		
 		WorldObject explicitTarget = new Character();
-		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-super.getSource().getVelocity().x, super.getSource().getVelocity().y)));
+		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-this.getSource().getVelocity().x, this.getSource().getVelocity().y)));
 		
 		// Establecemos como objetivo, el objetivo calculado
-		super.setTarget(explicitTarget);
+		this.setTarget(explicitTarget);
 		return super.getSteering();
 	}
 

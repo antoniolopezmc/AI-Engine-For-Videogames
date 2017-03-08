@@ -99,7 +99,7 @@ public class Wander_Delegated extends Face implements Behaviour {
 		this.wanderOrientation += (aletorio.nextFloat() - aletorio.nextFloat()) * this.wanderRate;
 		
 		// Calculamos la orientación del objetivo
-		float targetOrientation = this.wanderOrientation + super.getSource().getOrientation();
+		float targetOrientation = this.wanderOrientation + this.getSource().getOrientation();
 		
 		// Calculamos el centro del círculo Wander
 		Vector3 sourceOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
@@ -108,9 +108,9 @@ public class Wander_Delegated extends Face implements Behaviour {
 		sourceOrientationVector.z *= this.wanderOffset;
 		
 		Vector3 targetPosition = new Vector3();
-		targetPosition.x = super.getSource().getPosition().x + sourceOrientationVector.x;
-		targetPosition.y = super.getSource().getPosition().y + sourceOrientationVector.y;
-		targetPosition.z = super.getSource().getPosition().z + sourceOrientationVector.z;
+		targetPosition.x = this.getSource().getPosition().x + sourceOrientationVector.x;
+		targetPosition.y = this.getSource().getPosition().y + sourceOrientationVector.y;
+		targetPosition.z = this.getSource().getPosition().z + sourceOrientationVector.z;
 		
 		// Calculamos la locacización del objetivo
 		Vector3 targetOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(targetOrientation)), (float) Math.cos(Math.toRadians(targetOrientation)), 0.0f);
@@ -123,7 +123,7 @@ public class Wander_Delegated extends Face implements Behaviour {
 		WorldObject targetExplicit = new Character();
 		targetExplicit.setPosition(targetPosition);
 		// Establecemos como objetivo el objetivo calculado.
-		super.setTarget(targetExplicit);
+		this.setTarget(targetExplicit);
 		Steering steering = super.getSteering();
 
 		// Comprobamos que el steering que produce el Face sea de tipo

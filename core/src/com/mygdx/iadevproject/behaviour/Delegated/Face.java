@@ -21,8 +21,8 @@ public class Face extends Align_Accelerated implements Behaviour {
 		// 1.- Calcular el objetivo al que alinearse
 		
 		// Calcular la dirección hacia el objetivo
-		Vector3 direction = new Vector3(super.getTarget().getPosition());
-		direction = direction.sub(super.getTarget().getPosition());
+		Vector3 direction = new Vector3(this.getTarget().getPosition());
+		direction = direction.sub(this.getTarget().getPosition());
 		
 		// Si la dirección es cero, no cambianos nada. Estamos mirando al objetivo
 		if (direction.len() == 0.0f) {
@@ -34,12 +34,12 @@ public class Face extends Align_Accelerated implements Behaviour {
 		
 		// Almacenamos el objetivo principal para poder llamar al método del padre con el 'explicitTarget'
 		// y no perder el objetivo principal.
-		WorldObject aux = super.getTarget();
-		super.setTarget(explicitTarget);
+		WorldObject aux = this.getTarget();
+		this.setTarget(explicitTarget);
 		// Llamamos al 'getSteering' del padre
 		Steering output = super.getSteering();
 		// Recuperamos el objetivo principal
-		super.setTarget(aux);
+		this.setTarget(aux);
 		
 		// Devolvemos el steering calculado
 		return output;
