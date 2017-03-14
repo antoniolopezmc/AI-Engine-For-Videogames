@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Seek_Accelerated;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.steering.Steering;
 
 // ---> PATRÓN COMPOSITE.
@@ -42,6 +43,7 @@ public abstract class Formation extends Character {
 	public Formation(float maxAcceleration, Texture texture) {
 		super(texture);
 		this.maxAcceleration = maxAcceleration;
+		this.charactersList = new LinkedList<Character>();
 	}
 
 	// GETs y SETs.
@@ -64,8 +66,8 @@ public abstract class Formation extends Character {
 	// 		de la formación, en base a la forma de la propia formación.
 	// MUY IMPORTANTE -> ESTAS POSICIONES SON RELATIVAS AL CENTRO/POSICIÓN DE LA FORMACIÓN.
 	//		Para obtener las posiciones de nuestro mundo habrá que sumarlas a la posición de la formación dentro del mundo.
-	// ------> OBVIAMENTE, LA LONGITUS DE ESTA LISTA DEBE SER IGUAL A LA LONGITUD DE LA LISTA 'charactersList'.
-	protected abstract List<Vector3> getCharactersPosition(); // Patrón método plantilla.
+	// ------> OBVIAMENTE, LA LONGITUD DE ESTA LISTA DEBE SER IGUAL A LA LONGITUD DE LA LISTA 'charactersList'.
+	protected abstract List<Vector3> getCharactersPosition(); // ---> Patrón método plantilla.
 
 	public void addCharacterToCharactersList(Character character) {
 		// Al añadir un personaje a la formación, activamos el flag correspondiente.
@@ -86,10 +88,9 @@ public abstract class Formation extends Character {
 		this.update(behaviour.getSteering(), Gdx.graphics.getDeltaTime());
 		
 		// Ahora, calculamos la lista de posiciones de los personajes de la formación, con respecto a la propia formación.
-		// NOS QUEDAMOS CON UNA COPIA PARA CONSERVAR LOS ELEMENTOS DE LA LISTA ORIGINAL.
-		List<Vector3> charactersPositionList = new LinkedList<Vector3>(getCharactersPosition());
+		List<Vector3> charactersPositionList = getCharactersPosition();
 		
-		// Tras el update de la formación, obtenemos su posición, ya que con respecto a ella se moverán los integrantes.
+		// Tras el update de la formación, obtenemos su nueva posición, ya que con respecto a ella se moverán los integrantes.
 		Vector3 formationPosition = new Vector3(this.getPosition());
 		
 		// Ahora, calculamos la nueva posición hacia la que deben ir los integrantes de la formación.
@@ -109,13 +110,11 @@ public abstract class Formation extends Character {
 			// La posición del personaje ficticio será la correspondiente posición calculada anteriormente.
 			Character fakeCharacter = new Character();
 			Vector3 targetPosition =  charactersPositionList.get(index);
-			float finalPositionX = targetPosition.x;
-			float finalPositionY = targetPosition.y;
-			float finalPositionZ = targetPosition.z;
-			fakeCharacter.setPosition(new Vector3(finalPositionX, finalPositionY, finalPositionZ));
+			fakeCharacter.setPosition(new Vector3(targetPosition.x, targetPosition.y, targetPosition.z));
 			
 			// Ahora, aplicamos el comportamiento al personaje.
 			thisCharacter.applyBehaviour(new Seek_Accelerated(thisCharacter, fakeCharacter, this.maxAcceleration));
+			// --> Para hacer pruebas --> thisCharacter.applyBehaviour(new Seek_NoAccelerated(thisCharacter, fakeCharacter, this.maxAcceleration));
 			
 			// Finalmente, volvemos a activar el flag para que no se pueda mover al personaje desde otro sitio.
 			thisCharacter.setInFormation(true);

@@ -36,6 +36,8 @@ import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Flee_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.CircularFormation;
+import com.mygdx.iadevproject.model.Formation;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
@@ -50,6 +52,11 @@ public class IADeVProject extends ApplicationAdapter {
 	private Set<Object> selectedObjects; // Lista de objetos seleccionados
 	
 	private Character gota;
+	private Character gota2;
+	private Character gota3;
+	private Character gota4;
+	private Character gota5;
+	private CircularFormation formacion;
 	private Character cubo;
 	private Character collision;
 	
@@ -76,14 +83,53 @@ public class IADeVProject extends ApplicationAdapter {
         font = new BitmapFont();
         
         // Creamos el personaje.
-        gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota.setBounds(100.0f, 410.0f, 64.0f, 64.0f);
+        gota = new Character();
+        gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
         gota.setOrientation(30.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         
+        // Creamos el personaje.
+        gota2 = new Character();
+        gota2.setBounds(150.0f, 150.0f, 64.0f, 64.0f);
+        gota2.setOrientation(30.0f);
+        gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        
+        // Creamos el personaje.
+        gota3 = new Character();
+        gota3.setBounds(250.0f, 250.0f, 64.0f, 64.0f);
+        gota3.setOrientation(30.0f);
+        gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        
+        // Creamos el personaje.
+        gota4 = new Character();
+        gota4.setBounds(350.0f, 350.0f, 64.0f, 64.0f);
+        gota4.setOrientation(30.0f);
+        gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        
+        // Creamos el personaje.
+        gota5 = new Character();
+        gota5.setBounds(450.0f, 450.0f, 64.0f, 64.0f);
+        gota5.setOrientation(30.0f);
+        gota5.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota5.addToListBehaviour(new Wander_NoAccelerated(gota5, 50.0f, 20.0f)); // En formación, el wander no deberia tenerse en cuenta.
+        
+        // Creamos la formación.
+        formacion = new CircularFormation(50.0f);
+        formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
+        formacion.setOrientation(0.0f);
+        formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        formacion.addCharacterToCharactersList(gota);
+        formacion.addCharacterToCharactersList(gota2);
+        formacion.addCharacterToCharactersList(gota3);
+        formacion.addCharacterToCharactersList(gota4);
+        formacion.addCharacterToCharactersList(gota5);
+        formacion.setSeparationDistance(100.0f);
+        
+       
+        
         // Creamos otro personaje.
         cubo = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        cubo.setBounds(-10.0f, -10.0f, 64.0f, 64.0f);
+        cubo.setBounds(510.0f, 510.0f, 64.0f, 64.0f);
         cubo.setOrientation(90.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
         cubo.setMaxSpeed(50.0f);
@@ -101,7 +147,7 @@ public class IADeVProject extends ApplicationAdapter {
                 
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
         
-        
+        formacion.addToListBehaviour(new Seek_NoAccelerated(formacion, cubo, 50.0f));
        
         obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
         Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -136,45 +182,64 @@ public class IADeVProject extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
 //        gota.applyBehaviour();       
-        cubo.applyBehaviour();
+//       cubo.applyBehaviour();
 //        collision.applyBehaviour();
+        
+        formacion.applyBehaviour();
+        gota5.applyBehaviour(); // No debería hacer nada.
         
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
 		
-		for (WorldObject obs : worldsObstacles) {
-			obs.draw(batch);
-		}
+		//gota.draw(batch);
+		//gota2.draw(batch);
+		//gota3.draw(batch);
 		
-		gota.draw(batch);
-		cubo.draw(batch);
-		collision.draw(batch);
-		font.draw(batch, "CenterOfMass : " + collision.getCenterOfMass().x + " - " + collision.getCenterOfMass().y, collision.getCenterOfMass().x, collision.getCenterOfMass().y - 10);
-		font.draw(batch, "CenterOfMass : " + gota.getCenterOfMass().x + " - " + gota.getCenterOfMass().y, gota.getCenterOfMass().x, gota.getCenterOfMass().y - 10);
+		//formacion.draw(batch);
+		
+		//for (WorldObject obs : worldsObstacles) {
+		//	obs.draw(batch);
+		//}
+		
+		//gota.draw(batch);
+		//cubo.draw(batch);
+		//collision.draw(batch);
+		font.draw(batch, gota.getPosition().x + " - " + gota.getPosition().y, gota.getPosition().x, gota.getPosition().y - 10);
+		font.draw(batch, gota2.getPosition().x + " - " + gota2.getPosition().y, gota2.getPosition().x, gota2.getPosition().y - 10);
+		font.draw(batch, gota3.getPosition().x + " - " + gota3.getPosition().y, gota3.getPosition().x, gota3.getPosition().y - 10);
+		font.draw(batch, gota4.getPosition().x + " - " + gota4.getPosition().y, gota4.getPosition().x, gota4.getPosition().y - 10);
+		font.draw(batch, gota5.getPosition().x + " - " + gota5.getPosition().y, gota5.getPosition().x, gota5.getPosition().y - 10);
 		
 //		font.draw(batch, "Velocidad : " + cubo.getVelocity().x + " - " + cubo.getVelocity().y, cubo.getPosition().x, cubo.getPosition().y - 10);
 //		font.draw(batch, "Orientación: " + cubo.getOrientation(), cubo.getPosition().x, cubo.getPosition().y - 25);
 //		font.draw(batch, "Orientación: " + gota.getOrientation(), gota.getPosition().x, gota.getPosition().y - 25);
 		batch.end();
 		
-		renderer.begin(ShapeType.Filled);
+		/*renderer.begin(ShapeType.Filled);
 		renderer.setColor(Color.RED);
 		for (Vector3 punto : listaDePuntos) {
 			renderer.circle(punto.x, punto.y, 2);
-		}
+		}*/
 		
 		renderer.end();
 		
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.CYAN);
-		renderer.circle(cubo.getCenterOfMass().x, cubo.getCenterOfMass().y, cubo.getBoundingRadius());
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(Color.RED);
+		renderer.circle(formacion.getPosition().x, formacion.getPosition().y, 5.0f);
+		/*renderer.circle(cubo.getCenterOfMass().x, cubo.getCenterOfMass().y, cubo.getBoundingRadius());
 		renderer.circle(gota.getCenterOfMass().x, gota.getCenterOfMass().y, gota.getBoundingRadius());
 		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
 		//renderer.rect(cubo.getBoundingRectangle().x, cubo.getBoundingRectangle().y, cubo.getBoundingRectangle().width, cubo.getBoundingRectangle().height);
 		
 		for (WorldObject obs : worldsObstacles) {
 			renderer.circle(obs.getCenterOfMass().x, obs.getCenterOfMass().y, obs.getBoundingRadius());
-		}
+		}*/
+		renderer.setColor(Color.CYAN);
+		renderer.circle(gota.getPosition().x, gota.getPosition().y, 5.0f);
+		renderer.circle(gota2.getPosition().x, gota2.getPosition().y, 5.0f);
+		renderer.circle(gota3.getPosition().x, gota3.getPosition().y, 5.0f);
+		renderer.circle(gota4.getPosition().x, gota4.getPosition().y, 5.0f);
+		renderer.circle(gota5.getPosition().x, gota5.getPosition().y, 5.0f);
 		renderer.end();
 		
 		// process user input

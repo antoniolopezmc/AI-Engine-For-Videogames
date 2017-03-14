@@ -95,13 +95,13 @@ public abstract class WorldObject extends Sprite {
 	 */
 	public void setVelocity(Vector3 velocity) {
 		Vector3 vel = new Vector3(velocity);
-		if (vel.len() > maxSpeed) { 
+		if (vel.len() > this.maxSpeed) { 
 			// Si la velocidad que nos pasan como parámetro tiene un módulo mayor que la máxima velocidad
 			// a la que puede ir el personaje, la establecemos a la máxima velocidad
 			vel = vel.nor();
-			vel.x *= maxSpeed;
-			vel.y *= maxSpeed;
-			vel.x *= maxSpeed;
+			vel.x *= this.maxSpeed;
+			vel.y *= this.maxSpeed;
+			vel.x *= this.maxSpeed;
 		}
 		this.velocity = vel;
 	}
