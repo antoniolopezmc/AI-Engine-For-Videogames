@@ -138,6 +138,18 @@ public class Character extends WorldObject {
 			// Si el Steering es de tipo uniforme acelerado, se modifica la posición y orientación del personaje en función de la velocidad y rotación del personaje
 			//		y la velocidad y rotación del personaje en función de la aceleración lineal y angular del Steering.
 			
+			// Modificamos la velocidad del personaje.
+			Vector3 linPRODtime = new Vector3(newSteering.getLineal().x * time, newSteering.getLineal().y * time, newSteering.getLineal().z * time);
+			
+			Vector3 velocity = new Vector3(this.getVelocity());
+			velocity.add(linPRODtime);
+			
+			this.setVelocity(velocity); 
+			
+			// Modificamos la rotación (velocidad angular) del personaje.
+			float angPRODtime = newSteering.getAngular() * time;
+			this.setRotation_angularSpeed(this.getRotation_angularSpeed() + angPRODtime);
+			
 			// Modificamos la posición del personaje.
 			Vector3 velPRODtime = new Vector3(this.getVelocity().x * time, this.getVelocity().y * time, this.getVelocity().z * time);
 			this.setPosition(this.getPosition().add(velPRODtime));
@@ -146,14 +158,6 @@ public class Character extends WorldObject {
 			float rotPRODtime = this.getRotation_angularSpeed() * time;
 			this.setOrientation(this.getOrientation() + rotPRODtime);
 			
-			// Modificamos la velocidad del personaje.
-			Vector3 linPRODtime = new Vector3(newSteering.getLineal().x * time, newSteering.getLineal().y * time, newSteering.getLineal().z * time);
-			// TODO Revisar. Esto me da mala espina. El add ya te esta modificando el vector velocidad (aunque luego hagas el set y se regule en función de la velocidad máxima).
-			this.setVelocity(this.getVelocity().add(linPRODtime)); 
-			
-			// Modificamos la rotación (velocidad angular) del personaje.
-			float angPRODtime = newSteering.getAngular() * time;
-			this.setRotation_angularSpeed(this.getRotation_angularSpeed() + angPRODtime);
 		}
 	}
 }

@@ -9,8 +9,6 @@ import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
-// TODO IMPORTANTE -> PROBAR. HE CAMBIADO EL TIPO DE TARGETS.
-
 public class CollisionAvoidance implements Behaviour {
 	private final float INFINITY = Float.MAX_VALUE; // Constante que representa el número infinito
 	
@@ -71,13 +69,13 @@ public class CollisionAvoidance implements Behaviour {
 					
 					// Si se produce antes que los ya vistos, entonces actualizamos los valores para utilizarlos después en el cálculo
 					// del steering:
-					shortestTime = timeToCollision;
-					firstTarget = tar;
-					firstMinSeparation = minSeparation;
-					firstDistance = distance;
-//					firstRelativePos = relativePos;
-//					firstRelativeVel = relativeVel;
-					firstSumRadius = sumRadius;
+					shortestTime 		= timeToCollision;
+					firstTarget 		= tar;
+					firstMinSeparation 	= minSeparation;
+					firstDistance 		= distance;
+//					firstRelativePos 	= relativePos;
+//					firstRelativeVel 	= relativeVel;
+					firstSumRadius 		= sumRadius;
 				}
 			}
 		}

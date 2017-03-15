@@ -101,10 +101,12 @@ public abstract class WorldObject extends Sprite {
 			// Si la velocidad que nos pasan como parámetro tiene un módulo mayor que la máxima velocidad
 			// a la que puede ir el personaje, la establecemos a la máxima velocidad
 			vel = vel.nor();
+	
 			vel.x *= this.maxSpeed;
 			vel.y *= this.maxSpeed;
-			vel.x *= this.maxSpeed;
+			vel.z *= this.maxSpeed;
 		}
+		
 		this.velocity = vel;
 	}
 	
@@ -182,7 +184,7 @@ public abstract class WorldObject extends Sprite {
 	 * @return Centro de masa del objeto
 	 */
 	public Vector3 getCenterOfMass() {
-		return new Vector3(this.getX() + this.getWidth()/2, this.getY() + this.getHeight()/2, 0.0f);
+		return new Vector3(this.getX(), this.getY(), 0.0f);
 	}
 	
 	

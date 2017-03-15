@@ -132,7 +132,7 @@ public class IADeVProject extends ApplicationAdapter {
         cubo.setBounds(510.0f, 510.0f, 64.0f, 64.0f);
         cubo.setOrientation(90.0f);
         cubo.setVelocity(new Vector3(0.0f, 0.0f, 0));
-        cubo.setMaxSpeed(50.0f);
+        cubo.setMaxSpeed(60.0f);
         listaDePuntos = new LinkedList<Vector3>();
         listaDePuntos.add(new Vector3(20.0f, 20.0f, 0));
         listaDePuntos.add(new Vector3(160.0f, 200.0f, 0));
@@ -140,7 +140,7 @@ public class IADeVProject extends ApplicationAdapter {
         listaDePuntos.add(new Vector3(400.0f, 200.0f, 0));
         listaDePuntos.add(new Vector3(520.0f, 20.0f, 0));
         Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        cubo.addToListBehaviour(new Seek_Accelerated(cubo, obs1, 1000.0f));
+        cubo.addToListBehaviour(new Seek_Accelerated(cubo, gota, 50.0f));
         
 //        cubo.addToListBehaviour(new LookingWhereYouGoing(cubo, 20.0f, 50.0f, 0.0f, 10.0f, 1.0f));
         renderer = new ShapeRenderer();
@@ -182,35 +182,35 @@ public class IADeVProject extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
 //        gota.applyBehaviour();       
-//       cubo.applyBehaviour();
+        cubo.applyBehaviour();
 //        collision.applyBehaviour();
         
-        formacion.applyBehaviour();
-        gota5.applyBehaviour(); // No debería hacer nada.
+//        formacion.applyBehaviour();
+//        gota5.applyBehaviour(); // No debería hacer nada.
         
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
 		
 		gota.draw(batch);
-		gota2.draw(batch);
-		gota3.draw(batch);
-		gota4.draw(batch);
-		gota5.draw(batch);
+//		gota2.draw(batch);
+//		gota3.draw(batch);
+//		gota4.draw(batch);
+//		gota5.draw(batch);
+//		
+//		formacion.draw(batch);
 		
-		formacion.draw(batch);
+//		for (WorldObject obs : worldsObstacles) {
+//			obs.draw(batch);
+//		}
 		
-		//for (WorldObject obs : worldsObstacles) {
-		//	obs.draw(batch);
-		//}
-		
-		//gota.draw(batch);
-		//cubo.draw(batch);
-		//collision.draw(batch);
-		font.draw(batch, gota.getPosition().x + " - " + gota.getPosition().y, gota.getPosition().x, gota.getPosition().y - 10);
-		font.draw(batch, gota2.getPosition().x + " - " + gota2.getPosition().y, gota2.getPosition().x, gota2.getPosition().y - 10);
-		font.draw(batch, gota3.getPosition().x + " - " + gota3.getPosition().y, gota3.getPosition().x, gota3.getPosition().y - 10);
-		font.draw(batch, gota4.getPosition().x + " - " + gota4.getPosition().y, gota4.getPosition().x, gota4.getPosition().y - 10);
-		font.draw(batch, gota5.getPosition().x + " - " + gota5.getPosition().y, gota5.getPosition().x, gota5.getPosition().y - 10);
+		gota.draw(batch);
+		cubo.draw(batch);
+//		collision.draw(batch);
+//		font.draw(batch, gota.getPosition().x + " - " + gota.getPosition().y, gota.getPosition().x, gota.getPosition().y - 10);
+//		font.draw(batch, gota2.getPosition().x + " - " + gota2.getPosition().y, gota2.getPosition().x, gota2.getPosition().y - 10);
+//		font.draw(batch, gota3.getPosition().x + " - " + gota3.getPosition().y, gota3.getPosition().x, gota3.getPosition().y - 10);
+//		font.draw(batch, gota4.getPosition().x + " - " + gota4.getPosition().y, gota4.getPosition().x, gota4.getPosition().y - 10);
+//		font.draw(batch, gota5.getPosition().x + " - " + gota5.getPosition().y, gota5.getPosition().x, gota5.getPosition().y - 10);
 		
 //		font.draw(batch, "Velocidad : " + cubo.getVelocity().x + " - " + cubo.getVelocity().y, cubo.getPosition().x, cubo.getPosition().y - 10);
 //		font.draw(batch, "Orientación: " + cubo.getOrientation(), cubo.getPosition().x, cubo.getPosition().y - 25);
@@ -232,10 +232,7 @@ public class IADeVProject extends ApplicationAdapter {
 		renderer.circle(gota.getCenterOfMass().x, gota.getCenterOfMass().y, gota.getBoundingRadius());
 		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
 		//renderer.rect(cubo.getBoundingRectangle().x, cubo.getBoundingRectangle().y, cubo.getBoundingRectangle().width, cubo.getBoundingRectangle().height);
-		
-		for (WorldObject obs : worldsObstacles) {
-			renderer.circle(obs.getCenterOfMass().x, obs.getCenterOfMass().y, obs.getBoundingRadius());
-		}*/
+		*/
 		renderer.setColor(Color.CYAN);
 		renderer.circle(gota.getPosition().x, gota.getPosition().y, 5.0f);
 		renderer.circle(gota2.getPosition().x, gota2.getPosition().y, 5.0f);
@@ -244,6 +241,15 @@ public class IADeVProject extends ApplicationAdapter {
 		renderer.circle(gota5.getPosition().x, gota5.getPosition().y, 5.0f);
 		
 		renderer.end();
+		
+//		renderer.begin(ShapeType.Line);
+//		for (WorldObject obs : worldsObstacles) {
+//			renderer.circle(obs.getCenterOfMass().x, obs.getCenterOfMass().y, obs.getBoundingRadius());
+//		}
+//		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
+//		
+//		renderer.end();
+		
 		
 		// process user input
 		if (Gdx.input.isTouched()) {
