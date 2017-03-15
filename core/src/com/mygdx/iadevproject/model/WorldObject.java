@@ -1,6 +1,7 @@
 package com.mygdx.iadevproject.model;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 
@@ -20,31 +21,32 @@ public abstract class WorldObject extends Sprite {
 	private float rotation_angularSpeed;
 	
 	private float minBoxLength; // Longitud mínima de la caja de detección
-	private float maxSpeed; 	// Máxima velocidad a la que puede ir el personaje, independientemente de su steering.
+	// IMPORTANTE -> No confundir con maxSpeed de Behaviour (de algunos).
+	private float maxSpeed; 	// Máxima velocidad a la que puede ir el personaje, independientemente de su comportamiento.
 
 	// CONSTRUCTORES.
 	public WorldObject() {
 		super();
 		this.maxSpeed = Float.MAX_VALUE; // Si no establecemos una velocidad máxima, no hay valocidad máxima.
-		this.setOriginCenter();
+		this.setOrigin(this.getWidth()/2, this.getHeight()/2);
 	}
 	
 	public WorldObject(float maxSpeed) {
 		super();
 		this.maxSpeed = maxSpeed;
-		this.setOriginCenter();
+		this.setOrigin(this.getWidth()/2, this.getHeight()/2);
 	}
 	
 	public WorldObject(float maxSpeed, Texture texture) {
 		super(texture);
 		this.maxSpeed = maxSpeed;
-		this.setOriginCenter();
+		this.setOrigin(this.getWidth()/2, this.getHeight()/2);
 	}
 	
 	public WorldObject(Texture texture) {
 		super(texture);
 		this.maxSpeed = Float.MAX_VALUE; // Si no establecemos una velocidad máxima, no hay valocidad máxima.
-		this.setOriginCenter();
+		this.setOrigin(this.getWidth()/2, this.getHeight()/2);
 	}
 	
 	// GETs y SETs.
@@ -181,5 +183,23 @@ public abstract class WorldObject extends Sprite {
 	 */
 	public Vector3 getCenterOfMass() {
 		return new Vector3(this.getX() + this.getWidth()/2, this.getY() + this.getHeight()/2, 0.0f);
+	}
+	
+	
+	// MÉTODOS PARA DIBUJAR EL Sprite SOBREESCRITOS.
+	public void draw(Batch batch) {
+		if (this.getTexture() != null) {
+			// Cuando libgdx dibuja un Sprite, lo hace de tal manera que la posición de dicho Sprite es el vértice DE ABAJO A LA IZQUIERDA de la textura.
+			// Sin embargo, los que nosotros queremos es que en CENTRO de la textura sea la posición del Sprite.
+			// --> Por tanto, a la hora de dibujar se cambiará momentaneamente la posición real del objeto.
+			Vector3 realPosition = new Vector3(this.getPosition());
+			this.setPosition(this.getPosition().x - this.getWidth()/2, this.getPosition().y - this.getHeight()/2);
+			super.draw(batch);
+			this.setPosition(realPosition);
+		}
+	}
+	
+	public void draw(Batch batch, float alphaModulation) {
+		this.draw(batch);
 	}
 }

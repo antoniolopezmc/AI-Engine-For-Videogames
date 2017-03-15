@@ -6,7 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
+import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Align_Accelerated;
+import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.Seek_Accelerated;
+import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Arrive_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.steering.Steering;
 
@@ -16,7 +19,7 @@ public abstract class Formation extends Character {
 	// Lista de personajes que integran la formación.
 	private List<Character> charactersList;
 	// Máxima aceleración de la formación. Necesaria para llamar al Seek.
-	private float maxAcceleration;
+	private float maxAcceleration; // TODDO Esto será útil o no dependiendo de si el comportamiento elegido finalmente es acelerado o no.
 
 	// CONSTRUCTORES.
 	// IMPORTANTE -> Al construir la formación NO se le pasa la lista de integrantes como parámetro. Hay 2 métodos especiales para añadir o eliminar un componente de la formación.
@@ -100,21 +103,26 @@ public abstract class Formation extends Character {
 		
 		// YA TENEMOS LAS POSICIONES FINALES DEL MUNDO HACIA LAS QUE DEBEN MOVERSE CADA UNO DE LOS INTEGRANTES DE LA FORMACIÓN.
 		
-		// Ahora, los personajes de la formación deben ir/encontrarse a/con la formación. Para ello, deben moverse lo más rápido posible. ==> SEEK.
+		// Ahora, los personajes de la formación deben ir/encontrarse a/con la formación.
+		// 		Para ello, deben moverse lo más rápido posible. ==> SEEK o ARRIVE con radio muy pequeño.
+		//		Es mejor el arrive con radio pequeño porque así cuando el personaje llegue a la región interior se parará.
 		for (int index = 0; index < this.charactersList.size(); index++) {
 			Character thisCharacter = this.charactersList.get(index);
 			// Primero, desactivamos el flag del personaje. Si no lo hacemos, no podemos aplicarle ningún comportamiento.
 			thisCharacter.setInFormation(false);
 			
-			// Creamos un personaje ficticio para poder pasarlo al Seek. De este personaje solo nos interesa la posición, ya que es lo único que se usa en el Seek.
+			// Creamos un personaje ficticio para poder pasarlo al Seek/Arrive. De este personaje solo nos interesa la posición,
+			//		ya que es lo único que se usa en el Seek/Arrive.
 			// La posición del personaje ficticio será la correspondiente posición calculada anteriormente.
 			Character fakeCharacter = new Character();
 			Vector3 targetPosition =  charactersPositionList.get(index);
 			fakeCharacter.setPosition(new Vector3(targetPosition.x, targetPosition.y, targetPosition.z));
 			
 			// Ahora, aplicamos el comportamiento al personaje.
-			thisCharacter.applyBehaviour(new Seek_Accelerated(thisCharacter, fakeCharacter, this.maxAcceleration));
-			// --> Para hacer pruebas --> thisCharacter.applyBehaviour(new Seek_NoAccelerated(thisCharacter, fakeCharacter, this.maxAcceleration));
+			//thisCharacter.applyBehaviour(new Arrive_Accelerated(thisCharacter, fakeCharacter, this.maxAcceleration, this.maxAcceleration, 3.0f, 5.0f, 1.0f));
+			//thisCharacter.applyBehaviour(new Align_Accelerated(thisCharacter, this, 50.0f, 50.0f, 30.0f, 50.0f, 1.0f));
+			// --> Para hacer pruebas --> 
+			thisCharacter.applyBehaviour(new Arrive_NoAccelerated(thisCharacter, fakeCharacter, this.maxAcceleration, 5.0f, 1.0f));
 			
 			// Finalmente, volvemos a activar el flag para que no se pueda mover al personaje desde otro sitio.
 			thisCharacter.setInFormation(true);

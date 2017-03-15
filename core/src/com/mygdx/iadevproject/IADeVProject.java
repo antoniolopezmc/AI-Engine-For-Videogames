@@ -83,31 +83,31 @@ public class IADeVProject extends ApplicationAdapter {
         font = new BitmapFont();
         
         // Creamos el personaje.
-        gota = new Character();
+        gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
-        gota.setOrientation(30.0f);
+        gota.setOrientation(0.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         
         // Creamos el personaje.
-        gota2 = new Character();
+        gota2 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota2.setBounds(150.0f, 150.0f, 64.0f, 64.0f);
         gota2.setOrientation(30.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         
         // Creamos el personaje.
-        gota3 = new Character();
+        gota3 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota3.setBounds(250.0f, 250.0f, 64.0f, 64.0f);
         gota3.setOrientation(30.0f);
         gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         
         // Creamos el personaje.
-        gota4 = new Character();
+        gota4 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota4.setBounds(350.0f, 350.0f, 64.0f, 64.0f);
         gota4.setOrientation(30.0f);
         gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         
         // Creamos el personaje.
-        gota5 = new Character();
+        gota5 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota5.setBounds(450.0f, 450.0f, 64.0f, 64.0f);
         gota5.setOrientation(30.0f);
         gota5.setVelocity(new Vector3(0.0f,0.0f,0.0f));
@@ -191,11 +191,13 @@ public class IADeVProject extends ApplicationAdapter {
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
 		
-		//gota.draw(batch);
-		//gota2.draw(batch);
-		//gota3.draw(batch);
+		gota.draw(batch);
+		gota2.draw(batch);
+		gota3.draw(batch);
+		gota4.draw(batch);
+		gota5.draw(batch);
 		
-		//formacion.draw(batch);
+		formacion.draw(batch);
 		
 		//for (WorldObject obs : worldsObstacles) {
 		//	obs.draw(batch);
@@ -240,6 +242,7 @@ public class IADeVProject extends ApplicationAdapter {
 		renderer.circle(gota3.getPosition().x, gota3.getPosition().y, 5.0f);
 		renderer.circle(gota4.getPosition().x, gota4.getPosition().y, 5.0f);
 		renderer.circle(gota5.getPosition().x, gota5.getPosition().y, 5.0f);
+		
 		renderer.end();
 		
 		// process user input

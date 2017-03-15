@@ -11,7 +11,7 @@ public class Seek_NoAccelerated implements Behaviour {
 	
 	private Character source;
 	private WorldObject target;
-	private float maxSpeed;
+	private float maxSpeed; // IMPORTANTE -> No confundir con maxSpeed de WorldObject.
 	
 	public Seek_NoAccelerated (Character source, WorldObject target, float maxSpeed) {
 		this.source = source;
