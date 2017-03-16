@@ -18,26 +18,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Align;
 import com.mygdx.iadevproject.behaviour.AcceleratedUnifMov.*;
-import com.mygdx.iadevproject.behaviour.Delegated.CollisionAvoidance;
-import com.mygdx.iadevproject.behaviour.Delegated.Evade;
-import com.mygdx.iadevproject.behaviour.Delegated.Face;
-import com.mygdx.iadevproject.behaviour.Delegated.LookingWhereYouGoing;
-import com.mygdx.iadevproject.behaviour.Delegated.PathFollowingWithoutPathOffset;
-import com.mygdx.iadevproject.behaviour.Delegated.Persue;
 import com.mygdx.iadevproject.behaviour.Delegated.Wander_Delegated;
-import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Arrive_NoAccelerated;
-import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Flee_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.NoAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.CircularFormation;
-import com.mygdx.iadevproject.model.Formation;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
@@ -58,7 +46,6 @@ public class IADeVProject extends ApplicationAdapter {
 	private Character gota5;
 	private CircularFormation formacion;
 	private Character cubo;
-	private Character collision;
 	
 	ShapeRenderer renderer;
 	List<Vector3> listaDePuntos;
@@ -140,6 +127,7 @@ public class IADeVProject extends ApplicationAdapter {
         listaDePuntos.add(new Vector3(400.0f, 200.0f, 0));
         listaDePuntos.add(new Vector3(520.0f, 20.0f, 0));
         Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
         cubo.addToListBehaviour(new Seek_Accelerated(cubo, gota, 50.0f));
         
 //        cubo.addToListBehaviour(new LookingWhereYouGoing(cubo, 20.0f, 50.0f, 0.0f, 10.0f, 1.0f));
@@ -149,26 +137,6 @@ public class IADeVProject extends ApplicationAdapter {
         
         formacion.addToListBehaviour(new Seek_NoAccelerated(formacion, cubo, 50.0f));
        
-        obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
-        Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs2.setBounds(180.0f, 100.0f, 64.0f, 64.0f);
-        Obstacle obs3 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs3.setBounds(100.0f, 300.0f, 64.0f, 64.0f);
-        Obstacle obs4 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs4.setBounds(180.0f, 300.0f, 64.0f, 64.0f);
-        
-        worldsObstacles.add(obs1);
-        worldsObstacles.add(obs2);
-        worldsObstacles.add(obs3);
-        worldsObstacles.add(obs4);
-        
-        worldsObstacles.add(gota);
-        
-        collision = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        collision.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
-        collision.setOrientation(10.0f);
-        collision.setVelocity(new Vector3(-10.0f, -10.0f, 0));
-        collision.addToListBehaviour(new CollisionAvoidance(collision, worldsObstacles, 80.0f));
 	}
 	
 	@Override
@@ -182,30 +150,22 @@ public class IADeVProject extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
 //        gota.applyBehaviour();       
-        cubo.applyBehaviour();
-//        collision.applyBehaviour();
+//        cubo.applyBehaviour();
         
-//        formacion.applyBehaviour();
+        formacion.applyBehaviour();
 //        gota5.applyBehaviour(); // No debería hacer nada.
         
 		// begin a new batch and draw the bucket and all drops
 		batch.begin();
 		
 		gota.draw(batch);
-//		gota2.draw(batch);
-//		gota3.draw(batch);
-//		gota4.draw(batch);
-//		gota5.draw(batch);
-//		
-//		formacion.draw(batch);
+		gota2.draw(batch);
+		gota3.draw(batch);
+		gota4.draw(batch);
+		gota5.draw(batch);
 		
-//		for (WorldObject obs : worldsObstacles) {
-//			obs.draw(batch);
-//		}
+		formacion.draw(batch);
 		
-		gota.draw(batch);
-		cubo.draw(batch);
-//		collision.draw(batch);
 //		font.draw(batch, gota.getPosition().x + " - " + gota.getPosition().y, gota.getPosition().x, gota.getPosition().y - 10);
 //		font.draw(batch, gota2.getPosition().x + " - " + gota2.getPosition().y, gota2.getPosition().x, gota2.getPosition().y - 10);
 //		font.draw(batch, gota3.getPosition().x + " - " + gota3.getPosition().y, gota3.getPosition().x, gota3.getPosition().y - 10);
@@ -230,7 +190,6 @@ public class IADeVProject extends ApplicationAdapter {
 		renderer.circle(formacion.getPosition().x, formacion.getPosition().y, 5.0f);
 		/*renderer.circle(cubo.getCenterOfMass().x, cubo.getCenterOfMass().y, cubo.getBoundingRadius());
 		renderer.circle(gota.getCenterOfMass().x, gota.getCenterOfMass().y, gota.getBoundingRadius());
-		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
 		//renderer.rect(cubo.getBoundingRectangle().x, cubo.getBoundingRectangle().y, cubo.getBoundingRectangle().width, cubo.getBoundingRectangle().height);
 		*/
 		renderer.setColor(Color.CYAN);
@@ -242,15 +201,7 @@ public class IADeVProject extends ApplicationAdapter {
 		
 		renderer.end();
 		
-//		renderer.begin(ShapeType.Line);
-//		for (WorldObject obs : worldsObstacles) {
-//			renderer.circle(obs.getCenterOfMass().x, obs.getCenterOfMass().y, obs.getBoundingRadius());
-//		}
-//		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
-//		
-//		renderer.end();
-		
-		
+
 		// process user input
 		if (Gdx.input.isTouched()) {
 			Vector3 touchPos = new Vector3();

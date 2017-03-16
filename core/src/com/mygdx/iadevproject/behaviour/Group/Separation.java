@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject.behaviour.group;
+package com.mygdx.iadevproject.behaviour.Group;
 
 import java.util.List;
 
@@ -6,18 +6,17 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
-import com.mygdx.iadevproject.steering.Steering;
-import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
+import com.mygdx.iadevproject.steering.*;
 
-public class Attraction implements Behaviour {
+public class Separation implements Behaviour {
 	
 	private Character source;
 	private List<WorldObject> targets; // Lista de objetivos.
 	private float threshold; // Distancia máxima para tener en cuenta un objetivo.
 	private float decayCoefficient;
 	private float maxAcceleration; // Aceleración máxima del personaje.
-	
-	public Attraction(Character source, float maxAcceleration, List<WorldObject> targets, float threshold, float decayCoefficient) {
+
+	public Separation(Character source, float maxAcceleration, List<WorldObject> targets, float threshold, float decayCoefficient) {
 		this.source = source;
 		this.targets = targets;
 		this.threshold = threshold;
@@ -65,15 +64,14 @@ public class Attraction implements Behaviour {
 		output.setAngular(0);
 		
 		// Recorremos la lista de objetivos.
-		for (WorldObject character : targets) {
+		for (WorldObject character : this.targets) {
 			// Comprobamos si el objetivo está a la distancia adecuada para ser tenido en cuenta.
 			Vector3 direction = new Vector3(character.getPosition());
-			direction = direction.sub(source.getPosition());
+			direction = direction.sub(this.source.getPosition());
 			float distance = direction.len();
 			if (distance < this.threshold) {
-				// Calculamos la fuerza de atracción.
+				// Calculamos la fuerza de repulsión.
 				float strenght = Math.min(this.decayCoefficient / (distance*distance), this.maxAcceleration);
-				strenght = strenght * (-1);
 				
 				// Añadimos la aceleración.
 				direction = direction.nor();
