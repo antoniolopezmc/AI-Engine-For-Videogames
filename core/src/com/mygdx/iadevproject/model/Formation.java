@@ -73,9 +73,12 @@ public abstract class Formation extends Character {
 	protected abstract List<Vector3> getCharactersPosition(); // ---> Patrón método plantilla.
 
 	public void addCharacterToCharactersList(Character character) {
-		// Al añadir un personaje a la formación, activamos el flag correspondiente.
-		character.setInFormation(true);
-		this.charactersList.add(character);
+		// Solo podemos añadir un personaje a una formación si no pertenece a ninguna otra.
+		if (!character.isInFormation()) {
+			// Al añadir un personaje a la formación, activamos el flag correspondiente.
+			character.setInFormation(true);
+			this.charactersList.add(character);
+		}
 	}
 	
 	public void deleteCharacterFromCharactersList(Character character) {
