@@ -177,12 +177,11 @@ public class IADeVProject extends ApplicationAdapter {
 //		font.draw(batch, "Orientación: " + gota.getOrientation(), gota.getPosition().x, gota.getPosition().y - 25);
 		batch.end();
 		
-		/*renderer.begin(ShapeType.Filled);
-		renderer.setColor(Color.RED);
+		renderer.begin(ShapeType.Filled);
+		/*renderer.setColor(Color.RED);
 		for (Vector3 punto : listaDePuntos) {
 			renderer.circle(punto.x, punto.y, 2);
 		}*/
-		
 		renderer.end();
 		
 		renderer.begin(ShapeType.Filled);

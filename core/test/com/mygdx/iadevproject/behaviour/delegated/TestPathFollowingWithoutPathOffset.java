@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,19 +20,17 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
-//TODO Este test se lo dejo a Antonio que fue él el que lo implementó y sabe si funciona correctamente o no
-//TODO Está con error a caso hecho, para que no se nos olvide!!
-
 public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
-	
-	public List<WorldObject> worldsObstacles; // Lista de obstáculos del mundo
 	
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private BitmapFont font;
 	private ShapeRenderer renderer;
 	
-	private Character collision;
+	private Character gota;
+	private Character gota2;
+	
+	private List<Vector3> listaDePuntos;
 	
 	@Override
 	public void create() {
@@ -44,30 +43,34 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         batch = new SpriteBatch();
         font = new BitmapFont();
         renderer = new ShapeRenderer();
-        worldsObstacles = new LinkedList<WorldObject>();
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
-        Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
-        Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs2.setBounds(180.0f, 100.0f, 64.0f, 64.0f);
-        Obstacle obs3 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs3.setBounds(100.0f, 300.0f, 64.0f, 64.0f);
-        Obstacle obs4 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs4.setBounds(180.0f, 300.0f, 64.0f, 64.0f);
+        // Creamos la lista de puntos de debe seguir el objeto.
+        listaDePuntos = new LinkedList<Vector3>();
+        listaDePuntos.add(new Vector3(20.0f, 20.0f, 0));
+        listaDePuntos.add(new Vector3(160.0f, 200.0f, 0));
+        listaDePuntos.add(new Vector3(280.0f, 20.0f, 0));
+        listaDePuntos.add(new Vector3(400.0f, 200.0f, 0));
+        listaDePuntos.add(new Vector3(520.0f, 20.0f, 0));
         
-        worldsObstacles.add(obs1);
-        worldsObstacles.add(obs2);
-        worldsObstacles.add(obs3);
-        worldsObstacles.add(obs4);
+        // Creamos el personaje.
+        gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        gota.setOrientation(0.0f);
+        gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota.addToListBehaviour(new PathFollowingWithoutPathOffset(gota, 20.0f, listaDePuntos, 20.0f, PathFollowingWithoutPathOffset.MODO_PARAR_AL_FINAL));
+        gota.setMaxSpeed(20.0f); // Limitamos la velocidad del objeto para que no se nos vaya de madre.
         
-        collision = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        collision.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
-        collision.setOrientation(10.0f);
-        collision.setVelocity(new Vector3(-10.0f, -10.0f, 0));
-        collision.addToListBehaviour(new Seek_Accelerated(collision, worldsObstacles, 80.0f));
+        // Creamos el personaje.
+        gota2 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota2.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        gota2.setOrientation(0.0f);
+        gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota2.addToListBehaviour(new PathFollowingWithoutPathOffset(gota2, 40.0f, listaDePuntos, 20.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+        gota2.setMaxSpeed(20.0f); // Limitamos la velocidad del objeto para que no se nos vaya de madre.
+        
 	}
 	
 	@Override
@@ -80,33 +83,24 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-//        drop.applyBehaviour();       
-        collision.applyBehaviour();
+        gota.applyBehaviour();
+        gota2.applyBehaviour();
         
         batch.begin();
-		collision.draw(batch);
-		for (WorldObject obs : worldsObstacles) {
-			obs.draw(batch);
-		}
+        gota.draw(batch);
+		gota2.draw(batch);
         batch.end();
-        
     	
-		renderer.begin(ShapeType.Line);
-		for (WorldObject obs : worldsObstacles) {
-			renderer.circle(obs.getCenterOfMass().x, obs.getCenterOfMass().y, obs.getBoundingRadius());
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(Color.RED);
+		for (Vector3 punto : listaDePuntos) {
+			renderer.circle(punto.x, punto.y, 2);
 		}
-		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
-		
 		renderer.end();
 	}
 	
 	@Override
 	public void dispose() {
-		for (WorldObject obs : worldsObstacles) {
-			obs.getTexture().dispose();
-		}
-		
-		collision.getTexture().dispose();
 		batch.dispose();
 		font.dispose();
 		renderer.dispose();

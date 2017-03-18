@@ -10,8 +10,6 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 
-//TODO IMPORTANTE -> PROBAR.
-
 // TODO Esto funciona. Los he probado con el Seek NO ACELERADO y funciona. Con el Seek acelerado el personaje se va a tomar por culo (porque el cambio de velocidad no es inmediato).
 // TODO Preguntárselo a Luis Daniel.
 public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements Behaviour {
@@ -51,6 +49,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 
 	@Override
 	public Steering getSteering() {
+		
 		if (!this.pointsList.isEmpty()) {
 			Vector3 nextTarget = this.pointsList.get(0); // Consultamos el primer elemento de la lista (el punto donde tenemos que ir).
 			
@@ -74,7 +73,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 				}
 			}
 			
-			// Si ya hemos llegado al final, al eliminar el primer elemento, la lista puede quedarse vacía.
+			// Si ya hemos llegado al final y estamos en MODO_PARAR_AL_FINAL, al eliminar el primer elemento, la lista puede quedarse vacía.
 			//	Por tanto, debemos volver a comprobarlo.
 			if (!this.pointsList.isEmpty()) {
 				// ---> Cuando ya sabemos exactamente cual debe ser el siguiente objetivo, preparamos y devolvemos el Steergin adecuado.
@@ -82,10 +81,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 				// 		-> Por tanto, es lo único que hay que introducir.
 				nextTarget = this.pointsList.get(0);
 				WorldObject fakeCharacter = new Character();
-				float finalPositionX = nextTarget.x;
-				float finalPositionY = nextTarget.y;
-				float finalPositionZ = nextTarget.z;
-				fakeCharacter.setPosition(new Vector3(finalPositionX, finalPositionY, finalPositionZ));
+				fakeCharacter.setPosition(new Vector3(nextTarget.x, nextTarget.y, nextTarget.z));
 				
 				// Establecemos como objectivo el 'fakeCharacter'
 				this.setTarget(fakeCharacter);
@@ -93,9 +89,17 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 			}
 		}
 		
-		// Si la lista está vacía, es que ya no quedan más puntos a donde ir. Por tanto, no hacemos nada.
-		//		Esto es equivalente a obtener el Steering entre el pensonaje y él mismo.
-		this.setTarget(this.getSource());
+		// SI LLEGAMOS AQUÍ ES PORQUE LA LISTA DE PUNTOS ESTÁ VACÍA.
+		// ESO QUIERE DECIR QUE ESTAMOS EN 'MODO_PARAR_AL_FINAL' Y YA HEMOS LLEGADO AL FINAL.
+		// Lo que hay que hacer en este caso es ir SIEMPRE hacia el último punto de la lista de puntos.
+		// Dicho punto ocupará la primera posición (posición 0) de de la lista de puntos eliminados.
+		Vector3 nextTarget = this.removedPointsList.get(0);
+		WorldObject fakeCharacter = new Character();
+		
+		fakeCharacter.setPosition(new Vector3(nextTarget.x, nextTarget.y, nextTarget.z));
+		
+		// Establecemos como objectivo el 'fakeCharacter'
+		this.setTarget(fakeCharacter);
 		return super.getSteering();
 		
 	}
