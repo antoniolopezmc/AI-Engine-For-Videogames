@@ -16,7 +16,7 @@ import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Wander_NoAccelerate
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.formation.CircularFormation;
 
-public class TestCircularFormation extends ApplicationAdapter {
+public class TestStarFormation extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private BitmapFont font;
@@ -28,7 +28,9 @@ public class TestCircularFormation extends ApplicationAdapter {
 	private Character gota4;
 	private Character gota5;
 	private Character gota6;
-	private CircularFormation formacion;
+	private Character gota7;
+	private Character gota8;
+	private StarFormation formacion;
 	
 	// Este falso personaje contendrá en todo momento la posción del ratón.
 	private Character fakeMouse;
@@ -88,8 +90,20 @@ public class TestCircularFormation extends ApplicationAdapter {
         gota6.setOrientation(30.0f);
         gota6.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         
+        // Creamos el personaje.
+        gota7 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota7.setBounds(650.0f, 650.0f, 64.0f, 64.0f);
+        gota7.setOrientation(30.0f);
+        gota7.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        
+        // Creamos el personaje.
+        gota8 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota8.setBounds(750.0f, 750.0f, 64.0f, 64.0f);
+        gota8.setOrientation(30.0f);
+        gota8.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        
         // Creamos la formación.
-        formacion = new CircularFormation(50.0f);
+        formacion = new StarFormation(50.0f);
         formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
         formacion.setOrientation(0.0f);
         formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));
@@ -99,7 +113,10 @@ public class TestCircularFormation extends ApplicationAdapter {
         formacion.addCharacterToCharactersList(gota4);
         formacion.addCharacterToCharactersList(gota5);
         formacion.addCharacterToCharactersList(gota6);
-        formacion.setSeparationDistance(100.0f);        
+        formacion.addCharacterToCharactersList(gota7);
+        formacion.addCharacterToCharactersList(gota8);
+        formacion.setSeparationDistance(100.0f);   
+        formacion.setArmSize(150.0f);
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
@@ -132,6 +149,8 @@ public class TestCircularFormation extends ApplicationAdapter {
 		gota4.draw(batch);
 		gota5.draw(batch);
 		gota6.draw(batch);
+		gota7.draw(batch);
+		gota8.draw(batch);
 		formacion.draw(batch);
         batch.end();
 	}
