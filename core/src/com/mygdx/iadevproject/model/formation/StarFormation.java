@@ -13,7 +13,7 @@ public class StarFormation extends CircularFormation {
 	// 		- Si la cantidad de integrantes de la formación es par.
 	// Si no se dan estas condiciones, la formación será un círculo normal.
 
-	// Longitud entre los puntos internos y externos de la estrella.
+	// Desplazamiento de algunos componentes de la formación con respecto al sitio que deberían ocupar en una formación normal en círculo.
 	private float armSize;
 	
 	// CONSTRUCTORES.
