@@ -30,12 +30,13 @@ public class WallAvoidance extends Seek_Accelerated {
 	private float centerLookahead;						// Longitud del rayo central
 	private float leftLookahead;						// Longitud del rayo lateral izquierdo
 	private float rightLookahead;						// Longitud del rayo lateral derecho
+	private float separationAngle;						// Ángulo de separación entre el rayo central y los laterales
 	
 	private List<WorldObject> targets; 					// Lista de objetivos a evitar
 	private Map<RayPosition, Ray> rays;					// Rayos de colisión
 	private Map<RayPosition, Float> raysLength;			// Longitud de los rayos de colisión
 	
-	private Vector3 intersection;	// Vector intersección
+	private Vector3 intersection;						// Vector intersección
 	
 	/**
 	 * Los dos primeros parámetros son los mismos que para el Seek_Accelerated. Este constructor establece por defecto
@@ -44,10 +45,11 @@ public class WallAvoidance extends Seek_Accelerated {
 	 * @param maxAcceleration
 	 * @param targets - Lista de objetivos a evitar
 	 * @param avoidDistance - Distancia mínima de separación de la pared. Debe ser mayor que el radio del personaje
+	 * @param separationAngle - Ángulo de separación entre el rayo central y los lateraless
 	 * @param centerLookahead - Longitud del rayo de colisión central.
 	 * @throws IllegalArgumentException - Si la distancia mínima de separación es menor o igual que el radio del personaje
 	 */
-	public WallAvoidance(Character source, float maxAcceleration, List<WorldObject> targets, float avoidDistance, float centerLookahead) {
+	public WallAvoidance(Character source, float maxAcceleration, List<WorldObject> targets, float avoidDistance, float separationAngle, float centerLookahead) {
 		super(source, null, maxAcceleration);
 		
 		if (avoidDistance <= source.getBoundingRadius()) throw new IllegalArgumentException("Avoid distance should be greater than the radius of the character.");
@@ -55,6 +57,7 @@ public class WallAvoidance extends Seek_Accelerated {
 		this.intersection = new Vector3();
 		this.targets = targets;
 		this.avoidDistance = avoidDistance;
+		this.separationAngle = separationAngle;
 
 		this.rays = new HashMap<RayPosition, Ray>();
 		this.raysLength = new HashMap<RayPosition, Float>();
@@ -76,8 +79,8 @@ public class WallAvoidance extends Seek_Accelerated {
 	 * @param leftLookahead - Longitud del rayo lateral izquierdo
  	 * @param rightLookahead - Longitud del rayo lateral derecho
 	 */
-	public WallAvoidance(Character source, float maxAcceleration, List<WorldObject> targets, float avoidDistance, float centerLookahead, float leftLookahead, float rightLookahead) {
-		this(source, maxAcceleration, targets, avoidDistance, centerLookahead);
+	public WallAvoidance(Character source, float maxAcceleration, List<WorldObject> targets, float avoidDistance, float separationAngle, float centerLookahead, float leftLookahead, float rightLookahead) {
+		this(source, maxAcceleration, targets, avoidDistance, separationAngle, centerLookahead);
 		
 		this.leftLookahead = leftLookahead;
 		this.rightLookahead = rightLookahead;
@@ -150,8 +153,8 @@ public class WallAvoidance extends Seek_Accelerated {
 		// Obtengo la orientación de la velocidad del personaje para establecer la orientación
 		// del rayo central y el derecho e izquierdo
 		float centerOrientation = convertToRange0_360(getOrientation(centerDirection));
-		float leftOrientation = centerOrientation + 15;
-		float rightOrientation = centerOrientation - 15;
+		float leftOrientation = centerOrientation + this.separationAngle;
+		float rightOrientation = centerOrientation - this.separationAngle;
 		
 		// Normalizo el vector y lo escalo a su medida
 		centerDirection.nor();
