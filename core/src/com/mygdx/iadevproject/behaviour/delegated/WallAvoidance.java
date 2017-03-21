@@ -6,11 +6,8 @@ import java.util.Map;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
-import com.badlogic.gdx.math.collision.Sphere;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -39,8 +36,6 @@ public class WallAvoidance extends Seek_Accelerated {
 	private Map<RayPosition, Float> raysLength;			// Longitud de los rayos de colisión
 	
 	private Vector3 intersection;						// Vector intersección
-	public Vector3 normal = new Vector3();
-	public WorldObject targetSeek = new Obstacle();
 	
 	/**
 	 * Los dos primeros parámetros son los mismos que para el Seek_Accelerated. Este constructor establece por defecto
@@ -55,12 +50,6 @@ public class WallAvoidance extends Seek_Accelerated {
 	 */
 	public WallAvoidance(Character source, float maxAcceleration, List<WorldObject> targets, float avoidDistance, float separationAngle, float centerLookahead) {
 		super(source, null, maxAcceleration);
-		
-		targetSeek.setPosition(new Vector3());
-		
-		
-		
-		
 		
 		if (avoidDistance <= source.getBoundingRadius()) throw new IllegalArgumentException("Avoid distance should be greater than the radius of the character.");
 		
@@ -188,53 +177,67 @@ public class WallAvoidance extends Seek_Accelerated {
 		this.rays.put(RayPosition.CENTER, new Ray(origin, centerDirection));		
 		this.rays.put(RayPosition.RIGHT, new Ray(origin, rightDirection));	
 		
-		// 2.- Encontrar la colisión con alguno de los targets
-		WorldObject firstTarget = null;
+		
+		// Obtenemos el objetivo más cercano
+		WorldObject firstTarget = getCloserTarget(origin);
+		
+		// Si es null, significa que no chocamos con ninguno. Por lo que no hacemos nada.
+		if (firstTarget == null) {
+			// Si no chocamos con nada, entonces no hacemos nada
+			output.setLineal(new Vector3(0,0,0));
+			output.setAngular(0.0f);
+			return output;
+		}
+		
+		// 2.- Encontrar la colisión con alguno de los rayos
 		float distance, firstDistance = INFINITY, firstRayLength = INFINITY;
 		Ray firstRay = null, rayVector = null;
-		
-		for (WorldObject target : targets) {
+
+		for (RayPosition position : this.rays.keySet()) {
 			
-			for (RayPosition position : this.rays.keySet()) {
+			// Obtenemos el rayo
+			rayVector = this.rays.get(position);
+			
+			// Comprobamos si hay intersección
+			// IMPORTANTE: Consideramos que todos los personajes están rodeados por un círculo y comprobamos
+			// si el rayo colisiona con ese círculo
+			if (Intersector.intersectRaySphere(rayVector, firstTarget.getCenterOfMass(), firstTarget.getBoundingRadius(), intersection)) {
+			
+				// Si hay intersección, obtenemos la distancia entre el centro del rayo 
+				// y el punto de intersección.
+				distance = rayVector.origin.dst(intersection);
 				
-				// Obtenemos el rayo
-				rayVector = this.rays.get(position);
-				
-				// Comprobamos si hay intersección
-				// IMPORTANTE: Consideramos que todos los personajes están rodeados por un círculo y comprobamos
-				// si el rayo colisiona con ese círculo
-				if (Intersector.intersectRaySphere(rayVector, target.getCenterOfMass(), target.getBoundingRadius(), intersection)) {
-				
-					// Si hay intersección, obtenemos la distancia entre el centro del rayo 
-					// y el punto de intersección.
-					distance = rayVector.origin.dst(intersection);
-					
-					// Comprobamos si la distancia es menor que la longitud del rayo y si
-					// es menor que la menor distancia obtenida. Para quedarnos con la intersección
-					// más cercana (si hay varios rayos que intersecan)
-					if (distance < this.raysLength.get(position) && distance < firstDistance) {
-						firstDistance 		= distance;
-						firstTarget 		= target;
-						firstRay 			= rayVector;
-						firstRayLength 		= this.raysLength.get(position);
-					}
+				// Comprobamos si la distancia es menor que la longitud del rayo y si
+				// es menor que la menor distancia obtenida. Para quedarnos con la intersección
+				// más cercana (si hay varios rayos que intersecan)
+				if (distance < this.raysLength.get(position) && distance < firstDistance) {
+					firstDistance 		= distance;
+					firstRay 			= rayVector;
+					firstRayLength 		= this.raysLength.get(position);
 				}
 			}
 		}
 		
 		// Si hemos obtenido una intersección y la distancia de intersección es mejor
-		// que la longitud del rayo, hacemos un evade
+		// que la longitud del rayo, hacemos un Seek hacia el punto dado por el vector
+		// normal en el punto de intersección escalado a la distancia de evasión 'avoidDistance'
 		if (firstRay != null && firstDistance <= firstRayLength) {
+			// Obtenemos la normal en el punto de intersección.
 			Vector3 center = new Vector3(intersection);
-			normal = center.sub(firstTarget.getCenterOfMass());
+			Vector3 normal = center.sub(firstTarget.getCenterOfMass());
+			// Normalizamos y escalamos
 			normal.nor();
 			normal.scl(this.avoidDistance);
 			
+			// Obtenemos la posición del objetivo al que hacer el Seek
 			Vector3 targetPosition = new Vector3(intersection);
 			targetPosition.add(normal);
 			
+			// Creamos el objetivo al que vamos a hacer el Seek y le asignamos la posición anteriormente calculada
+			WorldObject targetSeek = new Obstacle();
 			targetSeek.setPosition(targetPosition);
 			
+			// Devolvemos el resultado del Seek.
 			return (new Seek_Accelerated(this.getSource(), targetSeek, this.getMaxAcceleration())).getSteering();			
 		
 		}
@@ -243,6 +246,27 @@ public class WallAvoidance extends Seek_Accelerated {
 		output.setLineal(new Vector3(0,0,0));
 		output.setAngular(0.0f);
 		return output;
+	}
+	
+	/**
+	 * Obtiene el objetivo más cercano a la posición 'position' de la lista de objetivos 'targets'
+	 * @param position - Posición de la que queremos obtener el objetivo más cercano.
+	 * @return - Objetivo más cercano.
+	 */
+	private WorldObject getCloserTarget(Vector3 position) {
+		WorldObject obj = null;
+		float minDistance = INFINITY;
+		float distance;
+		
+		for (WorldObject target : this.targets) {
+			distance = position.dst(target.getPosition());
+			if (distance < minDistance) {
+				obj = target;
+				minDistance = distance;
+			}
+		}
+		
+		return obj;
 	}
 	
 	/**
