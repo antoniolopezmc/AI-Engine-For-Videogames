@@ -2,7 +2,6 @@ package com.mygdx.iadevproject.model;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.steering.Steering;
 
 /**
  * Clase que representa los obstáculos del mundo. Es una subclase de WorldObject.
@@ -14,6 +13,10 @@ public class Obstacle extends WorldObject {
 	// CONSTRUCTORES.
 	public Obstacle(Texture texture) {
 		super(0.0f, texture);
+	}
+	
+	public Obstacle() {
+		super(0.0f);
 	}
 
 	// GETs y SETs SOBREESCRITOS.

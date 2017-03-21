@@ -10,8 +10,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.math.collision.Sphere;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
@@ -37,6 +39,8 @@ public class WallAvoidance extends Seek_Accelerated {
 	private Map<RayPosition, Float> raysLength;			// Longitud de los rayos de colisión
 	
 	private Vector3 intersection;						// Vector intersección
+	public Vector3 normal = new Vector3();
+	public WorldObject targetSeek = new Obstacle();
 	
 	/**
 	 * Los dos primeros parámetros son los mismos que para el Seek_Accelerated. Este constructor establece por defecto
@@ -51,6 +55,12 @@ public class WallAvoidance extends Seek_Accelerated {
 	 */
 	public WallAvoidance(Character source, float maxAcceleration, List<WorldObject> targets, float avoidDistance, float separationAngle, float centerLookahead) {
 		super(source, null, maxAcceleration);
+		
+		targetSeek.setPosition(new Vector3());
+		
+		
+		
+		
 		
 		if (avoidDistance <= source.getBoundingRadius()) throw new IllegalArgumentException("Avoid distance should be greater than the radius of the character.");
 		
@@ -179,10 +189,6 @@ public class WallAvoidance extends Seek_Accelerated {
 		this.rays.put(RayPosition.RIGHT, new Ray(origin, rightDirection));	
 		
 		// 2.- Encontrar la colisión con alguno de los targets
-		BoundingBox boundingBox; 						// BoundingBox para la comprobacion de la intersección
-		Vector3 minimum, maximum; 						// Mínimo y máximo para el boundingBox
-		Rectangle boundingRectangle;					// BoundingRectangle de cada target para obtener el boundingBox
-		
 		WorldObject firstTarget = null;
 		float distance, firstDistance = INFINITY, firstRayLength = INFINITY;
 		Ray firstRay = null, rayVector = null;
@@ -191,17 +197,13 @@ public class WallAvoidance extends Seek_Accelerated {
 			
 			for (RayPosition position : this.rays.keySet()) {
 				
-				// Crear el BoundingBox para el cálculo de la intersección.
-				boundingRectangle = target.getBoundingRectangle();
-				minimum = new Vector3(boundingRectangle.x - boundingRectangle.height/2, boundingRectangle.y - boundingRectangle.width/2, 0.0f);
-				maximum = new Vector3(minimum.x + boundingRectangle.height, minimum.y + boundingRectangle.width, 0.0f);
-				boundingBox = new BoundingBox(minimum, maximum);
-				
 				// Obtenemos el rayo
 				rayVector = this.rays.get(position);
 				
 				// Comprobamos si hay intersección
-				if (Intersector.intersectRayBounds(rayVector, boundingBox, intersection)) {
+				// IMPORTANTE: Consideramos que todos los personajes están rodeados por un círculo y comprobamos
+				// si el rayo colisiona con ese círculo
+				if (Intersector.intersectRaySphere(rayVector, target.getCenterOfMass(), target.getBoundingRadius(), intersection)) {
 				
 					// Si hay intersección, obtenemos la distancia entre el centro del rayo 
 					// y el punto de intersección.
@@ -223,7 +225,17 @@ public class WallAvoidance extends Seek_Accelerated {
 		// Si hemos obtenido una intersección y la distancia de intersección es mejor
 		// que la longitud del rayo, hacemos un evade
 		if (firstRay != null && firstDistance <= firstRayLength) {
-			return (new Evade(this.getSource(), firstTarget, this.getMaxAcceleration(), 1.0f)).getSteering();			
+			Vector3 center = new Vector3(intersection);
+			normal = center.sub(firstTarget.getCenterOfMass());
+			normal.nor();
+			normal.scl(this.avoidDistance);
+			
+			Vector3 targetPosition = new Vector3(intersection);
+			targetPosition.add(normal);
+			
+			targetSeek.setPosition(targetPosition);
+			
+			return (new Seek_Accelerated(this.getSource(), targetSeek, this.getMaxAcceleration())).getSteering();			
 		
 		}
 		

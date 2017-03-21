@@ -172,11 +172,11 @@ public abstract class WorldObject extends Sprite {
 	 * @return Radio que recubre al objeto.
 	 */
 	public float getBoundingRadius() {
-		//TODO Lo he calculado como el 70% del máximo de los lados del rectángulo que lo recubre.
+		//TODO Lo he calculado como el 80% del minimo de los lados del rectángulo que lo recubre.
 		//TODO CONSULTAR CON ANTONIO A VER QUÉ LE PARECE
 		
-		float maxEdge = Math.max(this.getBoundingRectangle().getHeight(), this.getBoundingRectangle().getWidth());
-		return (float) maxEdge * 0.7f;
+		float maxEdge = Math.min(this.getBoundingRectangle().height, this.getBoundingRectangle().width);
+		return (float) maxEdge * 0.8f;
 	}
 
 	/** 

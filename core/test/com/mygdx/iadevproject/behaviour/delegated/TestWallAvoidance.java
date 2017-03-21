@@ -84,7 +84,7 @@ public class TestWallAvoidance extends ApplicationAdapter {
         collision.setBounds(150.0f, -500.0f, 64.0f, 64.0f);
         collision.setOrientation(10.0f);
         collision.setVelocity(new Vector3(10.0f, 100.0f, 0));
-        wallAvoidance = new WallAvoidance(collision, 100.0f, worldsObstacles, 60.0f, 20.0f, 90.0f);
+        wallAvoidance = new WallAvoidance(collision, 1000.0f, worldsObstacles, 100.0f, 20.0f, 200.0f);
         collision.addToListBehaviour(wallAvoidance);
 	}
 	
@@ -112,37 +112,49 @@ public class TestWallAvoidance extends ApplicationAdapter {
 			obs.draw(batch);
 		}
         batch.end();
+      
+        // DESCOMENTAR SI SE QUIEREN VER LOS PUNTOS, LOS CÍRCULOS DE INTERSECIÓN Y LOS RAYOS
         
-        for (WorldObject target : worldsObstacles) {
-			Rectangle boundingRectangle = target.getBoundingRectangle();
-			Vector3 minimum = new Vector3(boundingRectangle.x - boundingRectangle.height/2, boundingRectangle.y - boundingRectangle.width/2, 0.0f);
-			Vector3 maximum = new Vector3(minimum.x + boundingRectangle.height, minimum.y + boundingRectangle.width, 0.0f);
-			BoundingBox boundingBox = new BoundingBox(minimum, maximum);
-			
-			renderer.begin(ShapeType.Line);
-			renderer.setColor(Color.CYAN);
-			renderer.rect(boundingBox.getCenterX() - boundingBox.getHeight()/2, boundingBox.getCenterY() - boundingBox.getWidth()/2, boundingBox.getHeight(), boundingBox.getWidth());
-			renderer.end();
-		}
+//        for (WorldObject target : worldsObstacles) {
+//			Rectangle boundingRectangle = target.getBoundingRectangle();
+//			Vector3 minimum = new Vector3(boundingRectangle.x - boundingRectangle.height/2, boundingRectangle.y - boundingRectangle.width/2, 0.0f);
+//			Vector3 maximum = new Vector3(minimum.x + boundingRectangle.height, minimum.y + boundingRectangle.width, 0.0f);
+//			BoundingBox boundingBox = new BoundingBox(minimum, maximum);
+//			
+//			renderer.begin(ShapeType.Line);
+//			renderer.setColor(Color.CYAN);
+////			renderer.rect(boundingBox.getCenterX() - boundingBox.getHeight()/2, boundingBox.getCenterY() - boundingBox.getWidth()/2, boundingBox.getHeight(), boundingBox.getWidth());
+//			renderer.circle(target.getCenterOfMass().x, target.getCenterOfMass().y, target.getBoundingRadius());
+//			renderer.end();
+//		}
 		
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.RED);
-		Ray ray = wallAvoidance.getRays().get(RayPosition.CENTER);
-		Vector3 endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.CENTER));
-		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-		
-		ray = wallAvoidance.getRays().get(RayPosition.LEFT);
-		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.LEFT));
-		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-
-		ray = wallAvoidance.getRays().get(RayPosition.RIGHT);
-		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.RIGHT));
-		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-		renderer.end();
-		
-		renderer.begin(ShapeType.Filled);
-		renderer.circle(wallAvoidance.getIntersection().x, wallAvoidance.getIntersection().y, 2);
-		renderer.end();
+//		renderer.begin(ShapeType.Line);
+//		renderer.setColor(Color.RED);
+//		Ray ray = wallAvoidance.getRays().get(RayPosition.CENTER);
+//		Vector3 endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.CENTER));
+//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+//		
+//		ray = wallAvoidance.getRays().get(RayPosition.LEFT);
+//		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.LEFT));
+//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+//
+//		ray = wallAvoidance.getRays().get(RayPosition.RIGHT);
+//		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.RIGHT));
+//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+//		renderer.end();
+//		
+//		renderer.begin(ShapeType.Filled);
+//		renderer.circle(wallAvoidance.getIntersection().x, wallAvoidance.getIntersection().y, 2);
+//		renderer.end();
+//		
+////		renderer.begin(ShapeType.Line);
+////		Vector3 inter = wallAvoidance.getIntersection();
+////		renderer.line(inter.x, inter.y, inter.x + wallAvoidance.normal.len(), inter.y + wallAvoidance.normal.len());
+////		renderer.end();
+////		
+//		renderer.begin(ShapeType.Filled);
+//		renderer.circle(wallAvoidance.targetSeek.getPosition().x, wallAvoidance.targetSeek.getPosition().y, 2);
+//		renderer.end();
 	}
 	
 	@Override

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -28,7 +29,7 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
 	private BitmapFont font;
 	private ShapeRenderer renderer;
 	
-	private Character collision;
+	private Character collision, drop;
 	
 	@Override
 	public void create() {
@@ -55,16 +56,22 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
         Obstacle obs4 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs4.setBounds(180.0f, 300.0f, 64.0f, 64.0f);
         
+        drop = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        drop.setBounds(400, 200, 64, 64);
+        drop.setVelocity(new Vector3(0,0,0));
+        drop.addToListBehaviour(new Seek_Accelerated(drop, obs4, 40.0f));
+        
         worldsObstacles.add(obs1);
         worldsObstacles.add(obs2);
         worldsObstacles.add(obs3);
         worldsObstacles.add(obs4);
+        worldsObstacles.add(drop);
         
         collision = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         collision.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
         collision.setOrientation(10.0f);
-        collision.setVelocity(new Vector3(-10.0f, -10.0f, 0));
-        collision.addToListBehaviour(new CollisionAvoidance(collision, worldsObstacles, 80.0f));
+        collision.setVelocity(new Vector3(-50.0f, -50.0f, 0));
+        collision.addToListBehaviour(new CollisionAvoidance(collision, worldsObstacles, 300.0f));
 	}
 	
 	@Override
@@ -77,7 +84,7 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-//        drop.applyBehaviour();       
+        drop.applyBehaviour();       
         collision.applyBehaviour();
         
         batch.begin();
