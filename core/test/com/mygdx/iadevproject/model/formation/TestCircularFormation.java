@@ -56,24 +56,28 @@ public class TestCircularFormation extends ApplicationAdapter {
         gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
         gota.setOrientation(0.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota2 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota2.setBounds(150.0f, 150.0f, 64.0f, 64.0f);
         gota2.setOrientation(30.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota2.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota3 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota3.setBounds(250.0f, 250.0f, 64.0f, 64.0f);
         gota3.setOrientation(30.0f);
         gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota3.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota4 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota4.setBounds(350.0f, 350.0f, 64.0f, 64.0f);
         gota4.setOrientation(30.0f);
         gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota4.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota5 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -81,12 +85,14 @@ public class TestCircularFormation extends ApplicationAdapter {
         gota5.setOrientation(30.0f);
         gota5.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota5.addToListBehaviour(new Wander_NoAccelerated(gota5, 50.0f, 20.0f)); // En formación, el wander no deberia tenerse en cuenta.
+        gota5.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota6 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota6.setBounds(550.0f, 550.0f, 64.0f, 64.0f);
         gota6.setOrientation(30.0f);
         gota6.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota6.setMaxSpeed(50.0f);
         
         // Creamos la formación.
         formacion = new CircularFormation(50.0f);
