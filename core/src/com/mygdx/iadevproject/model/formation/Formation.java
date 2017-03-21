@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Arrive_Accelerated;
+import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Arrive_Accelerated_WithOneRadious;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
@@ -19,51 +20,32 @@ public abstract class Formation extends Character {
 
 	// Lista de personajes que integran la formación.
 	private List<Character> charactersList;
-	// Máxima aceleración de la formación. Necesaria para llamar al Seek.
-	private float maxAcceleration; // TODDO Esto será útil o no dependiendo de si el comportamiento elegido finalmente es acelerado o no.
 
 	// CONSTRUCTORES.
 	// IMPORTANTE -> Al construir la formación NO se le pasa la lista de integrantes como parámetro. Hay 2 métodos especiales para añadir o eliminar un componente de la formación.
 	// 		Estos métodos nos permitirá realizar un tratamiento/procesamiento especial a los personajes cuando sean añadidos y eliminados.
-	public Formation(float maxAcceleration) {
+	public Formation() {
 		super();
-		this.maxAcceleration = maxAcceleration;
 		this.charactersList = new LinkedList<Character>();
 	}
 	
 	// CUIDADO -> No confundir la velocidad máxima de la formación con la velocidad máxima de cada uno de sus integrantes.
-	public Formation(float maxAcceleration, float maxSpeed) {
+	public Formation(float maxSpeed) {
 		super(maxSpeed);
-		this.maxAcceleration = maxAcceleration;
 		this.charactersList = new LinkedList<Character>();
 	}
 	
-	public Formation(float maxAcceleration, float maxSpeed, Texture texture) {
+	public Formation(float maxSpeed, Texture texture) {
 		super(maxSpeed, texture);
-		this.maxAcceleration = maxAcceleration;
 		this.charactersList = new LinkedList<Character>();
 	}
 	
-	public Formation(float maxAcceleration, Texture texture) {
-		super(texture);
-		this.maxAcceleration = maxAcceleration;
-		this.charactersList = new LinkedList<Character>();
-	}
-
 	// GETs y SETs.
 	public List<Character> getCharactersList() {
 		return charactersList;
 	}
 	
 	// No hay método set para el atributo 'charactersList'.
-
-	public float getMaxAcceleration() {
-		return maxAcceleration;
-	}
-
-	public void setMaxAcceleration(float maxAcceleration) {
-		this.maxAcceleration = maxAcceleration;
-	}
 	
 	// MÉTODOS.
 	// Devuelve una lista con las posición de cada uno de los integrantes
@@ -122,11 +104,25 @@ public abstract class Formation extends Character {
 			Vector3 targetPosition =  charactersPositionList.get(index);
 			fakeCharacter.setPosition(new Vector3(targetPosition.x, targetPosition.y, targetPosition.z));
 			
+			/**
+			 * 										EXTREMADAMENTE IMPORTANTE.
+			 * 
+			 * Cuando nosotros hacemos una formación, lo esperado es que los personajes 'formen' los más rápido posible,
+			 * es decir, que vayan a la posición lo más rápido posible y mantengan la formación. Y AHÍ SE QUEDEN SIN MOVERSE.
+			 * 
+			 *  Esto es extremadamente complejo hacerlo con un movimiento ACELERADO, ya que en este tipo de movimientos el steering
+			 *  solamente devuelve la acelaración y, por tanto, controlar la velocidad de un personaje y donde queremos que se pare
+			 *  exactamente es más complicado.
+			 *  
+			 *  Si queremos una total precisión en el punto de parada de un personaje (como es el caso de las formaciones), tenemos
+			 *  que hacer uso de comportamientos NO ACELERADOS. En los steerings de este tipo de comportamientos sí podemos acceder
+			 *  y establecer la velocidad que finalmente será aplicada al personaje.
+			 *  
+			 *  ---> Sería interesante hacer varias demos de prueba con movimientos ACELERADOS para mostrar 
+			 *  que es lo que pasa y por qué no funciona en esto casos.
+			 */
 			// Ahora, aplicamos el comportamiento al personaje.
-			//thisCharacter.applyBehaviour(new Arrive_Accelerated(thisCharacter, fakeCharacter, this.maxAcceleration, this.maxAcceleration, 3.0f, 5.0f, 1.0f));
-			//thisCharacter.applyBehaviour(new Align_Accelerated(thisCharacter, this, 50.0f, 50.0f, 30.0f, 50.0f, 1.0f));
-			// --> Para hacer pruebas --> 
-			thisCharacter.applyBehaviour(new Arrive_NoAccelerated(thisCharacter, fakeCharacter, this.maxAcceleration, 5.0f, 1.0f));
+			thisCharacter.applyBehaviour(new Arrive_NoAccelerated(thisCharacter, fakeCharacter, thisCharacter.getMaxSpeed(), 5.0f, 1.0f));
 			
 			// Finalmente, volvemos a activar el flag para que no se pueda mover al personaje desde otro sitio.
 			thisCharacter.setInFormation(true);

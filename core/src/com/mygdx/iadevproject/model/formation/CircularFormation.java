@@ -11,20 +11,12 @@ public class CircularFormation extends Formation {
 	private float separationDistance;
 
 	// CONSTRUCTORES.
-	public CircularFormation(float maxAcceleration) {
-		super(maxAcceleration);
+	public CircularFormation(float maxSpeed) {
+		super(maxSpeed);
 	}
 	
-	public CircularFormation(float maxAcceleration, float maxSpeed) {
-		super(maxAcceleration, maxSpeed);
-	}
-	
-	public CircularFormation(float maxAcceleration, float maxSpeed, Texture texture) {
-		super(maxAcceleration, maxSpeed, texture);
-	}
-	
-	public CircularFormation(float maxAcceleration, Texture texture) {
-		super(maxAcceleration, texture);
+	public CircularFormation(float maxSpeed, Texture texture) {
+		super(maxSpeed, texture);
 	}
 	
 	// GETs y SETs.

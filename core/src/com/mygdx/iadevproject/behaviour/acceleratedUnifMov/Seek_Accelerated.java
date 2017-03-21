@@ -9,14 +9,20 @@ import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class Seek_Accelerated implements Behaviour {
 
+	// Versión a utilizar.
+	public static int SEEK_ACCELERATED_MILLINGTON = 0;
+	public static int SEEK_ACCELERATED_REYNOLDS = 1;
+	
 	private Character source;
 	private WorldObject target;
 	private float maxAcceleration;
+	private int mode;
 	
 	public Seek_Accelerated (Character source, WorldObject target, float maxAcceleration) {
 		this.source = source;
 		this.target = target;
 		this.maxAcceleration = maxAcceleration;
+		this.mode = Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON; // Por defecto, se usa MILLINGTON.
 	}
 
 	public Character getSource() {
@@ -42,6 +48,20 @@ public class Seek_Accelerated implements Behaviour {
 	public void setMaxAcceleration(float maxAcceleration) {
 		this.maxAcceleration = maxAcceleration;
 	}
+	
+	public int getMode() {
+		return this.mode;
+	}
+	
+	public void setMode(int mode) {
+		// Si introducimos un valor no permitido, se establece el modo por defecto.
+		if ((mode != Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON) 
+				&& (mode != Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS)) {
+			this.mode = Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON;
+		} else {
+			this.mode = mode;
+		}
+	}
 
 	@Override
 	public Steering getSteering() {
@@ -52,19 +72,17 @@ public class Seek_Accelerated implements Behaviour {
 		Vector3 copy = new Vector3(this.target.getPosition());
 		Vector3 finalLineal = copy.sub(this.source.getPosition()).nor();
 		
-		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Reynolds.
+		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Millington.
 		// --> Versión de Millington: el personaje no se para nunca
 		// --> Versión de Reynolds: el personaje se para
-		//TODO Preguntar a Luis Daniel. Reynolds es una basura.
-		boolean reynolds = false;
-		if (reynolds) { 
+		if (mode == Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS) { 
 			// Versión de Craig W. Reynolds
 			finalLineal.x = finalLineal.x * this.maxAcceleration;
 			finalLineal.y = finalLineal.y * this.maxAcceleration;
 			finalLineal.z = finalLineal.z * this.maxAcceleration;
 			output.setLineal(finalLineal.sub(source.getVelocity()));
 			
-		} else {
+		} else if (mode == Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON) {
 			// Versión de Ian Millington
 			finalLineal.x = finalLineal.x * this.maxAcceleration;
 			finalLineal.y = finalLineal.y * this.maxAcceleration;

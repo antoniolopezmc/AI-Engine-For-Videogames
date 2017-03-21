@@ -17,20 +17,12 @@ public class StarFormation extends CircularFormation {
 	private float armSize;
 	
 	// CONSTRUCTORES.
-	public StarFormation(float maxAcceleration) {
-		super(maxAcceleration);
+	public StarFormation(float maxSpeed) {
+		super(maxSpeed);
 	}
 	
-	public StarFormation(float maxAcceleration, float maxSpeed) {
-		super(maxAcceleration, maxSpeed);
-	}
-	
-	public StarFormation(float maxAcceleration, float maxSpeed, Texture texture) {
-		super(maxAcceleration, maxSpeed, texture);
-	}
-	
-	public StarFormation(float maxAcceleration, Texture texture) {
-		super(maxAcceleration, texture);
+	public StarFormation(float maxSpeed, Texture texture) {
+		super(maxSpeed, texture);
 	}
 
 	// GETs y SETs.
