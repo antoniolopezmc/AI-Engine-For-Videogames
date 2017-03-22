@@ -45,6 +45,10 @@ public abstract class Formation extends Character {
 		return charactersList;
 	}
 	
+	public int getNumberOfCharacters() {
+		return this.getCharactersList().size();
+	}
+	
 	// No hay método set para el atributo 'charactersList'.
 	
 	// MÉTODOS.
@@ -54,6 +58,9 @@ public abstract class Formation extends Character {
 	//		Para obtener las posiciones de nuestro mundo habrá que sumarlas a la posición de la formación dentro del mundo.
 	// ------> OBVIAMENTE, LA LONGITUD DE ESTA LISTA DEBE SER IGUAL A LA LONGITUD DE LA LISTA 'charactersList'.
 	protected abstract List<Vector3> getCharactersPosition(); // ---> Patrón método plantilla.
+	
+	// MUY IMPORTANTE -> Las orientaciones de los personajes empiezan en la vertical (orientación 0º está en la parte superior de la vertical).
+	// 			Los ángulos de una formación empiezan en la horizontal (el ángulo de 0º está a la derecha). -> Circunferencia goniométrica.
 
 	public void addCharacterToCharactersList(Character character) {
 		// Solo podemos añadir un personaje a una formación si no pertenece a ninguna otra.
