@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.delegated.Wander_Delegated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Wander_NoAccelerated;
@@ -95,7 +96,7 @@ public class TestCircularFormation extends ApplicationAdapter {
         gota6.setMaxSpeed(50.0f);
         
         // Creamos la formación.
-        formacion = new CircularFormation(50.0f);
+        formacion = new CircularFormation(50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
         formacion.setOrientation(0.0f);
         formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));
@@ -109,7 +110,7 @@ public class TestCircularFormation extends ApplicationAdapter {
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
-        formacion.addToListBehaviour(new Seek_NoAccelerated(formacion, fakeMouse, 50.0f));
+        formacion.addToListBehaviour(new Seek_Accelerated(formacion, fakeMouse, 50.0f));
 
 	}
 	
@@ -130,6 +131,7 @@ public class TestCircularFormation extends ApplicationAdapter {
         
         formacion.applyBehaviour();
         gota5.applyBehaviour(); // No debería hacer nada.
+        formacion.drawFormationPoints(renderer);
         
         batch.begin();
         gota.draw(batch);

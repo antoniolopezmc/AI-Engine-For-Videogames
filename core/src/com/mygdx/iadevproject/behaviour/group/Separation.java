@@ -75,7 +75,10 @@ public class Separation implements Behaviour {
 				
 				// Añadimos la aceleración.
 				direction = direction.nor();
-				output.setLineal(output.getLineal().add(new Vector3(direction.x * strenght, direction.y * strenght, direction.z * strenght)));
+				Vector3 incremento = output.getLineal();
+				// En los apuntes está al revés. Pero así es como funciona.
+				incremento = incremento.add(new Vector3(-direction.x * strenght, -direction.y * strenght, -direction.z * strenght));
+				output.setLineal(incremento);
 			}
 		}
 		return output;

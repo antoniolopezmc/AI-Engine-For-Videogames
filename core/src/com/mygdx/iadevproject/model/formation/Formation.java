@@ -3,7 +3,10 @@ package com.mygdx.iadevproject.model.formation;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
@@ -45,6 +48,10 @@ public abstract class Formation extends Character {
 		return charactersList;
 	}
 	
+	public int getNumberOfCharacters() {
+		return this.getCharactersList().size();
+	}
+	
 	// No hay método set para el atributo 'charactersList'.
 	
 	// MÉTODOS.
@@ -54,6 +61,9 @@ public abstract class Formation extends Character {
 	//		Para obtener las posiciones de nuestro mundo habrá que sumarlas a la posición de la formación dentro del mundo.
 	// ------> OBVIAMENTE, LA LONGITUD DE ESTA LISTA DEBE SER IGUAL A LA LONGITUD DE LA LISTA 'charactersList'.
 	protected abstract List<Vector3> getCharactersPosition(); // ---> Patrón método plantilla.
+	
+	// MUY IMPORTANTE -> Las orientaciones de los personajes empiezan en la vertical (orientación 0º está en la parte superior de la vertical).
+	// 			Los ángulos de una formación empiezan en la horizontal (el ángulo de 0º está a la derecha). -> Circunferencia goniométrica.
 
 	public void addCharacterToCharactersList(Character character) {
 		// Solo podemos añadir un personaje a una formación si no pertenece a ninguna otra.
@@ -129,5 +139,25 @@ public abstract class Formation extends Character {
 			
 		}
 		
+	}
+	
+	public void drawFormationPoints(ShapeRenderer renderer) {
+		// Ahora, calculamos la lista de posiciones de los personajes de la formación, con respecto a la propia formación.
+		List<Vector3> charactersPositionList = getCharactersPosition();
+		
+		// Tras el update de la formación, obtenemos su nueva posición, ya que con respecto a ella se moverán los integrantes.
+		Vector3 formationPosition = new Vector3(this.getPosition());
+		
+		// Ahora, calculamos la nueva posición hacia la que deben ir los integrantes de la formación.
+		for (Vector3 p : charactersPositionList) {
+			p.add(formationPosition);
+		}
+		
+		renderer.begin(ShapeType.Filled);
+		renderer.setColor(Color.RED);
+		for (Vector3 vector : charactersPositionList) {
+			renderer.circle(vector.x, vector.y, 2);
+		}
+		renderer.end();
 	}
 }
