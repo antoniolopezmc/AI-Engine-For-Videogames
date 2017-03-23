@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
@@ -120,7 +121,7 @@ public class Wander_Delegated extends Face implements Behaviour {
 		targetPosition.z += this.wanderRadius * targetOrientationVector.z;
 		
 		// 2.- Delegamos en el Behaviour Face:
-		WorldObject targetExplicit = new Character();
+		WorldObject targetExplicit = new Obstacle();
 		targetExplicit.setPosition(targetPosition);
 		// Establecemos como objetivo el objetivo calculado.
 		this.setTarget(targetExplicit);

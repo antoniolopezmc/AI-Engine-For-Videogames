@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.model.Character;
@@ -56,7 +57,7 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
         Obstacle obs4 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs4.setBounds(180.0f, 300.0f, 64.0f, 64.0f);
         
-        drop = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         drop.setBounds(400, 200, 64, 64);
         drop.setVelocity(new Vector3(0,0,0));
         drop.addToListBehaviour(new Seek_Accelerated(drop, obs4, 40.0f));
@@ -67,7 +68,7 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
         worldsObstacles.add(obs4);
         worldsObstacles.add(drop);
         
-        collision = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        collision = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         collision.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
         collision.setOrientation(10.0f);
         collision.setVelocity(new Vector3(-50.0f, -50.0f, 0));

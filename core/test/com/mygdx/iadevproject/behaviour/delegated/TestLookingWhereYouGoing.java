@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.behaviour.delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.model.Character;
 
@@ -37,7 +38,7 @@ public class TestLookingWhereYouGoing extends ApplicationAdapter {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
-        bucket = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
         bucket.setOrientation(90.0f);
         bucket.setVelocity(new Vector3(0,20,0));

@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov;
+package com.mygdx.iadevproject.arbitrator;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -9,13 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_NoAccelerated;
-import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Flee_NoAccelerated;
-import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
+import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.model.Character;
 
-public class TestFlee_NoAccelerated extends ApplicationAdapter {
-	
+public class TestPriorityArbitrator extends ApplicationAdapter {
+
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private BitmapFont font;
@@ -39,21 +38,19 @@ public class TestFlee_NoAccelerated extends ApplicationAdapter {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
-        drop = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        bucket = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        
+        drop = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         drop.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
-        drop.setOrientation(0.0f);
+        drop.setOrientation(60.0f);
+        drop.setVelocity(new Vector3(0,0,0));
         // Esto está hecho, una vez que se ha comprobado que el Wander funciona!
-//      drop.addToListBehaviour(new Wander_NoAccelerated(drop, 50.0f, 10.0f));
-        
-        // Esto está hecho una vez que se ha comprobado que el Seek funciona!
-        drop.addToListBehaviour(new Seek_NoAccelerated(drop, bucket, 50.0f));
+//        drop.addToListBehaviour(new Wander_NoAccelerated(drop, 50.0f, 10.0f));
         
         
-        bucket.setBounds(0.0f, 100.0f, 64.0f, 64.0f);
+        bucket = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
         bucket.setOrientation(0.0f);
-        bucket.addToListBehaviour(new Flee_NoAccelerated(bucket, drop, 50.0f));
+        bucket.setVelocity(new Vector3(0,0,0));
+        bucket.addToListBehaviour(new Align_Accelerated(bucket, drop, 50.0f, 20.0f, 5.0f, 10.0f, 1.0f));
 	}
 	
 	@Override
@@ -66,7 +63,7 @@ public class TestFlee_NoAccelerated extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        drop.applyBehaviour();       
+//        drop.applyBehaviour();       
         bucket.applyBehaviour();
         
         batch.begin();
@@ -132,4 +129,5 @@ public class TestFlee_NoAccelerated extends ApplicationAdapter {
 //		camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f,
 //				100 - effectiveViewportHeight / 2f);
 	}
+
 }

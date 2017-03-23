@@ -7,6 +7,7 @@ import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 
@@ -80,7 +81,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 				// Siguiente objetivo -> Creamos un personaje ficticio. De este personaje solo se usará la posición (en el Seek acelerado solo se usa el target para consultar su posición).
 				// 		-> Por tanto, es lo único que hay que introducir.
 				nextTarget = this.pointsList.get(0);
-				WorldObject fakeCharacter = new Character();
+				WorldObject fakeCharacter = new Obstacle();
 				fakeCharacter.setPosition(new Vector3(nextTarget.x, nextTarget.y, nextTarget.z));
 				
 				// Establecemos como objectivo el 'fakeCharacter'
@@ -94,7 +95,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 		// Lo que hay que hacer en este caso es ir SIEMPRE hacia el último punto de la lista de puntos.
 		// Dicho punto ocupará la primera posición (posición 0) de de la lista de puntos eliminados.
 		Vector3 nextTarget = this.removedPointsList.get(0);
-		WorldObject fakeCharacter = new Character();
+		WorldObject fakeCharacter = new Obstacle();
 		
 		fakeCharacter.setPosition(new Vector3(nextTarget.x, nextTarget.y, nextTarget.z));
 		

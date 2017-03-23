@@ -12,6 +12,6 @@ public interface Behaviour {
 	 * Método que devuelve el Steering concreto según el tipo de comportamiento.
 	 * @return El Steering concreto creado según el tipo de comportamiento.
 	 */
-	Steering getSteering();
+	public Steering getSteering();
 	
 }

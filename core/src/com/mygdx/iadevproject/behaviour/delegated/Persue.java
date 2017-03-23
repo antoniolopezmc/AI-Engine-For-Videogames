@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 
@@ -52,7 +53,7 @@ public class Persue extends Seek_Accelerated implements Behaviour {
 		
 		// Personaje predicho. De este personaje solo se usará la posición (en el Seek acelerado solo se usa el target para consultar su posición).
 		// 		-> Por tanto, es lo único que hay que introducir. 
-		WorldObject characterPrediction = new Character();
+		WorldObject characterPrediction = new Obstacle();
 		float finalPositionX = this.getTarget().getPosition().x + this.getTarget().getVelocity().x * prediction;
 		float finalPositionY = this.getTarget().getPosition().y + this.getTarget().getVelocity().y * prediction;
 		float finalPositionZ = this.getTarget().getPosition().z + this.getTarget().getVelocity().z * prediction;

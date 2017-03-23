@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.model.Character;
@@ -67,7 +68,7 @@ public class TestWallAvoidance extends ApplicationAdapter {
         Obstacle obs5 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs5.setBounds(300.0f, 100.0f, 64.0f, 64.0f);
         
-        drop = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         drop.setBounds(600, 100, 64, 64);
         drop.setVelocity(new Vector3(0,0,0));
         Seek_Accelerated seek = new Seek_Accelerated(drop, obs4, 40.0f);
@@ -81,13 +82,13 @@ public class TestWallAvoidance extends ApplicationAdapter {
         worldsObstacles.add(obs5);
         worldsObstacles.add(drop);
         
-        collision = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        collision = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         collision.setBounds(150.0f, -200.0f, 64.0f, 64.0f);
         collision.setOrientation(10.0f);
         collision.setVelocity(new Vector3(10.0f, 100.0f, 0));
         wallAvoidance = new WallAvoidance(collision, 1000.0f, worldsObstacles, 100.0f, 20.0f, 200.0f);
         collision.addToListBehaviour(wallAvoidance);
-	}
+    }
 	
 	@Override
 	public void render() {

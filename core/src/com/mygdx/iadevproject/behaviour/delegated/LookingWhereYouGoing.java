@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
@@ -29,7 +30,7 @@ public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour
 			return output;
 		}
 		
-		WorldObject explicitTarget = new Character();
+		WorldObject explicitTarget = new Obstacle();
 		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-this.getSource().getVelocity().x, this.getSource().getVelocity().y)));
 		
 		// Establecemos como objetivo, el objetivo calculado

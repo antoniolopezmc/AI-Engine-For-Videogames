@@ -15,10 +15,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.model.Character;
-import com.mygdx.iadevproject.model.Obstacle;
-import com.mygdx.iadevproject.model.WorldObject;
 
 public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
 	
@@ -56,7 +54,7 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         listaDePuntos.add(new Vector3(520.0f, 20.0f, 0));
         
         // Creamos el personaje.
-        gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
         gota.setOrientation(0.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
@@ -64,7 +62,7 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         gota.setMaxSpeed(20.0f); // Limitamos la velocidad del objeto para que no se nos vaya de madre.
         
         // Creamos el personaje.
-        gota2 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota2 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota2.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
         gota2.setOrientation(0.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));

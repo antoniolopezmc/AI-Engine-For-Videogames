@@ -6,8 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.steering.*;
+
 
 /**
  * 
@@ -15,30 +17,63 @@ import com.mygdx.iadevproject.steering.*;
  */
 public class Character extends WorldObject {
 	
-	// Lista de posibles comportamientos del personaje.
-	private List<Behaviour> listBehaviour;
+	// Constante que indica la importancia por defecto que tienen los comportamientos que se añaden
+	// al personaje.
+	private static float DEFAULT_IMPORTANCE = 1;
+	
+	// Mapa de posibles comportamientos del personaje con los valores de importancia de los mismos para el personaje.
+	// Está <Float, Behaviour> porque si se quiere tener ordenado por valor de importancia (lo que nos ahorraría muchas comprobaciones
+	// cuando se haga el árbitro de prioridades). El TreeMap se ordena por la clave no por el valor, por lo que es necesario que sea así.
+	private Map<Float, Behaviour> listBehaviour;
 	// Atributo que indica si el personaje forma parte de una formación. Por defecto está a false.
 	private boolean inFormation;
 	
+	// Árbitro que maneja el comportamiento del personaje
+	private Arbitrator arbitrator;
+	
+	
 	// CONSTRUCTORES.
-	public Character() {
+	public Character(Arbitrator arbitrator) {
 		super();
-		listBehaviour = new LinkedList<Behaviour>();
+		createListBehaviour();
+		this.arbitrator = arbitrator;
 	}
 	
-	public Character(float maxSpeed) {
+	public Character(Arbitrator arbitrator, float maxSpeed) {
 		super(maxSpeed);
-		listBehaviour = new LinkedList<Behaviour>();
+		createListBehaviour();
+		this.arbitrator = arbitrator;
 	}
 	
-	public Character(float maxSpeed, Texture texture) {
+	public Character(Arbitrator arbitrator, float maxSpeed, Texture texture) {
 		super(maxSpeed, texture);
-		listBehaviour = new LinkedList<Behaviour>();
+		createListBehaviour();
+		this.arbitrator = arbitrator;
 	}
 	
-	public Character(Texture texture) {
+	public Character(Arbitrator arbitrator, Texture texture) {
 		super(texture);
-		listBehaviour = new LinkedList<Behaviour>(); 
+		createListBehaviour();
+		this.arbitrator = arbitrator;
+	}
+	
+	/**
+	 * Método que crea la lista de comportamientos. Se ha creado este método para evitar
+	 * repetir el código en los constructores
+	 */
+	private void createListBehaviour() {
+		// Añadimos el comparador porque si no, el TreeMap por defecto, si se encuentra
+		// dos claves que tengan el mismo valor (aunque sean objetos distintos) se queda con 
+		// el último que introduces
+		this.listBehaviour = new TreeMap<Float, Behaviour>(new Comparator<Float>() {
+			@Override
+			public int compare(Float o1, Float o2) {
+				// Para que los ordene de mayor a menor
+				if (o1 > o2) return -1;
+				if (o1 == o2) return 0;
+				return 1;
+			}
+		});
 	}
 	
 	// GETs y SETs.
@@ -46,7 +81,7 @@ public class Character extends WorldObject {
 	 * Método 'get' para el atributo 'listBehaviour'.
 	 * @return La lista de los posibles comportamientos del personaje.
 	 */
-	public List<Behaviour> getListBehaviour() {
+	public Map<Float, Behaviour> getListBehaviour() {
 		return listBehaviour;
 	}
 	
@@ -54,7 +89,7 @@ public class Character extends WorldObject {
 	 * Método 'set' para el atributo 'listBehaviour'.
 	 * @param listBehaviour La lista de los posibles comportamientos del personaje.
 	 */
-	public void setListBehaviour(List<Behaviour> listBehaviour) {
+	public void setListBehaviour(Map<Float, Behaviour> listBehaviour) {
 		this.listBehaviour = listBehaviour;
 	}
 
@@ -63,7 +98,17 @@ public class Character extends WorldObject {
 	 * @param behaviour Comportamiento a añadir.
 	 */
 	public void addToListBehaviour(Behaviour behaviour) {
-		this.listBehaviour.add(behaviour);
+		this.listBehaviour.put(new Float(DEFAULT_IMPORTANCE), behaviour);
+	}
+	
+	/**
+	 * Método para añadir un nuevo comportamiento a la lista del objeto cuyo valor
+	 * de importancia es 'importance'
+	 * @param behaviour Comportamiento a añadir.
+	 * @param importance Valor de importancia que tiene ese comportamiento.
+	 */
+	public void addToListBehaviour(Behaviour behaviour, float importance) {
+		this.listBehaviour.put(new Float(importance), behaviour);
 	}
 
 	public boolean isInFormation() {
@@ -72,6 +117,14 @@ public class Character extends WorldObject {
 
 	public void setInFormation(boolean inFormation) {
 		this.inFormation = inFormation;
+	}
+
+	public Arbitrator getArbitrator() {
+		return arbitrator;
+	}
+
+	public void setArbitrator(Arbitrator arbitrator) {
+		this.arbitrator = arbitrator;
 	}
 
 	// MÉTODOS.
@@ -98,9 +151,8 @@ public class Character extends WorldObject {
 	 * @param target Personaje objetico sobre el que se aplicará el comportamiento.
 	 */
 	// Este método me lo he inventado. DISCUTIR.
-	public void applyBehaviour () { // TODO En este método es donde se implementará la parte del árbitro. Aunque sea otro behavior más, mejor poner como otro atributo, porque será único.
-		// Como ejemplo se va a coger el primer elemento de la lista de comportamientos.
-		this.applyBehaviour(this.listBehaviour.get(0));
+	public void applyBehaviour () { 
+		this.update(this.arbitrator.getSteering(listBehaviour), Gdx.graphics.getDeltaTime());
 	}
 	
 	// Aplicar un determinado comportamiento a un personaje. Este comportamiento se le pasa como parámetro.

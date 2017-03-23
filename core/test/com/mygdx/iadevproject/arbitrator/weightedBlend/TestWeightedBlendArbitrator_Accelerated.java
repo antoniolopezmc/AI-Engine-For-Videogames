@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject.behaviour.acceleratedUnifMov;
+package com.mygdx.iadevproject.arbitrator.weightedBlend;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -9,20 +9,24 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
+import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Flee_Accelerated;
+import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
+import com.mygdx.iadevproject.behaviour.delegated.Face;
 import com.mygdx.iadevproject.model.Character;
 
-public class TestArrive_Accelerated_WithOneRadious extends ApplicationAdapter {
-	
+public class TestWeightedBlendArbitrator_Accelerated extends ApplicationAdapter {
+
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private BitmapFont font;
 	private ShapeRenderer renderer;
 	
 	private Character drop;
-	private Character bucket;
+	private Character bucket, bucket1, bucket2, bucket3;
 	
 	@Override
 	public void create() {
@@ -40,21 +44,46 @@ public class TestArrive_Accelerated_WithOneRadious extends ApplicationAdapter {
         camera.update();
         
         drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        
         drop.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
-        drop.setOrientation(0.0f);
-        drop.setVelocity(new Vector3(0,0,0));
-        drop.addToListBehaviour(new Flee_Accelerated(drop, bucket, 10.0f));
-        
-        
+        drop.setOrientation(60.0f);
+        drop.setVelocity(new Vector3(0,0.0f,0));
+        Character target = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f));
+        target.setBounds(-600.0f, -600.0f, 64.0f, 64.0f);
+        Seek_Accelerated seek = new Seek_Accelerated(drop, target, 30.0f);
+        seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);
+        drop.addToListBehaviour(seek);
+     
+        bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
         bucket.setOrientation(0.0f);
         bucket.setVelocity(new Vector3(0,0,0));
-        Arrive_Accelerated_WithOneRadious behaviourBucket = new Arrive_Accelerated_WithOneRadious(bucket, drop, 50.0f);
-        behaviourBucket.setTargetRadious(40.0f);
-        bucket.addToListBehaviour(behaviourBucket);
+        bucket.addToListBehaviour(new Arrive_Accelerated(bucket, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));
+        bucket.addToListBehaviour(new Flee_Accelerated(bucket, drop, 15.0f));
+        bucket.addToListBehaviour(new Face(bucket, drop, 30.0f, 10.0f, 10.0f, 5.0f, 1.0f), 60.0f);
         
+        bucket1 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket1.setBounds(187.0f, 210.0f, 64.0f, 64.0f);
+        bucket1.setOrientation(0.0f);
+        bucket1.setVelocity(new Vector3(0,0,0));
+        bucket1.addToListBehaviour(new Arrive_Accelerated(bucket1, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));
+        bucket1.addToListBehaviour(new Flee_Accelerated(bucket1, drop, 15.0f));
+        bucket1.addToListBehaviour(new Face(bucket1, drop, 30.0f, 10.0f, 10.0f, 5.0f, 1.0f), 60.0f);
+        
+        bucket2 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket2.setBounds(0.0f, 302.0f, 64.0f, 64.0f);
+        bucket2.setOrientation(0.0f);
+        bucket2.setVelocity(new Vector3(0,0,0));
+        bucket2.addToListBehaviour(new Arrive_Accelerated(bucket2, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));
+        bucket2.addToListBehaviour(new Flee_Accelerated(bucket2, drop, 15.0f));
+        bucket2.addToListBehaviour(new Face(bucket2, drop, 30.0f, 10.0f, 10.0f, 5.0f, 1.0f), 60.0f);
+        
+        bucket3 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket3.setBounds(10.0f, 200.0f, 64.0f, 64.0f);
+        bucket3.setOrientation(0.0f);
+        bucket3.setVelocity(new Vector3(0,0,0));
+        bucket3.addToListBehaviour(new Arrive_Accelerated(bucket3, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));
+        bucket3.addToListBehaviour(new Flee_Accelerated(bucket3, drop, 15.0f));
+        bucket3.addToListBehaviour(new Face(bucket3, drop, 30.0f, 10.0f, 10.0f, 5.0f, 1.0f), 60.0f);
 	}
 	
 	@Override
@@ -67,19 +96,32 @@ public class TestArrive_Accelerated_WithOneRadious extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        //drop.applyBehaviour();       
+        drop.applyBehaviour();       
         bucket.applyBehaviour();
+        bucket1.applyBehaviour();
+        bucket2.applyBehaviour();
+        bucket3.applyBehaviour();
         
         batch.begin();
         drop.draw(batch);
 		bucket.draw(batch);
+		bucket1.draw(batch);
+		bucket2.draw(batch);
+		bucket3.draw(batch);
         batch.end();
+        
+        renderer.begin(ShapeType.Filled);
+		renderer.circle(-600.0f, -600.0f, 2);
+		renderer.end();
 	}
 	
 	@Override
 	public void dispose() {
 		drop.getTexture().dispose();
 		bucket.getTexture().dispose();
+		bucket1.getTexture().dispose();
+		bucket2.getTexture().dispose();
+		bucket3.getTexture().dispose();
 		batch.dispose();
 		font.dispose();
 		renderer.dispose();
@@ -133,4 +175,5 @@ public class TestArrive_Accelerated_WithOneRadious extends ApplicationAdapter {
 //		camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f,
 //				100 - effectiveViewportHeight / 2f);
 	}
+
 }

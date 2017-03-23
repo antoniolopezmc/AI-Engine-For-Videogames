@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
@@ -38,14 +39,14 @@ public class TestArrive_NoAccelerated extends ApplicationAdapter {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
-        drop = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        drop = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         drop.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
         drop.setOrientation(0.0f);
         // Esto está hecho, una vez que se ha comprobado que el Wander funciona!
         drop.addToListBehaviour(new Wander_NoAccelerated(drop, 50.0f, 10.0f));
 
         
-        bucket = new Character(new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         bucket.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
         bucket.setOrientation(0.0f);
         bucket.addToListBehaviour(new Arrive_NoAccelerated(bucket, drop, 100.0f, 5.0f, 2.0f));

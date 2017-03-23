@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 
@@ -29,7 +30,7 @@ public class Face extends Align_Accelerated implements Behaviour {
 			return null;
 		}
 		
-		WorldObject explicitTarget = new Character();
+		WorldObject explicitTarget = new Obstacle();
 		explicitTarget.setOrientation((float) Math.toDegrees(MathUtils.atan2(-direction.x, direction.y)));
 		
 		// Almacenamos el objetivo principal para poder llamar al método del padre con el 'explicitTarget'
