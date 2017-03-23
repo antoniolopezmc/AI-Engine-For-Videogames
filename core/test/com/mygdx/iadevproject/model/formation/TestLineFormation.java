@@ -17,7 +17,7 @@ import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Wander_NoAccelerate
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.formation.CircularFormation;
 
-public class TestCircularFormation extends ApplicationAdapter {
+public class TestLineFormation extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private BitmapFont font;
@@ -29,7 +29,7 @@ public class TestCircularFormation extends ApplicationAdapter {
 	private Character gota4;
 	private Character gota5;
 	private Character gota6;
-	private CircularFormation formacion;
+	private LineFormation formacion;
 	
 	// Este falso personaje contendrá en todo momento la posción del ratón.
 	private Character fakeMouse;
@@ -96,9 +96,9 @@ public class TestCircularFormation extends ApplicationAdapter {
         gota6.setMaxSpeed(50.0f);
         
         // Creamos la formación.
-        formacion = new CircularFormation(50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        formacion = new LineFormation(50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
-        formacion.setOrientation(0.0f);
+        formacion.setOrientation(115.0f);
         formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         formacion.addCharacterToCharactersList(gota);
         formacion.addCharacterToCharactersList(gota2);
@@ -106,7 +106,7 @@ public class TestCircularFormation extends ApplicationAdapter {
         formacion.addCharacterToCharactersList(gota4);
         formacion.addCharacterToCharactersList(gota5);
         formacion.addCharacterToCharactersList(gota6);
-        formacion.setSeparationDistance(100.0f);        
+        formacion.setSeparationDistance(100.0f);  
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
