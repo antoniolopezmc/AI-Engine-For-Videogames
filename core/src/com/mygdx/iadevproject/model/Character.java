@@ -12,7 +12,6 @@ import com.mygdx.iadevproject.steering.*;
 
 
 /**
- * 
  * Clase que representa a un personaje del videojuego.
  */
 public class Character extends WorldObject {
