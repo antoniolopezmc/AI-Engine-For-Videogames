@@ -5,7 +5,6 @@ import java.util.*;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.Behaviour;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
-import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;

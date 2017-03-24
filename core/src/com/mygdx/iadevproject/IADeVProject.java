@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.*;
 import com.mygdx.iadevproject.behaviour.delegated.Wander_Delegated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
@@ -102,7 +103,7 @@ public class IADeVProject extends ApplicationAdapter {
         gota5.addToListBehaviour(new Wander_NoAccelerated(gota5, 50.0f, 20.0f)); // En formación, el wander no deberia tenerse en cuenta.
         
         // Creamos la formación.
-        formacion = new CircularFormation(50.0f);
+        formacion = new CircularFormation(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), 50.0f);
         formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
         formacion.setOrientation(0.0f);
         formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));

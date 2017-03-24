@@ -2,7 +2,6 @@ package com.mygdx.iadevproject.behaviour.acceleratedUnifMov;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.TestSeek_Accelerated;
 
 public class TestArrive_Accelerated_WithOneRadiousLauncher {
 	public static void main (String[] arg) {

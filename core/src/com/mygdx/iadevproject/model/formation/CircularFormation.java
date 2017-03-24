@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.Arbitrator;
 
 public class CircularFormation extends Formation {
 	
@@ -12,12 +13,12 @@ public class CircularFormation extends Formation {
 	private float separationDistance;
 
 	// CONSTRUCTORES.
-	public CircularFormation(float maxSpeed) {
-		super(maxSpeed);
+	public CircularFormation(Arbitrator arbitrator, float maxSpeed) {
+		super(arbitrator, maxSpeed);
 	}
 	
-	public CircularFormation(float maxSpeed, Texture texture) {
-		super(maxSpeed, texture);
+	public CircularFormation(Arbitrator arbitrator, float maxSpeed, Texture texture) {
+		super(arbitrator, maxSpeed, texture);
 	}
 	
 	// GETs y SETs.

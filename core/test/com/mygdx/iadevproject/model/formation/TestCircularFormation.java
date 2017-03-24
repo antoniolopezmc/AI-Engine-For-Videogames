@@ -10,11 +10,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
+import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.delegated.Wander_Delegated;
-import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
+import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.CircularFormation;
 
 public class TestCircularFormation extends ApplicationAdapter {
@@ -32,7 +35,7 @@ public class TestCircularFormation extends ApplicationAdapter {
 	private CircularFormation formacion;
 	
 	// Este falso personaje contendrá en todo momento la posción del ratón.
-	private Character fakeMouse;
+	private WorldObject fakeMouse;
 	
 	@Override
 	public void create() {
@@ -50,38 +53,38 @@ public class TestCircularFormation extends ApplicationAdapter {
         camera.update();
         
         // Creamos 'fakeMouse'
-        fakeMouse = new Character();
+        fakeMouse = new Obstacle();
         
         // Creamos el personaje.
-        gota = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
         gota.setOrientation(0.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
-        gota2 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota2 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota2.setBounds(150.0f, 150.0f, 64.0f, 64.0f);
         gota2.setOrientation(30.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota2.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
-        gota3 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota3 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota3.setBounds(250.0f, 250.0f, 64.0f, 64.0f);
         gota3.setOrientation(30.0f);
         gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota3.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
-        gota4 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota4 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota4.setBounds(350.0f, 350.0f, 64.0f, 64.0f);
         gota4.setOrientation(30.0f);
         gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota4.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
-        gota5 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota5 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota5.setBounds(450.0f, 450.0f, 64.0f, 64.0f);
         gota5.setOrientation(30.0f);
         gota5.setVelocity(new Vector3(0.0f,0.0f,0.0f));
@@ -89,14 +92,14 @@ public class TestCircularFormation extends ApplicationAdapter {
         gota5.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
-        gota6 = new Character(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota6 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota6.setBounds(550.0f, 550.0f, 64.0f, 64.0f);
         gota6.setOrientation(30.0f);
         gota6.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota6.setMaxSpeed(50.0f);
         
         // Creamos la formación.
-        formacion = new CircularFormation(50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        formacion = new CircularFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
         formacion.setOrientation(0.0f);
         formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.model.Character;
 
 public class LineFormation extends Formation {
@@ -13,16 +14,16 @@ public class LineFormation extends Formation {
 	private float separationDistance;
 
 	// CONSTRUCTORES.
-	public LineFormation() {
-		super();
+	public LineFormation(Arbitrator arbitrator) {
+		super(arbitrator);
 	}
 	
-	public LineFormation(float maxSpeed) {
-		super(maxSpeed);
+	public LineFormation(Arbitrator arbitrator, float maxSpeed) {
+		super(arbitrator, maxSpeed);
 	}
 	
-	public LineFormation(float maxSpeed, Texture texture) {
-		super(maxSpeed, texture);
+	public LineFormation(Arbitrator arbitrator, float maxSpeed, Texture texture) {
+		super(arbitrator, maxSpeed, texture);
 	}
 	
 	// GETs y SETs.

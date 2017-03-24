@@ -2,7 +2,6 @@ package com.mygdx.iadevproject.behaviour.group;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.iadevproject.behaviour.group.TestSeparation;
 
 public class TestCohesionLauncher {
 	public static void main (String[] arg) {

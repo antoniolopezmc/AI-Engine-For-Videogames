@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.arbitrator.Arbitrator;
 
 // La formación en estrella es un tipo de formación en círculo.
 public class StarFormation extends CircularFormation {
@@ -17,12 +18,12 @@ public class StarFormation extends CircularFormation {
 	private float armSize;
 	
 	// CONSTRUCTORES.
-	public StarFormation(float maxSpeed) {
-		super(maxSpeed);
+	public StarFormation(Arbitrator arbitrator, float maxSpeed) {
+		super(arbitrator, maxSpeed);
 	}
 	
-	public StarFormation(float maxSpeed, Texture texture) {
-		super(maxSpeed, texture);
+	public StarFormation(Arbitrator arbitrator, float maxSpeed, Texture texture) {
+		super(arbitrator, maxSpeed, texture);
 	}
 
 	// GETs y SETs.

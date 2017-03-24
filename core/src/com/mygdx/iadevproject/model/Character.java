@@ -24,12 +24,12 @@ public class Character extends WorldObject {
 	// Mapa de posibles comportamientos del personaje con los valores de importancia de los mismos para el personaje.
 	// Está <Float, Behaviour> porque si se quiere tener ordenado por valor de importancia (lo que nos ahorraría muchas comprobaciones
 	// cuando se haga el árbitro de prioridades). El TreeMap se ordena por la clave no por el valor, por lo que es necesario que sea así.
-	private Map<Float, Behaviour> listBehaviour;
+	protected Map<Float, Behaviour> listBehaviour;
 	// Atributo que indica si el personaje forma parte de una formación. Por defecto está a false.
 	private boolean inFormation;
 	
 	// Árbitro que maneja el comportamiento del personaje
-	private Arbitrator arbitrator;
+	protected Arbitrator arbitrator;
 	
 	
 	// CONSTRUCTORES.
@@ -55,6 +55,30 @@ public class Character extends WorldObject {
 		super(texture);
 		createListBehaviour();
 		this.arbitrator = arbitrator;
+	}
+	
+	
+	/**
+	 * CONSTRUCTORES PARA LA SUBCLASE FORMATION!
+	 */
+	protected Character() {
+		super();
+		createListBehaviour();
+	}
+	
+	protected Character(float maxSpeed) {
+		super(maxSpeed);
+		createListBehaviour();
+	}
+	
+	protected Character(float maxSpeed, Texture texture) {
+		super(maxSpeed, texture);
+		createListBehaviour();
+	}
+	
+	protected Character(Texture texture) {
+		super(texture);
+		createListBehaviour();
 	}
 	
 	/**
@@ -152,7 +176,9 @@ public class Character extends WorldObject {
 	 */
 	// Este método me lo he inventado. DISCUTIR.
 	public void applyBehaviour () { 
-		this.update(this.arbitrator.getSteering(listBehaviour), Gdx.graphics.getDeltaTime());
+		if (!this.inFormation){
+			this.update(this.arbitrator.getSteering(listBehaviour), Gdx.graphics.getDeltaTime());
+		}
 	}
 	
 	// Aplicar un determinado comportamiento a un personaje. Este comportamiento se le pasa como parámetro.

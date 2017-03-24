@@ -8,15 +8,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.behaviour.Behaviour;
-import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
-import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Arrive_Accelerated;
-import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Arrive_Accelerated_WithOneRadious;
-import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
+import com.mygdx.iadevproject.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
-import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
-import com.mygdx.iadevproject.steering.Steering;
+import com.mygdx.iadevproject.model.Obstacle;
+import com.mygdx.iadevproject.model.WorldObject;
 
 // ---> PATRÓN COMPOSITE.
 public abstract class Formation extends Character {
@@ -27,19 +23,19 @@ public abstract class Formation extends Character {
 	// CONSTRUCTORES.
 	// IMPORTANTE -> Al construir la formación NO se le pasa la lista de integrantes como parámetro. Hay 2 métodos especiales para añadir o eliminar un componente de la formación.
 	// 		Estos métodos nos permitirá realizar un tratamiento/procesamiento especial a los personajes cuando sean añadidos y eliminados.
-	public Formation() {
-		super();
+	public Formation(Arbitrator arbitrator) {
+		super(arbitrator);
 		this.charactersList = new LinkedList<Character>();
 	}
 	
 	// CUIDADO -> No confundir la velocidad máxima de la formación con la velocidad máxima de cada uno de sus integrantes.
-	public Formation(float maxSpeed) {
-		super(maxSpeed);
+	public Formation(Arbitrator arbitrator, float maxSpeed) {
+		super(arbitrator, maxSpeed);
 		this.charactersList = new LinkedList<Character>();
 	}
 	
-	public Formation(float maxSpeed, Texture texture) {
-		super(maxSpeed, texture);
+	public Formation(Arbitrator arbitrator, float maxSpeed, Texture texture) {
+		super(arbitrator, maxSpeed, texture);
 		this.charactersList = new LinkedList<Character>();
 	}
 	
@@ -80,11 +76,18 @@ public abstract class Formation extends Character {
 		this.charactersList.remove(character);
 	} 
 	
+	/**
+	 * MUY IMPORTANTE. DE JM -> HE CAMBIADO EL MÉTODO A applyBehaviour() POR QUE YA EL MÉTODO DEL PADRE LLAMA AL ÁRBITRO,
+	 * NO DEVUELVE DIRECTAMENTE EL PRIMERO DE LA LISTA. DE ESTA MANERA, SOBREESCRIBIMOS ESTE MÉTODO PARA QUE AHORA EN VEZ DE 
+	 * OBTENER EL STEERING DEL ARGUMENTO QUE NOS PASABAN, LO OBTENEMOS DEL ÁRBITRO QUE TIENE LA FORMACIÓN. 
+	 * 
+	 * LO HE PROBADO Y FUNCIONA!!
+	 */
 	// CUIDADO -> NO CONFUNDIR EL BEHAVIOUR DE LA FORMACIÓN CON LOS BEHAVIOURs DE CADA UNO DE LOS PERSONAJES QUE LA INTEGRAN.
 	//		Los behaviours de cada uno de los personajes aquí no valen para nada.
-	public void applyBehaviour(Behaviour behaviour) {
+	public void applyBehaviour() {
 		// En primer lugar, aplicamos el behaviour a la propia formación.
-		this.update(behaviour.getSteering(), Gdx.graphics.getDeltaTime());
+		this.update(this.arbitrator.getSteering(this.listBehaviour), Gdx.graphics.getDeltaTime());
 		
 		// Ahora, calculamos la lista de posiciones de los personajes de la formación, con respecto a la propia formación.
 		List<Vector3> charactersPositionList = getCharactersPosition();
@@ -110,7 +113,7 @@ public abstract class Formation extends Character {
 			// Creamos un personaje ficticio para poder pasarlo al Seek/Arrive. De este personaje solo nos interesa la posición,
 			//		ya que es lo único que se usa en el Seek/Arrive.
 			// La posición del personaje ficticio será la correspondiente posición calculada anteriormente.
-			Character fakeCharacter = new Character();
+			WorldObject fakeCharacter = new Obstacle();
 			Vector3 targetPosition =  charactersPositionList.get(index);
 			fakeCharacter.setPosition(new Vector3(targetPosition.x, targetPosition.y, targetPosition.z));
 			

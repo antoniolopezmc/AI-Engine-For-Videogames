@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
-import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
 import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
@@ -48,7 +48,7 @@ public class Cohesion extends Seek_Accelerated {
 		// Sino, creamos un personaje ficticio y hacemos un Seek hacie él.
 		// La posición del personaje ficticio será el centro de masas calculado.
 		centerOfMass = new Vector3(centerOfMass.x/((float)count), centerOfMass.y/((float)count), centerOfMass.z/((float)count));
-		Character fakeTarget = new Character();
+		WorldObject fakeTarget = new Obstacle();
 		fakeTarget.setPosition(centerOfMass);
 		super.setTarget(fakeTarget); // Establecemos el objetivo real.
 		// Llamamos al padre.
