@@ -10,10 +10,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_Accelerated;
-import com.mygdx.iadevproject.arbitrator.weightedBlend.WeightedBlendArbitrator_NoAccelerated;
+import com.mygdx.iadevproject.arbitrator.accelerated.WeightedBlendArbitrator_Accelerated;
+import com.mygdx.iadevproject.arbitrator.noAccelerated.WeightedBlendArbitrator_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.behaviour.delegated.Wander_Delegated;
+import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -113,7 +114,9 @@ public class TestCircularFormation extends ApplicationAdapter {
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
-        formacion.addToListBehaviour(new Seek_Accelerated(formacion, fakeMouse, 50.0f));
+        Seek_Accelerated seek = new Seek_Accelerated(formacion, fakeMouse, 50.0f);
+        seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);
+        formacion.addToListBehaviour(seek);
 
 	}
 	

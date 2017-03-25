@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject.arbitrator.weightedBlend;
+package com.mygdx.iadevproject.arbitrator.accelerated;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,9 +50,6 @@ public class WeightedBlendArbitrator_Accelerated implements Arbitrator {
 		Vector3 lineal = new Vector3(0,0,0);
 		float angular = 0.0f;
 		
-		// Empty vector para comprobar si el steering es 0 (en vez de null)
-		Vector3 emptyVector = new Vector3(0,0,0);
-		
 		// Para cada uno de los comportamientos
 		for (Entry<Float, Behaviour> behaviour : behaviours.entrySet()) {
 			// Obtenemos el steering del comportamiento
@@ -62,9 +59,10 @@ public class WeightedBlendArbitrator_Accelerated implements Arbitrator {
 			if (steer instanceof Steering_AcceleratedUnifMov) {
 				Steering_AcceleratedUnifMov steerAcc = (Steering_AcceleratedUnifMov) steer;
 				
-				// Si es distinto de null o no es un vector 0, actualizamos
-				// los valores
-				if (steerAcc != null || !steerAcc.getLineal().idt(emptyVector)) {	 
+				// Si es distinto de null actualizamos los valores.
+				// No comprobamos si el vector lineal o el valor angular es 0 porque
+				// al ser una mezcla ponderada, no va a afectar al resultado.
+				if (steerAcc != null) {	 
 					lineal.add(steerAcc.getLineal().scl(behaviour.getKey()));
 					angular += steerAcc.getAngular()*behaviour.getKey();
 				}

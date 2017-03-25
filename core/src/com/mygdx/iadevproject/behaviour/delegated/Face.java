@@ -8,8 +8,7 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.steering.Steering;
-
-//TODO IMPORTANTE -> PROBAR.
+import com.mygdx.iadevproject.steering.Steering_AcceleratedUnifMov;
 
 public class Face extends Align_Accelerated implements Behaviour {
 
@@ -25,9 +24,12 @@ public class Face extends Align_Accelerated implements Behaviour {
 		Vector3 direction = new Vector3(this.getTarget().getPosition());
 		direction = direction.sub(this.getSource().getPosition());
 		
-		// Si la dirección es cero, no cambianos nada. Estamos mirando al objetivo
+		// Si la dirección es cero, no cambianos nada. Estamos sobre el objetivo
 		if (direction.len() == 0.0f) {
-			return null;
+			Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
+			output.setAngular(0);
+			output.setLineal(new Vector3(0,0,0));
+			return output;
 		}
 		
 		WorldObject explicitTarget = new Obstacle();

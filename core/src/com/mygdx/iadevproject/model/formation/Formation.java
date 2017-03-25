@@ -7,8 +7,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.arbitrator.Arbitrator;
+import com.mygdx.iadevproject.arbitrator.PriorityArbitrator;
+import com.mygdx.iadevproject.behaviour.Behaviour;
+import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -134,14 +138,45 @@ public abstract class Formation extends Character {
 			 *  ---> Sería interesante hacer varias demos de prueba con movimientos ACELERADOS para mostrar 
 			 *  que es lo que pasa y por qué no funciona en esto casos.
 			 */
-			// Ahora, aplicamos el comportamiento al personaje.
-			thisCharacter.applyBehaviour(new Arrive_NoAccelerated(thisCharacter, fakeCharacter, thisCharacter.getMaxSpeed(), 5.0f, 1.0f));
+//			ESTO ES LO QUE HA PUESTO JM y FUNCIONA AL PELO!!
+			Arbitrator arbitrator = new PriorityArbitrator(1e-3f);
+			Map<Float, Behaviour> map = new TreeMap<Float, Behaviour>(new Comparator<Float>() {
+				@Override
+				public int compare(Float o1, Float o2) {
+					// Para que los ordene de mayor a menor
+					if (o1 > o2) return -1;
+					if (o1 == o2) return 0;
+					return 1;
+				}
+			});
+			map.put(30.0f, new Arrive_NoAccelerated(thisCharacter, fakeCharacter, thisCharacter.getMaxSpeed(), 5.0f, 1.0f));
+			WorldObject invented = new Obstacle();
+			Vector3 center = new Vector3(formationPosition);
+			Vector3 extreme = new Vector3(fakeCharacter.getPosition());
+			invented.setOrientation(getOrientation(extreme.sub(center)));
+			map.put(1.0f, new Align_Accelerated(thisCharacter, invented, 30.0f, 20.0f, 1.0f, 10.0f, 1.0f));
+			
+			thisCharacter.update(arbitrator.getSteering(map), Gdx.graphics.getDeltaTime());
+			
+
+//			ESTO ES LO QUE TENÍA ANTONIO
+//			// Ahora, aplicamos el comportamiento al personaje.
+//			thisCharacter.applyBehaviour(new Arrive_NoAccelerated(thisCharacter, fakeCharacter, thisCharacter.getMaxSpeed(), 5.0f, 1.0f));
 			
 			// Finalmente, volvemos a activar el flag para que no se pueda mover al personaje desde otro sitio.
 			thisCharacter.setInFormation(true);
 			
 		}
 		
+	}
+	
+	/**
+	 * Método que obtiene la orientación de un vector.
+	 * @param vector - Vector del que obtenemos la orientación
+	 * @return - Orientación del vector 
+	 */
+	private float getOrientation (Vector3 vector) {
+		return (float) Math.toDegrees(MathUtils.atan2(-vector.x, vector.y));
 	}
 	
 	public void drawFormationPoints(ShapeRenderer renderer) {

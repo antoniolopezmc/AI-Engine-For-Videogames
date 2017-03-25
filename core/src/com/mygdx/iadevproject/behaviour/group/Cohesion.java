@@ -43,6 +43,7 @@ public class Cohesion extends Seek_Accelerated {
 			// Creamos el 'Steering' que será devuelto. El steering nulo en este caso.
 			Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 			output.setLineal(new Vector3(0.0f, 0.0f, 0.0f));
+			output.setAngular(0.0f);
 			return output;
 		}
 		// Sino, creamos un personaje ficticio y hacemos un Seek hacie él.

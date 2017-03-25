@@ -70,7 +70,53 @@ public class Seek_Accelerated implements Behaviour {
 				
 		// Calculamos el atributo 'lineal'.
 		Vector3 copy = new Vector3(this.target.getPosition());
-		Vector3 finalLineal = copy.sub(this.source.getPosition()).nor();
+		Vector3 finalLineal = copy.sub(this.source.getPosition());
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//TODO IMPORTANTE!!!!!!!! CONSULTAR CON ANTONIO Y COMENTARLO!!!!!
+		if (finalLineal.len() < 1) { 
+			output.setLineal(new Vector3(0,0,0));
+			output.setAngular(0.0f);
+			return output;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		finalLineal.nor();
 		
 		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Millington.
 		// --> Versión de Millington: el personaje no se para nunca
