@@ -9,15 +9,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.arbitrator.Arbitrator;
-import com.mygdx.iadevproject.arbitrator.PriorityArbitrator;
-import com.mygdx.iadevproject.behaviour.Behaviour;
-import com.mygdx.iadevproject.behaviour.acceleratedUnifMov.Align_Accelerated;
-import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
+import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
+import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
+import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
+import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
-import com.mygdx.iadevproject.steering.Steering;
 
 // ---> PATRÓN COMPOSITE.
 public abstract class Formation extends Character {

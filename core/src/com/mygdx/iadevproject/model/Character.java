@@ -6,9 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.arbitrator.Arbitrator;
-import com.mygdx.iadevproject.behaviour.Behaviour;
-import com.mygdx.iadevproject.steering.*;
+import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
+import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.mygdx.iadevproject.aiReactive.steering.*;
 
 
 /**
