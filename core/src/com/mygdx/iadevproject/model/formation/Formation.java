@@ -22,8 +22,16 @@ import com.mygdx.iadevproject.model.WorldObject;
 // ---> PATRÓN COMPOSITE.
 public abstract class Formation extends Character {
 
+	// Los integrantes de una formación, podrán orientarse de distinta manera trás haber creado la formación.
+	public static int FREE_ORIENTATION = 0; // POR DEFECTO.
+	public static int LOOK_INSIDE = 1;
+	public static int LOOK_OUTSIDE = 2;
+	public static int SAME_ORIENTATION = 3; // Todos los integrantes mirarán hacia el mismo sitio (orientación de la formación).
+	
 	// Lista de personajes que integran la formación.
 	private List<Character> charactersList;
+	// Orientación final de los ¡¡¡componentes del la formación!!!
+	private int componentFormationOrientationMode;
 
 	// CONSTRUCTORES.
 	// IMPORTANTE -> Al construir la formación NO se le pasa la lista de integrantes como parámetro. Hay 2 métodos especiales para añadir o eliminar un componente de la formación.
@@ -31,17 +39,20 @@ public abstract class Formation extends Character {
 	public Formation(Arbitrator arbitrator) {
 		super(arbitrator);
 		this.charactersList = new LinkedList<Character>();
+		this.componentFormationOrientationMode = 0;
 	}
 	
 	// CUIDADO -> No confundir la velocidad máxima de la formación con la velocidad máxima de cada uno de sus integrantes.
 	public Formation(Arbitrator arbitrator, float maxSpeed) {
 		super(arbitrator, maxSpeed);
 		this.charactersList = new LinkedList<Character>();
+		this.componentFormationOrientationMode = 0;
 	}
 	
 	public Formation(Arbitrator arbitrator, float maxSpeed, Texture texture) {
 		super(arbitrator, maxSpeed, texture);
 		this.charactersList = new LinkedList<Character>();
+		this.componentFormationOrientationMode = 0;
 	}
 	
 	// GETs y SETs.
@@ -66,6 +77,13 @@ public abstract class Formation extends Character {
 	// MUY IMPORTANTE -> Las orientaciones de los personajes empiezan en la vertical (orientación 0º está en la parte superior de la vertical).
 	// 			Los ángulos de una formación empiezan en la horizontal (el ángulo de 0º está a la derecha). -> Circunferencia goniométrica.
 
+	
+	// Los comportamiento ¡¡¡¡DE LOS INTEGRANTES!!!! de cada tipo de formación, dependerán de la formación concreta. (Esta funcionalidad se delega a los hijos).
+	// --> Los hijos deberán implementar este método, que se encargará de aplicar el árbitro sobre la lista de comportamieentos en cada uno de los hijos y devolver el Steergin final.
+	// Como parámetro se le pasa el personaje actual de la formación y el punto final al que debe ir (en forma de WorldObject).
+	// --> Hemos tomado esta decisión, precisamente, para que cada hijo pueda tener su propio comportamiento para los integrantes de la formación.
+	protected abstract Steering getComponentFormationSteerginToApply(Character source, WorldObject fakeTarget);// ---> Patrón método plantilla.
+	
 	public void addCharacterToCharactersList(Character character) {
 		// Solo podemos añadir un personaje a una formación si no pertenece a ninguna otra.
 		if (!character.isInFormation()) {
@@ -79,7 +97,17 @@ public abstract class Formation extends Character {
 		// Al eliminar un personaje de la formación, desactivamos el flag correspondiente.
 		character.setInFormation(false);
 		this.charactersList.remove(character);
-	} 
+	}
+
+	// No va a haber 'setComponentFormationArbitrator'. En esta ocasión el árbitro será siempre por prioridad.
+	
+	public int getComponentFormationOrientationMode() {
+		return componentFormationOrientationMode;
+	}
+
+	public void setComponentFormationOrientationMode(int mode) {
+		this.componentFormationOrientationMode = mode;
+	}
 	
 	/**
 	 * MUY IMPORTANTE. DE JM -> HE CAMBIADO EL MÉTODO A applyBehaviour() POR QUE YA EL MÉTODO DEL PADRE LLAMA AL ÁRBITRO,
@@ -110,60 +138,22 @@ public abstract class Formation extends Character {
 			
 			// Ahora, los personajes de la formación deben ir/encontrarse a/con la formación.
 			// 		Para ello, deben moverse lo más rápido posible. ==> SEEK o ARRIVE con radio muy pequeño.
-			//		Es mejor el arrive con radio pequeño porque así cuando el personaje llegue a la región interior se parará.
+			//		Es mejor el arrive con radio pequeño porque así cuando el personaje llegue a la región interior se parará,
+			//			en vez de estar oscilando continuamente.
 			for (int index = 0; index < this.charactersList.size(); index++) {
+				// Recuperamos el personaje de la lista.
 				Character thisCharacter = this.charactersList.get(index);
 				// Primero, desactivamos el flag del personaje. Si no lo hacemos, no podemos aplicarle ningún comportamiento.
 				thisCharacter.setInFormation(false);
 				
-				// Creamos un personaje ficticio para poder pasarlo al Seek/Arrive. De este personaje solo nos interesa la posición,
-				//		ya que es lo único que se usa en el Seek/Arrive.
-				// La posición del personaje ficticio será la correspondiente posición calculada anteriormente.
-				WorldObject fakeCharacter = new Obstacle();
+				// Creamos un personaje ficticio para poder pasarlo al comportamiento.
+				// 	---> La posición del personaje ficticio será la correspondiente posición calculada anteriormente.
+				WorldObject fakeTarget = new Obstacle();
 				Vector3 targetPosition =  charactersPositionList.get(index);
-				fakeCharacter.setPosition(new Vector3(targetPosition.x, targetPosition.y, targetPosition.z));
+				fakeTarget.setPosition(new Vector3(targetPosition.x, targetPosition.y, targetPosition.z));
 				
-				/**
-				 * 										EXTREMADAMENTE IMPORTANTE.
-				 * 
-				 * Cuando nosotros hacemos una formación, lo esperado es que los personajes 'formen' los más rápido posible,
-				 * es decir, que vayan a la posición lo más rápido posible y mantengan la formación. Y AHÍ SE QUEDEN SIN MOVERSE.
-				 * 
-				 *  Esto es extremadamente complejo hacerlo con un movimiento ACELERADO, ya que en este tipo de movimientos el steering
-				 *  solamente devuelve la acelaración y, por tanto, controlar la velocidad de un personaje y donde queremos que se pare
-				 *  exactamente es más complicado.
-				 *  
-				 *  Si queremos una total precisión en el punto de parada de un personaje (como es el caso de las formaciones), tenemos
-				 *  que hacer uso de comportamientos NO ACELERADOS. En los steerings de este tipo de comportamientos sí podemos acceder
-				 *  y establecer la velocidad que finalmente será aplicada al personaje.
-				 *  
-				 *  ---> Sería interesante hacer varias demos de prueba con movimientos ACELERADOS para mostrar 
-				 *  que es lo que pasa y por qué no funciona en esto casos.
-				 */
-	//			ESTO ES LO QUE HA PUESTO JM y FUNCIONA AL PELO!!
-				Arbitrator arbitrator = new PriorityArbitrator(1e-3f);
-				Map<Float, Behaviour> map = new TreeMap<Float, Behaviour>(new Comparator<Float>() {
-					@Override
-					public int compare(Float o1, Float o2) {
-						// Para que los ordene de mayor a menor
-						if (o1 > o2) return -1;
-						if (o1 == o2) return 0;
-						return 1;
-					}
-				});
-				map.put(30.0f, new Arrive_NoAccelerated(thisCharacter, fakeCharacter, thisCharacter.getMaxSpeed(), 5.0f, 1.0f));
-				WorldObject invented = new Obstacle();
-				Vector3 center = new Vector3(formationPosition);
-				Vector3 extreme = new Vector3(fakeCharacter.getPosition());
-				invented.setOrientation(getOrientation(extreme.sub(center)));
-				map.put(1.0f, new Align_Accelerated(thisCharacter, invented, 30.0f, 20.0f, 1.0f, 10.0f, 1.0f));
-				
-				thisCharacter.applySteering(arbitrator.getSteering(map));
-				
-	
-	//			ESTO ES LO QUE TENÍA ANTONIO
-	//			// Ahora, aplicamos el comportamiento al personaje.
-	//			thisCharacter.applyBehaviour(new Arrive_NoAccelerated(thisCharacter, fakeCharacter, thisCharacter.getMaxSpeed(), 5.0f, 1.0f));
+				// Aplicamos un steering al integrante actual de la formación. Para obtener dicho steering delegamos en el hijo (en la formación concreta).
+				thisCharacter.applySteering(this.getComponentFormationSteerginToApply(thisCharacter, fakeTarget));
 				
 				// Finalmente, volvemos a activar el flag para que no se pueda mover al personaje desde otro sitio.
 				thisCharacter.setInFormation(true);
@@ -171,13 +161,14 @@ public abstract class Formation extends Character {
 			}
 		}
 	}
-	
+
 	/**
 	 * Método que obtiene la orientación de un vector.
 	 * @param vector - Vector del que obtenemos la orientación
 	 * @return - Orientación del vector 
 	 */
-	private float getOrientation (Vector3 vector) {
+	// Se pone como 'protected' para que los hijos puedan acceder a ella.
+	protected float calculateOrientation (Vector3 vector) {
 		return (float) Math.toDegrees(MathUtils.atan2(-vector.x, vector.y));
 	}
 	

@@ -23,12 +23,12 @@ public class Character extends WorldObject {
 	// Mapa de posibles comportamientos del personaje con los valores de importancia de los mismos para el personaje.
 	// Está <Float, Behaviour> porque si se quiere tener ordenado por valor de importancia (lo que nos ahorraría muchas comprobaciones
 	// cuando se haga el árbitro de prioridades). El TreeMap se ordena por la clave no por el valor, por lo que es necesario que sea así.
-	protected Map<Float, Behaviour> listBehaviour;
+	private Map<Float, Behaviour> listBehaviour;
 	// Atributo que indica si el personaje forma parte de una formación. Por defecto está a false.
 	private boolean inFormation;
 	
 	// Árbitro que maneja el comportamiento del personaje
-	protected Arbitrator arbitrator;
+	private Arbitrator arbitrator;
 	
 	
 	// CONSTRUCTORES.

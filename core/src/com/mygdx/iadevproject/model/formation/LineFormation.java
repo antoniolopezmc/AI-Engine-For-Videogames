@@ -1,12 +1,22 @@
 package com.mygdx.iadevproject.model.formation;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
+import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
+import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
+import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
+import com.mygdx.iadevproject.model.WorldObject;
 
 public class LineFormation extends Formation {
 	
@@ -102,6 +112,48 @@ public class LineFormation extends Formation {
 		return salida;		
 	}
 
-	
+	@Override
+	protected Steering getComponentFormationSteerginToApply(Character source, WorldObject fakeTarget) {
+		// Tanto el árbitro como el map se crean "a pelo", porque dependerán de la formación concreta y no serán configurables desde el exterior.
+		Arbitrator arbitrator = new PriorityArbitrator(1e-3f);
+		Map<Float, Behaviour> map = new TreeMap<Float, Behaviour>(new Comparator<Float>() {
+			@Override
+			public int compare(Float o1, Float o2) {
+				// Para que los ordene de mayor a menor
+				if (o1 > o2) return -1;
+				if (o1 == o2) return 0;
+				return 1;
+			}
+		});
+		
+		// TODO MUY IMPORTANTE -> ¿Los componentes de una formación deben tener en cuenta las colisiones (sería lo primero en el map)? PENSAR. PENSAR EN EL PATHFINDING.
+		
+		// Primer comportamiento del map. -> Desplazamiento hacia 'fakeTarget'.
+		map.put(30.0f, new Arrive_NoAccelerated(source, fakeTarget, source.getMaxSpeed(), 5.0f, 1.0f));
+		
+		// Segundo comportamiento del map (con menor prioridad). -> Rotación/Cambio de orientación.
+		// 	--> ESTE CAMBIO DE ORIENTACIÓN SÍ PODRÁ SER CONFIGURADO DESDE EL EXTERIOR (MEDIANTE UNA CONSTANTE).
+		
+		// Para algunos cambios de orientación necesitaremos las posiones de la formación y del integrante actual. 
+		//		Con esas posiciones calcularemos un vector y después la orientación asociada a ese vector.
+		WorldObject invented = new Obstacle();
+		Vector3 center = new Vector3(this.getPosition()); // Posición de la formación.
+		Vector3 extreme = new Vector3(fakeTarget.getPosition()); // Posición del integrante actual.
+		
+		// En función del tipo de orientación elegida...
+		if (this.getComponentFormationOrientationMode() == Formation.LOOK_OUTSIDE) {
+			invented.setOrientation(this.calculateOrientation(extreme.sub(center)));
+			map.put(20.0f, new Align_Accelerated(source, invented, 30.0f, 20.0f, 1.0f, 10.0f, 1.0f));
+		} else if (this.getComponentFormationOrientationMode() == Formation.LOOK_INSIDE) {
+			invented.setOrientation(this.calculateOrientation(center.sub(extreme)));
+			map.put(20.0f, new Align_Accelerated(source, invented, 30.0f, 20.0f, 1.0f, 10.0f, 1.0f));
+		} else if (this.getComponentFormationOrientationMode() == Formation.SAME_ORIENTATION) {
+			// Nos alineamos con la formación. Es decir, todos los integrantes tendrán la misma orientación que la formación.
+			map.put(20.0f, new Align_Accelerated(source, this, 30.0f, 20.0f, 1.0f, 10.0f, 1.0f));
+		}
+		
+		// Devolvemos el comportamiento que nos diga el árbitro.
+		return arbitrator.getSteering(map);
+	}
 
 }

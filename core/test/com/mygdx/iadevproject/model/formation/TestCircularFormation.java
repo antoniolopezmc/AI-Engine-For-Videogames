@@ -110,7 +110,8 @@ public class TestCircularFormation extends ApplicationAdapter {
         formacion.addCharacterToCharactersList(gota4);
         formacion.addCharacterToCharactersList(gota5);
         formacion.addCharacterToCharactersList(gota6);
-        formacion.setSeparationDistance(100.0f);        
+        formacion.setSeparationDistance(100.0f);
+        formacion.setComponentFormationOrientationMode(Formation.LOOK_OUTSIDE);
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
