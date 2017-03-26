@@ -121,7 +121,8 @@ public class TestComplexFormation extends ApplicationAdapter {
         formacion2.addCharacterToCharactersList(gota4);
         formacion2.addCharacterToCharactersList(gota5);
         formacion2.addCharacterToCharactersList(gota6);
-        formacion2.setSeparationDistance(100.0f); 
+        formacion2.setSeparationDistance(100.0f);
+        formacion2.addToListBehaviour(new Wander_NoAccelerated(formacion2, 50.0f, 20.0f)); // En formación, el wander no deberia tenerse en cuenta.
         
         // Creamos el personaje.
         gota7 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -165,6 +166,7 @@ public class TestComplexFormation extends ApplicationAdapter {
         
         padre.applyBehaviour();
         gota5.applyBehaviour(); // No debería hacer nada.
+        formacion2.applyBehaviour(); // No debería hacer nada.
         formacion.drawFormationPoints(renderer);
         formacion2.drawFormationPoints(renderer);
         padre.drawFormationPoints(renderer);
