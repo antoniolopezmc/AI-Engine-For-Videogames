@@ -67,10 +67,7 @@ public class LineFormation extends Formation {
 		List<Vector3> salida = new LinkedList<Vector3>();
 		
 		// Si hay personajes en la formación.
-		if (this.getNumberOfCharacters() > 0) {
-			// Almacenamos la cantidad de personajes de la formación en formato 'float'.
-			float numberOfCharactersAsFloat = (float) this.getNumberOfCharacters();
-			
+		if (this.getNumberOfCharacters() > 0) {			
 			// IMPORTANTE -> Puesto que la posición de los componentes de la formación dependen de la orientación de la propia formación
 			//		y esa orientación puede variar muy rápida y bruscamente, vamos a trabajar con orientaciones estándar.
 			// Con esto conseguimos que para todo un rango de posibles orientaciones, la posición de los componentes de la formación no cambie.
@@ -88,7 +85,7 @@ public class LineFormation extends Formation {
 			int character = 1; // Variable para contar los personajes en la formación. Nos permite saber cuántos hemos situado ya.
 			Vector3 finalPosition = null;
 			int desplazamiento = 1; // IMPORTANTE -> Con esta variable indicamos el desplazamiento o separación lateral con respecto al centro. (Se multiplica por 'this.separationDistance')
-			while (character < this.getNumberOfCharacters()/2) { // Primero, situamos la mitad de componentes a un lado de la posición de la formación.
+			while (character <= this.getNumberOfCharacters()/2) { // Primero, situamos la mitad de componentes a un lado de la posición de la formación.
 				finalPosition = new Vector3((this.separationDistance * desplazamiento) * ((float) Math.cos((double) Math.toRadians(rightLineOrientation))), (this.separationDistance * desplazamiento) * ((float) Math.sin((double) Math.toRadians(rightLineOrientation))), 0.0f);
 				salida.add(new Vector3(finalPosition)); // IMPORTANTE -> AÑADIMOS UNA COPIA PARA QUE NO HAYA ALIASING.
 				character++;
