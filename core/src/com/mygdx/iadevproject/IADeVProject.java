@@ -38,6 +38,8 @@ public class IADeVProject extends ApplicationAdapter {
 	// Altura del mapa
 	public static int HEIGHT = 1000;
 	public static int[][] MAP_OF_COSTS = new int[WIDTH][HEIGHT];
+	public static int INFINITY = Integer.MAX_VALUE;
+	public static int DEFAULT_COST = 1;
 	
 	public static List<WorldObject> worldsObstacles; // Lista de obstáculos del mundo
 	
