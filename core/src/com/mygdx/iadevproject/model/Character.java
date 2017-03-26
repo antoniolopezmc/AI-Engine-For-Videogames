@@ -174,18 +174,19 @@ public class Character extends WorldObject {
 	 * @param target Personaje objetico sobre el que se aplicará el comportamiento.
 	 */
 	// Este método me lo he inventado. DISCUTIR.
-	public void applyBehaviour () { 
-		if (!this.inFormation){
-			this.update(this.arbitrator.getSteering(listBehaviour), Gdx.graphics.getDeltaTime());
+	public void applyBehaviour () {
+		if (!this.inFormation) {
+			Steering steer = this.arbitrator.getSteering(listBehaviour);
+			this.applySteering(steer);
 		}
 	}
 	
 	// Aplicar un determinado comportamiento a un personaje. Este comportamiento se le pasa como parámetro.
-	public void applyBehaviour (Behaviour behaviour) {
+	public void applySteering (Steering steer) {
 		// Si el personaje forma parte de una formación, sus comportamientos propios no serán tenidos en cuenta.
 		// 		No podrá comportarse como él quiera.
 		if (!this.inFormation) {
-			this.update(behaviour.getSteering(), Gdx.graphics.getDeltaTime());
+			this.update(steer, Gdx.graphics.getDeltaTime());
 		}		
 	}
 	// **********************************************************************************************

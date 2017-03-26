@@ -17,6 +17,7 @@ import com.mygdx.iadevproject.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerate
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.steering.Steering;
 
 // ---> PATRÓN COMPOSITE.
 public abstract class Formation extends Character {
@@ -89,9 +90,9 @@ public abstract class Formation extends Character {
 	 */
 	// CUIDADO -> NO CONFUNDIR EL BEHAVIOUR DE LA FORMACIÓN CON LOS BEHAVIOURs DE CADA UNO DE LOS PERSONAJES QUE LA INTEGRAN.
 	//		Los behaviours de cada uno de los personajes aquí no valen para nada.
-	public void applyBehaviour() {
+	public void applySteering(Steering steer) {
 		// En primer lugar, aplicamos el behaviour a la propia formación.
-		this.update(this.arbitrator.getSteering(this.listBehaviour), Gdx.graphics.getDeltaTime());
+		this.update(steer, Gdx.graphics.getDeltaTime());
 		
 		// Ahora, calculamos la lista de posiciones de los personajes de la formación, con respecto a la propia formación.
 		List<Vector3> charactersPositionList = getCharactersPosition();
@@ -156,7 +157,7 @@ public abstract class Formation extends Character {
 			invented.setOrientation(getOrientation(extreme.sub(center)));
 			map.put(1.0f, new Align_Accelerated(thisCharacter, invented, 30.0f, 20.0f, 1.0f, 10.0f, 1.0f));
 			
-			thisCharacter.update(arbitrator.getSteering(map), Gdx.graphics.getDeltaTime());
+			thisCharacter.applySteering(arbitrator.getSteering(map));
 			
 
 //			ESTO ES LO QUE TENÍA ANTONIO
