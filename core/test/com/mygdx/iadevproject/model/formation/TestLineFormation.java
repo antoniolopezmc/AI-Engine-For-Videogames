@@ -112,7 +112,9 @@ public class TestLineFormation extends ApplicationAdapter {
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
-        formacion.addToListBehaviour(new Seek_Accelerated(formacion, fakeMouse, 50.0f));
+        Seek_Accelerated seek = new Seek_Accelerated(formacion, fakeMouse, 50.0f);
+        seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);
+        formacion.addToListBehaviour(seek);
 
 	}
 	
@@ -123,9 +125,11 @@ public class TestLineFormation extends ApplicationAdapter {
         // Estas 2 lineas sirven para que los objetos dibujados actualicen su posición cuando se mueva la cámara. (Que se muevan también).
         batch.setProjectionMatrix(camera.combined);
         renderer.setProjectionMatrix(camera.combined);
-        
+        /*Vector3 touchPos = new Vector3();
+		touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		camera.unproject(touchPos);*/
         // Establecemos la posición de 'fakeMouse'.
-        //fakeMouse.setPosition(Gdx.input.getX(), Gdx.input.getY()); // TODO Los objetos se mueven en formación, pero a veces no hacia donde deberían. ANALIZAR.
+        //fakeMouse.setPosition(touchPos); // TODO Los objetos se mueven en formación, pero a veces no hacia donde deberían. ANALIZAR.
         fakeMouse.setPosition(150, 150); // TODO Esto si va OK. AL METER EL RATÓN DE POR MEDIO, SE PRODUCE UNA PERTURBACIÓN EN LA FUERZA. XD
         
         

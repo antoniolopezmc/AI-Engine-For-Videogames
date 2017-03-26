@@ -33,6 +33,12 @@ import com.mygdx.iadevproject.model.formation.CircularFormation;
 
 public class IADeVProject extends ApplicationAdapter {
 	
+	// Anchura del mapa.
+	public static int WIDTH = 1000;
+	// Altura del mapa
+	public static int HEIGHT = 1000;
+	public static int[][] MAP_OF_COSTS = new int[WIDTH][HEIGHT];
+	
 	public static List<WorldObject> worldsObstacles; // Lista de obstáculos del mundo
 	
 	private SpriteBatch batch;
