@@ -12,7 +12,7 @@ import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Arrive_NoAccelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -87,7 +87,8 @@ public class CircularFormation extends Formation {
 		// TODO MUY IMPORTANTE -> ¿Los componentes de una formación deben tener en cuenta las colisiones (sería lo primero en el map)? PENSAR. PENSAR EN EL PATHFINDING.
 		
 		// Primer comportamiento del map. -> Desplazamiento hacia 'fakeTarget'.
-		map.put(30.0f, new Arrive_NoAccelerated(source, fakeTarget, source.getMaxSpeed(), 5.0f, 1.0f));
+//		map.put(30.0f, new Arrive_NoAccelerated(source, fakeTarget, source.getMaxSpeed(), 5.0f, 1.0f));
+		map.put(30.0f, new Arrive_Accelerated(source, fakeTarget, source.getMaxSpeed(), source.getMaxSpeed(), 5.0f, 10.0f, 1.0f));
 		
 		// Segundo comportamiento del map (con menor prioridad). -> Rotación/Cambio de orientación.
 		// 	--> ESTE CAMBIO DE ORIENTACIÓN SÍ PODRÁ SER CONFIGURADO DESDE EL EXTERIOR (MEDIANTE UNA CONSTANTE).

@@ -7,6 +7,11 @@ import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 
+
+// EXTREMADAMENTE IMPORTANTE!! --> HAY QUE TENER EN CUENTA QUE EL SEEK NUNCA VA A DEVOLVER UN VECTOR 0 (O CON VALOR MUY PEQUEÑO) PUES
+// NO LLEGA NUNCA AL SITIO. ESTO IMPLICA QUE SI SE QUIERE UTILIZAR EN ÁRBITROS CON PRIORIDAD, TODO LO QUE VAYA DETRÁS DEL SEEK 
+// NO SE VA A LLEGAR A EJECUTAR, PORQUE NUNCA VA A DEVOLVER UN VALOR PEQUEÑO.
+
 public class Seek_Accelerated implements Behaviour {
 
 	// Versión a utilizar.
@@ -71,51 +76,7 @@ public class Seek_Accelerated implements Behaviour {
 		// Calculamos el atributo 'lineal'.
 		Vector3 copy = new Vector3(this.target.getPosition());
 		Vector3 finalLineal = copy.sub(this.source.getPosition());
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//TODO IMPORTANTE!!!!!!!! CONSULTAR CON ANTONIO Y COMENTARLO!!!!!
-		if (finalLineal.len() < 1) { 
-			output.setLineal(new Vector3(0,0,0));
-			output.setAngular(0.0f);
-			return output;
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		finalLineal.nor();
 		
 		// Consideramos las dos versiones del Seek acelerado. Por defecto, se utiliza la de Millington.
@@ -123,9 +84,9 @@ public class Seek_Accelerated implements Behaviour {
 		// --> Versión de Reynolds: el personaje se para
 		if (mode == Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS) { 
 			// Versión de Craig W. Reynolds
-			finalLineal.x = finalLineal.x * this.maxAcceleration;
-			finalLineal.y = finalLineal.y * this.maxAcceleration;
-			finalLineal.z = finalLineal.z * this.maxAcceleration;
+			finalLineal.x = finalLineal.x * this.source.getMaxSpeed();
+			finalLineal.y = finalLineal.y * this.source.getMaxSpeed();
+			finalLineal.z = finalLineal.z * this.source.getMaxSpeed();
 			output.setLineal(finalLineal.sub(source.getVelocity()));
 			
 		} else if (mode == Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON) {

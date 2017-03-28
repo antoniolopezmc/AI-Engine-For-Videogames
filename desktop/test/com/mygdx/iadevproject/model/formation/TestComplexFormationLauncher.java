@@ -2,7 +2,6 @@ package com.mygdx.iadevproject.model.formation;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.iadevproject.model.formation.TestCircularFormation;
 
 public class TestComplexFormationLauncher {
 	public static void main (String[] arg) {

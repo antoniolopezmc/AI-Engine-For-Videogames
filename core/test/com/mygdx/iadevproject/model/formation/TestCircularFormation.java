@@ -14,7 +14,6 @@ import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Acce
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_NoAccelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
-import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
