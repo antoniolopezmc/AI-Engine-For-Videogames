@@ -77,7 +77,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 			//	Por tanto, debemos volver a comprobarlo.
 			if (!this.pointsList.isEmpty()) {
 				// ---> Cuando ya sabemos exactamente cual debe ser el siguiente objetivo, preparamos y devolvemos el Steergin adecuado.
-				// Siguiente objetivo -> Creamos un personaje ficticio. De este personaje solo se usará la posición (en el Seek acelerado solo se usa el target para consultar su posición).
+				// Siguiente objetivo -> Creamos un personaje ficticio. De este personaje solo se usará la posición (en el Seek acelerado solo usa el target para consultar su posición).
 				// 		-> Por tanto, es lo único que hay que introducir.
 				nextTarget = this.pointsList.get(0);
 				WorldObject fakeCharacter = new Obstacle();

@@ -88,7 +88,7 @@ public class TestComplexFormation extends ApplicationAdapter {
         formacion.addCharacterToCharactersList(gota);
         formacion.addCharacterToCharactersList(gota2);
         formacion.addCharacterToCharactersList(gota3);
-        formacion.setSeparationDistance(100.0f); 
+        formacion.setSeparationDistance(200.0f); 
         
         // Creamos el personaje.
         gota4 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -115,12 +115,13 @@ public class TestComplexFormation extends ApplicationAdapter {
         // Creamos la formación.
         formacion2 = new LineFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         formacion2.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
-        formacion2.setOrientation(115.0f);
+        formacion2.setOrientation(45.0f);
         formacion2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         formacion2.addCharacterToCharactersList(gota4);
         formacion2.addCharacterToCharactersList(gota5);
         formacion2.addCharacterToCharactersList(gota6);
-        formacion2.setSeparationDistance(100.0f);
+        formacion2.setSeparationDistance(200.0f);
+        formacion2.setComponentFormationOrientationMode(Formation.SAME_ORIENTATION); // Para que todos miren al mismo sitio.
         formacion2.addToListBehaviour(new Wander_NoAccelerated(formacion2, 50.0f, 20.0f)); // En formación, el wander no deberia tenerse en cuenta.
         
         // Creamos el personaje.
@@ -138,7 +139,7 @@ public class TestComplexFormation extends ApplicationAdapter {
         padre.addCharacterToCharactersList(formacion);
         padre.addCharacterToCharactersList(formacion2);
         padre.addCharacterToCharactersList(gota7);
-        padre.setSeparationDistance(100.0f); 
+        padre.setSeparationDistance(200.0f); 
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
