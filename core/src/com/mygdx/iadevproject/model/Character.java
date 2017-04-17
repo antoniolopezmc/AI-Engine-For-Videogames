@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.steering.*;
+import com.mygdx.iadevproject.model.formation.Formation;
 
 
 /**
@@ -24,8 +25,8 @@ public class Character extends WorldObject {
 	// Está <Float, Behaviour> porque si se quiere tener ordenado por valor de importancia (lo que nos ahorraría muchas comprobaciones
 	// cuando se haga el árbitro de prioridades). El TreeMap se ordena por la clave no por el valor, por lo que es necesario que sea así.
 	private Map<Float, Behaviour> listBehaviour;
-	// Atributo que indica si el personaje forma parte de una formación. Por defecto está a false.
-	private boolean inFormation;
+	// Formación a la que pertece el personaje. Si no pertecene a ninguna está a null. HAY QUE TENER CUIDADO AL MANEJAR LA DOBLE REFERENCIA.
+	private Formation formation;
 	
 	// Árbitro que maneja el comportamiento del personaje
 	private Arbitrator arbitrator;
@@ -55,7 +56,6 @@ public class Character extends WorldObject {
 		createListBehaviour();
 		this.arbitrator = arbitrator;
 	}
-	
 	
 	/**
 	 * CONSTRUCTORES PARA LA SUBCLASE FORMATION!
@@ -135,11 +135,17 @@ public class Character extends WorldObject {
 	}
 
 	public boolean isInFormation() {
-		return inFormation;
+		// Un personaje está en una formación si el atributo formación es distinto de null.
+		// Dicho atributo corresponderá con la formación en la que está el personaje.
+		return this.formation != null;
 	}
 
-	public void setInFormation(boolean inFormation) {
-		this.inFormation = inFormation;
+	public Formation getFormation() {
+		return formation;
+	}
+
+	public void setFormation(Formation formation) {
+		this.formation = formation;
 	}
 
 	public Arbitrator getArbitrator() {
@@ -173,7 +179,7 @@ public class Character extends WorldObject {
 	 * Aplicar un determinado comportamiento hacia un objetivo (otro personaje). La aplicación de ese comportamiento provocará la actualización del personaje actual (this).
 	 */
 	public void applyBehaviour () {
-		if (!this.inFormation) {
+		if (!this.isInFormation()) {
 			Steering steer = this.arbitrator.getSteering(listBehaviour);
 			this.applySteering(steer);
 		}
@@ -183,7 +189,7 @@ public class Character extends WorldObject {
 	public void applySteering (Steering steer) {
 		// Si el personaje forma parte de una formación, sus comportamientos propios no serán tenidos en cuenta.
 		// 		No podrá comportarse como él quiera.
-		if (!this.inFormation) {
+		if (!this.isInFormation()) {
 			this.update(steer, Gdx.graphics.getDeltaTime());
 		}		
 	}

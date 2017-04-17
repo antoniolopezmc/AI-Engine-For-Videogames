@@ -83,16 +83,19 @@ public abstract class Formation extends Character {
 	public void addCharacterToCharactersList(Character character) {
 		// Solo podemos añadir un personaje a una formación si no pertenece a ninguna otra.
 		if (!character.isInFormation()) {
-			// Al añadir un personaje a la formación, activamos el flag correspondiente.
-			character.setInFormation(true);
+			// Al añadir un personaje a la formación, le indicamos la formación a la que pertenece (this).
+			character.setFormation(this);
 			this.charactersList.add(character);
 		}
 	}
 	
 	public void deleteCharacterFromCharactersList(Character character) {
-		// Al eliminar un personaje de la formación, desactivamos el flag correspondiente.
-		character.setInFormation(false);
-		this.charactersList.remove(character);
+		// Para eliminar un personaje de una formación, éste debe pertenecer a esta formación.
+		if (character.getFormation() == this) {
+			// Al eliminar un personaje de la formación, el atributo correspondiente del personaje vuelve a ser null.
+			character.setFormation(null);
+			this.charactersList.remove(character);
+		}
 	}
 
 	// No va a haber 'setComponentFormationArbitrator'. En esta ocasión el árbitro será siempre por prioridad.
@@ -139,8 +142,8 @@ public abstract class Formation extends Character {
 			for (int index = 0; index < this.charactersList.size(); index++) {
 				// Recuperamos el personaje de la lista.
 				Character thisCharacter = this.charactersList.get(index);
-				// Primero, desactivamos el flag del personaje. Si no lo hacemos, no podemos aplicarle ningún comportamiento.
-				thisCharacter.setInFormation(false);
+				// Primero, indicamos momentaneamente que el personaje no está en ninguna formación. Si no lo hacemos, no podemos aplicarle ningún comportamiento.
+				thisCharacter.setFormation(null);
 				
 				// Creamos un personaje ficticio para poder pasarlo al comportamiento.
 				// 	---> La posición del personaje ficticio será la correspondiente posición calculada anteriormente.
@@ -151,8 +154,8 @@ public abstract class Formation extends Character {
 				// Aplicamos un steering al integrante actual de la formación. Para obtener dicho steering delegamos en el hijo (en la formación concreta).
 				thisCharacter.applySteering(this.getComponentFormationSteerginToApply(thisCharacter, fakeTarget));
 				
-				// Finalmente, volvemos a activar el flag para que no se pueda mover al personaje desde otro sitio.
-				thisCharacter.setInFormation(true);
+				// Finalmente, volvemos a indicar la formación a la que pertenece el personaje para que no se le pueda mover desde otro sitio.
+				thisCharacter.setFormation(this);
 				
 			}
 		}
