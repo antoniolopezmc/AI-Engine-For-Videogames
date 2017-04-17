@@ -32,16 +32,20 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		
 		switch (keycode) {
 		case Input.Keys.LEFT: 				// Movimiento hacia la izquierda
-			IADeVProject.camera.translate(-3, 0, 0);
+			IADeVProject.camera.translate(-5, 0, 0);
+//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(-5,0,0));
 			break;
 		case Input.Keys.RIGHT:				// Movimiento hacia la derecha
-			IADeVProject.camera.translate(3, 0, 0);
+			IADeVProject.camera.translate(5, 0, 0);
+//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(5, 0, 0));
 			break;
 		case Input.Keys.DOWN:				// Movimiento hacia abajo
-			IADeVProject.camera.translate(0, -3, 0);
+			IADeVProject.camera.translate(0, -5, 0);
+//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(0, -5, 0));
 			break;
 		case Input.Keys.UP:					// Movimiento hacia arriba
-			IADeVProject.camera.translate(0, 3, 0);
+			IADeVProject.camera.translate(0, 5, 0);
+//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(0, 5, 0));
 			break;
 		case Input.Keys.A:					// Alejar la cámara
 			IADeVProject.camera.zoom += 0.02;	
@@ -77,6 +81,13 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			Vector3 touchPos = new Vector3();
 			touchPos.set(screenX, screenY, 0);
 			IADeVProject.camera.unproject(touchPos);
+			
+			
+			
+			IADeVProject.bucket.setPosition(touchPos);
+			
+			
+			
 			
 			// Para todo objeto del mundo
 			for (WorldObject obj : IADeVProject.worldObjects) {
