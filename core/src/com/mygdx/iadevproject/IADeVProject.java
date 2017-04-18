@@ -3,7 +3,6 @@ package com.mygdx.iadevproject;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,23 +20,19 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance.RayPosition;
+import com.mygdx.iadevproject.map.Ground;
+import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -46,28 +40,35 @@ import com.mygdx.iadevproject.model.WorldObject;
  
 public class IADeVProject extends ApplicationAdapter {
 	
-	public static int WIDTH = 2048;									// Anchura del mapa.
-	public static int HEIGHT = 2048;								// Altura del mapa
-	public static int[][] MAP_OF_COSTS = new int[WIDTH][HEIGHT];	// Mapa de costes
-	public static int INFINITY = Integer.MAX_VALUE;					// Valor infinito
-	public static int DEFAULT_COST = 1;								// Coste por defecto
-	
+	/** CONSTANTES **/
+	public static final int WIDTH 				= 2048;						// Anchura del mapa.
+	public static final int HEIGHT 				= 2048;						// Altura del mapa
+	public static final int INFINITY 			= Integer.MAX_VALUE;		// Valor infinito
+	public static final int DEFAULT_COST 		= 1;						// Coste por defecto
+	public static final Ground DEFAULT_GROUND 	= Ground.TRAIL;				// Terreno por defecto
 	// Estos dos atributos se obtienen del mapa 'tiledMap' cuando se crea esta clase
-	public static int WORLD_OBJECT_WIDTH;				// Anchura de los personajes
-	public static int WORLD_OBJECT_HEIGHT;				// Altura de los personajes
+	public static int WORLD_OBJECT_WIDTH;									// Anchura de los personajes
+	public static int WORLD_OBJECT_HEIGHT;									// Altura de los personajes
 	
+	
+	/** MAPAS **/
+	public static int[][] 	 MAP_OF_COSTS 	= new int[WIDTH][HEIGHT];		// Mapa de costes
+	public static Ground[][] MAP_OF_GROUNDS = new Ground[WIDTH][HEIGHT];	// Mapa de terrenos
+	/** MAPA REAL CON DIBUJITOS **/
+	public static TiledMap tiledMap;										// Mapa real de los dibujitos
+	
+	
+	/** VARIABLES GLOBALES **/
 	public static List<WorldObject> worldObjects;		// Objetos del mundo
 	public static List<WorldObject> worldObstacles;		// Obstáculos del mundo
 	public static Set<WorldObject> selectedObjects; 	// Lista de objetos seleccionados
 	public static OrthographicCamera camera;			// Cárama (es pública para que se pueda acceder el InputProcessorIADeVProject)
 	
-	
-	private SpriteBatch batch;
+	/** VARIABLES LOCALES **/
+	public static SpriteBatch batch;
 	private BitmapFont font;
-	private ShapeRenderer renderer;
-	private TiledMap tiledMap;
+	public static ShapeRenderer renderer;
     private TiledMapRenderer tiledMapRenderer;
-	
 	private InputProcessorIADeVProject inputProcessor;		// InputProcessor
 	
 	public static Character drop, bucket;
@@ -86,7 +87,6 @@ public class IADeVProject extends ApplicationAdapter {
         float h = Gdx.graphics.getHeight();
 
         // Constructs a new OrthographicCamera, using the given viewport width and height
-        // Height is multiplied by aspect ratio.
         camera 				= new OrthographicCamera(w, h);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -98,20 +98,24 @@ public class IADeVProject extends ApplicationAdapter {
         tiledMapRenderer 	= new TiledMapIADeVProject(tiledMap);
         
         // Obtenemos del mapa la anchura y altura de los personajes a raíz del tamaño de las celdas
-        WORLD_OBJECT_WIDTH = 32; //(Integer) tiledMap.getProperties().get("tilewidth");
-        WORLD_OBJECT_HEIGHT = 32; //(Integer) tiledMap.getProperties().get("tileheight");
+        WORLD_OBJECT_WIDTH = (Integer) tiledMap.getProperties().get("tilewidth");
+        WORLD_OBJECT_HEIGHT = (Integer) tiledMap.getProperties().get("tileheight");
         
+        // Creamos los mapas (de costes, de terreno, etc)
+        MapsCreatorIADeVProject.createMaps();
+        
+        // Obtenemos los obstáculos del mapa
         worldObstacles = getObstaclesOfMap();
         
         
         drop = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-    	drop.setBounds(100.0f, 100.0f, WORLD_OBJECT_WIDTH, WORLD_OBJECT_HEIGHT);
+    	drop.setBounds(600.0f, 600.0f, WORLD_OBJECT_WIDTH, WORLD_OBJECT_HEIGHT);
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         drop.setMaxSpeed(50.0f);
         
         bucket = new Character(new PriorityArbitrator(1e-5f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-    	bucket.setBounds(200.0f, 200.0f, WORLD_OBJECT_WIDTH, WORLD_OBJECT_HEIGHT);
+    	bucket.setBounds(800.0f, 600.0f, WORLD_OBJECT_WIDTH, WORLD_OBJECT_HEIGHT);
         bucket.setOrientation(60.0f);
         bucket.setVelocity(new Vector3(0,0.0f,0));
 
@@ -124,8 +128,6 @@ public class IADeVProject extends ApplicationAdapter {
         
         addToWorldObjectList(drop, bucket);
 	}
-	
-	
 	
 	@Override
 	public void render() {
@@ -145,41 +147,6 @@ public class IADeVProject extends ApplicationAdapter {
         
         drop.applyBehaviour();
         
-//        TiledMapTileLayer obstacleLayer =  (TiledMapTileLayer)tiledMap.getLayers().get("way");
-//        int height = obstacleLayer.getHeight();
-//        int width = obstacleLayer.getWidth();
-//        
-////        System.out.println("height = "+ height+ " - width ="+width);
-//        
-        
-//        
-//        for (int i=0; i < obstacleLayer.getHeight(); i++)
-//        {
-//        	for (int j=0; j < obstacleLayer.getWidth(); j++)
-//        	{
-//        		Cell cell = obstacleLayer.getCell(i,j);
-//        		if (cell != null)
-//        		{
-////        			System.out.println(i + "," + j);
-//        			int x = cell.getTile().getTextureRegion().getRegionX();
-//        			int y = cell.getTile().getTextureRegion().getRegionY();
-//        			
-//        			Vector3 pos = new Vector3(x,y,0);
-//        			Obstacle obs = new Obstacle(cell.getTile().getTextureRegion().getTexture());
-//        			
-////        			camera.unproject(pos);
-////            		System.out.println("x = "+pos.x+", y = "+pos.y);
-//        			
-//        			obs.setPosition(pos);
-//        			
-//        			obstacles.add(obs);
-//        		}
-//        		
-//        	}
-//        }
-        
-        		
-        
         batch.begin();
 
 	        for (WorldObject obj : worldObjects) {
@@ -191,28 +158,11 @@ public class IADeVProject extends ApplicationAdapter {
         batch.end();
 
         // DESCOMENTAR PARA MOSTRAR LOS CENTROS DE LOS OBSTÁCULOS
-//        renderer.begin(ShapeType.Filled);
-//	        for (WorldObject obs : worldObstacles) {
-//	        	renderer.circle(obs.getPosition().x, obs.getPosition().y, 2);
-//	        }
-//		renderer.end();
+//        drawCenterOfObstacles();
 
 		
 		// ESTO ES PARA MOSTRAR LAS LÍNEAS DEL WALL AVOIDANCE
-//		renderer.begin(ShapeType.Line);
-//		renderer.setColor(Color.RED);
-//		Ray ray = wallAvoidance.getRays().get(RayPosition.CENTER);
-//		Vector3 endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.CENTER));
-//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-//		
-//		ray = wallAvoidance.getRays().get(RayPosition.LEFT);
-//		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.LEFT));
-//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-//
-//		ray = wallAvoidance.getRays().get(RayPosition.RIGHT);
-//		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.RIGHT));
-//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-//		renderer.end();
+//        drawLinesOfWallAvoidance();
 	}
 
 	@Override
@@ -230,6 +180,8 @@ public class IADeVProject extends ApplicationAdapter {
         batch.dispose();
 	}
 	
+	
+	/** MÉTODOS ÚTILES **/
 	/**
 	 * Método que obtiene los obstáculo del mapa 'tiledMap' y lo devuelve en forma de Lista
 	 * @return Lista de los obstáculos del mundo
@@ -237,24 +189,57 @@ public class IADeVProject extends ApplicationAdapter {
 	private List<WorldObject> getObstaclesOfMap() {
 		List<WorldObject> obstacles = new LinkedList<WorldObject>();
         
+		// Obtenemos la capa del mapa de los obstáculos
         MapLayer obstacleLayer =  tiledMap.getLayers().get("obstacles");        
         for (MapObject obj : obstacleLayer.getObjects()) {
         	
+        	// Para cada objeto, obtenemos sus propiedades
         	MapProperties properties = obj.getProperties();
         	
+        	// Calculamos la coordenada X como la coordenada x + la mitad del ancho del obstáculo (ya que la coordenada X se encuentra abajo izquierda del objeto)
         	float x = (Float) properties.get("x");
         	x += ((Float) properties.get("width"))/2;
         	
+        	// Calculamos la coordenada Y como la coordenada y + la mitad del alto del obstáculo (ya que la coordenada Y se encuentra abajo izquierda del objeto)
         	float y = (Float) properties.get("y");
         	y += ((Float) properties.get("height"))/2;
         	
+        	// Creamos el obstáculo con las coordenadas calculadas y las propiedades de alto y ancho del obstáculo
 			Obstacle obs = new Obstacle();
 			obs.setBounds(x, y, (Float) properties.get("width"), (Float) properties.get("height"));
 			
+			// Lo añadimos a la lista de obstáculos
 			obstacles.add(obs);
         }
         
+        // Devolvemos la lista de obstáculos
         return obstacles;
+	}
+	
+	/**
+	 * Método que dado la posición 'position' devuelve el coste del mapa de coste
+	 * asociado a esa posición.
+	 * @param position Posición de la que se quiere saber su coste
+	 * @return Coste de esa posición
+	 */
+	public static int getCostOfPosition(Vector3 position) {
+		if (position.x < 0 || position.y < 0) throw new IllegalArgumentException("Coordenates must be positives");
+		if (position.x >= WIDTH || position.y >= HEIGHT) throw new IllegalArgumentException("Coordenates must be less than WIDHT and HEIGHT constants");
+		
+		return MAP_OF_COSTS[(int)position.x][(int)position.y];
+	}
+	
+	/**
+	 * Método que dado la posición 'position' devuelve el terreno del mapa de terrenos
+	 * asociado a esa posición.
+	 * @param position Posición de la que se quiere saber su terreno
+	 * @return Terreno de esa posición
+	 */
+	public static Ground getGroundOfPosition(Vector3 position) {
+		if (position.x < 0 || position.y < 0) throw new IllegalArgumentException("Coordenates must be positives");
+		if (position.x >= WIDTH || position.y >= HEIGHT) throw new IllegalArgumentException("Coordenates must be less than WIDHT and HEIGHT constants");
+
+		return MAP_OF_GROUNDS[(int)position.x][(int)position.y];
 	}
 	
 	/**
@@ -287,4 +272,37 @@ public class IADeVProject extends ApplicationAdapter {
 		selectedObjects.add(obj);
 	}
 
+	
+	/** MÉTODOS DE DIBUJO DE LÍNEAS **/
+	/**
+	 * Método para dibujar los centros de los obstáculos en el mapa
+	 */
+	private void drawCenterOfObstacles() {
+		renderer.begin(ShapeType.Filled);
+        	for (WorldObject obs : worldObstacles) {
+        		renderer.circle(obs.getPosition().x, obs.getPosition().y, 2);
+        	}
+        renderer.end();
+	}
+	
+	/**
+	 * Método para dibujar las líneas relevantes del WallAvoidance
+	 */
+	private void drawLinesOfWallAvoidance() {
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(Color.RED);
+		Ray ray = wallAvoidance.getRays().get(RayPosition.CENTER);
+		Vector3 endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.CENTER));
+		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+		
+		ray = wallAvoidance.getRays().get(RayPosition.LEFT);
+		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.LEFT));
+		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+
+		ray = wallAvoidance.getRays().get(RayPosition.RIGHT);
+		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.RIGHT));
+		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+		renderer.end();
+	}
+	
 }

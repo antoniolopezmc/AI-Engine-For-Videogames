@@ -62,6 +62,10 @@ public class InputProcessorIADeVProject implements InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
+		// Con esto indicamos que si la tecla que se suelta no es la última que se ha
+		// pulsado, no hacemos nada, se sigue haciendo el efecto de la última tecla pulsada
+		if (keycode != lastKey) return true;
+		
 		keyPressed = false;
 		return true;
 	}
