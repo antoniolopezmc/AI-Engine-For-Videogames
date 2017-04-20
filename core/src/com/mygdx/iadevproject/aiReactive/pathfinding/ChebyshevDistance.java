@@ -2,34 +2,26 @@ package com.mygdx.iadevproject.aiReactive.pathfinding;
 
 public class ChebyshevDistance implements Distance {
 
-	private static Distance uniqueInstance = new ChebyshevDistance();
-	
-	// Constructor privado.
-	private ChebyshevDistance() {}
-	
-	// Método que devuelve la instancia única.
-	public static Distance getUniqueInstance() {
-		return uniqueInstance;
-	}
-	
+	// Métodos.
 	@Override
-	public float[][] getMatrixOfDistances(int width, int height, int xSource, int ySource) {
+	public float[][] getMatrixOfDistances(int width, int height, int xGoal, int yGoal) {
 		// Creamos la matriz que será devuelta.
 		float[][] result = new float[width][height];
 		// La posición del objeto origen se inicializa a 0.
-		result[xSource][ySource] = 0.0f;
+		result[xGoal][yGoal] = 0.0f;
 		// Recorremos la matriz para calcular el valor del resto de posiciones.
 		for (int x = 0; x<width; x++) {
 			for (int y = 0; y<height; y++) {
-				result[x][y] = Math.max(Math.abs(xSource - x), Math.abs(ySource - y));
+				result[x][y] = Math.max(Math.abs(xGoal - x), Math.abs(yGoal - y));
 			}
 		}	
 		// Devolvemos el resultado.
 		return result;
 	}
 	
+	// Programa de prueba.
 	public static void main(String[] args) {
-		Distance d = ChebyshevDistance.getUniqueInstance();
+		Distance d = new ChebyshevDistance();
 		float[][] matriz = d.getMatrixOfDistances(20, 14, 5, 12);
 		for (int y = 0; y<14; y++) {
 			for (int x = 0; x<20; x++) {

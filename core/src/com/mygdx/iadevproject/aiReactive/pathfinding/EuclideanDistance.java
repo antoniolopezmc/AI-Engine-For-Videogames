@@ -2,34 +2,26 @@ package com.mygdx.iadevproject.aiReactive.pathfinding;
 
 public class EuclideanDistance implements Distance {
 
-	private static Distance uniqueInstance = new EuclideanDistance();
-	
-	// Constructor privado.
-	private EuclideanDistance() {}
-	
-	// Método que devuelve la instancia única.
-	public static Distance getUniqueInstance() {
-		return uniqueInstance;
-	}
-
+	// Métodos.
 	@Override
-	public float[][] getMatrixOfDistances(int width, int height, int xSource, int ySource) {
+	public float[][] getMatrixOfDistances(int width, int height, int xGoal, int yGoal) {
 		// Creamos la matriz que será devuelta.
 		float[][] result = new float[width][height];
 		// La posición del objeto origen se inicializa a 0.
-		result[xSource][ySource] = 0.0f;
+		result[xGoal][yGoal] = 0.0f;
 		// Recorremos la matriz para calcular el valor del resto de posiciones.
 		for (int x = 0; x<width; x++) {
 			for (int y = 0; y<height; y++) {
-				result[x][y] = (float) Math.sqrt((xSource - x)*(xSource - x) + (ySource - y)*(ySource - y));
+				result[x][y] = (float) Math.sqrt((xGoal - x)*(xGoal - x) + (yGoal - y)*(yGoal - y));
 			}
 		}	
 		// Devolvemos el resultado.
 		return result;
 	}
 	
+	// Programa de prueba.
 	public static void main(String[] args) {
-		Distance d = EuclideanDistance.getUniqueInstance();
+		Distance d = new EuclideanDistance();
 		float[][] matriz = d.getMatrixOfDistances(20, 14, 0, 0);
 		for (int y = 0; y<14; y++) {
 			for (int x = 0; x<20; x++) {
