@@ -78,7 +78,7 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	
 	PathFinding pf = new PathFinding();
-    List<Vector3> listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 588.0001f, 66.0f, 538.00006f, 640.00006f);
+    List<Vector3> listaDePuntos; // = pf.applyPathFinding(MAP_OF_COSTS, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 588.0001f, 350.0f, 538.00006f, 640.00006f);
 	
 	
 
@@ -139,6 +139,10 @@ public class IADeVProject extends ApplicationAdapter {
         System.out.println(MAP_OF_COSTS[(int) 538.0f][(int) 414.00003f]);
         System.out.println(MAP_OF_COSTS[(int) 537.0f][(int) 305.00003f]);
         System.out.println(MAP_OF_COSTS[(int) 537.0f][(int) 261.00003f]);
+        System.out.println("********");        
+        System.out.println(MAP_OF_COSTS[(int) 588.0001f][(int) 350.0f]);
+        
+        listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 789.0f, 403.0f, 1354.f, 230.0f);
 	}
 	
 	@Override
