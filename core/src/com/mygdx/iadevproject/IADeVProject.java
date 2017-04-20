@@ -31,6 +31,7 @@ import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accel
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance.RayPosition;
+import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
@@ -73,6 +74,13 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	public static Character drop, bucket;
 	private WallAvoidance wallAvoidance;
+	
+	
+	
+	PathFinding pf = new PathFinding();
+    List<Vector3> listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 588.0001f, 66.0f, 538.00006f, 640.00006f);
+	
+	
 
 	@Override
 	public void create() {
@@ -127,6 +135,10 @@ public class IADeVProject extends ApplicationAdapter {
         drop.addToListBehaviour(new Face(drop, bucket, 30.0f, 30.0f, 1.0f, 10.0f, 1.0f));
         
         addToWorldObjectList(drop, bucket);
+        
+        System.out.println(MAP_OF_COSTS[(int) 538.0f][(int) 414.00003f]);
+        System.out.println(MAP_OF_COSTS[(int) 537.0f][(int) 305.00003f]);
+        System.out.println(MAP_OF_COSTS[(int) 537.0f][(int) 261.00003f]);
 	}
 	
 	@Override
@@ -163,6 +175,13 @@ public class IADeVProject extends ApplicationAdapter {
 		
 		// ESTO ES PARA MOSTRAR LAS LÍNEAS DEL WALL AVOIDANCE
 //        drawLinesOfWallAvoidance();
+             
+        renderer.begin(ShapeType.Filled);
+		renderer.setColor(Color.RED);
+		for (Vector3 punto : listaDePuntos) {
+			renderer.circle(punto.x, punto.y, 2);
+		}
+		renderer.end();
 	}
 
 	@Override

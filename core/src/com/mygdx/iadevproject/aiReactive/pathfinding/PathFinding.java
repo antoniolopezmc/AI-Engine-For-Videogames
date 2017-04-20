@@ -53,5 +53,4 @@ public class PathFinding {
 		return list;
 		
 	}
-
 }

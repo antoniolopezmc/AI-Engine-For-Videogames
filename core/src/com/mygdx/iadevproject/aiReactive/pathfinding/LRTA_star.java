@@ -13,7 +13,7 @@ public class LRTA_star {
 	private int[][] map_of_costs;
 	// Distancia concreta elegida para aplicar el algoritmo.
 	private Distance distance;
-	// Anchura y altura de las matrices con las que se están trabajando.
+	// Anchura y altura de las matrices con las que se está trabajando.
 	private int width, height;
 	// Coordenadas del punto origen. COORDENADAS DEL GRID, NO SON LAS COORDENADAS REALES.
 	private int xSource, ySource;
@@ -58,8 +58,7 @@ public class LRTA_star {
 			result.add(new Vector3(position)); // Añado el elementos a la lista resultante.
 		}
 		
-		// Añado la posición final a la lista resultado.
-		result.add(new Vector3(finalPosition));
+		// La posición final ya se ha añadido a la lista en la última iteración.
 		
 		return result;
 	}
