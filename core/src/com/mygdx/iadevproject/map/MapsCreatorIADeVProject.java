@@ -36,14 +36,14 @@ public class MapsCreatorIADeVProject {
 		      			
 		      			// Para cada celda obtenemos su posición en el mapa y su tamaño 
 		      			// y rellenamos los mapas correspondientes
-		      			int x = i*tileHeight;
-		      			int y = j*tileWidth;
+		      			int x = i*tileHeight  / IADeVProject.TILE_SIZE;
+		      			int y = j*tileWidth   / IADeVProject.TILE_SIZE;
 		      			
 		      			int width = cell.getTile().getTextureRegion().getRegionWidth();
 		      			int height = cell.getTile().getTextureRegion().getRegionHeight();
    			
-		      			for (int ic=x; ic < x+height; ic++) {
-		      				for (int jc=y; jc < y+width; jc++) {
+		      			for (int ic=x; ic < x+height / IADeVProject.TILE_SIZE ; ic++) {
+		      				for (int jc=y; jc < y+width / IADeVProject.TILE_SIZE; jc++) {
 		      					IADeVProject.MAP_OF_COSTS[ic][jc] = ground.getCost();
 		      					IADeVProject.MAP_OF_GROUNDS[ic][jc] = ground;
 		      				}
@@ -58,8 +58,8 @@ public class MapsCreatorIADeVProject {
 	 * Método que inicializa los mapas a los valores por defecto.
 	 */
 	private static void inicializeMaps() {
-		for (int i=0; i < IADeVProject.WIDTH; i++) {
-			for (int j=0; j < IADeVProject.HEIGHT; j++) {
+		for (int i=0; i < IADeVProject.GRID_WIDTH; i++) {
+			for (int j=0; j < IADeVProject.GRID_HEIGHT; j++) {
 				IADeVProject.MAP_OF_COSTS[i][j] = IADeVProject.DEFAULT_COST;
 				IADeVProject.MAP_OF_GROUNDS[i][j] = IADeVProject.DEFAULT_GROUND;
 			}
