@@ -24,6 +24,7 @@ public class MapsCreatorIADeVProject {
 			// Obtenemos su capa
 			TiledMapTileLayer layer =  (TiledMapTileLayer)IADeVProject.tiledMap.getLayers().get(ground.toString().toLowerCase());
 		    			
+			// Obtenemos el alto y el ancho de del Tile
 			tileWidth 	= (int)layer.getTileWidth();
 			tileHeight 	= (int)layer.getTileHeight();
 			
