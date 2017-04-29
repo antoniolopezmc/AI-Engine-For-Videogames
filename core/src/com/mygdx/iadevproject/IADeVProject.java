@@ -145,6 +145,7 @@ public class IADeVProject extends ApplicationAdapter {
 //        System.out.println("********");        
 //        System.out.println(MAP_OF_COSTS[(int) 588.0001f][(int) 350.0f]);
         
+        // --> La distancia de Manhattan es una basura. El personaje da muchísimas vueltas. La mejor es la de CHEBYSHEV.
         listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, GRID_WIDTH, GRID_HEIGHT, 588.00006f, 286.00003f, 543.00006f, 620.00006f);
         
         
