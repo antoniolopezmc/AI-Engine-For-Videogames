@@ -56,7 +56,7 @@ public abstract class Formation extends Character {
 		return charactersList;
 	}
 	
-	public int getNumberOfCharacters() { // TODO Hay que probar esta función.
+	public int getNumberOfCharacters() {
 		// Un integrante de una formación puede ser un personaje u otra formación. Eso hay que tenerlo en cuenta.
 		int resultado = 0;
 		for (Character character : this.charactersList) {

@@ -12,12 +12,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_NoAccelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
-import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Wander_NoAccelerated;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.CircularFormation;
 
 public class TestStarFormation extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -61,24 +62,28 @@ public class TestStarFormation extends ApplicationAdapter {
         gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
         gota.setOrientation(0.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota2 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota2.setBounds(150.0f, 150.0f, 64.0f, 64.0f);
         gota2.setOrientation(30.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota2.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota3 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota3.setBounds(250.0f, 250.0f, 64.0f, 64.0f);
         gota3.setOrientation(30.0f);
         gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota3.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota4 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota4.setBounds(350.0f, 350.0f, 64.0f, 64.0f);
         gota4.setOrientation(30.0f);
         gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota4.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota5 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -86,27 +91,31 @@ public class TestStarFormation extends ApplicationAdapter {
         gota5.setOrientation(30.0f);
         gota5.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota5.addToListBehaviour(new Wander_NoAccelerated(gota5, 50.0f, 20.0f)); // En formación, el wander no deberia tenerse en cuenta.
+        gota5.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota6 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         gota6.setBounds(550.0f, 550.0f, 64.0f, 64.0f);
         gota6.setOrientation(30.0f);
         gota6.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota6.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota7 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota7.setBounds(650.0f, 650.0f, 64.0f, 64.0f);
+        gota7.setBounds(550.0f, 550.0f, 64.0f, 64.0f);
         gota7.setOrientation(30.0f);
         gota7.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota7.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota8 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota8.setBounds(750.0f, 750.0f, 64.0f, 64.0f);
+        gota8.setBounds(550.0f, 550.0f, 64.0f, 64.0f);
         gota8.setOrientation(30.0f);
         gota8.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota8.setMaxSpeed(50.0f);
         
         // Creamos la formación.
-        formacion = new StarFormation(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), 50.0f);
+        formacion = new StarFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
         formacion.setOrientation(0.0f);
         formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));
@@ -118,13 +127,15 @@ public class TestStarFormation extends ApplicationAdapter {
         formacion.addCharacterToCharactersList(gota6);
         formacion.addCharacterToCharactersList(gota7);
         formacion.addCharacterToCharactersList(gota8);
-        formacion.setSeparationDistance(70.0f);   
+        formacion.setSeparationDistance(100.0f);
         formacion.setArmSize(200.0f);
         formacion.setComponentFormationOrientationMode(Formation.LOOK_INSIDE);
         
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
-        formacion.addToListBehaviour(new Seek_NoAccelerated(formacion, fakeMouse, 50.0f));
+        Seek_Accelerated seek = new Seek_Accelerated(formacion, fakeMouse, 50.0f);
+        seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);
+        formacion.addToListBehaviour(seek);
         
         System.out.println("Cantidad de integrantes en la formación: " + formacion.getNumberOfCharacters());
 
@@ -147,6 +158,7 @@ public class TestStarFormation extends ApplicationAdapter {
         
         formacion.applyBehaviour();
         gota5.applyBehaviour(); // No debería hacer nada.
+        formacion.drawFormationPoints(renderer);
         
         batch.begin();
         gota.draw(batch);
