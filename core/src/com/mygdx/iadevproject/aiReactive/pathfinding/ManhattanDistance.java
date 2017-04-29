@@ -4,14 +4,14 @@ public class ManhattanDistance implements Distance {
 
 	// Métodos.
 	@Override
-	public float[][] getMatrixOfDistances(int width, int height, int xGoal, int yGoal) {
+	public float[][] getMatrixOfDistances(int matrix_width, int matrix_height, int xGoal, int yGoal) {
 		// Creamos la matriz que será devuelta.
-		float[][] result = new float[width][height];
+		float[][] result = new float[matrix_width][matrix_height];
 		// La posición del objeto origen se inicializa a 0.
 		result[xGoal][yGoal] = 0.0f;
 		// Recorremos la matriz para calcular el valor del resto de posiciones.
-		for (int x = 0; x<width; x++) {
-			for (int y = 0; y<height; y++) {
+		for (int x = 0; x<matrix_width; x++) {
+			for (int y = 0; y<matrix_height; y++) {
 				result[x][y] = Math.abs(xGoal - x) + Math.abs(yGoal - y);
 			}
 		}	

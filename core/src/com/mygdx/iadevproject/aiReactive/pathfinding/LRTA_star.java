@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.badlogic.gdx.math.Vector3;
 
+
+// IMPORTANTE -> LRTA* con espacio de búsqueda minimal, es decir, el espacio de búsqueda es solo el estado actual.
 public class LRTA_star {
 
 	// --> Coste de pasar de una celda a otra adyacente (tanto en diagonal, como en horizontal, como en vertical).
@@ -14,7 +16,7 @@ public class LRTA_star {
 	// Distancia concreta elegida para aplicar el algoritmo.
 	private Distance distance;
 	// Anchura y altura de las matrices con las que se está trabajando.
-	private int width, height;
+	private int matrix_width, matrix_height;
 	// Coordenadas del punto origen. COORDENADAS DEL GRID, NO SON LAS COORDENADAS REALES.
 	private int xSource, ySource;
 	// Coordenadas del punto destino ===> Será el punto objetivo de la matriz de distancias/costes.
@@ -22,11 +24,11 @@ public class LRTA_star {
 	private int xGoal, yGoal;
 	
 	// Constructor.
-	public LRTA_star(int[][] map_of_costs, Distance distance, int width, int height, int xSource, int ySource, int xGoal, int yGoal) {
+	public LRTA_star(int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xSource, int ySource, int xGoal, int yGoal) {
 		this.map_of_costs = map_of_costs;
 		this.distance = distance;
-		this.width = width;
-		this.height = height;
+		this.matrix_width = matrix_width;
+		this.matrix_height = matrix_height;
 		this.xSource = xSource;
 		this.ySource = ySource;
 		this.xGoal = xGoal;
@@ -41,7 +43,7 @@ public class LRTA_star {
 		// Creamos la lista que será devuelta.
 		List<Vector3> result = new LinkedList<Vector3>();
 		// Creamos la matriz de distancias al objetivo.
-		float[][] distancesMatrix = distance.getMatrixOfDistances(this.width, this.height, this.xGoal, this.yGoal);
+		float[][] distancesMatrix = distance.getMatrixOfDistances(this.matrix_width, this.matrix_height, this.xGoal, this.yGoal);
 		// Creamos un vector para almacenar la posición actual. Al principio, corresponderá con la posición inicial.
 		Vector3 position = new Vector3((float) xSource, (float) ySource, 0.0f);
 		// Añadimos la posición inicial a la lista.
@@ -68,7 +70,7 @@ public class LRTA_star {
 	 * Calcula f(p) en un punto.
 	 * @param distancesMatrix Matriz de distancias a un punto.
 	 * @param position Punto p.
-	 * @return f(p)
+	 * @return f(p) = coste de acción + coste heurístico en ese punto + coste del terreno en ese punto
 	 */
 	private float getFx (float[][] distancesMatrix, Vector3 position) {
 		return LRTA_star.default_action_cost + distancesMatrix[(int) position.x][(int) position.y] + (float) this.map_of_costs[(int) position.x][(int) position.y];
@@ -111,26 +113,26 @@ public class LRTA_star {
 		if (x > 0) {
 			result.add(new Vector3(x-1, y, 0.0f));
 		}
-		if (x < (this.width-1)) {
+		if (x < (this.matrix_width-1)) {
 			result.add(new Vector3(x+1, y, 0.0f));
 		}
 		if (y > 0) {
 			result.add(new Vector3(x, y-1, 0.0f));
 		}
-		if (y < (this.height-1)) {
+		if (y < (this.matrix_height-1)) {
 			result.add(new Vector3(x, y+1, 0.0f));
 		}
 
 		if ((x > 0) && (y > 0)) {
 			result.add(new Vector3(x-1, y-1, 0.0f));
 		}
-		if ((x > 0) && (y < (this.height-1))) {
+		if ((x > 0) && (y < (this.matrix_height-1))) {
 			result.add(new Vector3(x-1, y+1, 0.0f));
 		}
-		if ((x < (this.width-1)) && (y > 0)) {
+		if ((x < (this.matrix_width-1)) && (y > 0)) {
 			result.add(new Vector3(x+1, y-1, 0.0f));
 		}
-		if ((x < (this.width-1)) && (y < (this.height-1))) {
+		if ((x < (this.matrix_width-1)) && (y < (this.matrix_height-1))) {
 			result.add(new Vector3(x+1, y+1, 0.0f));
 		}
 		// IMPORTANTE -> En esta lista hay siempre como mínimo 3 elementos.

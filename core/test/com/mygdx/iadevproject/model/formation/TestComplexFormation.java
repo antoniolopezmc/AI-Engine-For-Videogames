@@ -146,6 +146,8 @@ public class TestComplexFormation extends ApplicationAdapter {
         Seek_Accelerated seek = new Seek_Accelerated(padre, fakeMouse, 50.0f);
         seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);
         padre.addToListBehaviour(seek);
+        
+        System.out.println("Cantidad de integrantes en la formación: " + padre.getNumberOfCharacters());
 
 	}
 	

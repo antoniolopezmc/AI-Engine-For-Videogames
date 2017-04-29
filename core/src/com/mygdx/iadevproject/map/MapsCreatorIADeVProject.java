@@ -36,14 +36,14 @@ public class MapsCreatorIADeVProject {
 		      			
 		      			// Para cada celda obtenemos su posición en el mapa y su tamaño 
 		      			// y rellenamos los mapas correspondientes
-		      			int x = i*tileHeight  / IADeVProject.TILE_SIZE;
-		      			int y = j*tileWidth   / IADeVProject.TILE_SIZE;
+		      			int x = i*tileHeight  / IADeVProject.GRID_CELL_SIZE;
+		      			int y = j*tileWidth   / IADeVProject.GRID_CELL_SIZE;
 		      			
 		      			int width = cell.getTile().getTextureRegion().getRegionWidth();
 		      			int height = cell.getTile().getTextureRegion().getRegionHeight();
    			
-		      			for (int ic=x; ic < x+height / IADeVProject.TILE_SIZE ; ic++) {
-		      				for (int jc=y; jc < y+width / IADeVProject.TILE_SIZE; jc++) {
+		      			for (int ic=x; ic < x+height / IADeVProject.GRID_CELL_SIZE ; ic++) {
+		      				for (int jc=y; jc < y+width / IADeVProject.GRID_CELL_SIZE; jc++) {
 		      					IADeVProject.MAP_OF_COSTS[ic][jc] = ground.getCost();
 		      					IADeVProject.MAP_OF_GROUNDS[ic][jc] = ground;
 		      				}

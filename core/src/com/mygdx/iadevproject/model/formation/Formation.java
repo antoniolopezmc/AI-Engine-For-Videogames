@@ -56,8 +56,18 @@ public abstract class Formation extends Character {
 		return charactersList;
 	}
 	
-	public int getNumberOfCharacters() {
-		return this.getCharactersList().size();
+	public int getNumberOfCharacters() { // TODO Hay que probar esta función.
+		// Un integrante de una formación puede ser un personaje u otra formación. Eso hay que tenerlo en cuenta.
+		int resultado = 0;
+		for (Character character : this.charactersList) {
+			if (character instanceof Formation) {
+				Formation charForm = (Formation) character;
+				resultado = resultado + charForm.getNumberOfCharacters();
+			} else { 
+				resultado = resultado + 1;
+			}
+		}
+		return resultado;
 	}
 	
 	// No hay método set para el atributo 'charactersList'.

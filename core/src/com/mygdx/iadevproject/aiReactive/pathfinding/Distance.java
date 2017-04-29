@@ -10,5 +10,5 @@ public interface Distance {
 	 * @param yGoal Posición Y del objetivo
 	 * @return La matriz de distancia según la distancia concreta elegida.
 	 */
-	public float[][] getMatrixOfDistances(int width, int height, int xGoal, int yGoal);
+	public float[][] getMatrixOfDistances(int matrix_width, int matrix_height, int xGoal, int yGoal);
 }

@@ -117,6 +117,8 @@ public class TestCircularFormation extends ApplicationAdapter {
         Seek_Accelerated seek = new Seek_Accelerated(formacion, fakeMouse, 50.0f);
         seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);
         formacion.addToListBehaviour(seek);
+        
+        System.out.println("Cantidad de integrantes en la formación: " + formacion.getNumberOfCharacters());
 
 	}
 	

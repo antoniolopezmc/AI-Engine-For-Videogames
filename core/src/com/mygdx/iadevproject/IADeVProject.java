@@ -42,11 +42,11 @@ import com.mygdx.iadevproject.model.WorldObject;
 public class IADeVProject extends ApplicationAdapter {
 	
 	/** CONSTANTES **/
-	public static final int TILE_SIZE 			= 16;						// Tamaño de las celdas para los distintos grids
+	public static final int GRID_CELL_SIZE 			= 16;					// Longitud del lado de las celdas para los distintos grids.
 	public static final int WIDTH 				= 2048;						// Anchura del mapa
 	public static final int HEIGHT 				= 2048;						// Altura del mapa
-	public static final int GRID_WIDTH 			= WIDTH / TILE_SIZE;		// Anchura del grid
-	public static final int GRID_HEIGHT			= HEIGHT / TILE_SIZE;		// Altura del grid
+	public static final int GRID_WIDTH 			= WIDTH / GRID_CELL_SIZE;	// Anchura del grid
+	public static final int GRID_HEIGHT			= HEIGHT / GRID_CELL_SIZE;	// Altura del grid
 	public static final int INFINITY 			= Integer.MAX_VALUE;		// Valor infinito
 	public static final int DEFAULT_COST 		= 1;						// Coste por defecto
 	public static final Ground DEFAULT_GROUND 	= Ground.TRAIL;				// Terreno por defecto
@@ -145,7 +145,7 @@ public class IADeVProject extends ApplicationAdapter {
 //        System.out.println("********");        
 //        System.out.println(MAP_OF_COSTS[(int) 588.0001f][(int) 350.0f]);
         
-//        listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 789.0f, 403.0f, 1354.f, 230.0f);
+        listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 789.0f, 403.0f, 1354.0f, 230.0f);
 	}
 	
 	@Override
@@ -190,12 +190,12 @@ public class IADeVProject extends ApplicationAdapter {
         
         
         
-//        renderer.begin(ShapeType.Filled);
-//		renderer.setColor(Color.RED);
-//		for (Vector3 punto : listaDePuntos) {
-//			renderer.circle(punto.x, punto.y, 2);
-//		}
-//		renderer.end();
+        renderer.begin(ShapeType.Filled);
+		renderer.setColor(Color.RED);
+		for (Vector3 punto : listaDePuntos) {
+			renderer.circle(punto.x, punto.y, 2);
+		}
+		renderer.end();
 	}
 
 	@Override
@@ -259,7 +259,7 @@ public class IADeVProject extends ApplicationAdapter {
 		if (position.x < 0 || position.y < 0) throw new IllegalArgumentException("Coordenates must be positives");
 		if (position.x >= WIDTH || position.y >= HEIGHT) throw new IllegalArgumentException("Coordenates must be less than WIDHT and HEIGHT constants");
 		
-		return MAP_OF_COSTS[(int)position.x/IADeVProject.TILE_SIZE][(int)position.y/IADeVProject.TILE_SIZE];
+		return MAP_OF_COSTS[(int)position.x/IADeVProject.GRID_CELL_SIZE][(int)position.y/IADeVProject.GRID_CELL_SIZE];
 	}
 	
 	/**
@@ -272,7 +272,7 @@ public class IADeVProject extends ApplicationAdapter {
 		if (position.x < 0 || position.y < 0) throw new IllegalArgumentException("Coordenates must be positives");
 		if (position.x >= WIDTH || position.y >= HEIGHT) throw new IllegalArgumentException("Coordenates must be less than WIDHT and HEIGHT constants");
 
-		return MAP_OF_GROUNDS[(int)position.x/IADeVProject.TILE_SIZE][(int)position.y/IADeVProject.TILE_SIZE];
+		return MAP_OF_GROUNDS[(int)position.x/IADeVProject.GRID_CELL_SIZE][(int)position.y/IADeVProject.GRID_CELL_SIZE];
 	}
 	
 	/**

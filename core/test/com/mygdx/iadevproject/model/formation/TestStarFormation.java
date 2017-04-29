@@ -125,6 +125,8 @@ public class TestStarFormation extends ApplicationAdapter {
         renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
         formacion.addToListBehaviour(new Seek_NoAccelerated(formacion, fakeMouse, 50.0f));
+        
+        System.out.println("Cantidad de integrantes en la formación: " + formacion.getNumberOfCharacters());
 
 	}
 	
