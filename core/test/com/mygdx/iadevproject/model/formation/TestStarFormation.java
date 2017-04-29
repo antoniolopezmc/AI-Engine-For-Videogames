@@ -150,8 +150,7 @@ public class TestStarFormation extends ApplicationAdapter {
         renderer.setProjectionMatrix(camera.combined);
         
         // Establecemos la posición de 'fakeMouse'.
-        //fakeMouse.setPosition(Gdx.input.getX(), Gdx.input.getY()); // TODO Los objetos se mueven en formación, pero a veces no hacia donde deberían. ANALIZAR.
-        fakeMouse.setPosition(150, 150); // TODO Esto si va OK. AL METER EL RATÓN DE POR MEDIO, SE PRODUCE UNA PERTURBACIÓN EN LA FUERZA. XD
+        fakeMouse.setPosition(150, 150);
         
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
