@@ -31,6 +31,8 @@ import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accel
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance.RayPosition;
+import com.mygdx.iadevproject.aiReactive.pathfinding.Distance;
+import com.mygdx.iadevproject.aiReactive.pathfinding.ManhattanDistance;
 import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
@@ -79,12 +81,10 @@ public class IADeVProject extends ApplicationAdapter {
 	private WallAvoidance wallAvoidance;
 	
 	
-	
 	PathFinding pf = new PathFinding();
-    List<Vector3> listaDePuntos; // = pf.applyPathFinding(MAP_OF_COSTS, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 588.0001f, 350.0f, 538.00006f, 640.00006f);
+    List<Vector3> listaDePuntos;
 	
-	
-
+    
 	@Override
 	public void create() {
 		// Establecemos a LibGDX el InputProcessor implementado en la clase InputProcessorIADeVProject
@@ -145,7 +145,9 @@ public class IADeVProject extends ApplicationAdapter {
 //        System.out.println("********");        
 //        System.out.println(MAP_OF_COSTS[(int) 588.0001f][(int) 350.0f]);
         
-        listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.EUCLIDEAN_DISTANCE, WIDTH, HEIGHT, 789.0f, 403.0f, 1354.0f, 230.0f);
+        listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, GRID_WIDTH, GRID_HEIGHT, 588.00006f, 286.00003f, 543.00006f, 620.00006f);
+        
+        
 	}
 	
 	@Override
@@ -191,11 +193,18 @@ public class IADeVProject extends ApplicationAdapter {
         
         
         renderer.begin(ShapeType.Filled);
-		renderer.setColor(Color.RED);
+        renderer.setColor(Color.RED);
+		Vector3 puntoAnterior = null;
 		for (Vector3 punto : listaDePuntos) {
 			renderer.circle(punto.x, punto.y, 2);
+			if (puntoAnterior != null) {
+				renderer.line(punto, puntoAnterior);
+			}
+			puntoAnterior = new Vector3(punto);
 		}
 		renderer.end();
+		
+		System.out.println(MAP_OF_COSTS[(int)bucket.getPosition().x/GRID_CELL_SIZE][(int)bucket.getPosition().y/GRID_CELL_SIZE]);
 	}
 
 	@Override
