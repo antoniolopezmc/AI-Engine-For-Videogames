@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
@@ -44,7 +45,7 @@ import com.mygdx.iadevproject.model.WorldObject;
 public class IADeVProject extends ApplicationAdapter {
 	
 	/** CONSTANTES **/
-	public static final int GRID_CELL_SIZE 			= 16;					// Longitud del lado de las celdas para los distintos grids.
+	public static final int GRID_CELL_SIZE 			= 32;					// Longitud del lado de las celdas para los distintos grids.
 	public static final int WIDTH 				= 2048;						// Anchura del mapa
 	public static final int HEIGHT 				= 2048;						// Altura del mapa
 	public static final int GRID_WIDTH 			= WIDTH / GRID_CELL_SIZE;	// Anchura del grid
@@ -69,6 +70,7 @@ public class IADeVProject extends ApplicationAdapter {
 	public static List<WorldObject> worldObstacles;		// Obstáculos del mundo
 	public static Set<WorldObject> selectedObjects; 	// Lista de objetos seleccionados
 	public static OrthographicCamera camera;			// Cárama (es pública para que se pueda acceder el InputProcessorIADeVProject)
+	public static boolean PRINT_PATH_BEHAVIOUR = false; // Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
 	
 	/** VARIABLES LOCALES **/
 	public static SpriteBatch batch;
@@ -147,7 +149,6 @@ public class IADeVProject extends ApplicationAdapter {
         
         // --> La distancia de Manhattan es una basura. El personaje da muchísimas vueltas. La mejor es la de CHEBYSHEV.
         listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, GRID_WIDTH, GRID_HEIGHT, 588.00006f, 286.00003f, 543.00006f, 620.00006f);
-        
         
 	}
 	
@@ -283,6 +284,34 @@ public class IADeVProject extends ApplicationAdapter {
 		if (position.x >= WIDTH || position.y >= HEIGHT) throw new IllegalArgumentException("Coordenates must be less than WIDHT and HEIGHT constants");
 
 		return MAP_OF_GROUNDS[(int)position.x/IADeVProject.GRID_CELL_SIZE][(int)position.y/IADeVProject.GRID_CELL_SIZE];
+	}
+	
+	/**
+	 * Método que transforma una posición del plano o mapa real en una posición del grid.
+	 * @param grid_cell_size Longitud del lado de las celdas del grid.
+	 * @param mapPosition Posición real del mapa.
+	 * @return Posición del grid.
+	 */
+	public static Vector3 mapPositionTOgridPosition (int grid_cell_size, Vector3 mapPosition) {
+		// Eliminamos los decimales haciendo el casting.
+		int gridPosition_x = (int) mapPosition.x/grid_cell_size;
+		int gridPosition_y = (int) mapPosition.y/grid_cell_size;
+		int gridPosition_z = (int) mapPosition.z/grid_cell_size;
+		return new Vector3(gridPosition_x, gridPosition_y, gridPosition_z);
+	}
+	
+	/**
+	 * Método que transforma una posición del grid a una posición del plano o mapa real.
+	 * @param grid_cell_size Longitud del lado de las celdas del grid.
+	 * @param gridPosition Posición real del grid.
+	 * @return Posición real del mapa.
+	 */
+	public static Vector3 gridPositionTOmapPosition (int grid_cell_size, Vector3 gridPosition) {
+		// Además de la propia tranformación también se aplica un desplazamiento para situar el objeto en el centro del tile.
+		float mapPosition_x = (gridPosition.x * ((float) grid_cell_size)) + ((float) grid_cell_size/2);
+		float mapPosition_y = (gridPosition.y * ((float) grid_cell_size)) + ((float) grid_cell_size/2);
+		float mapPosition_z = (gridPosition.z * ((float) grid_cell_size)) + ((float) grid_cell_size/2);
+		return new Vector3(mapPosition_x, mapPosition_y, mapPosition_z);
 	}
 	
 	/**

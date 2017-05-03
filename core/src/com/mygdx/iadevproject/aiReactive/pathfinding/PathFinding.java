@@ -26,10 +26,12 @@ public class PathFinding {
 	 */
 	public List<Vector3> applyPathFinding (int[][] map_of_costs, int grid_cell_size, int distance, int matrix_width, int matrix_height, float xSource_real, float ySource_real, float xGoal_real, float yGoal_real) {
 		// Primero, convertimos de coordenadas reales del plano a coordenadas del GRID.
-		int xSource = (int) xSource_real/grid_cell_size;
-		int ySource = (int) ySource_real/grid_cell_size;
-		int xGoal = (int) xGoal_real/grid_cell_size;
-		int yGoal = (int) yGoal_real/grid_cell_size;
+		Vector3 source_gridPosition = IADeVProject.mapPositionTOgridPosition(grid_cell_size, new Vector3(xSource_real, ySource_real, 0.0f));
+		Vector3 goal_gridPosition = IADeVProject.mapPositionTOgridPosition(grid_cell_size, new Vector3(xGoal_real, yGoal_real, 0.0f));
+		int xSource = (int) source_gridPosition.x;
+		int ySource = (int) source_gridPosition.y;
+		int xGoal = (int) goal_gridPosition.x;
+		int yGoal = (int) goal_gridPosition.y;
 		
 		// Creamos el objeto correspondiente a la distancia/heurística que vamos a aplicar.
 		Distance d = null;
@@ -47,9 +49,10 @@ public class PathFinding {
 		
 		// Finalmente, pasamos las coordenadas obtenidas (coordenadas del grid) a coordenadas reales del plano.
 		for (Vector3 vector3 : list) {
-			vector3.x = vector3.x * ((float) grid_cell_size);
-			vector3.y = vector3.y * ((float) grid_cell_size);
-			vector3.z = vector3.z * ((float) grid_cell_size);
+			Vector3 modificado = IADeVProject.gridPositionTOmapPosition(grid_cell_size, vector3);
+			vector3.x = modificado.x;
+			vector3.y = modificado.y;
+			vector3.z = modificado.z;
 		}
 		
 		list.get(0).x = xSource_real;
