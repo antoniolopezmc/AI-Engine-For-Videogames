@@ -19,7 +19,7 @@ public enum Ground {
 	private static final int FOREST_COST 		= 50;
 	private static final int DESERT_COST 		= 35;
 	private static final int MEADOW_COST 		= 10;
-	private static final int WAY_COST 			= 5;
+	private static final int WAY_COST 			= 2;
 	private static final int TRAIL_COST 		= IADeVProject.DEFAULT_COST;
 	
 	/**

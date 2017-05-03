@@ -148,7 +148,7 @@ public class IADeVProject extends ApplicationAdapter {
 //        System.out.println(MAP_OF_COSTS[(int) 588.0001f][(int) 350.0f]);
         
         // --> La distancia de Manhattan es una basura. El personaje da muchísimas vueltas. La mejor es la de CHEBYSHEV.
-        listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, GRID_WIDTH, GRID_HEIGHT, 588.00006f, 286.00003f, 543.00006f, 620.00006f);
+        listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, GRID_WIDTH, GRID_HEIGHT, 870.06006f, 390.63998f, 1293.0f, 391.7f);
         
 	}
 	
@@ -205,8 +205,6 @@ public class IADeVProject extends ApplicationAdapter {
 			puntoAnterior = new Vector3(punto);
 		}
 		renderer.end();
-		
-		System.out.println(MAP_OF_COSTS[(int)bucket.getPosition().x/GRID_CELL_SIZE][(int)bucket.getPosition().y/GRID_CELL_SIZE]);
 	}
 
 	@Override
