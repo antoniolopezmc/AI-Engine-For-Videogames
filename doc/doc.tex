@@ -1,0 +1,146 @@
+\documentclass[a4paper,10pt]{article}
+	 \textheight = 24cm
+	 \textwidth = 18cm
+	 \topmargin = -1cm
+	 \oddsidemargin = -1cm
+	 
+\setcounter{part}{0} 	
+\setcounter{secnumdepth}{3} % Para enumerar hasta subsubsection
+\setcounter{tocdepth}{3} % Para enumerar hasta subsubsection 
+ 
+\usepackage[utf8]{inputenc}
+\usepackage[none]{hyphenat} %Paquete para indicar que no separe las palabras
+\usepackage{graphicx} %Paquete para incluir imágenes
+\usepackage{fancyhdr} %Paquete para modificar los pies de página y encabezados
+\usepackage[hidelinks]{hyperref} 
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\usepackage{listings} %Paquete para poner código de programación
+
+
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\renewcommand{\refname}{Bibliografía}
+\renewcommand{\appendixname}{Apéndices}
+\renewcommand{\contentsname}{Índice}
+\renewcommand{\thesection}{\arabic{section}}
+
+\begin{document}
+%--------------------------------------------------------------------
+\thispagestyle{empty}
+\begin{figure}[h]
+\includegraphics[scale=0.4]{images/logo-umu.jpg} \hspace{100mm}
+\includegraphics[scale=0.2]{images/logo-fium.png}
+\centering
+\end{figure}
+
+\vspace{15mm}
+
+\begin{center}
+\rule{100mm}{0.1mm} \\
+\vspace{5mm}
+\begin{Huge}
+ \textbf{Universidad de Murcia}\\ \vspace{10mm}
+\end{Huge}
+\begin{huge}
+ \textbf{Facultad de Informática}
+\end{huge}
+\vspace{5mm} \\
+\rule{100mm}{0.5mm}
+
+\vspace{20mm}
+
+\begin{Huge}
+ IA para el Desarrollo de Videojuegos \\ \vspace{5mm}
+\end{Huge}
+
+\begin{LARGE}
+ Real Time Wargame
+\end{LARGE}
+
+\vspace{15mm}
+
+\begin{Large}
+ \textbf{Autores} \\ \vspace{2mm}
+ Antonio López Martínez-Carrasco\\ \vspace{2mm}
+ \textit{antonio.lopez31@um.es} \\ \vspace{4mm}
+ José María Sánchez Salas\\ \vspace{2mm}
+ \textit{josemaria.sanchez12@um.es}
+\end{Large}
+
+\vspace{7mm}
+
+\begin{Large}
+ \textbf{Profesores} \\ \vspace{2mm}
+ Francisco Javier Martín-Blázquez Gómez \\ \vspace{2mm}
+ \textit{jgmarin@um.es} \\ \vspace{4mm}
+ Luis Daniel Hernández Molinero \\ \vspace{2mm}
+ \textit{ldaniel@um.es}
+\end{Large}
+\end{center}
+%--------------------------------------------------------------------
+%--------------------------------------------------------------------
+\newpage
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.5pt} %Definimos el grosor de la línea
+\lhead[IA para el Desarrollo de Videojuegos]{IA para el Desarrollo de Videojuegos}
+\rhead[Real Time Wargame]{Real Time Wargame}
+\renewcommand{\footrulewidth}{0.5pt}
+\tableofcontents
+\newpage
+
+
+\part{Introducción y estructura de la aplicación}
+\input{secciones/introduccion}
+
+\input{secciones/estructura-aplicacion}
+
+
+\part{Clase principal y mapa}
+\input{secciones/clase-principal}
+
+\input{secciones/mapa}
+
+
+\part{IA reactiva}
+\input{secciones/steerings}
+
+\input{secciones/comportamientos}
+
+\input{secciones/arbitros}
+
+\input{secciones/modelo}
+
+
+\part{PathFinding}
+\input{secciones/pathfinding}
+
+
+\part{IA táctica}
+
+
+\part{Conclusiones}
+\input{secciones/conclusiones}
+
+
+\newpage
+\part{Bibliografía}
+\input{bib.tex}
+
+\end{document}
