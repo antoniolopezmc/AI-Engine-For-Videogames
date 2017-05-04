@@ -24,16 +24,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
 import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance.RayPosition;
-import com.mygdx.iadevproject.aiReactive.pathfinding.Distance;
-import com.mygdx.iadevproject.aiReactive.pathfinding.ManhattanDistance;
 import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
@@ -66,17 +61,18 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	
 	/** VARIABLES GLOBALES **/
-	public static List<WorldObject> worldObjects;		// Objetos del mundo
-	public static List<WorldObject> worldObstacles;		// Obstáculos del mundo
-	public static Set<WorldObject> selectedObjects; 	// Lista de objetos seleccionados
-	public static OrthographicCamera camera;			// Cárama (es pública para que se pueda acceder el InputProcessorIADeVProject)
-	public static boolean PRINT_PATH_BEHAVIOUR = false; // Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
+	public static List<WorldObject> worldObjects;					// Objetos del mundo
+	public static List<WorldObject> worldObstacles;					// Obstáculos del mundo
+	public static Set<WorldObject> selectedObjects; 				// Lista de objetos seleccionados
+	public static OrthographicCamera camera;						// Cárama (es pública para que se pueda acceder el InputProcessorIADeVProject)
+	public static boolean PRINT_PATH_BEHAVIOUR = false; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
+	public static BitmapFont font = new BitmapFont();				// Para dibujar letras 
+	public static ShapeRenderer renderer = new ShapeRenderer();		// Para dibujar líneas
 	
+    
 	/** VARIABLES LOCALES **/
-	public static SpriteBatch batch;
-	private BitmapFont font;
-	public static ShapeRenderer renderer;
-    private TiledMapRenderer tiledMapRenderer;
+	private SpriteBatch batch;
+	private TiledMapRenderer tiledMapRenderer;
 	private InputProcessorIADeVProject inputProcessor;		// InputProcessor
 	
 	public static Character drop, bucket;
@@ -105,8 +101,6 @@ public class IADeVProject extends ApplicationAdapter {
         camera.update();
         
         batch 				= new SpriteBatch();
-        font 				= new BitmapFont();
-        renderer 			= new ShapeRenderer();
         tiledMap 			= new TmxMapLoader().load("../core/assets/map.tmx");
         tiledMapRenderer 	= new TiledMapIADeVProject(tiledMap);
         
