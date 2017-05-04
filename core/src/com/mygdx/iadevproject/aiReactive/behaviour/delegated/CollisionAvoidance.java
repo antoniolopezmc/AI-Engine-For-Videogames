@@ -2,6 +2,7 @@ package com.mygdx.iadevproject.aiReactive.behaviour.delegated;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
@@ -11,15 +12,6 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 
 public class CollisionAvoidance implements Behaviour {
-	
-	/**
-	 * Método para pintar las líneas de debug del Behaviour
-	 */
-	private void debug() {
-		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
-			
-		}
-	}
 	
 	private final float INFINITY = Float.MAX_VALUE; // Constante que representa el número infinito
 	
@@ -33,6 +25,18 @@ public class CollisionAvoidance implements Behaviour {
 		this.maxAcceleration = maxAcceleration;
 	}
 
+	/**
+	 * Método para pintar las líneas de debug del Behaviour
+	 */
+	private void debug(WorldObject source, WorldObject target) {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Line);
+			IADeVProject.renderer.circle(source.getCenterOfMass().x, source.getCenterOfMass().y, source.getBoundingRadius());
+			IADeVProject.renderer.circle(target.getCenterOfMass().x, target.getCenterOfMass().y, target.getBoundingRadius());			
+			IADeVProject.renderer.end();
+		}
+	}
+	
 	@Override
 	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
@@ -95,6 +99,7 @@ public class CollisionAvoidance implements Behaviour {
 			// Comprobamos si chocaremos exactamente o estamos ya chocando, para calcular el steering 
 			// sobre la posición actual o sobre la posición futura:
 			if (firstMinSeparation <= 0 || firstDistance <= firstSumRadius) {
+				debug(source, firstTarget);
 				return (new Evade(source, firstTarget, this.maxAcceleration, shortestTime)).getSteering();
 			}
 		}

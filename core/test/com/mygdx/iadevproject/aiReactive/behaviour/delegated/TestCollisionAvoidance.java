@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
@@ -41,8 +41,8 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
         worldsObstacles = new LinkedList<WorldObject>();
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -85,8 +85,7 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        drop.applyBehaviour();       
-        collision.applyBehaviour();
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
         
         batch.begin();
 		collision.draw(batch);
@@ -95,14 +94,8 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
 		}
         batch.end();
         
-    	
-		renderer.begin(ShapeType.Line);
-		for (WorldObject obs : worldsObstacles) {
-			renderer.circle(obs.getCenterOfMass().x, obs.getCenterOfMass().y, obs.getBoundingRadius());
-		}
-		renderer.circle(collision.getCenterOfMass().x, collision.getCenterOfMass().y, collision.getBoundingRadius());
-		
-		renderer.end();
+        drop.applyBehaviour();       
+        collision.applyBehaviour();
 	}
 	
 	@Override
