@@ -1,5 +1,7 @@
 package com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
@@ -14,7 +16,13 @@ public class Arrive_Accelerated implements Behaviour {
 	 */
 	private void debug() {
 		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Line);
+			IADeVProject.renderer.setColor(Color.YELLOW);
 			
+			IADeVProject.renderer.circle(this.target.getPosition().x, this.target.getPosition().y, targetRadious);
+			IADeVProject.renderer.circle(this.target.getPosition().x, this.target.getPosition().y, slowRadious);
+						
+			IADeVProject.renderer.end();
 		}
 	}
 	
@@ -145,6 +153,8 @@ public class Arrive_Accelerated implements Behaviour {
 		
 		// Establecemos la aceleración angular a 0.
 		output.setAngular(0);
+		
+		this.debug(); // Mostramos información de depuración, si procede.
 		
 		return output;
 	}

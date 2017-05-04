@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.model.Character;
@@ -33,8 +34,10 @@ public class TestArrive_Accelerated extends ApplicationAdapter {
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -51,7 +54,9 @@ public class TestArrive_Accelerated extends ApplicationAdapter {
         bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
         bucket.setOrientation(0.0f);
         bucket.setVelocity(new Vector3(0,0,0));
-        bucket.addToListBehaviour(new Arrive_Accelerated(bucket, drop, 50.0f, 100.0f, 1.0f, 10.0f, 1.0f));
+        bucket.addToListBehaviour(new Arrive_Accelerated(bucket, drop, 50.0f, 100.0f, 20.0f, 80.0f, 1.0f));
+        // Arrive con radio interior pequeño:
+        // bucket.addToListBehaviour(new Arrive_Accelerated(bucket, drop, 50.0f, 100.0f, 1.0f, 80.0f, 1.0f));
 	}
 	
 	@Override
@@ -63,14 +68,15 @@ public class TestArrive_Accelerated extends ApplicationAdapter {
         renderer.setProjectionMatrix(camera.combined);
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-//        drop.applyBehaviour();       
-        bucket.applyBehaviour();
-        
+                
         batch.begin();
         drop.draw(batch);
 		bucket.draw(batch);
         batch.end();
+        
+//      drop.applyBehaviour();       
+      bucket.applyBehaviour();
+      
 	}
 	
 	@Override
