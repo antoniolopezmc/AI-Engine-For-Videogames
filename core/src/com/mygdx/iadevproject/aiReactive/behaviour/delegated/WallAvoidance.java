@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -18,16 +20,6 @@ import com.mygdx.iadevproject.model.WorldObject;
 
 public class WallAvoidance extends Seek_Accelerated {
 
-	/**
-	 * Método para pintar las líneas de debug del Behaviour
-	 */
-	private void debug() {
-		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
-			
-		}
-	}
-	
-	
 	/**
 	 * Enumerado para las posiciones de los rayos del Behaviour
 	 */
@@ -102,9 +94,9 @@ public class WallAvoidance extends Seek_Accelerated {
 	 * Método para inicializar el objeto 'raysLength'
 	 */
 	private void inicializeRaysLength() {
-		this.raysLength.put(RayPosition.CENTER, this.centerLookahead);
 		this.raysLength.put(RayPosition.LEFT, this.leftLookahead);
 		this.raysLength.put(RayPosition.RIGHT, this.rightLookahead);
+		this.raysLength.put(RayPosition.CENTER, this.centerLookahead);
 	}
 	
 	public List<WorldObject> getTargets() {
@@ -149,6 +141,35 @@ public class WallAvoidance extends Seek_Accelerated {
 
 	public float getRightLookahead() {
 		return rightLookahead;
+	}
+	
+	/**
+	 * Método para pintar las líneas de debug del Behaviour
+	 */
+	private void debug(boolean thereIsIntersection, WorldObject target, Vector3 normal) {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Line);
+			IADeVProject.renderer.setColor(Color.RED);
+			
+			Ray ray = this.rays.get(RayPosition.CENTER);
+			Vector3 endPoint = ray.getEndPoint(new Vector3(0,0,0), this.raysLength.get(RayPosition.CENTER));
+			IADeVProject.renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+			
+			ray = this.rays.get(RayPosition.LEFT);
+			endPoint = ray.getEndPoint(new Vector3(0,0,0), this.raysLength.get(RayPosition.LEFT));
+			IADeVProject.renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+
+			ray = this.rays.get(RayPosition.RIGHT);
+			endPoint = ray.getEndPoint(new Vector3(0,0,0), this.raysLength.get(RayPosition.RIGHT));
+			IADeVProject.renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
+			
+			if (thereIsIntersection) {
+				IADeVProject.renderer.line(intersection.x, intersection.y, normal.x, normal.y);
+				IADeVProject.renderer.circle(target.getPosition().x, target.getPosition().y, target.getBoundingRadius());
+			}
+						
+			IADeVProject.renderer.end();
+		}
 	}
 
 	@Override
@@ -248,9 +269,13 @@ public class WallAvoidance extends Seek_Accelerated {
 			WorldObject targetSeek = new Obstacle();
 			targetSeek.setPosition(targetPosition);
 			
+			debug(true, firstTarget, targetPosition);
+			
 			// Devolvemos el resultado del Seek.
 			return (new Seek_Accelerated(this.getSource(), targetSeek, this.getMaxAcceleration())).getSteering();
 		}
+		
+		debug(false, null, null);
 		
 		// Si no chocamos con nada, entonces no hacemos nada
 		output.setLineal(new Vector3(0,0,0));

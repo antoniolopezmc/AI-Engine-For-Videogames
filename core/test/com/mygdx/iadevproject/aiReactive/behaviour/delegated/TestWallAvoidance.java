@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
@@ -46,16 +47,12 @@ public class TestWallAvoidance extends ApplicationAdapter {
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
         worldsObstacles = new LinkedList<WorldObject>();
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
-        
-//        tiledMap = new TmxMapLoader().load("../core/assets/example.tmx");
-//        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-//        
         
         Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
@@ -68,25 +65,24 @@ public class TestWallAvoidance extends ApplicationAdapter {
         Obstacle obs5 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs5.setBounds(300.0f, 100.0f, 64.0f, 64.0f);
         
-        drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet-normal.png")));
         drop.setBounds(600, 100, 64, 64);
         drop.setVelocity(new Vector3(0,0,0));
         Seek_Accelerated seek = new Seek_Accelerated(drop, obs4, 40.0f);
-//        seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);
         drop.addToListBehaviour(seek);
         
 //        worldsObstacles.add(obs1);
 //        worldsObstacles.add(obs2);
 //        worldsObstacles.add(obs3);
         worldsObstacles.add(obs4);
-        worldsObstacles.add(obs5);
+//        worldsObstacles.add(obs5);
         worldsObstacles.add(drop);
         
-        collision = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        collision = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket-normal.png")));
         collision.setBounds(150.0f, -200.0f, 64.0f, 64.0f);
         collision.setOrientation(10.0f);
         collision.setVelocity(new Vector3(10.0f, 100.0f, 0));
-        wallAvoidance = new WallAvoidance(collision, 1000.0f, worldsObstacles, 100.0f, 20.0f, 200.0f);
+        wallAvoidance = new WallAvoidance(collision, 1000.0f, worldsObstacles, 200.0f, 20.0f, 200.0f);
         collision.addToListBehaviour(wallAvoidance);
     }
 	
@@ -97,17 +93,12 @@ public class TestWallAvoidance extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-//        tiledMap.getLayers().get(0).setVisible(true);
-//        
-//        tiledMapRenderer.setView(camera);
-//        tiledMapRenderer.render();
-        
         // Estas 2 lineas sirven para que los objetos dibujados actualicen su posición cuando se mueva la cámara. (Que se muevan también).
         batch.setProjectionMatrix(camera.combined);
         renderer.setProjectionMatrix(camera.combined);
         
-        drop.applyBehaviour();
-        collision.applyBehaviour();
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
         
         batch.begin();
 		collision.draw(batch);
@@ -115,49 +106,9 @@ public class TestWallAvoidance extends ApplicationAdapter {
 			obs.draw(batch);
 		}
         batch.end();
-      
-        // DESCOMENTAR SI SE QUIEREN VER LOS PUNTOS, LOS CÍRCULOS DE INTERSECIÓN Y LOS RAYOS
         
-//        for (WorldObject target : worldsObstacles) {
-//			Rectangle boundingRectangle = target.getBoundingRectangle();
-//			Vector3 minimum = new Vector3(boundingRectangle.x - boundingRectangle.height/2, boundingRectangle.y - boundingRectangle.width/2, 0.0f);
-//			Vector3 maximum = new Vector3(minimum.x + boundingRectangle.height, minimum.y + boundingRectangle.width, 0.0f);
-//			BoundingBox boundingBox = new BoundingBox(minimum, maximum);
-//			
-//			renderer.begin(ShapeType.Line);
-//			renderer.setColor(Color.CYAN);
-////			renderer.rect(boundingBox.getCenterX() - boundingBox.getHeight()/2, boundingBox.getCenterY() - boundingBox.getWidth()/2, boundingBox.getHeight(), boundingBox.getWidth());
-//			renderer.circle(target.getCenterOfMass().x, target.getCenterOfMass().y, target.getBoundingRadius());
-//			renderer.end();
-//		}
-		
-//		renderer.begin(ShapeType.Line);
-//		renderer.setColor(Color.RED);
-//		Ray ray = wallAvoidance.getRays().get(RayPosition.CENTER);
-//		Vector3 endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.CENTER));
-//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-//		
-//		ray = wallAvoidance.getRays().get(RayPosition.LEFT);
-//		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.LEFT));
-//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-//
-//		ray = wallAvoidance.getRays().get(RayPosition.RIGHT);
-//		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.RIGHT));
-//		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-//		renderer.end();
-//		
-//		renderer.begin(ShapeType.Filled);
-//		renderer.circle(wallAvoidance.getIntersection().x, wallAvoidance.getIntersection().y, 2);
-//		renderer.end();
-//		
-////		renderer.begin(ShapeType.Line);
-////		Vector3 inter = wallAvoidance.getIntersection();
-////		renderer.line(inter.x, inter.y, inter.x + wallAvoidance.normal.len(), inter.y + wallAvoidance.normal.len());
-////		renderer.end();
-////		
-//		renderer.begin(ShapeType.Filled);
-//		renderer.circle(wallAvoidance.targetSeek.getPosition().x, wallAvoidance.targetSeek.getPosition().y, 2);
-//		renderer.end();
+        drop.applyBehaviour();
+        collision.applyBehaviour();
 	}
 	
 	@Override
