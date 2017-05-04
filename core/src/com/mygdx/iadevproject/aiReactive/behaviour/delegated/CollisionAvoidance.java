@@ -2,7 +2,9 @@ package com.mygdx.iadevproject.aiReactive.behaviour.delegated;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
@@ -10,6 +12,23 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 
 public class CollisionAvoidance implements Behaviour {
+	
+	private ShapeRenderer renderer = null;
+    
+	public ShapeRenderer getRenderer() {
+		return this.renderer;
+	}
+	
+	public void setRenderer(ShapeRenderer renderer) {
+		this.renderer = renderer;
+	}
+	
+	private void debug() {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR && this.renderer != null) {
+			
+		}
+	}
+	
 	private final float INFINITY = Float.MAX_VALUE; // Constante que representa el número infinito
 	
 	private Character source;

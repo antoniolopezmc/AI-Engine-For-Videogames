@@ -353,26 +353,5 @@ public class IADeVProject extends ApplicationAdapter {
         		renderer.circle(obs.getPosition().x, obs.getPosition().y, 2);
         	}
         renderer.end();
-	}
-	
-	/**
-	 * Método para dibujar las líneas relevantes del WallAvoidance
-	 */
-	private void drawLinesOfWallAvoidance() {
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.RED);
-		Ray ray = wallAvoidance.getRays().get(RayPosition.CENTER);
-		Vector3 endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.CENTER));
-		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-		
-		ray = wallAvoidance.getRays().get(RayPosition.LEFT);
-		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.LEFT));
-		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-
-		ray = wallAvoidance.getRays().get(RayPosition.RIGHT);
-		endPoint = ray.getEndPoint(new Vector3(0,0,0), wallAvoidance.getRaysLength().get(RayPosition.RIGHT));
-		renderer.line(ray.origin.x, ray.origin.y, endPoint.x, endPoint.y);
-		renderer.end();
-	}
-	
+	}	
 }

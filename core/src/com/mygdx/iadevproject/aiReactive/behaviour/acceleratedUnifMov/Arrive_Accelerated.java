@@ -1,12 +1,31 @@
 package com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.steering.*;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 
 public class Arrive_Accelerated implements Behaviour {
+	
+	private ShapeRenderer renderer = null;
+    
+	public ShapeRenderer getRenderer() {
+		return this.renderer;
+	}
+	
+	public void setRenderer(ShapeRenderer renderer) {
+		this.renderer = renderer;
+	}
+	
+	private void debug() {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR && this.renderer != null) {
+			
+		}
+	}
+	
 	
 	private Character source;
 	private WorldObject target;

@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
@@ -17,6 +19,23 @@ import com.mygdx.iadevproject.model.WorldObject;
 
 public class WallAvoidance extends Seek_Accelerated {
 
+	private ShapeRenderer renderer = null;
+    
+	public ShapeRenderer getRenderer() {
+		return this.renderer;
+	}
+	
+	public void setRenderer(ShapeRenderer renderer) {
+		this.renderer = renderer;
+	}
+	
+	private void debug() {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR && this.renderer != null) {
+			
+		}
+	}
+	
+	
 	/**
 	 * Enumerado para las posiciones de los rayos del Behaviour
 	 */
@@ -141,7 +160,7 @@ public class WallAvoidance extends Seek_Accelerated {
 	}
 
 	@Override
-	public Steering getSteering() {
+	public Steering getSteering() {		
 		// Creamos el 'Steering' que será devuelto.
 		Steering_AcceleratedUnifMov output = new Steering_AcceleratedUnifMov();
 		
@@ -238,8 +257,7 @@ public class WallAvoidance extends Seek_Accelerated {
 			targetSeek.setPosition(targetPosition);
 			
 			// Devolvemos el resultado del Seek.
-			return (new Seek_Accelerated(this.getSource(), targetSeek, this.getMaxAcceleration())).getSteering();			
-		
+			return (new Seek_Accelerated(this.getSource(), targetSeek, this.getMaxAcceleration())).getSteering();
 		}
 		
 		// Si no chocamos con nada, entonces no hacemos nada
