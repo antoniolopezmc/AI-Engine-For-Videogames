@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
 import com.mygdx.iadevproject.model.Character;
@@ -32,17 +33,18 @@ public class TestWander_Delegated extends ApplicationAdapter {
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
-        bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket-normal.png")));
         bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        bucket.setMaxSpeed(50.0f);
         bucket.setOrientation(45.0f);
         bucket.setVelocity(new Vector3(0,0,0));
-        bucket.addToListBehaviour(new Wander_Delegated(bucket, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 10.0f, 30.0f, 5.0f, 45.0f, 10.0f));
+        bucket.addToListBehaviour(new Wander_Delegated(bucket, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, 45.0f, 10.0f));
 	}
 	
 	@Override
@@ -55,11 +57,13 @@ public class TestWander_Delegated extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                
-        bucket.applyBehaviour();
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
         
         batch.begin();
         bucket.draw(batch);
         batch.end();
+        
+        bucket.applyBehaviour();
 	}
 	
 	@Override

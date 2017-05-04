@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.VelocityMatching_Accelerated;
@@ -35,8 +36,8 @@ public class TestVelocityMatching_Accelerated extends ApplicationAdapter {
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -70,14 +71,17 @@ public class TestVelocityMatching_Accelerated extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        drop.applyBehaviour();       
-        bucket.applyBehaviour();
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+
         
         batch.begin();
         drop.draw(batch);
         drop1.draw(batch);
 		bucket.draw(batch);
         batch.end();
+        
+        drop.applyBehaviour();       
+        bucket.applyBehaviour();
 	}
 	
 	@Override

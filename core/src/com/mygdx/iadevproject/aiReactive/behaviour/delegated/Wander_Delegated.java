@@ -2,6 +2,7 @@ package com.mygdx.iadevproject.aiReactive.behaviour.delegated;
 
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
@@ -15,15 +16,6 @@ import com.mygdx.iadevproject.model.WorldObject;
 
 public class Wander_Delegated extends Face implements Behaviour {
 
-	/**
-	 * Método para pintar las líneas de debug del Behaviour
-	 */
-	private void debug() {
-		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
-			
-		}
-	}
-	
 	private static Random aletorio = new Random();
 	
 	// Distancia desde el personaje hasta el Facing
@@ -101,6 +93,21 @@ public class Wander_Delegated extends Face implements Behaviour {
 	public void setMaxAcceleration(float maxAcceleration) {
 		this.maxAcceleration = maxAcceleration;
 	}
+	
+	/**
+	 * Método para pintar las líneas de debug del Behaviour
+	 */
+	private void debug(Vector3 origin, Vector3 center, Vector3 targetPosition) {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Line);
+			
+			IADeVProject.renderer.line(origin.x, origin.y, center.x, center.y);
+			IADeVProject.renderer.circle(center.x, center.y, this.wanderRadius);
+			IADeVProject.renderer.circle(targetPosition.x, targetPosition.y, 2.0f);
+			
+			IADeVProject.renderer.end();
+		}
+	}
 
 	@Override
 	public Steering getSteering() {
@@ -113,7 +120,9 @@ public class Wander_Delegated extends Face implements Behaviour {
 		float targetOrientation = this.wanderOrientation + this.getSource().getOrientation();
 		
 		// Calculamos el centro del círculo Wander
-		Vector3 sourceOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
+//		Vector3 sourceOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
+		Vector3 sourceOrientationVector = getVector(super.getSource().getOrientation());
+		
 		sourceOrientationVector.x *= this.wanderOffset;
 		sourceOrientationVector.y *= this.wanderOffset;
 		sourceOrientationVector.z *= this.wanderOffset;
@@ -123,8 +132,13 @@ public class Wander_Delegated extends Face implements Behaviour {
 		targetPosition.y = this.getSource().getPosition().y + sourceOrientationVector.y;
 		targetPosition.z = this.getSource().getPosition().z + sourceOrientationVector.z;
 		
-		// Calculamos la locacización del objetivo
-		Vector3 targetOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(targetOrientation)), (float) Math.cos(Math.toRadians(targetOrientation)), 0.0f);
+		// SE ALMACENA ESTA VARIABLE PARA PODER HACER EL DEBUG, ya que después se modifica para obtener la localización 
+		// concreta del objetivo
+		Vector3 wanderCenter = new Vector3(targetPosition); 
+		
+		// Calculamos la localización del objetivo
+//		Vector3 targetOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(targetOrientation)), (float) Math.cos(Math.toRadians(targetOrientation)), 0.0f);
+		Vector3 targetOrientationVector = getVector(targetOrientation);
 		
 		targetPosition.x += this.wanderRadius * targetOrientationVector.x;
 		targetPosition.y += this.wanderRadius * targetOrientationVector.y;
@@ -143,10 +157,13 @@ public class Wander_Delegated extends Face implements Behaviour {
 			Steering_AcceleratedUnifMov output = (Steering_AcceleratedUnifMov) steering;
 			
 			// Creamos el vector lineal como el vector de la orientación del personaje multiplicado por la máxima aceleración
-			Vector3 lineal = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
+//			Vector3 lineal = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
+			Vector3 lineal = getVector(super.getSource().getOrientation());
 			lineal.x *= this.maxAcceleration;
 			lineal.y *= this.maxAcceleration;
 			lineal.z *= this.maxAcceleration;
+			
+			debug(this.getSource().getPosition(), wanderCenter, targetPosition);
 			
 			output.setLineal(lineal);
 			
@@ -154,6 +171,16 @@ public class Wander_Delegated extends Face implements Behaviour {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Método que apartir de la orientación 'orientation' devuelve el vector
+	 * que representa esa dirección.
+	 * @param orientation -  Orientación.
+	 * @return - Vector que representa a esa dirección.
+	 */
+	private Vector3 getVector (float orientation) {
+		return new Vector3((float)-Math.sin(Math.toRadians(orientation)), (float)Math.cos(Math.toRadians(orientation)), 0);
 	}
 
 }

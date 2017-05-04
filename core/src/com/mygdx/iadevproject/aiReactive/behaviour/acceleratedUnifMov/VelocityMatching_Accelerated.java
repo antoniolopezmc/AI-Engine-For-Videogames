@@ -1,5 +1,6 @@
 package com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
@@ -10,16 +11,6 @@ import com.mygdx.iadevproject.model.WorldObject;
 
 public class VelocityMatching_Accelerated implements Behaviour {
 
-	/**
-	 * Método para pintar las líneas de debug del Behaviour
-	 */
-	private void debug() {
-		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
-			
-		}
-	}
-	
-	
 	private Character source;
 	private WorldObject target;
 	// Máxima aceleración del personaje
@@ -87,6 +78,18 @@ public class VelocityMatching_Accelerated implements Behaviour {
 		this.timeToTarget = timeToTarget;
 	}
 
+	
+	/**
+	 * Método para pintar las líneas de debug del Behaviour
+	 */
+	private void debug(Vector3 origin, Vector3 velocity) {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Line);
+			IADeVProject.renderer.line(origin.x, origin.y, origin.x+velocity.x, origin.y+velocity.y);
+			IADeVProject.renderer.end();
+		}
+	}
+	
 	@Override
 	public Steering getSteering() {
 		// Creamos el 'Steering' que será devuelto.
@@ -109,8 +112,9 @@ public class VelocityMatching_Accelerated implements Behaviour {
 			finalLineal.z = finalLineal.z * this.maxAcceleration; 			
 		}
 		
-		output.setLineal(finalLineal);	
+		debug(this.source.getPosition(), this.target.getVelocity());
 		
+		output.setLineal(finalLineal);	
 		output.setAngular(0);
 		
 		return output;
