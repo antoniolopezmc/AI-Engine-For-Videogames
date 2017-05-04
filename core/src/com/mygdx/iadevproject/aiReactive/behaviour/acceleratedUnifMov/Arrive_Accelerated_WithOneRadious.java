@@ -1,6 +1,9 @@
 package com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.model.Character;
@@ -11,6 +14,21 @@ import com.mygdx.iadevproject.model.WorldObject;
  * El personaje va a máxima velocidad hacía un objetivo, pero al acercarse a una determinada distancia, empieza a frenar. 
  */
 public class Arrive_Accelerated_WithOneRadious extends Seek_Accelerated {
+	
+	/**
+	 * Método para pintar las líneas de debug del Behaviour
+	 */
+	private void debug() {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Line);
+			IADeVProject.renderer.setColor(Color.YELLOW);
+			
+			IADeVProject.renderer.circle(this.getTarget().getPosition().x, this.getTarget().getPosition().y, targetRadious);
+						
+			IADeVProject.renderer.end();
+		}
+	}
+	
 
 	private float targetRadious;
 	
@@ -50,6 +68,9 @@ public class Arrive_Accelerated_WithOneRadious extends Seek_Accelerated {
 			output.setAngular(0);
 			return output;
 		}
+		
+		this.debug(); // Mostramos información de depuración, si procede.
+		
 		// Sino, aplicamos un Seek normal y corriente.
 		return super.getSteering();
 	}

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.AntiAlign_Accelerated;
 import com.mygdx.iadevproject.model.Character;
@@ -33,8 +34,10 @@ public class TestAntiAlign_Accelerated extends ApplicationAdapter {
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
         batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();

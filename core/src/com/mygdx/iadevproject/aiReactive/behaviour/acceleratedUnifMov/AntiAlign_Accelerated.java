@@ -1,5 +1,7 @@
 package com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
@@ -15,8 +17,32 @@ public class AntiAlign_Accelerated implements Behaviour {
 	 */
 	private void debug() {
 		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Filled);
+			IADeVProject.renderer.setColor(Color.YELLOW);
 			
+			Vector3 punto1 = new Vector3();
+			Vector3 punto2 = this.getVector((this.target.getOrientation() + 180) % 360);
+			punto2.x *= 100;
+			punto2.y *= 100;
+			punto1.add(this.source.getPosition());
+			punto2.add(this.source.getPosition());
+			IADeVProject.renderer.line(punto1, punto2);
+			
+			IADeVProject.renderer.circle(punto1.x, punto1.y, 2);
+			IADeVProject.renderer.circle(punto2.x, punto2.y, 2);
+						
+			IADeVProject.renderer.end();
 		}
+	}
+	
+	/**
+	 * Método que apartir de la orientación 'orientation' devuelve el vector
+	 * que representa esa dirección.
+	 * @param orientation -  Orientación.
+	 * @return - Vector que representa a esa dirección.
+	 */
+	private Vector3 getVector (float orientation) {
+		return new Vector3((float)-Math.sin(Math.toRadians(orientation)), (float)Math.cos(Math.toRadians(orientation)), 0);
 	}
 	
 	private Character source;
@@ -142,6 +168,8 @@ public class AntiAlign_Accelerated implements Behaviour {
 		}
 		
 		output.setLineal(new Vector3(0,0,0));
+		
+		this.debug(); // Mostramos información de depuración, si procede.
 		
 		return output;
 	}
