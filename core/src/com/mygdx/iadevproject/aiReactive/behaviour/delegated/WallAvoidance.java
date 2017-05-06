@@ -271,8 +271,9 @@ public class WallAvoidance extends Seek_Accelerated {
 			
 			debug(true, firstTarget, targetPosition);
 			
-			// Devolvemos el resultado del Seek.
-			return (new Seek_Accelerated(this.getSource(), targetSeek, this.getMaxAcceleration())).getSteering();
+			// Devolvemos el resultado del 'getSteering' del padre
+			this.setTarget(targetSeek);
+			return super.getSteering();
 		}
 		
 		debug(false, null, null);
@@ -329,7 +330,6 @@ public class WallAvoidance extends Seek_Accelerated {
 	 * @return - 'orientation' en el rango 0-360
 	 */
 	private float convertToRange0_360(float orientation) {
-		// IMPORTANTE -> Para establecer la orientación, se llama al método del padre. El de 'this' está sobreescrito para evitar confusiones con los nombres.
 		float realOrientation = orientation % 360;
 		
 		if (realOrientation < 0) { realOrientation += 360; }

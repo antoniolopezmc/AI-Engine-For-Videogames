@@ -1,3 +1,20 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Clase principal}
+Todo lo referente a esta sección, se encuentra dentro del paquete \texttt{com.mygdx.iadevproject} del proyecto. La clase principal de nuestro proyecto es la clase \texttt{IADeVProject} y es la que contiene los siguientes elementos:
+\begin{itemize}
+ \item \textbf{Constantes}. Estas son: el tamaño del mapa (alto y ancho); el tamaño de las celdas de los grids, así como el tamaño de estos (alto y ancho); valores de infinito, coste y terreno por defecto; y el tamaño de los objetos del mundo (alto y ancho, obtenidos a partir de la información del mapa).
+ \item \textbf{Mapas}. Estos son: el mapa real que se dibuja; el mapa de costes para el PathFinding; el mapa de terrenos para el PathFinding táctico (exceptuando el mapa real, todos los demás son los que se denominan grids y todos tienen el mismo tamaño).
+ \item \textbf{Variables globales}. Estas son: los objetos y obstáculos del mundo; el conjunto de objetos seleccionados por el usuario (utilizando el ratón); la cámara; el flag que indica si se dibujan, o no, las líneas de depuración de los distintos comportamientos; así como las variables necesarias para que desde los comportamientos se puedan dibujar las líneas de depuración.
+\end{itemize}
+
+Esta clase se encarga de crear e inicializar todos los elementos anteriores, de renderizar el seguimiento del juego y, una vez terminado, eliminar todos los elementos creados para el renderizado. \\
+
+El control de la interacción del usuario con el juego se ha implementado en la clase \texttt{InputProcessorIADeVProject}, que contiene todos los manejadores para las posibles acciones que puede realizar el usuario con el teclado y el ratón. Debido a que el usuario puede seleccionar objetos del mundo, cuando se realiza la selección para que añadan los objetos al conjunto de objetos seleccionados, se hace uso del método \texttt{addToSelectedObjectsList()} de la clase \texttt{IADeVProject}. Como también se proporciona la funcionalidad de eliminar la selección de objetos, dicha clase también proporciona el método \texttt{clearSelectedObjectsList()}. \\
+
+Debido a que el tamaño de los distintos grids y el tamaño del mapa pueden no ser iguales (pues depende del tamaño de las celdas), es necesario hacer una conversión entre las posiciones reales del mapa y las posiciones correspondientes del grid. Por eso mismo, la clase \texttt{IADeVProject} proporciona los dos siguientes métodos:
+\begin{itemize}
+ \item \texttt{mapPositionTOgridPosition() y gridPositionTOmapPosition()}. Ambos reciben como parámetros el tamaño de la celda del grid y un vector con la posición que se quiere convertir. El primero transforma una posición del mapa a una posición del grid, y el segundo hace la inversa: transforma una posición del grid a una posición del mapa.
+\end{itemize}
+
+

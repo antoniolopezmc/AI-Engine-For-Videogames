@@ -1,3 +1,143 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Comportamientos}
+Todo lo referente a esta sección, se encuentra dentro del paquete \texttt{com.mygdx.iadevproject.aiReactive.behaviour} del proyecto. Para generalizar el uso de los comportamientos, se ha decidido crear la interfaz \texttt{Behaviour} que tienen que implementar todos los distintos tipos de comportamientos. Esta interfaz proporciona un solo método:
+\begin{itemize}
+ \item \texttt{getSteering()}, que no recibe ningún parámetro y devuelve un \texttt{Steering}. Este método no recibe ningún parámetro para generalizar los comportamientos, pues no todos los comportamientos necesitan lo mismo para poder calcular su steering. De esta manera, en la creación del comportamiento concreto, se ha de proporcionar todos los datos necesarios para que él pueda calcular su steering, implementando a su manera, este método. 
+\end{itemize}
+
+A continuación, en las siguientes subsecciones se muestran todos los comportamientos que hemos implementado.
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Comportamientos no acelerados}
+Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov} del proyecto. Los distintos comportamientos no acelerados que hemos implementado son:
+\begin{itemize}
+ \item \texttt{Arrive\_NoAccelerated}. Este comportamiento consiste en llegar hacia un objetivo, rodeado por un radio de satisfacción en el que se supone que el personaje ya ha llegado, a la máxima velocidad y en un tiempo determinado. Así, para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \begin{itemize}
+  \item El personaje que va a aplicar el comportamiento.
+  \item El objetivo al que se quiere dirigir.
+  \item La máxima velocidad con la que se aplica el comportamiento.
+  \item El radio de satisfacción.
+  \item El tiempo que se tarda en llegar al objetivo.
+ \end{itemize}
+ 
+ \item \texttt{Flee\_NoAccelerated}. Este comportamiento consiste en alejarse de un determinado objetivo, a la máxima velocidad. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \begin{itemize}
+  \item El personaje que va a aplicar el comportamiento.
+  \item El objetivo del que se quiere alejar.
+  \item La máxima velocidad con la que se aplica el comportamiento.
+ \end{itemize}
+ 
+ \item \texttt{Seek\_NoAccelerated}. Este comportamiento es el opuesto al anterior, consiste en ir hacia un determinado objetivo, a la máxima velocidad. Los parámetros son los mismos que los necesarios en el anterior. 
+ 
+ \item \texttt{Wander\_NoAccelerated}. Este comportamiento consiste en moverse de manera aleatoria, con un ángulo máximo de rotación a la máxima velocidad. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \begin{itemize}
+  \item El personaje que va a aplicar el comportamiento.
+  \item La máxima velocidad con la que se aplica el comportamiento.
+  \item El máximo ángulo de rotación que puede cambiar un personaje su orientación.
+ \end{itemize}
+\end{itemize}
+
+Es importante destacar, que estos cuatro comportamientos, dentro del método \texttt{getSteering()} modifican la orientación del personaje.
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Comportamientos acelerados}
+Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov} del proyecto. Los distintos comportamientos acelerados que hemos implementado son:
+\begin{itemize}
+ \item \texttt{Align\_Accelerated}.
+ \item \texttt{AntiAlign\_Accelerated}.
+ \item \texttt{Arrive\_Accelerated}.
+ \item \texttt{Arrive\_Accelerated\_WithOneRadius}.
+ \item \texttt{Flee\_Accelerated}.
+ 
+ 
+ \item \texttt{Seek\_Accelerated}. Este comportamiento consiste en ir hacia un punto objetivo a la máxima aceleración posible. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \begin{itemize}
+  \item El personaje que va a aplicar el comportamiento.
+  \item El objetivo al que se quiere dirigir.
+  \item La máxima aceleración con la que se aplica el comportamiento.
+ \end{itemize}
+ Para este comportamiento, se ha hecho uso de las dos implementaciones que nos han proporcionado los profesores en la teoría: la implementación de Millington y la implementación de Reynolds. De esta manera, por defecto, se utiliza la implementación de Millington, pero si se quiere cambiar de implementación, proporciona el método \texttt{setMode()} que recibe como parámetro el modo al que se quiere cambiar. El valor del modo de cada una de las implementaciónes está en las constantes \texttt{SEEK\_ACCELERATED\_MILLINGTON} y \texttt{SEEK\_ACCELERATED\_REYNOLDS} correspondientemente.
+ 
+ 
+ \item \texttt{VelocityMatching\_Accelerated}. Este comportamiento consiste en, dado un objetivo, ponerse a la misma velocidad que él. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \begin{itemize}
+  \item El personaje que va a aplicar el comportamiento.
+  \item El objetivo al que se quiere ajustar a su velocidad.
+  \item La máxima aceleración a la que se puede aplicar el comportamiento.
+  \item El tiempo que en que se alcanza la velocidad del objetivo.
+ \end{itemize}
+ Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
+\end{itemize}
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Comportamientos delegados}
+Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{com.mygdx.iadevproject.aiReactive.behaviour.delegated} del proyecto. Los distintos comportamientos delegados que hemos implementado son:
+\begin{itemize}
+ \item \texttt{CollisionAvoidance}. Este comportamiento consiste en evitar colisiones con otros objetos. Este comportamiento supone que todos los objetivos, así como el personaje, están protegidos por un círculo que los envuelve y detecta colisión cuando el círculo del personaje interseca con alguno de los círculos de los objetivos. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \begin{itemize}
+  \item El personaje que va a aplicar el comportamiento.
+  \item La lista de objetivos a evitar.
+  \item La máxima acceleración que se aplica para evitar el choque.
+ \end{itemize}
+ Para evitar las colisiones, el comportamiento tiene en cuenta tanto la velocidad del personaje como la velocidad de todos los objetivos, y con ella calcula si en un futuro van a chocar. De todos los objetivos con los que pueda chocar, se queda con el que esté más cercano; es decir, con el que va a chocar antes. Una vez que lo ha calculado, entonces hace uso del comportamiento \texttt{Evade} para evitar chocar con el objetivo obtenido. 
+ 
+ Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
+  
+  
+ \item \texttt{Evade}.
+ 
+ 
+ \item \texttt{Face}. Este comportamiento consiste hacer que el personaje se quede mirando hacia un objetivo. Es un tipo de \texttt{Align\_Accelerated}, por lo que recibe los mismos parámetros que este. Sin embargo, a diferencia del Align, este comportamiento utiliza el objetivo que se le pasa como parámetro para saber la posición en la que se encuentra y así, poder calcular la orientación a la que se tiene que alinear el personaje.
+ 
+ 
+ \item \texttt{LookingWhereYouGoing}. Este comportamiento consiste en cambiar la orientación del personaje para que mire hacia donde va; es decir, que mire en la dirección a la que se mueve. Es un tipo de \texttt{Align\_Accelerated} y para su creación, recibe los mismos parámetros que este, exceptuando el objetivo, pues este es calculado por el comportamiento. Su funcionamiento consiste en obtener la orientación del vector velocidad del personaje y alinearse con él.
+ 
+ \item \texttt{PathFollowingWithoutPathOffset}.
+ \item \texttt{Persue}.
+ 
+ 
+ \item \texttt{WallAvoidance}. Este comportamiento consiste en evitar colisiones con otros objetos. La diferencia entre este comportamiento y el anterior, es que la colisión no se detecta cuando el círculo que envuelve al personaje interseca con el círculo de alguno de los objetivos, sino que desde el personaje se lanzan tres rayos (separados un ángulo y longitud determinada), donde el rayo central sigue la dirección de la velocidad del personaje, y si alguno de esos rayos interseca con algún objetivo, entonces lo evita. Es un tipo de \texttt{Seek\_Accelerated}, por lo que recibe los mismos parámetros que él, exceptuando el objetivo, pues este es calculado por el comportamiento. Para la creación de este comportamiento, son necesarios los siguientes parámetros, además de los necesarios para el \texttt{Seek\_Accelerated}:
+ \begin{itemize}
+  \item La lista de objetivos a evitar.
+  \item La distancia mínima de separación al objetivo. Debe ser mayor que el radio del círculo que envuelve el personaje.
+  \item El ángulo de separación entre el rayo central y los laterales.
+  \item La longitud del rayo central. Por defecto, se establece la longitud de los rayos laterales como el 75\% de la longitud del central. Si se quiere modificar esto, tiene otro constructor con el que se puede indicar la longitud de los rayos laterales de manera independiente.
+ \end{itemize}
+ Para detectar las colisiones entre los rayos y los objetos, se hace uso de la clase \texttt{Ray} y el método estático \texttt{intersectRaySphere()} proporcionado por la clase \texttt{Intersector}, que además de indicar si hay colisión, devuelve el punto de intersección en el caso de que haya una colisión. En el caso de que haya varios rayos que intersequen con el mismo objetivo, se obtiene aquella intersección que esté más próxima al personaje. Así, una vez que se tiene el punto de intersección, y teniendo en cuenta que suponemos que todos los objetos están envueltos por un círculo, el cálculo de la normal en el punto de intersección es inmediato. Tras tener la normal, calculamos el punto al que realizar el Seek y delegamos en él para mover el personaje hacia esa posición.
+ 
+ Es importante destacar, que previo a la comprobación de la intersección, se obtiene de la lista de objetivos a evitar, aquél objetivo que esté más cerca del personaje. De tal manera, que no se hace la comprobación de la intersección para todos los objetivos, si no solamente para el objetivo más cercano. 
+ 
+ Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
+
+ 
+ \item \texttt{Wander\_Delegated}. Este comportamiento consiste en moverse de manera aleatoria, igual que el \texttt{Wander\_NoAccelerated} pero de manera acelerada, lo que proporciona un movimiento mucho más suave. Es un tipo de \texttt{Face}, por lo que recibe los mismos parámetros que este, exceptuando el objetivo, pues este se calcula dentro del comportamiento. Para la creación de este comportamiento, son necesarios los siguientes parámetros, además de los necesarios para el \texttt{Face}:
+ \begin{itemize}
+  \item La distancia desde el personaje al Facing.
+  \item El radio del círculo del Facing.
+  \item El máximo ángulo que el personaje puede girar.
+  \item La orientación del personaje de la que se parte.
+  \item La máxima acceleración a la que se va a mover el personaje.
+ \end{itemize}
+ Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
+
+\end{itemize}
+
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Comportamientos de grupo}
+Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{com.mygdx.iadevproject.aiReactive.behaviour.group} del proyecto. Los distintos comportamientos de grupo que hemos implementado son:
+\begin{itemize}
+ \item \texttt{Cohesion}.
+ \item \texttt{Separation}.
+\end{itemize}
+
