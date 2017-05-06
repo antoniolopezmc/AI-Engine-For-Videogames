@@ -40,7 +40,7 @@ import com.mygdx.iadevproject.model.WorldObject;
 public class IADeVProject extends ApplicationAdapter {
 	
 	/** CONSTANTES **/
-	public static final int GRID_CELL_SIZE 			= 32;					// Longitud del lado de las celdas para los distintos grids.
+	public static final int GRID_CELL_SIZE 		= 32;						// Longitud del lado de las celdas para los distintos grids.
 	public static final int WIDTH 				= 2048;						// Anchura del mapa
 	public static final int HEIGHT 				= 2048;						// Altura del mapa
 	public static final int GRID_WIDTH 			= WIDTH / GRID_CELL_SIZE;	// Anchura del grid
@@ -64,7 +64,7 @@ public class IADeVProject extends ApplicationAdapter {
 	public static List<WorldObject> worldObjects;					// Objetos del mundo
 	public static List<WorldObject> worldObstacles;					// Obstáculos del mundo
 	public static Set<WorldObject> selectedObjects; 				// Lista de objetos seleccionados
-	public static OrthographicCamera camera;						// Cárama (es pública para que se pueda acceder el InputProcessorIADeVProject)
+	public static OrthographicCamera camera;						// Cámara (es pública para que se pueda acceder el InputProcessorIADeVProject)
 	public static boolean PRINT_PATH_BEHAVIOUR = false; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
 	public static BitmapFont font = new BitmapFont();				// Para dibujar letras 
 	public static ShapeRenderer renderer = new ShapeRenderer();		// Para dibujar líneas
@@ -76,7 +76,6 @@ public class IADeVProject extends ApplicationAdapter {
 	private InputProcessorIADeVProject inputProcessor;		// InputProcessor
 	
 	public static Character drop, bucket;
-	private WallAvoidance wallAvoidance;
 	
 	
 	PathFinding pf = new PathFinding();
@@ -126,7 +125,7 @@ public class IADeVProject extends ApplicationAdapter {
         bucket.setOrientation(60.0f);
         bucket.setVelocity(new Vector3(0,0.0f,0));
 
-        wallAvoidance = new WallAvoidance(drop, 300.0f, worldObstacles, 300.0f, 30.0f, 200.0f);
+        WallAvoidance wallAvoidance = new WallAvoidance(drop, 300.0f, worldObstacles, 300.0f, 30.0f, 200.0f);
         drop.addToListBehaviour(wallAvoidance, 60);
         Seek_Accelerated seek = new Seek_Accelerated(drop, bucket, 20.0f);
         seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON);
@@ -176,16 +175,6 @@ public class IADeVProject extends ApplicationAdapter {
 
         // DESCOMENTAR PARA MOSTRAR LOS CENTROS DE LOS OBSTÁCULOS
 //        drawCenterOfObstacles();
-
-		
-		// ESTO ES PARA MOSTRAR LAS LÍNEAS DEL WALL AVOIDANCE
-//        drawLinesOfWallAvoidance();
-             
-        
-        // DESCOMENTAR SI SE QUIERE SABER EL COSTE Y EL TERRENO POR EL QUE VA PASANDO EL OBJETO 'drop'
-//      System.out.println("COST = "+getCostOfPosition(drop.getPosition()));
-//      System.out.println("GROUND = "+getGroundOfPosition(drop.getPosition()));
-        
         
         
         renderer.begin(ShapeType.Filled);

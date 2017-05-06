@@ -7,14 +7,16 @@
 \setcounter{part}{0} 	
 \setcounter{secnumdepth}{3} % Para enumerar hasta subsubsection
 \setcounter{tocdepth}{3} % Para enumerar hasta subsubsection 
- 
+
 \usepackage[utf8]{inputenc}
 \usepackage[none]{hyphenat} %Paquete para indicar que no separe las palabras
 \usepackage{graphicx} %Paquete para incluir imágenes
+\graphicspath{ {images/} } %Indicamos la carpeta donde están las imágenes
 \usepackage{fancyhdr} %Paquete para modificar los pies de página y encabezados
 \usepackage[hidelinks]{hyperref} 
 \usepackage{enumitem}
 \usepackage{hyperref}
+\usepackage{color}
 
 \usepackage{listings} %Paquete para poner código de programación
 
@@ -39,14 +41,16 @@
 \renewcommand{\refname}{Bibliografía}
 \renewcommand{\appendixname}{Apéndices}
 \renewcommand{\contentsname}{Índice}
+\renewcommand{\partname}{Parte}
 \renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\figurename}{Figura}
 
 \begin{document}
 %--------------------------------------------------------------------
 \thispagestyle{empty}
 \begin{figure}[h]
-\includegraphics[scale=0.4]{images/logo-umu.jpg} \hspace{100mm}
-\includegraphics[scale=0.2]{images/logo-fium.png}
+\includegraphics[scale=0.4]{logo-umu.jpg} \hspace{100mm}
+\includegraphics[scale=0.2]{logo-fium.png}
 \centering
 \end{figure}
 
@@ -105,19 +109,26 @@
 \tableofcontents
 \newpage
 
-
+\newpage
 \part{Introducción y estructura de la aplicación}
 \input{secciones/introduccion}
 
 \input{secciones/estructura-aplicacion}
 
 
+\newpage
+\part{Manual de uso}
+\input{secciones/manual}
+
+
+\newpage
 \part{Clase principal y mapa}
 \input{secciones/clase-principal}
 
 \input{secciones/mapa}
 
 
+\newpage
 \part{IA reactiva}
 \input{secciones/steerings}
 
@@ -128,13 +139,16 @@
 \input{secciones/modelo}
 
 
+\newpage
 \part{PathFinding}
 \input{secciones/pathfinding}
 
 
+\newpage
 \part{IA táctica}
 
 
+\newpage
 \part{Conclusiones}
 \input{secciones/conclusiones}
 
