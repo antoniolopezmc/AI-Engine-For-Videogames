@@ -20,7 +20,6 @@ public abstract class WorldObject extends Sprite {
 	// EXTREMADAMENTE IMPORTANTE -> Lo que en la clase Sprite se llama 'rotation', es realmente lo que nosotros llamamos 'orientación'.
 	private float rotation_angularSpeed;
 	
-	private float minBoxLength; // Longitud mínima de la caja de detección
 	// IMPORTANTE -> No confundir con maxSpeed de Behaviour (de algunos).
 	private float maxSpeed; 	// Máxima velocidad a la que puede ir el personaje, independientemente de su comportamiento.
 
@@ -134,23 +133,7 @@ public abstract class WorldObject extends Sprite {
 	public void setRotation_angularSpeed(float rotation_angularSpeed) {
 		this.rotation_angularSpeed = rotation_angularSpeed;
 	}
-	
-	/**
-	 * Método que obtiene la longitud mínima de la caja de detección.
-	 * @return Longitud mínima de la caja de detección.
-	 */
-	public float getMinBoxLength() {
-		return minBoxLength;
-	}
-	
-	/**
-	 * Método que establece la longitud mínima de la caja de detección.
-	 * @param minBoxLength Nueva longitud mínima.
-	 */
-	public void setMinBoxLength(float minBoxLength) {
-		this.minBoxLength = minBoxLength;
-	}
-	
+
 	/**
 	 * Método que devuelve la máxima velocidad a la que puede ir el objeto.
 	 * @return Máxima velocidad del personaje.

@@ -1,3 +1,27 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Modelo}
+
+Esta es una de las partes más importantes del videojuego, puesto que en ella podemos encontrar a los \textbf{agentes} que intervendrán e interactuarán en el transcurso del juego. Concretamente, en este paquete podemos encontrar la implementación de los objetos del mundo (concepto general que lo engloba todo), la implementación de los personajes, la implementación de los obstáculos y la implementación de las formaciones (que han sido tratadas como un tipo especial de personaje).
+
+\subsection{Clase WorldObject}
+
+La clase \texttt{WorldObject} es un concepto general que representa a una entidad del juego. Todas las entidades concretas (descritas en los siguientes subapartados) heredarán de esta \textbf{clase abstracta}. Una cosa muy importante a tener en cuenta es que esta clase abstracta hereda a su vez de la clase \texttt{Sprite} de la librería libgdx. Esto se ha hecho así para aprovechar todas las características y propiedades que ya posee la clase \texttt{Sprite}, como por ejemplo, la posición, la orientación, la anchura, la altura, las funciones de dibujo u otra funcionalidad ya preprogramada en la librería. \\
+
+Solamente hay que tener en cuenta una cosa muy importante: a lo que nosotros llamamos orientación, la librería lo llama rotación. Esto a su vez puede llevar a confusiones con la velocidad angular (que para nosotros es la rotación). Para evitar todos estos problemas de nomenclatura y todas las confusiones que esto pueda provocar, se han tomado ciertas medidas:
+
+\begin{itemize}
+	\item[-] Se han creado el par de funciones \texttt{getOrientation} y \texttt{setOrientation} que llaman a las funciones correspondiente del padre (\texttt{super.getRotation} y \texttt{super.setRotation}).
+	\item[-] Se han sobreescrito las funciones \texttt{getRotation} y \texttt{setRotation} heredadas del padre para que si se llaman en el hijo (en la clase \texttt{WorldObject}), lancen una excepción. Estas funciones no se deben llamar nunca, puesto que si deseamos consultar o modificar la orientación de una entidad, deberemos hacer uso de las funciones \texttt{getOrientation} y \texttt{setOrientation} de la clase \texttt{WorldObject}.
+\end{itemize}
+
+Estas modificaciones solucionan el problema y evitan que se puedan producir confusiones con los nombres y errores de concepto a lo largo del resto del proyecto. \\
+
+En cuanto a los atributos propios de la clase \texttt{WorldObject} (los no heredados de la clase \texttt{Sprite}), podemos encontrar la velocidad del personaje (vector velocidad de tipo \texttt{Vector3}), la velocidad angular del personaje (escalar de tipo float), el atributo \texttt{minBoxLength} o longitud mínima de la caja de detección () y la velocidad máxima del personaje (escalar de tipo float que hace referencia a la máxima velocidad que puede tener el personaje independientemente de su comportamiento). Este último atributo se ve reflejado en el método \texttt{setVelocity}. Si el módulo del vector que se pasa como parámetro supera a la velocidad máxima del personaje permitida, entonces el vector que se asigna al personaje es un vector con la misma dirección y sentido que el pasado como parámetro, pero con un módulo igual al atributo \texttt{maxSpeed} (máxima velocidad del personaje permitida). \\
+ 
+
+\subsection{Clase Character}
+
+\subsection{Clase Obstacle}
+
+\subsection{Formaciones}
