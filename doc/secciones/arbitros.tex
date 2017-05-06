@@ -1,3 +1,26 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Árbitros}
+Todo lo referente a esta sección, se encuentra dentro del paquete \texttt{com.mygdx.iadevproject.aiReactive.arbitrator} del proyecto. Para generalizar el uso de los árbitros, se ha decidido crear la interfaz \texttt{Arbitrator} que tienen que implementar todos los distintos tipos de árbitros. Esta interfaz proporciona un solo método:
+\begin{itemize}
+ \item \texttt{getSteering()}, que recibe como parámetro un objeto del tipo \texttt{Map<Float, Behaviour>} que contiene el conjunto de comportamientos (con sus valores de importancia correspondientes) del que se quiere obtener un steering final. 
+\end{itemize}
+
+Dependiendo del tipo de árbitro que utilicemos, este método devolverá un steering u otro. Los distintos tipos de árbitros que se han implementado son los siguientes:
+\begin{itemize}
+ \item \textbf{Árbitro de mezcla ponderada}. Este tipo de árbitro, lo que hace es obtener un steering final como resultado de la mezcla de todos los steerings obtenidos por el conjunto de comportamientos, de manera ponderada. Es decir, para cada comportamiento, se obtiene su steering y el resultado del mismo se añade al steering final multiplicado por el valor de importancia asociado al comportamiento (de ahí que se reciba un objeto de tipo \texttt{Map<Float, Behaviour>} que para cada comportamiento se tiene su valor de importancia asociado). Debido a que hay dos tipos de steerings, como se ha comentado en la sección \ref{steerings}, se han implementado dos tipos de árbitros de mezcla ponderada: uno para los comportamientos que devuelve steerings acelerados (clase \texttt{WeightedBlendArbitrator\_Accelerated}) y otro para los comportamientos que devuelven steerings no acelerados (clase \texttt{WeightedBlendArbitrator\_NoAccelerated}). El funcionamiento es el mismo en ambos casos, solamente que si un comportamiento devuelve un steering del otro tipo, no se tiene en cuenta. \\
+ 
+ Ambos árbitros, en su constructor, reciben como parámetros la máxima aceleración y la máxima rotación (en el caso del acelerado), y la máxima velocidad y máxima orientación (en el caso del no acelerado) que dicho árbitro tiene permitido devolver. Por lo que, una vez que se ha calculado el steering final, se comprueba que el valor del steering no supere ninguno de los valores anteriores. \\
+ 
+ 
+ \item \textbf{Árbitro de prioridad}. Este tipo de árbitro considera que el conjunto de comportamientos recibido como parámetro se encuentra ordenado por prioridad, es decir: el primer objeto del conjunto es el que tiene mayor prioridad. Así pues, recorre dicho conjunto, obteniendo para el comportamiento actual su steering y si este steering es válido (es decir, es distinto de \texttt{null} y supera un determinado valor \texttt{epsilon}), el árbitro directamente devuelve este steering y termina. Si resulta que de todo el conjunto de comportamientos, ninguno es válido porque no ha superado el valor \texttt{epsilon}, el árbitro devuelve, en este caso, el steering obtenido por el último comportamiento del conjunto, independientemente del valor que tenga. \\
+ 
+ A diferencia del árbitro anterior, con este árbitro se puede usar comportamientos que devuelvan tanto steerings acelerados como no acelerados; lo que implica que el árbitro puede devolver cualquier tipo de steering. El determinado valor \texttt{epsilon} es un valor que se le pasa al árbitro en su constructor, y que indica el valor mínimo que un steering debe de tener para que se considere válido.
+\end{itemize}
+
+
+
+
+
+
+
