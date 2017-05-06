@@ -78,6 +78,10 @@ public abstract class Formation extends Character {
 	// MUY IMPORTANTE -> ESTAS POSICIONES SON RELATIVAS AL CENTRO/POSICIÓN DE LA FORMACIÓN.
 	//		Para obtener las posiciones de nuestro mundo habrá que sumarlas a la posición de la formación dentro del mundo.
 	// ------> OBVIAMENTE, LA LONGITUD DE ESTA LISTA DEBE SER IGUAL A LA LONGITUD DE LA LISTA 'charactersList'.
+	/**
+	 * Método que calcula todas las posiciones a las que deben ir los componentes de la formación.
+	 * @return Lista de posiciones en las que los componentes de la formación se situarán.
+	 */
 	protected abstract List<Vector3> getCharactersPosition(); // ---> Patrón método plantilla.
 	
 	// MUY IMPORTANTE -> Las orientaciones de los personajes empiezan en la vertical (orientación 0º está en la parte superior de la vertical).
@@ -88,8 +92,19 @@ public abstract class Formation extends Character {
 	// --> Los hijos deberán implementar este método, que se encargará de aplicar el árbitro sobre la lista de comportamieentos en cada uno de los hijos y devolver el Steergin final.
 	// Como parámetro se le pasa el personaje actual de la formación y el punto final al que debe ir (en forma de WorldObject).
 	// --> Hemos tomado esta decisión, precisamente, para que cada hijo pueda tener su propio comportamiento para los integrantes de la formación.
+	/**
+	 * Método plantilla que devuelve el steering que se aplicará sobre cada uno de los integrantes de la formación.
+	 * El target solamente puede ser un punto y no nada más complejo, puesto que al fin y al cabo, los integrantes de la formación deben limitarse a ir al punto que ha sido calculado para ellos.
+	 * @param source Personaje origen.
+	 * @param fakeTarget Punto destino.
+	 * @return El steering que se aplicará sobre el componente de la formación.
+	 */
 	protected abstract Steering getComponentFormationSteerginToApply(Character source, WorldObject fakeTarget);// ---> Patrón método plantilla.
 	
+	/**
+	 * Añade un personaje a la formación, solo sí no está ya en una formación.
+	 * @param character Personaje a añadir a la formación,
+	 */
 	public void addCharacterToCharactersList(Character character) {
 		// Solo podemos añadir un personaje a una formación si no pertenece a ninguna otra.
 		if (!character.isInFormation()) {
@@ -99,6 +114,10 @@ public abstract class Formation extends Character {
 		}
 	}
 	
+	/**
+	 * Elimina un personaje de la formación.
+	 * @param character Personaje a eliminar de la formación.
+	 */
 	public void deleteCharacterFromCharactersList(Character character) {
 		// Para eliminar un personaje de una formación, éste debe pertenecer a esta formación.
 		if (character.getFormation() == this) {
@@ -110,15 +129,23 @@ public abstract class Formation extends Character {
 
 	// No va a haber 'setComponentFormationArbitrator'. En esta ocasión el árbitro será siempre por prioridad.
 	
+	/**
+	 * Obtenemos el tipo de orientación que adoptarán los componentes de la formación.
+	 * @return Tipo de orientación que adoptarán los componentes de la formación.
+	 */
 	public int getComponentFormationOrientationMode() {
 		return componentFormationOrientationMode;
 	}
 
+	/**
+	 * Establecemos el tipo de orientación que adoptarán los componentes de la formación.
+	 * @param mode Tipo de orientación a aplicar.
+	 */
 	public void setComponentFormationOrientationMode(int mode) {
 		this.componentFormationOrientationMode = mode;
 	}
 	
-	/**
+	/*
 	 * MUY IMPORTANTE. DE JM -> HE CAMBIADO EL MÉTODO A applyBehaviour() POR QUE YA EL MÉTODO DEL PADRE LLAMA AL ÁRBITRO,
 	 * NO DEVUELVE DIRECTAMENTE EL PRIMERO DE LA LISTA. DE ESTA MANERA, SOBREESCRIBIMOS ESTE MÉTODO PARA QUE AHORA EN VEZ DE 
 	 * OBTENER EL STEERING DEL ARGUMENTO QUE NOS PASABAN, LO OBTENEMOS DEL ÁRBITRO QUE TIENE LA FORMACIÓN. 
@@ -127,6 +154,10 @@ public abstract class Formation extends Character {
 	 */
 	// CUIDADO -> NO CONFUNDIR EL BEHAVIOUR DE LA FORMACIÓN CON LOS BEHAVIOURs DE CADA UNO DE LOS PERSONAJES QUE LA INTEGRAN.
 	//		Los behaviours de cada uno de los personajes aquí no valen para nada.
+	/**
+	 * Método para aplicar un steering a la formación.
+	 * @param steer Steering a aplicar.
+	 */
 	public void applySteering(Steering steer) {
 		if (!this.isInFormation()) {
 			// En primer lugar, aplicamos el behaviour a la propia formación.
@@ -181,11 +212,15 @@ public abstract class Formation extends Character {
 		return (float) Math.toDegrees(MathUtils.atan2(-vector.x, vector.y));
 	}
 	
+	/**
+	 * Método que dibuja las posiciones donde se deben colocar los componentes de la formación.
+	 * @param renderer Renderer sobre el que dibujar.
+	 */
 	public void drawFormationPoints(ShapeRenderer renderer) {
-		// Ahora, calculamos la lista de posiciones de los personajes de la formación, con respecto a la propia formación.
+		// Calculamos la lista de posiciones de los personajes de la formación, con respecto a la propia formación.
 		List<Vector3> charactersPositionList = getCharactersPosition();
 		
-		// Tras el update de la formación, obtenemos su nueva posición, ya que con respecto a ella se moverán los integrantes.
+		// Obtenemos la posición de la formación.
 		Vector3 formationPosition = new Vector3(this.getPosition());
 		
 		// Ahora, calculamos la nueva posición hacia la que deben ir los integrantes de la formación.
@@ -193,6 +228,7 @@ public abstract class Formation extends Character {
 			p.add(formationPosition);
 		}
 		
+		// Dibujamos las posiciones resultantes.
 		renderer.begin(ShapeType.Filled);
 		renderer.setColor(Color.RED);
 		for (Vector3 vector : charactersPositionList) {

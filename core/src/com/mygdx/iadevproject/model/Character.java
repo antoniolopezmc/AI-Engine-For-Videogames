@@ -58,29 +58,6 @@ public class Character extends WorldObject {
 	}
 	
 	/**
-	 * CONSTRUCTORES PARA LA SUBCLASE FORMATION!
-	 */
-	protected Character() {
-		super();
-		createListBehaviour();
-	}
-	
-	protected Character(float maxSpeed) {
-		super(maxSpeed);
-		createListBehaviour();
-	}
-	
-	protected Character(float maxSpeed, Texture texture) {
-		super(maxSpeed, texture);
-		createListBehaviour();
-	}
-	
-	protected Character(Texture texture) {
-		super(texture);
-		createListBehaviour();
-	}
-	
-	/**
 	 * Método que crea la lista de comportamientos. Se ha creado este método para evitar
 	 * repetir el código en los constructores
 	 */
@@ -185,6 +162,10 @@ public class Character extends WorldObject {
 		}
 	}
 	
+	/**
+	 * Al personaje se le aplica el steering pasado como parámetro. 
+	 * @param steer Steering a aplicar.
+	 */
 	// Aplicar un determinado Steering a un personaje. Este Steering se le pasa como parámetro.
 	public void applySteering (Steering steer) {
 		// Si el personaje forma parte de una formación, sus comportamientos propios no serán tenidos en cuenta.

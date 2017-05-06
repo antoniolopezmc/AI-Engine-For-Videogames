@@ -170,9 +170,11 @@ public abstract class WorldObject extends Sprite {
 		return new Vector3(this.getX(), this.getY(), 0.0f);
 	}
 	
-	
-	// MÉTODOS PARA DIBUJAR EL Sprite SOBREESCRITOS.
+	/**
+	 * Método para dibujar el WorldObject sobre el Batch que se pasa como parámetro.
+	 */
 	public void draw(Batch batch) {
+	// MÉTODOS PARA DIBUJAR EL Sprite SOBREESCRITOS.
 		if (this.getTexture() != null) {
 			// Cuando libgdx dibuja un Sprite, lo hace de tal manera que la posición de dicho Sprite es el vértice DE ABAJO A LA IZQUIERDA de la textura.
 			// Sin embargo, los que nosotros queremos es que en CENTRO de la textura sea la posición del Sprite.
