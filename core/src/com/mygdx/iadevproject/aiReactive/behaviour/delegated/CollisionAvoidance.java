@@ -53,8 +53,6 @@ public class CollisionAvoidance implements Behaviour {
 		float firstMinSeparation = 0.0f;
 		float firstDistance = 0.0f;
 		float firstSumRadius = 0.0f;
-//		Vector3 firstRelativePos = null;
-//		Vector3 firstRelativeVel = null;
 		
 		// Recorremos los posibles objetivos 
 		for (WorldObject tar : targets) {
@@ -88,8 +86,6 @@ public class CollisionAvoidance implements Behaviour {
 					firstTarget 		= tar;
 					firstMinSeparation 	= minSeparation;
 					firstDistance 		= distance;
-//					firstRelativePos 	= relativePos;
-//					firstRelativeVel 	= relativeVel;
 					firstSumRadius 		= sumRadius;
 				}
 			}

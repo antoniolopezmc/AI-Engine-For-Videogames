@@ -120,7 +120,6 @@ public class Wander_Delegated extends Face implements Behaviour {
 		float targetOrientation = this.wanderOrientation + this.getSource().getOrientation();
 		
 		// Calculamos el centro del círculo Wander
-//		Vector3 sourceOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
 		Vector3 sourceOrientationVector = getVector(super.getSource().getOrientation());
 		
 		sourceOrientationVector.x *= this.wanderOffset;
@@ -137,7 +136,6 @@ public class Wander_Delegated extends Face implements Behaviour {
 		Vector3 wanderCenter = new Vector3(targetPosition); 
 		
 		// Calculamos la localización del objetivo
-//		Vector3 targetOrientationVector = new Vector3((float) -Math.sin(Math.toRadians(targetOrientation)), (float) Math.cos(Math.toRadians(targetOrientation)), 0.0f);
 		Vector3 targetOrientationVector = getVector(targetOrientation);
 		
 		targetPosition.x += this.wanderRadius * targetOrientationVector.x;
@@ -157,7 +155,6 @@ public class Wander_Delegated extends Face implements Behaviour {
 			Steering_AcceleratedUnifMov output = (Steering_AcceleratedUnifMov) steering;
 			
 			// Creamos el vector lineal como el vector de la orientación del personaje multiplicado por la máxima aceleración
-//			Vector3 lineal = new Vector3((float) -Math.sin(Math.toRadians(super.getSource().getOrientation())), (float) Math.cos(Math.toRadians(super.getSource().getOrientation())), 0.0f);
 			Vector3 lineal = getVector(super.getSource().getOrientation());
 			lineal.x *= this.maxAcceleration;
 			lineal.y *= this.maxAcceleration;
