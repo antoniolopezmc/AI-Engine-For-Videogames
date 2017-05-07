@@ -1,3 +1,43 @@
 %--------------------------------------------------------------------
 \medskip
 \section{PathFinding}
+
+Tras haber implementado todos los comportamientos y tipos de movimientos que se pueden aplicar a los personajes de nuestro videojuego, es también muy importante contar con un mecanismo que nos permita obtener el camino adecuado para llegar desde un origen a un destino en función de distintos criterios y teniendo en cuenta cierta información del entorno. Dicho mecanismo se denomina \textit{PathFinding} y es un elemento muy importante en aquellos videojuegos en los que sea necesario (aunque, como también se ha visto en clase, otros videojuegos no lo necesitan, por lo que no lo implementan). \\
+
+El mecanismo de PathFinding visto en clase se apoya fundamentalmente en 2 estructuras. Por un lado, es totalmente imprescindible la matriz de costes de terrero. Esta estructura es un grid ficticio que se sitúa sobre el mapa físico y en el que se almacenan los costes del terreno del mapa del juego. Por otro lado, también se necesita una matriz de distancias o heurística. En esta matriz se almacenan los costes desde cada una de las celdas hasta una celda objetivo. Ambas matrices deben tener las mismas dimensiones. \\
+
+Es muy importantes destacar la existencia de 2 tipos de posiciones con las que vamos a trabajar. Por un lado, tenemos la posición real de una entidad en el mapa y, por otro lado, dicha entidad también tendrá una posición en el grid. Esta segunda posición es con la que trabaja el PathFinding. Teniendo esto en cuenta, habrá que contar con las funciones necesarias para pasar de una posición a otra.
+
+\subsection{Distancias}
+
+Tal y como se ha comentado en clase, las heurísticas que se han implementado son: \textbf{distancia de Manhattan}, \textbf{distancia de Chebyshev} y \textbf{distancia Euclídea}. La información concreta y la forma de cálculo de cada una de estas distancias se especifica detalladamente en las transparencia de la asignatura. \\
+
+En le código fuente de nuestro proyecto podemos encontrar la interfaz \texttt{Distance}. Esta interfaz sirve para generalizar todos los tipos de distancia concretos y tratarlos de manera homogénea. El método fundamental de todas las distancias implementadas es \texttt{getMatrixOfDistances}. Este método recibe las dimensiones que deberá tener la matriz de salida y la posición objetivo y devuelve la matriz de distancias correspondiente. \\
+
+A la hora de realizar un PathFinding desde un origen hasta un destino, la posición objetivo que se le pasa al método \texttt{getMatrixOfDistances} es la posición destino a la que queremos llegar. Esto quiere decir que la matriz de distancias calculada almacenará la distancia desde todas las posiciones del grid a la posición destino a la que queremos llegar (posición destino \textbf{del grid}).
+
+\subsection{Algoritmo LRTA*}
+
+Tal y como se dice en la especificación de estas prácticas, se debe implementar el algoritmo LRTA* con espacio de búsqueda minimal. Eso quiere decir que el espacio de búsqueda solamente estará compuesto por el estado actual en el que nos encontramos. \\
+
+El algoritmo LRTA* recibe como entrada la matriz de costes del terreno, la matriz de distancias (que será distinta según la heurística elegida), la anchura y altura de ambas matrices, la posición origen \textbf{del grid} y la posición destino \textbf{del grid}. El algoritmo LRTA* trabajará (modificará) sobre la matriz de distancias y devolverá una lista de puntos que corresponden con todas aquellas posiciones \textbf{del grid} por las que hay que pasar para llegar desde el origen hasta el destino. \\ 
+
+Para calcular la función \textit{f(x)} de un estado concreto, serán necesarios los siguientes elementos:
+\begin{itemize}
+	\item[-] El coste que supone realizar una acción (movernos de una celda a otra). Este valor viene definido por la constante \texttt{default\_action\_cost} de la clase \texttt{LRTA\_star}.
+	\item[-] La distancia que hay desde en estado actual hasta la posición de destino. Este valor podemos obtenerlo de la matriz de distancias.
+	\item[-] El coste del terreno en la posición o estado actual en el que nos encontramos.
+\end{itemize}
+
+Estos componentes serán la base para obtener el valor de la función \textit{f(x)} de un estado concreto y, por tanto, para que el algoritmo LRTA* calcule el camino adecuado desde un origen hasta un destino. \\
+
+En la clase \texttt{LRTA\_star} se han implementado diversos método necesarios para el correcto funcionamiento del algoritmo LRTA*. El primero de ellos es \texttt{generateSuccessors}. Este método recibe una posición del grid y devuelve todos sus vecinos (tanto en horizontal, como en vertical, como en diagonal). El segundo método necesario es \texttt{getSuccessorWithTheSmallestHeuristic}. Este método selecciona el vecino tal que \textit{f(x)} devuelva el mayor valor.
+
+\subsection{Clase PathFinding}
+
+Esta es la clase principal del mecanismo de PathFinding. Contiene el método \texttt{applyPathFinding}, que es el encargado de realizar la conversión de posiciones del mapa a posiciones del grid (y viceversa) y de la ejecución del algoritmo LRTA*. Este método recibe como parámetro la matriz de costes del terreno, la heurística deseada, el tamaño del lado de celda del grid, la anchura y altura de las matrices, las coordenadas 'x' e 'y' \textbf{del mapa} del origen y las coordenadas 'x' e 'y' \textbf{del mapa} del destino. \\
+
+En primer lugar, las coordenadas del mapa son transformadas en coordenadas del grid; seguidamente, se calcula la matriz de distancias; a continuación, se ejecuta el algoritmo LRTA*; y finalmente, se vuelven a transformar todas las coordenadas del grid al mapa (de todos los puntos que ha devuelto el algoritmo LRTA*). \\
+
+Cabe destacar que al transformar las coordenadas del mapa de los puntos origen y destino a coordenadas del grid se pierde información, puesto que las coordenadas del mapa son de tipo \texttt{float} (con decimales) y las coordenadas del grid no tienen decimales (puesto que estas coordenadas son realmente los indices con los que se accederán a ambas matrices). Por este motivo, al volver a transformar las coordenadas del grid al mapa, se realiza también una segunda transformación. El primer y último punto de la lista que devuelve el algoritmo LRTA* (el origen y destino), son reemplazados por las coordenadas originales que se pasaron como parámetro a la función \texttt{applyPathFinding}.
+
