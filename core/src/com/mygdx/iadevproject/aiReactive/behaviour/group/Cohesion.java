@@ -56,6 +56,7 @@ public class Cohesion extends Seek_Accelerated {
 		return super.getSteering();
 	}
 	
+	// Este método nos va a permitir obtener simplemente la posición del centro de masas (para poder, por ejemplo, dibujar dicho punto).
 	public Vector3 getCenterOfMass() {
 		Vector3 centerOfMass = new Vector3(0.0f, 0.0f, 0.0f);
 		int count = 0;

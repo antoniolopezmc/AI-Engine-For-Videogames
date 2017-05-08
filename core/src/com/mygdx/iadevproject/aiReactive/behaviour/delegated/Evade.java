@@ -30,8 +30,8 @@ public class Evade extends Flee_Accelerated implements Behaviour {
 
 	@Override
 	public Steering getSteering() {
-		// Calculamos los datos necesarios para poder llamar al 'getSteering' del Seek. (Llamada a super).
-		// IMPORTANTE -> Como tenemos que hacer una predicción, se creará un personaje ficticio. Ese personaje será lo que se pase realmente al 'getSteering' del Seek.
+		// Calculamos los datos necesarios para poder llamar al 'getSteering' del Flee. (Llamada a super).
+		// IMPORTANTE -> Como tenemos que hacer una predicción, se creará un personaje ficticio. Ese personaje será lo que se pase realmente al 'getSteering' del padre.
 		
 		// Calculamos la dirección (el vector) y distancia entre la fuente y el objetivo REAL.
 		Vector3 direction = new Vector3(this.getTarget().getPosition());
@@ -51,7 +51,7 @@ public class Evade extends Flee_Accelerated implements Behaviour {
 			prediction = distance / speed;
 		}
 		
-		// Personaje predicho. De este personaje solo se usará la posición (en el Seek acelerado solo se usa el target para consultar su posición).
+		// Personaje predicho. De este personaje solo se usará la posición (en el Flee acelerado solo se usa el target para consultar su posición).
 		// 		-> Por tanto, es lo único que hay que introducir. 
 		WorldObject characterPrediction = new Obstacle();
 		float finalPositionX = this.getTarget().getPosition().x + this.getTarget().getVelocity().x * prediction;

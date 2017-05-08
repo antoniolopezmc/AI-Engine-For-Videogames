@@ -47,19 +47,31 @@ Es importante destacar, que estos cuatro comportamientos, dentro del método \te
 \subsection{Comportamientos acelerados}
 Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov} del proyecto. Los distintos comportamientos acelerados que hemos implementado son:
 \begin{itemize}
- \item \texttt{Align\_Accelerated}. Este comportamiento consiste en adoptar la misma orientación que otro personaje (personaje destino) mediante un movimiento giratorio. La condición principal para llevar a cabo dicho movimiento es que debemos girar hacía el lado cuyo ángulo hacia la orientación destino sea menor. Para crear este comportamiento son necesarios los siguientes parámetro:
+ \item \texttt{Align\_Accelerated}. Este comportamiento consiste en adoptar la misma orientación que otro personaje (personaje destino) mediante un movimiento giratorio. La condición principal para llevar a cabo dicho movimiento es que debemos girar hacía el lado cuyo ángulo hacia la orientación destino sea menor. Además, en función de lo cerca que esté la fuente del destino (del valor del ángulo diferencia), la fuente se comportará del manera distinta. Hasta llegar a un ángulo exterior, la fuente gira con la máxima velocidad angular permitida. Al superar dicho ángulo, el personaje va adaptando su velocidad angular. Cuando se supera un ángulo interior, se devuelve un steering con aceleración lineal nulo y con aceleración angular inversa a la velocidad angular del personaje fuente. Para crear este comportamiento son necesarios los siguientes parámetro:
+ \begin{itemize}
+ 	\item Personaje origen y \texttt{WorldObject} destino.
+ 	\item Máxima aceleración angular que el personaje puede aplicar.
+ 	\item Máxima rotación (velocidad angular) que el personaje puede aplicar.
+ 	\item \texttt{targetRadious} del personaje destino (ángulo interior). En este comportamiento no es un radio, sino un ángulo.
+ 	\item \texttt{slowRadious} del personaje destino (ángulo exterior). En este comportamiento no es un radio, sino un ángulo.
+ 	\item \texttt{timeToTarget} es el tiempo que queremos que tarde el personaje en realizar este comportamiento.
+ \end{itemize}
+ \item \texttt{AntiAlign\_Accelerated}. Este comportamiento consiste en adoptar la orientación opuesta de un personaje destino mediante un movimiento giratorio. Al igual que antes, debemos girar hacía el lado cuyo ángulo hacia la orientación deseada sea menor. El funcionamiento del comportamiento es igual que el anterior (aunque en este caso, debemos posicionarnos con orientación inversa a la del destino). Para crear este comportamiento son necesarios los mismos parámetros que el comportamiento anterior.
+ \item \texttt{Arrive\_Accelerated}. En este comportamiento se definen 3 zonas distintas en las que el comportamiento del personaje es distinto. Podemos encontrar 2 radios ficticios con respecto al personaje destino. En primer lugar, el personaje fuente va aplicando la máxima aceleración establecida hasta llegar al radio exterior. Al llegar al radio exterior, el personaje adapta su velocidad en función de la distancia entre el personaje destino y él, hasta llegar al radio interior. Finalmente, cuando el personaje esta en el radio interior, este comportamiento devuelve el steering nulo (con valor 0). Para crear este comportamiento son necesarios los siguientes parámetro:
+ \begin{itemize}
+ 	\item Personaje origen y \texttt{WorldObject} destino.
+ 	\item El valor de la máxima aceleración permitida.
+ 	\item El valor de la máxima velocidad permitida.
+ 	\item \texttt{targetRadious}. 
+ \end{itemize}
+ \item \texttt{Arrive\_Accelerated\_WithOneRadius}. Este comportamiento es una mezcla entre un Seek y un Arrive (hereda del comportamiento Seek Acelerado). En este comportamiento podemos encontrar solamente un radio ficticio alrededor del personaje destino. La fuente se mueve aplicando un comportamiento Seek Acelerado normal hasta llegar al radio y cuando entra en él empieza a frenar (devolviendo un steering cuyo vector aceleración tiene un sentido contrario al vector velocidad del personaje fuente). Para crear este comportamiento son necesarios los siguientes parámetro:
+ \begin{itemize}
+ 	\item El 
+ \end{itemize}
+ \item \texttt{Flee\_Accelerated}. Cuando un personaje aplica este comportamiento, se aleja del personaje destino aplicando la máxima aceleración establecida. Para crear este comportamiento son necesarios los siguientes parámetro:
  \begin{itemize}
  	\item
- \end{itemize}
- \item \texttt{AntiAlign\_Accelerated}. Este comportamiento consiste en adoptar la orientación opuesta de un personaje destino mediante un movimiento giratorio. Al igual que antes, debemos girar hacía el lado cuyo ángulo hacia la orientación deseada sea menor. Para crear este comportamiento son necesarios los siguientes parámetro:
- \begin{itemize}
- 	\item
- \end{itemize}
- \item \texttt{Arrive\_Accelerated}.
- \item \texttt{Arrive\_Accelerated\_WithOneRadius}.
- \item \texttt{Flee\_Accelerated}.
- 
- 
+ \end{itemize} 
  \item \texttt{Seek\_Accelerated}. Este comportamiento consiste en ir hacia un punto objetivo a la máxima aceleración posible. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
  \begin{itemize}
   \item El personaje que va a aplicar el comportamiento.
@@ -79,8 +91,6 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
  Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
 \end{itemize}
 
-
-
 %--------------------------------------------------------------------
 \medskip
 \subsection{Comportamientos delegados}
@@ -95,19 +105,17 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
  Para evitar las colisiones, el comportamiento tiene en cuenta tanto la velocidad del personaje como la velocidad de todos los objetivos, y con ella calcula si en un futuro van a chocar. De todos los objetivos con los que pueda chocar, se queda con el que esté más cercano; es decir, con el que va a chocar antes. Una vez que lo ha calculado, entonces hace uso del comportamiento \texttt{Evade} para evitar chocar con el objetivo obtenido. 
  
  Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
-  
-  
- \item \texttt{Evade}.
  
+ \item \texttt{Persue}. Este comportamiento, al igual que el Seek, se aplica para ir hacia/perseguir a otro personaje (personaje destino). La diferencia con respecto al comportamiento Seek es que en este caso no vamos hacia el propio personaje destino, sino hacia \textbf{una predicción} de dónde estará el personaje destino pasado un tiempo. Por tanto, en primer lugar, se realiza dicha predicción y, a continuación, llamamos al comportamiento padre estableciendo como objetivo un personaje ficticio con la posición predicha (en vez del propio personaje real). El único parámetro adicional necesario para crear este comportamiento es \texttt{maxPrediction}, que define el tiempo máximo en segundos para predecir la posición del personaje destino.
+  
+ \item \texttt{Evade}. Este comportamiento, al igual que el Flee, se aplica para huir/escapar de otro personaje (personaje destino). La diferencia con respecto al comportamiento Flee es que en este caso no escapamos del propio personaje destino, sino de \textbf{una predicción} de dónde estará el personaje destino pasado un tiempo. El funcionamiento y parámetros son los mismos que el comportamiento anterior.
  
- \item \texttt{Face}. Este comportamiento consiste hacer que el personaje se quede mirando hacia un objetivo. Es un tipo de \texttt{Align\_Accelerated}, por lo que recibe los mismos parámetros que este. Sin embargo, a diferencia del Align, este comportamiento utiliza el objetivo que se le pasa como parámetro para saber la posición en la que se encuentra y así, poder calcular la orientación a la que se tiene que alinear el personaje.
+ \item \texttt{Face}. Este comportamiento consiste hacer que el personaje se quede mirando hacia un objetivo. Es un tipo de \texttt{Align\_Accelerated}, por lo que recibe los mismos parámetros que éste. Sin embargo, a diferencia del Align, este comportamiento utiliza el objetivo que se le pasa como parámetro para saber la posición en la que se encuentra y así, poder calcular la orientación a la que se tiene que alinear el personaje.
  
  
  \item \texttt{LookingWhereYouGoing}. Este comportamiento consiste en cambiar la orientación del personaje para que mire hacia donde va; es decir, que mire en la dirección a la que se mueve. Es un tipo de \texttt{Align\_Accelerated} y para su creación, recibe los mismos parámetros que este, exceptuando el objetivo, pues este es calculado por el comportamiento. Su funcionamiento consiste en obtener la orientación del vector velocidad del personaje y alinearse con él.
  
- \item \texttt{PathFollowingWithoutPathOffset}.
- \item \texttt{Persue}.
- 
+ \item \texttt{PathFollowingWithoutPathOffset}. 
  
  \item \texttt{WallAvoidance}. Este comportamiento consiste en evitar colisiones con otros objetos. La diferencia entre este comportamiento y el anterior, es que la colisión no se detecta cuando el círculo que envuelve al personaje interseca con el círculo de alguno de los objetivos, sino que desde el personaje se lanzan tres rayos (separados un ángulo y longitud determinada), donde el rayo central sigue la dirección de la velocidad del personaje, y si alguno de esos rayos interseca con algún objetivo, entonces lo evita. Es un tipo de \texttt{Seek\_Accelerated}, por lo que recibe los mismos parámetros que él, exceptuando el objetivo, pues este es calculado por el comportamiento. Para la creación de este comportamiento, son necesarios los siguientes parámetros, además de los necesarios para el \texttt{Seek\_Accelerated}:
  \begin{itemize}
@@ -135,15 +143,16 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
 
 \end{itemize}
 
-
-
-
 %--------------------------------------------------------------------
 \medskip
 \subsection{Comportamientos de grupo}
 Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{com.mygdx.iadevproject.aiReactive.behaviour.group} del proyecto. Los distintos comportamientos de grupo que hemos implementado son:
 \begin{itemize}
- \item \texttt{Cohesion}.
+ \item \texttt{Cohesion}. Este comportamiento consiste en movernos hacia el centro de masas de un conjunto de objetivos con una aceleración máxima (este comportamiento hereda del Seek Acelerado). Solamente se tendrán en cuenta aquellos objetos que estén dentro de un radio (atributo \texttt{threshold}). A parte de los parámetros necesarios para el Seek, se necesitan los siguientes parámetro:
+ \begin{itemize}
+ 	\item La lista de objetivos a tener en cuenta para calcular el centro de masas (solo se tendrán en cuenta aquellos que estén dentro del radio establecido).
+ 	\item \texttt{threshold}. Radio dentro del cual se tendrán en cuenta los elementos de la lista de objetivos.
+ \end{itemize}
  \item \texttt{Separation}.
 \end{itemize}
 
