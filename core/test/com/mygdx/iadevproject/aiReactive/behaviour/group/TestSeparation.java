@@ -106,9 +106,9 @@ public class TestSeparation extends ApplicationAdapter {
         cubo = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         cubo.setBounds(350.0f, 100.0f, 64.0f, 64.0f);
         cubo.setOrientation(30.0f);
-        cubo.setVelocity(new Vector3(-10.0f,0.0f,0.0f)); // Hacía la izquierda.
+        cubo.setVelocity(new Vector3(-30.0f,0.0f,0.0f)); // Hacía la izquierda.
         cubo.setMaxSpeed(50.0f);
-        cubo.addToListBehaviour(new Separation(cubo, 500.0f, listWorldObjects, threshold, 500.0f));
+        cubo.addToListBehaviour(new Separation(cubo, 500.0f, listWorldObjects, threshold, 5000.0f));
         
 	}
 	

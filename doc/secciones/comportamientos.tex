@@ -62,15 +62,19 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
  	\item Personaje origen y \texttt{WorldObject} destino.
  	\item El valor de la máxima aceleración permitida.
  	\item El valor de la máxima velocidad permitida.
- 	\item \texttt{targetRadious}. 
+ 	\item \texttt{targetRadious}. El radio de la circunferencia ficticia interior.
+ 	\item \texttt{slowRadious}. El radio de la circunferencia ficticia exterior.
+ 	\item \texttt{timeToTarget} es el tiempo que queremos que tarde el personaje en realizar este comportamiento.
  \end{itemize}
- \item \texttt{Arrive\_Accelerated\_WithOneRadius}. Este comportamiento es una mezcla entre un Seek y un Arrive (hereda del comportamiento Seek Acelerado). En este comportamiento podemos encontrar solamente un radio ficticio alrededor del personaje destino. La fuente se mueve aplicando un comportamiento Seek Acelerado normal hasta llegar al radio y cuando entra en él empieza a frenar (devolviendo un steering cuyo vector aceleración tiene un sentido contrario al vector velocidad del personaje fuente). Para crear este comportamiento son necesarios los siguientes parámetro:
+ \item \texttt{Arrive\_Accelerated\_WithOneRadius}. Este comportamiento es una mezcla entre un Seek y un Arrive (hereda del comportamiento Seek Acelerado). En este comportamiento podemos encontrar solamente un radio ficticio alrededor del personaje destino. La fuente se mueve aplicando un comportamiento Seek Acelerado normal hasta llegar al radio y cuando entra en él empieza a frenar (devolviendo un steering cuyo vector aceleración tiene un sentido contrario al vector velocidad del personaje fuente). A parte de los parámetros del padre (comportamiento Seek), también son necesarios los siguientes parámetros:
  \begin{itemize}
- 	\item El 
+ 	\item \texttt{targetRadious}. El radio de la circunferencia ficticia.
  \end{itemize}
  \item \texttt{Flee\_Accelerated}. Cuando un personaje aplica este comportamiento, se aleja del personaje destino aplicando la máxima aceleración establecida. Para crear este comportamiento son necesarios los siguientes parámetro:
  \begin{itemize}
- 	\item
+ 	\item El personaje que va a aplicar el comportamiento.
+  	\item El objetivo al que se quiere dirigir.
+  	\item La máxima aceleración con la que se aplica el comportamiento.
  \end{itemize} 
  \item \texttt{Seek\_Accelerated}. Este comportamiento consiste en ir hacia un punto objetivo a la máxima aceleración posible. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
  \begin{itemize}
@@ -112,12 +116,16 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
  
  \item \texttt{Face}. Este comportamiento consiste hacer que el personaje se quede mirando hacia un objetivo. Es un tipo de \texttt{Align\_Accelerated}, por lo que recibe los mismos parámetros que éste. Sin embargo, a diferencia del Align, este comportamiento utiliza el objetivo que se le pasa como parámetro para saber la posición en la que se encuentra y así, poder calcular la orientación a la que se tiene que alinear el personaje.
  
- 
  \item \texttt{LookingWhereYouGoing}. Este comportamiento consiste en cambiar la orientación del personaje para que mire hacia donde va; es decir, que mire en la dirección a la que se mueve. Es un tipo de \texttt{Align\_Accelerated} y para su creación, recibe los mismos parámetros que este, exceptuando el objetivo, pues este es calculado por el comportamiento. Su funcionamiento consiste en obtener la orientación del vector velocidad del personaje y alinearse con él.
  
- \item \texttt{PathFollowingWithoutPathOffset}. 
+ \item \texttt{PathFollowingWithoutPathOffset}. Este comportamiento consiste en seguir una serie de puntos aplicando un comportamiento Seek hacia cada uno de ellos (este comportamiento hereda de Seek Acelerado). Este comportamiento tiene 2 modos de funcionamiento: seguir la lista de puntos y para al final (\texttt{MODO\_PARAR\_AL\_FINAL}) o seguir la lista de puntos, volver a seguirla haciendo el camino inverso, volver a seguirla... y así hasta el infinito (MODO\_IDA\_Y\_VUELTA). Para poder llevar a cabo este segundo modo, los punto de la lista de entrada no pueden eliminarse sin más, sino que debemos de tener otra lista en la que vayamos almacenando aquellos puntos por los que ya hemos pasado. A la hora de comprobar si se ha alcanzado un punto, no se comparará si la posición actual del personaje es exactamente igual a la posición del punto, sino que existe un margen que viene definido por el parámetro \texttt{radius} (es decir, un personaje ha llegado a un punto si está dentro del círculo cuyo radio viene definido por el valor de dicho parámetro). A la hora de aplicar el Seek a cada uno de los puntos de la lista de entrada, se crea un personaje ficticio cuya posición en el punto al que debemos ir. Para la creación de este comportamiento, son necesarios los siguientes parámetros (además de los necesarios para el \texttt{Seek\_Accelerated}):
+ \begin{itemize}
+ 	\item La lista de puntos por los que el personaje debe pasar.
+ 	\item \texttt{radius}. El radio de \textit{satisfacción} o \textit{permisividad}.
+ 	\item El modo de funcionamiento del comportamiento.
+ \end{itemize}
  
- \item \texttt{WallAvoidance}. Este comportamiento consiste en evitar colisiones con otros objetos. La diferencia entre este comportamiento y el anterior, es que la colisión no se detecta cuando el círculo que envuelve al personaje interseca con el círculo de alguno de los objetivos, sino que desde el personaje se lanzan tres rayos (separados un ángulo y longitud determinada), donde el rayo central sigue la dirección de la velocidad del personaje, y si alguno de esos rayos interseca con algún objetivo, entonces lo evita. Es un tipo de \texttt{Seek\_Accelerated}, por lo que recibe los mismos parámetros que él, exceptuando el objetivo, pues este es calculado por el comportamiento. Para la creación de este comportamiento, son necesarios los siguientes parámetros, además de los necesarios para el \texttt{Seek\_Accelerated}:
+ \item \texttt{WallAvoidance}. Este comportamiento consiste en evitar colisiones con otros objetos. La diferencia entre este comportamiento y el anterior, es que la colisión no se detecta cuando el círculo que envuelve al personaje interseca con el círculo de alguno de los objetivos, sino que desde el personaje se lanzan tres rayos (separados un ángulo y longitud determinada), donde el rayo central sigue la dirección de la velocidad del personaje, y si alguno de esos rayos interseca con algún objetivo, entonces lo evita. Es un tipo de \texttt{Seek\_Accelerated}, por lo que recibe los mismos parámetros que él, exceptuando el objetivo, pues este es calculado por el comportamiento. Para la creación de este comportamiento, son necesarios los siguientes parámetros (además de los necesarios para el \texttt{Seek\_Accelerated}):
  \begin{itemize}
   \item La lista de objetivos a evitar.
   \item La distancia mínima de separación al objetivo. Debe ser mayor que el radio del círculo que envuelve el personaje.
@@ -151,8 +159,14 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
  \item \texttt{Cohesion}. Este comportamiento consiste en movernos hacia el centro de masas de un conjunto de objetivos con una aceleración máxima (este comportamiento hereda del Seek Acelerado). Solamente se tendrán en cuenta aquellos objetos que estén dentro de un radio (atributo \texttt{threshold}). A parte de los parámetros necesarios para el Seek, se necesitan los siguientes parámetro:
  \begin{itemize}
  	\item La lista de objetivos a tener en cuenta para calcular el centro de masas (solo se tendrán en cuenta aquellos que estén dentro del radio establecido).
- 	\item \texttt{threshold}. Radio dentro del cual se tendrán en cuenta los elementos de la lista de objetivos.
+ 	\item \texttt{threshold}. Radio dentro del cual un elemento de la lista de objetivos se tendrá en cuenta.
  \end{itemize}
- \item \texttt{Separation}.
+ \item \texttt{Separation}. Este comportamiento consiste en alejarnos de un conjunto de objetivos aplicando una fuerza de repulsión y con una aceleración máxima establecida. Al igual que antes, solamente se tendrán en cuenta aquellas objetivos que estén dentro de un radio (atributo \texttt{threshold}). El vector aceleración lineal final se calculará teniendo en cuenta cada una de las repulsiones calculadas con respecto a cada uno de los elementos que se encuentren dentro del radio establecido. Cabe destacar que este comportamiento \textbf{no se ha implementado exactamente como en las transparencias}. Según las transparencias, cada uno de los vectores individuales se deben ir añadiendo al resultado final, sin embargo, esto no nos funcionó (el personaje fuente pasaba de largo sin sufrir ningún tipo de repulsión). Lo que hemos hecho es ir añadiendo \textbf{cada vector, pero con sentido contrario} al resultado final. De esta manera sí conseguimos que el behavior haga lo que tiene que hacer. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \begin{itemize}
+ 	\item Personaje origen y la lista de objetivos (tipo \texttt{WorldObject}).
+ 	\item \texttt{threshold}. Radio dentro del cual un elemento de la lista de objetivos se tendrá en cuenta.
+ 	\item \texttt{decayCoefficient}. Fuerza de repulsión.
+ 	\item \texttt{maxAcceleration}. Máxima aceleración establecida.
+ \end{itemize}
 \end{itemize}
 
