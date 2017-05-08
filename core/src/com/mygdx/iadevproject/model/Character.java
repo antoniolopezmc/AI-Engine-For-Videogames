@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.steering.*;
+import com.mygdx.iadevproject.aiTactical.roles.TacticalRole;
 import com.mygdx.iadevproject.model.formation.Formation;
 
 
@@ -20,6 +21,7 @@ public class Character extends WorldObject {
 	// Constante que indica la importancia por defecto que tienen los comportamientos que se añaden
 	// al personaje.
 	private static float DEFAULT_IMPORTANCE = 1;
+	private static float DEFAULT_HEALTH = 100.0f;
 	
 	// Mapa de posibles comportamientos del personaje con los valores de importancia de los mismos para el personaje.
 	// Está <Float, Behaviour> porque si se quiere tener ordenado por valor de importancia (lo que nos ahorraría muchas comprobaciones
@@ -30,32 +32,45 @@ public class Character extends WorldObject {
 	
 	// Árbitro que maneja el comportamiento del personaje
 	private Arbitrator arbitrator;
+	// Rol del personaje
+	private TacticalRole role;
 	
+	private Team team;
+	private float currentHealth;
+	private float maxHealth;
+	private float previousHealth; // Este atributo es para la comprobación de si están pegando a un personaje
 	
+
 	// CONSTRUCTORES.
 	public Character(Arbitrator arbitrator) {
 		super();
-		createListBehaviour();
-		this.arbitrator = arbitrator;
+		initializeAttributes(arbitrator);
 	}
 	
 	public Character(Arbitrator arbitrator, float maxSpeed) {
 		super(maxSpeed);
-		createListBehaviour();
-		this.arbitrator = arbitrator;
+		initializeAttributes(arbitrator);
 	}
 	
 	public Character(Arbitrator arbitrator, float maxSpeed, Texture texture) {
 		super(maxSpeed, texture);
-		createListBehaviour();
-		this.arbitrator = arbitrator;
+		initializeAttributes(arbitrator);
 	}
 	
 	public Character(Arbitrator arbitrator, Texture texture) {
 		super(texture);
+		initializeAttributes(arbitrator);
+	}
+	
+	private void initializeAttributes(Arbitrator arbitrator) {
 		createListBehaviour();
 		this.arbitrator = arbitrator;
+		this.currentHealth = DEFAULT_HEALTH;
+		this.maxHealth = DEFAULT_HEALTH;
+		this.previousHealth = DEFAULT_HEALTH;
+		this.team = Team.NEUTRAL;
 	}
+	
 	
 	/**
 	 * Método que crea la lista de comportamientos. Se ha creado este método para evitar
@@ -132,6 +147,42 @@ public class Character extends WorldObject {
 	public void setArbitrator(Arbitrator arbitrator) {
 		this.arbitrator = arbitrator;
 	}
+	
+	public TacticalRole getRole() {
+		return role;
+	}
+	
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public float getCurrentHealth() {
+		return currentHealth;
+	}
+
+	public void setCurrentHealth(float currentHealth) {
+		this.currentHealth = currentHealth;
+	}
+
+	public float getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(float maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+
+	public float getPreviousHealth() {
+		return previousHealth;
+	}
+
+	public void setPreviousHealth(float previousHealth) {
+		this.previousHealth = previousHealth;
+	}
 
 	// MÉTODOS.
 	/**
@@ -150,6 +201,37 @@ public class Character extends WorldObject {
 		
 		return this.getOrientation();
 	}
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	public Map<Float, Behaviour> initializeTacticalRole(TacticalRole role) {
+		this.role = role;
+		// Devolver lista de comportamientos inicial llamando 
+		return this.role.initialize();
+		
+	}	
+	
+	public void updateTacticalRole() {
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// **********************************************************************************************
 	/**
