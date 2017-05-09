@@ -212,6 +212,14 @@ public abstract class Formation extends Character {
 		return (float) Math.toDegrees(MathUtils.atan2(-vector.x, vector.y));
 	}
 	
+	public void reduceHealth (float health) {
+		// MUY MUY MUY MUY MUY IMPORTANTE.
+		// --> Las formaciones no pierden vida.
+		// --> A un objeto formación como tal no le puede atacar ni puede perder vida.
+		
+		// Por tanto, este método no hace nada.
+	}
+	
 	/**
 	 * Método que dibuja las posiciones donde se deben colocar los componentes de la formación.
 	 * @param renderer Renderer sobre el que dibujar.

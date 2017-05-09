@@ -17,6 +17,14 @@ import com.mygdx.iadevproject.model.WorldObject;
 
 public class Actions {
 	
+	// =============> EXTREMADAMENTE IMPORTANTE <===============
+	// En la acción atacar debemos comprobrar que no sea una formación.
+	// 	-> No podemos atacar a un objeto formación como tal.
+	
+	// =============> EXTREMADAMENTE IMPORTANTE <===============
+	// LAS FORMACIONES TAMPOCO VAN A ATACAR.
+	// SINO QUE SI QUIEREN ATACAR SE VA A MODIFICAR LA LISTA DE BEHAVIOURS DE SUS INTEGRANTES. --> Pensar.
+	
 	/**
 	 * Método que refleja la acción de huir de un objetivo.
 	 * @param source Personaje que quiere aplicar la acción.

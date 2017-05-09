@@ -304,4 +304,14 @@ public class Character extends WorldObject {
 			
 		}
 	}
+	
+	// **********************************************************************************************
+	
+	/**
+	 * Método para reducir la vida del personaje.
+	 * @param health Vida que queremos restar.
+	 */
+	public void reduceHealth (float health) {
+		this.currentHealth = Math.max(0.0f, this.currentHealth - health);
+	}
 }
