@@ -2,9 +2,11 @@ package com.mygdx.iadevproject;
 
 import java.util.Set;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -17,9 +19,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -63,16 +62,17 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	
 	/** VARIABLES GLOBALES **/
-	public static List<WorldObject> worldObjects;					// Objetos del mundo
-	public static List<WorldObject> worldObstacles;					// Obstáculos del mundo
-	public static Set<WorldObject> selectedObjects; 				// Lista de objetos seleccionados
-	public static OrthographicCamera camera;						// Cámara (es pública para que se pueda acceder el InputProcessorIADeVProject)
-	public static boolean PRINT_PATH_BEHAVIOUR = false; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
-	public static BitmapFont font = new BitmapFont();				// Para dibujar letras 
-	public static ShapeRenderer renderer = new ShapeRenderer();		// Para dibujar líneas
-	public static Rectangle[] bases = new Rectangle[Team.values().length];
-	public static Rectangle[] manantials = {};
+	public static List<WorldObject> worldObjects;			// Objetos del mundo
+	public static List<WorldObject> worldObstacles;			// Obstáculos del mundo
+	public static Set<WorldObject> selectedObjects; 		// Lista de objetos seleccionados
+	public static OrthographicCamera camera;				// Cámara (es pública para que se pueda acceder el InputProcessorIADeVProject)
+	public static boolean PRINT_PATH_BEHAVIOUR; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
+	public static BitmapFont font;							// Para dibujar letras 
+	public static ShapeRenderer renderer;					// Para dibujar líneas
+	public static Map<Team, Rectangle> bases;				// Bases de los equipos. Cada equipo tiene su base. 
+	public static Map<Team, Rectangle> manantials;			// Manantiales de los equipos. Cada equipo tiene su manantial.
     
+	
 	/** VARIABLES LOCALES **/
 	private SpriteBatch batch;
 	private TiledMapRenderer tiledMapRenderer;
@@ -91,9 +91,15 @@ public class IADeVProject extends ApplicationAdapter {
 		inputProcessor = new InputProcessorIADeVProject();
 		Gdx.input.setInputProcessor(inputProcessor);
 	
-		selectedObjects = new HashSet<WorldObject>();
-		worldObjects 	= new LinkedList<WorldObject>();
-		
+		// Creación de las variables globales
+		selectedObjects 		= new HashSet<WorldObject>();
+		worldObjects 			= new LinkedList<WorldObject>();
+		PRINT_PATH_BEHAVIOUR 	= false;
+		font 					= new BitmapFont();
+		renderer 				= new ShapeRenderer();
+		bases 					= new HashMap<Team, Rectangle>();	
+		manantials 				= new HashMap<Team, Rectangle>(); 	
+				
 		float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
@@ -110,11 +116,14 @@ public class IADeVProject extends ApplicationAdapter {
         WORLD_OBJECT_WIDTH = (Integer) tiledMap.getProperties().get("tilewidth");
         WORLD_OBJECT_HEIGHT = (Integer) tiledMap.getProperties().get("tileheight");
         
-        // Creamos los mapas (de costes, de terreno, etc)
-        MapsCreatorIADeVProject.createMaps();
+        
+        initializeMaps();		// Inicializamos los mapas a los valores por defecto.
+        MapsCreatorIADeVProject.createMaps(tiledMap, GRID_CELL_SIZE); 				// Creamos los mapas (de costes, de terreno, etc)
+        bases = MapsCreatorIADeVProject.getBasesOfMap(tiledMap, HEIGHT);			// Obtenemos las bases
+        manantials = MapsCreatorIADeVProject.getManantialsOfMap(tiledMap, HEIGHT); 	// Obtenemos los manantiales
         
         // Obtenemos los obstáculos del mapa
-        worldObstacles = getObstaclesOfMap();
+        worldObstacles = MapsCreatorIADeVProject.getObstaclesOfMap(tiledMap);
         
         
         drop = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -164,21 +173,12 @@ public class IADeVProject extends ApplicationAdapter {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         
+        
         drop.applyBehaviour();
         
-        batch.begin();
-
-	        for (WorldObject obj : worldObjects) {
-	        	if (!(obj instanceof Obstacle)) {
-	        		obj.draw(batch);
-	        	}
-	        }
-        
-        batch.end();
-
-        // DESCOMENTAR PARA MOSTRAR LOS CENTROS DE LOS OBSTÁCULOS
-//        drawCenterOfObstacles();
-        
+        drawRegionsOfBasesAndManantials();	// Dibujamos las regiones de las bases y los manantiales.
+        drawAllObjects();					// Dibujamos todos los objetos del mundo.
+       
         
         renderer.begin(ShapeType.Filled);
         renderer.setColor(Color.RED);
@@ -211,37 +211,15 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	/** MÉTODOS ÚTILES **/
 	/**
-	 * Método que obtiene los obstáculo del mapa 'tiledMap' y lo devuelve en forma de Lista
-	 * @return Lista de los obstáculos del mundo
+	 * Método que inicializa los mapas a los valores por defecto. 
 	 */
-	private List<WorldObject> getObstaclesOfMap() {
-		List<WorldObject> obstacles = new LinkedList<WorldObject>();
-        
-		// Obtenemos la capa del mapa de los obstáculos
-        MapLayer obstacleLayer =  tiledMap.getLayers().get("obstacles");        
-        for (MapObject obj : obstacleLayer.getObjects()) {
-        	
-        	// Para cada objeto, obtenemos sus propiedades
-        	MapProperties properties = obj.getProperties();
-        	
-        	// Calculamos la coordenada X como la coordenada x + la mitad del ancho del obstáculo (ya que la coordenada X se encuentra abajo izquierda del objeto)
-        	float x = (Float) properties.get("x");
-        	x += ((Float) properties.get("width"))/2;
-        	
-        	// Calculamos la coordenada Y como la coordenada y + la mitad del alto del obstáculo (ya que la coordenada Y se encuentra abajo izquierda del objeto)
-        	float y = (Float) properties.get("y");
-        	y += ((Float) properties.get("height"))/2;
-        	
-        	// Creamos el obstáculo con las coordenadas calculadas y las propiedades de alto y ancho del obstáculo
-			Obstacle obs = new Obstacle();
-			obs.setBounds(x, y, (Float) properties.get("width"), (Float) properties.get("height"));
-			
-			// Lo añadimos a la lista de obstáculos
-			obstacles.add(obs);
-        }
-        
-        // Devolvemos la lista de obstáculos
-        return obstacles;
+	private static void initializeMaps() {
+		for (int i=0; i < IADeVProject.GRID_WIDTH; i++) {
+			for (int j=0; j < IADeVProject.GRID_HEIGHT; j++) {
+				IADeVProject.MAP_OF_COSTS[i][j] = IADeVProject.DEFAULT_COST;
+				IADeVProject.MAP_OF_GROUNDS[i][j] = IADeVProject.DEFAULT_GROUND;
+			}
+		}
 	}
 	
 	/**
@@ -333,11 +311,42 @@ public class IADeVProject extends ApplicationAdapter {
 	/**
 	 * Método para dibujar los centros de los obstáculos en el mapa
 	 */
-	private void drawCenterOfObstacles() {
-		renderer.begin(ShapeType.Filled);
-        	for (WorldObject obs : worldObstacles) {
-        		renderer.circle(obs.getPosition().x, obs.getPosition().y, 2);
-        	}
+//	private void drawCenterOfObstacles() {
+//		renderer.begin(ShapeType.Filled);
+//        	for (WorldObject obs : worldObstacles) {
+//        		renderer.circle(obs.getPosition().x, obs.getPosition().y, 2);
+//        	}
+//        renderer.end();
+//	}	
+	
+	/**
+	 * Método que dibuja las regiones de las bases y los manantiales, para que 
+	 * visualmente se vea lo que abarca cada una de las bases y manantiales.
+	 */
+	private void drawRegionsOfBasesAndManantials() {
+		renderer.begin(ShapeType.Line);
+        renderer.setColor(Color.CYAN);
+	        for (Rectangle r : bases.values()) {
+	        	renderer.rect(r.x, r.y, r.width, r.height);
+	        }
+	        for (Rectangle r : manantials.values()) {
+	        	renderer.rect(r.x, r.y, r.width, r.height);
+	        }
         renderer.end();
-	}	
+	}
+	
+	/**
+	 * Método que dibuja todos los objetos en el mapa.
+	 */
+	private void drawAllObjects() {
+        batch.begin();
+
+        for (WorldObject obj : worldObjects) {
+        	if (!(obj instanceof Obstacle)) {
+        		obj.draw(batch);
+        	}
+        }
+    
+        batch.end();
+	}
 }
