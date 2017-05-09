@@ -23,6 +23,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
@@ -35,6 +36,7 @@ import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
+import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
  
 public class IADeVProject extends ApplicationAdapter {
@@ -68,7 +70,8 @@ public class IADeVProject extends ApplicationAdapter {
 	public static boolean PRINT_PATH_BEHAVIOUR = false; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
 	public static BitmapFont font = new BitmapFont();				// Para dibujar letras 
 	public static ShapeRenderer renderer = new ShapeRenderer();		// Para dibujar líneas
-	
+	public static Rectangle[] bases = new Rectangle[Team.values().length];
+	public static Rectangle[] manantials = {};
     
 	/** VARIABLES LOCALES **/
 	private SpriteBatch batch;
