@@ -1,5 +1,6 @@
 package com.mygdx.iadevproject.checksAndActions;
 
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Team;
@@ -7,16 +8,56 @@ import com.mygdx.iadevproject.model.WorldObject;
 
 public class Checks {
 	
+	// Distancia por defecto a la que nosotros consideramos que objeto está "cerca" de otro. 
+	private static final float NEAR = 10;
+	
 	/**
 	 * Método que cumprueba si me están atacando.
 	 * @param source Personaje que quiere saber si le están atacando.
 	 * @return true si me están atacando, false en caso contrario.
 	 */
 	public static boolean doTheyAttackMe (Character source) {
+		// Consideramos que a un personaje lo están atacando cuando su vida se reduce con respecto al frame anterior
+		// 		(por eso hemos creado el atributo 'previousHealth').
 		return source.getCurrentHealth() != source.getPreviousHealth();
 	}
 	
+	/**
+	 * Método que comprueba si hay enemigos a menos de una distancia pasada como parámetro.
+	 * @param source
+	 * @param distance
+	 * @return
+	 */
+	public static boolean areThereEnemiesNear (Character source, float distance) {
+		for (WorldObject obj : IADeVProject.worldObjects) {
+			if (obj instanceof Character) {
+				Character target = (Character)obj;
+				
+				if (isItFromEnemyTeam(source, target)) {
+					// Calculamos la distancia entre ambos personajes.
+					Vector3 targetPosition = new Vector3(target.getPosition());
+					Vector3 sourcePosition = new Vector3(source.getPosition());
+					Vector3 vDistancia = targetPosition.sub(sourcePosition);
+					float distancia = vDistancia.len();
+					// Si la distancia entre source y target es menor a la que pasamos como parámetro
+					// 	sí hay enemigos cerca.
+					if (distancia < distance) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
+	/**
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public static boolean areThereEnemiesNear (Character source) {
+		return areThereEnemiesNear(source, NEAR);
+	}
 	
 	/**
 	 * Método que comprueba si hay enemigos en la base del personaje 'source'
@@ -90,7 +131,7 @@ public class Checks {
 	 * @return true si son del mismo equipo, false en caso contrario.
 	 */
 	public static boolean isItFromMyTeam(Character source, Character target) {
-		return source.getTeam() == target.getTeam();
+		return !amIFromNeutralTeam(source) && !amIFromNeutralTeam(target) && source.getTeam() == target.getTeam();
 	}
 
 	/**
