@@ -296,7 +296,10 @@ public class WallAvoidance extends Seek_Accelerated {
 		
 		for (WorldObject target : this.targets) {
 			distance = position.dst(target.getPosition());
-			if (distance < minDistance) {
+			// Comprobamos que la distancia sea distinta de 0 para que, si en la lista
+			// de 'targets' el está el propio personaje, no se tenga en cuenta como
+			// objetivo más cercano.
+			if (distance != 0 && distance < minDistance) {
 				obj = target;
 				minDistance = distance;
 			}

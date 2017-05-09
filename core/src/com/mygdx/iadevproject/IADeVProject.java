@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
@@ -94,7 +95,7 @@ public class IADeVProject extends ApplicationAdapter {
 		// Creación de las variables globales
 		selectedObjects 		= new HashSet<WorldObject>();
 		worldObjects 			= new LinkedList<WorldObject>();
-		PRINT_PATH_BEHAVIOUR 	= false;
+		PRINT_PATH_BEHAVIOUR 	= true;
 		font 					= new BitmapFont();
 		renderer 				= new ShapeRenderer();
 		bases 					= new HashMap<Team, Rectangle>();	
@@ -131,18 +132,20 @@ public class IADeVProject extends ApplicationAdapter {
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         drop.setMaxSpeed(50.0f);
+       
         
         bucket = new Character(new PriorityArbitrator(1e-5f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
     	bucket.setBounds(800.0f, 600.0f, WORLD_OBJECT_WIDTH, WORLD_OBJECT_HEIGHT);
         bucket.setOrientation(60.0f);
         bucket.setVelocity(new Vector3(0,0.0f,0));
 
-        WallAvoidance wallAvoidance = new WallAvoidance(drop, 300.0f, worldObstacles, 300.0f, 30.0f, 200.0f);
+        WallAvoidance wallAvoidance = new WallAvoidance(drop, 300.0f, worldObstacles, 300.0f, 20.0f, 100.0f);
         drop.addToListBehaviour(wallAvoidance, 60);
         Seek_Accelerated seek = new Seek_Accelerated(drop, bucket, 20.0f);
         seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON);
         drop.addToListBehaviour(seek);
         drop.addToListBehaviour(new Face(drop, bucket, 30.0f, 30.0f, 1.0f, 10.0f, 1.0f));
+        drop.addToListBehaviour(new CollisionAvoidance(drop, worldObstacles, 200.0f));
         
         addToWorldObjectList(drop, bucket);
         
@@ -210,6 +213,49 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	
 	/** MÉTODOS ÚTILES **/
+	/**
+	 * Método que dado un equipo, devuelve su base.
+	 * @param team Equipo.
+	 * @return Base del equipo.
+	 */
+	public static Rectangle getBaseOfTeam(Team team) {
+		return bases.get(team);
+	}
+	
+	/**
+	 * Método que dado un equipo, devuelve su manantial de curación.
+	 * @param team Equipo.
+	 * @return Manantial del equipo.
+	 */
+	public static Rectangle getManantialOfTeam(Team team) {
+		return manantials.get(team);
+	}
+	
+	/**
+	 * Método que dado un equipo, devuelve la posición de su base.
+	 * @param team Equipo.
+	 * @return Posición de la base.
+	 */
+	public static Vector3 getPositionOfTeamBase(Team team) {
+		Rectangle base = getBaseOfTeam(team); 
+		// Ahora mismo se calcula como el centro de la base. Ya que las coordenadas (x,y) están 
+		// abajo izquierda.
+		return new Vector3(base.x+base.width/2, base.y+base.height/2, 0.0f);
+	}
+	
+	/**
+	 * Método que dado un equipo, devuelve la posición de su manantial.
+	 * @param team Equipo.
+	 * @return Posición del manantial.
+	 */
+	public static Vector3 getPositionOfTeamManantial(Team team) {
+		Rectangle manantial = getManantialOfTeam(team);
+		// Ahora mismo se calcula como el centro del manantial. Ya que las coordenadas (x,y) están 
+		// abajo izquierda.
+		return new Vector3(manantial.x+manantial.width/2, manantial.y+manantial.height/2, 0.0f);
+	}
+	
+	
 	/**
 	 * Método que inicializa los mapas a los valores por defecto. 
 	 */

@@ -1,5 +1,7 @@
 package com.mygdx.iadevproject.checksAndActions;
 
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.model.Character;
@@ -213,12 +215,29 @@ public class Checks {
 			if (obj instanceof Character) {
 				Character target = (Character)obj;
 				
-				if (isItFromEnemyTeam(source, target)) {
-					// TODO
+				// Si el target es del equipo contrario y está en la base enemiga (está en mi base), entonces
+				// devolvemos true
+				if (isItFromEnemyTeam(source, target) && amIInEnemyBase(target)) {
+					return true;
 				}
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' se encuentra en su
+	 * manantial de curación. 
+	 * @param source Personajque que quiere saber si está en su manantial de curación.
+	 * @return true si está en su manantial de curación, false en caso contrario.
+	 */
+	public static boolean amIInMyManantial(Character source) {
+		// Obtenemos el manantial del personaje
+		Rectangle myManantial = IADeVProject.getManantialOfTeam(source.getTeam());
+		// Obtenemos la posición del personaje
+		Vector2 position = new Vector2(source.getPosition().x, source.getPosition().y);
+		// Devolvemos si el manantial contiene a la posición del personaje
+		return myManantial.contains(position);
 	}
 	
 	// TODO Pensar -> ¿Hay aliados en mi base? ¿Hay aliados en la base enemiga? ¿Hay enemigos en la base enemiga (en su propia base)?
@@ -229,7 +248,12 @@ public class Checks {
 	 * @return true si está en su base, false en caso contrario.
 	 */
 	public static boolean amIInMyBase(Character source) {
-		return false;
+		// Obtenemos la base del personaje
+		Rectangle myBase = IADeVProject.getBaseOfTeam(source.getTeam());
+		// Obtenemos la posición del personaje
+		Vector2 position = new Vector2(source.getPosition().x, source.getPosition().y);
+		// Devolvemos si la base contiene a la posición del personaje
+		return myBase.contains(position);
 	}
 	
 	/**
@@ -238,10 +262,13 @@ public class Checks {
 	 * @return true si está en la base enemiga, false en caso contrario.
 	 */
 	public static boolean amIInEnemyBase(Character source) {
-		return false;
+		// Obtenemos la base enemiga del personaje
+		Rectangle enemyBase = IADeVProject.getBaseOfTeam(source.getTeam().getEnemyTeam());
+		// Obtenemos la posición del personaje
+		Vector2 position = new Vector2(source.getPosition().x, source.getPosition().y);
+		// Devolvemos si la base contiene a la posición del personaje
+		return enemyBase.contains(position);
 	}
-	
-	// TODO -> Comprobar si estoy en fuentes de curación. CADA EQUIPO TIENE LA SUYA.
 	
 	/**
 	 * Método que comprueba si el personaje 'source' ha recuperado su vida totalmente.
