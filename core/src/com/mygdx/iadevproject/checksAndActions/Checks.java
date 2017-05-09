@@ -78,8 +78,9 @@ public class Checks {
 	 * @param target Personaje del que se quiere saber si es del equipo contrario.
 	 * @return true si es del equipo contrario, false en caso contrario.
 	 */
+
 	public static boolean isItFromEnemyTeam(Character source, Character target) {
-		return source.getTeam() == target.getTeam() && target.getTeam() != Team.NEUTRAL;
+		return !amIFromNeutralTeam(source) && !amIFromNeutralTeam(target) && !isItFromMyTeam(source, target);
 	}
 	
 	/**
@@ -92,4 +93,12 @@ public class Checks {
 		return source.getTeam() == target.getTeam();
 	}
 
+	/**
+	 * Método que comprueba si el personaje 'source' es del equipo neutral.
+	 * @param source Personaque que realiza la pregunta.
+	 * @return true si es del equipo neutral, false en caso contrario.
+	 */
+	public static boolean amIFromNeutralTeam(Character source) {
+		return source.getTeam() == Team.NEUTRAL;
+	}
 }

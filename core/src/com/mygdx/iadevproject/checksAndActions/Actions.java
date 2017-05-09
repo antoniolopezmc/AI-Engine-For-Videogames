@@ -1,6 +1,9 @@
 package com.mygdx.iadevproject.checksAndActions;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
@@ -21,7 +24,7 @@ public class Actions {
 	 * @param maxAcceleration Máxima aceleración a la que se quiere huir.
 	 * @return El comportamiento correspondiente a la acción de huir.
 	 */
-	public Behaviour flee(Character source, WorldObject target, float maxAcceleration) {
+	public Map<Float, Behaviour> flee(Character source, WorldObject target, float maxAcceleration) {
 		return new Flee_Accelerated(source, target, maxAcceleration);
 	}
 	
@@ -32,7 +35,7 @@ public class Actions {
 	 * @param maxAcceleration Máxima acceleración a la que se quiere ir
 	 * @return El comportamiento correspondiente a la acción de ir a curarse.
 	 */
-	public Behaviour goToCure(Character source, Vector3 position, float maxAcceleration) {
+	public Map<Float, Behaviour> goToCure(Character source, Vector3 position, float maxAcceleration) {
 		PathFinding pf = new PathFinding();
 		List<Vector3> pointsList = pf.applyPathFinding(IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT, 
 				source.getPosition().x, source.getPosition().y, position.x, position.y);
@@ -46,7 +49,7 @@ public class Actions {
 	 * @param target
 	 * @return
 	 */
-	public Behaviour supportAnAlly(Character source, Character target) {
+	public Map<Float, Behaviour> supportAnAlly(Character source, Character target) {
 		return null;
 	}
 	
@@ -55,7 +58,7 @@ public class Actions {
 	 * @param source
 	 * @return
 	 */
-	public Behaviour patrolYourArea(Character source) {
+	public Map<Float, Behaviour> patrolYourArea(Character source) {
 		return null;
 	}
 	
@@ -65,7 +68,26 @@ public class Actions {
 	 * @param source
 	 * @return
 	 */
-	public Behaviour doRandomThings(Character source) {
+	public Map<Float, Behaviour> doRandomThings(Character source) {
 		return new Wander_Delegated(source, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, 45.0f, 10.0f);
+	}
+	
+	/**
+	 * Método que crea la lista de comportamientos. Se ha creado este método para evitar
+	 * repetir el código en los constructores
+	 */
+	private Map<Float, Behaviour> createListBehaviour() {
+		// Añadimos el comparador porque si no, el TreeMap por defecto, si se encuentra
+		// dos claves que tengan el mismo valor (aunque sean objetos distintos) se queda con 
+		// el último que introduces
+		return new TreeMap<Float, Behaviour>(new Comparator<Float>() {
+			@Override
+			public int compare(Float o1, Float o2) {
+				// Para que los ordene de mayor a menor
+				if (o1 > o2) return -1;
+				if (o1 == o2) return 0;
+				return 1;
+			}
+		});
 	}
 }
