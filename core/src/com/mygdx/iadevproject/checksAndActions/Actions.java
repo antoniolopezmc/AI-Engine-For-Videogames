@@ -13,6 +13,7 @@ import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
+import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
@@ -26,6 +27,56 @@ public class Actions {
 	// =============> EXTREMADAMENTE IMPORTANTE <===============
 	// LAS FORMACIONES TAMPOCO VAN A ATACAR.
 	// SINO QUE SI QUIEREN ATACAR SE VA A MODIFICAR LA LISTA DE BEHAVIOURS DE SUS INTEGRANTES. --> Pensar.
+	
+	/**
+	 * Método que refleja la acción de ir a la base de un personaje que se pasa como parámetro.
+	 * @param weight Peso que tiene esta acción.
+	 * @param source Personaje que quiere aplicar la acción.
+	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
+	 * @return El Map de comportamientos correspondiente a esta acción.
+	 */
+	public Map<Float, Behaviour> goToMyBase (float weight, Character source, float maxAcceleration) {
+		// Obtenemos la posición de la base del personaje.
+		Vector3 position = IADeVProject.getPositionOfTeamBase(source.getTeam());
+		// Devolvemos el comportamiento de ir hacia la posición de la base.
+		return goTo(weight, source, position, maxAcceleration);
+	}
+	
+	/**
+	 * Método que refleja la acción de ir a la base enemiga de un personaje que se pasa como parámetro.
+	 * @param weight Peso que tiene esta acción.
+	 * @param source Personaje que quiere aplicar la acción.
+	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
+	 * @return El Map de comportamientos correspondiente a esta acción.
+	 */
+	public Map<Float, Behaviour> goToEnemyBase (float weight, Character source, float maxAcceleration) {
+		// Obtenemos la posición de la base enemiga del personaje.
+		Vector3 position = IADeVProject.getPositionOfTeamBase(source.getTeam().getEnemyTeam());
+		// Devolvemos el comportamiento de ir hacia la posición de la base enemiga.
+		return goTo(weight, source, position, maxAcceleration);
+	}
+	
+	/**
+	 * Método que refleja la acción de atacar.
+	 * @param source Personaje que realiza el ataque.
+	 * @param target Personaje que recibe el ataque.
+	 * @param health Salud que restará el ataque.
+	 * @param maxDistance Máxima distancia a la que el ataque se puede realizar.
+	 * @return El Map de comportamientos correspondiente a esta acción.
+	 */
+	// Esta acción no va a necesitar un peso. Tal y como se explica en el comportamiento Attack, realmente lo que nos
+	// 	interesa del comportamiento attack no es el comportamiento en sí, si no el hecho de que se ejecute el método
+	//	de reducir vida del target del ataque.
+	// IMPORTANTE -> Debemos comprobar que ambos personajes son enemigos. PERO ESA COMPROBACIÓN NO SE HACE AQUÍ.
+	// 		Se hará en la maquina de estados/árbol de decisión... correspondiente.
+	public Map<Float, Behaviour> attack (Character source, Character target, float health, float maxDistance) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		// Ponemos un peso. Da igual el que sea.
+		map.put(10.0f, new Attack(source, target, health, maxDistance));
+		return map;
+	}
+	
+	// TODO Atacar mirando al objetivo.
 	
 	/**
 	 * Método que refleja la acción de huir de un objetivo.
@@ -91,7 +142,7 @@ public class Actions {
 	 * @param source Personaje que quiere aplicar la acción.
 	 * @return
 	 */
-	public Map<Float, Behaviour> patrolYourArea(float weight, Character source) {
+	public Map<Float, Behaviour> patrolYourBase(float weight, Character source) {
 		//TODO
 		return null;
 	}
