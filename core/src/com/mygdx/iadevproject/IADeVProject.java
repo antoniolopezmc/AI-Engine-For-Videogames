@@ -41,22 +41,6 @@ import com.mygdx.iadevproject.model.WorldObject;
  
 public class IADeVProject extends ApplicationAdapter {
 	
-	List<Vector3> fjavierWayPoints = new LinkedList<Vector3>(Arrays.asList(new Vector3(1592.2f,52.9f,0.0f), 
-																			new Vector3(1589.8f,197.8f,0.0f),
-																			new Vector3(1589.8f,335.8f,0.0f),
-																			new Vector3(1661.2f,434.7f,0.0f),
-																			new Vector3(1776.2f,439.3f,0.0f),
-																			new Vector3(1893.5f,439.3f,0.0f),
-																			new Vector3(1990.1f,439.3f,0.0f)));
-	
-	List<Vector3> ldanielWayPoints = new LinkedList<Vector3>(Arrays.asList(new Vector3(49.5f,1613.3f,0.0f), 
-																			new Vector3(158.6f,1613.3f,0.0f),
-																			new Vector3(258.2f,1613.3f,0.0f),
-																			new Vector3(401.1f,1613.3f,0.0f),
-																			new Vector3(461.2f,1692.2f,0.0f),
-																			new Vector3(457.5f,1769.3f,0.0f),
-																			new Vector3(457.5f,1974.2f,0.0f)));
-	
 	/** CONSTANTES **/
 	public static final int GRID_CELL_SIZE 		= 32;						// Longitud del lado de las celdas para los distintos grids.
 	public static final int WIDTH 				= 2048;						// Anchura del mapa
@@ -212,22 +196,6 @@ public class IADeVProject extends ApplicationAdapter {
 		
 		renderer.begin(ShapeType.Filled);
         renderer.setColor(Color.RED);
-		puntoAnterior = null;
-		for (Vector3 punto : fjavierWayPoints) {
-			renderer.circle(punto.x, punto.y, 2);
-			if (puntoAnterior != null) {
-				renderer.line(punto, puntoAnterior);
-			}
-			puntoAnterior = new Vector3(punto);
-		}
-		puntoAnterior = null;
-		for (Vector3 punto : ldanielWayPoints) {
-			renderer.circle(punto.x, punto.y, 2);
-			if (puntoAnterior != null) {
-				renderer.line(punto, puntoAnterior);
-			}
-			puntoAnterior = new Vector3(punto);
-		}
 		renderer.end();
 	}
 

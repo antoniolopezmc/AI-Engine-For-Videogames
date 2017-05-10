@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
+import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
@@ -49,6 +50,15 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 
 	@Override
 	public Steering getSteering() {
+		
+		// Se este if es TRUE quiere decir que al comportamiento se le ha pasado un null o una lista vacia como la lista de puntos a seguir.
+		//	Por tanto, devolvemos el steering nulo.
+		if ((this.pointsList == null) || ((this.pointsList.isEmpty()) && (this.removedPointsList.isEmpty()))) {
+			Steering_AcceleratedUnifMov steer = new Steering_AcceleratedUnifMov();
+			steer.setLineal(new Vector3(0.0f, 0.0f, 0.0f));
+			steer.setAngular(0.0f);
+			return steer;
+		}
 		
 		if (!this.pointsList.isEmpty()) {
 			Vector3 nextTarget = this.pointsList.get(0); // Consultamos el primer elemento de la lista (el punto donde tenemos que ir).

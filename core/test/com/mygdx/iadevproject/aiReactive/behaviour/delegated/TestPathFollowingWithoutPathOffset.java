@@ -28,6 +28,8 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
 	
 	private Character gota;
 	private Character gota2;
+	private Character gota3;
+	private Character cubo;
 	
 	private List<Vector3> listaDePuntos;
 	
@@ -56,7 +58,7 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         
         // Creamos el personaje.
         gota = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        gota.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         gota.setOrientation(0.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota.addToListBehaviour(new PathFollowingWithoutPathOffset(gota, 20.0f, listaDePuntos, 20.0f, PathFollowingWithoutPathOffset.MODO_PARAR_AL_FINAL));
@@ -64,12 +66,20 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         
         // Creamos el personaje.
         gota2 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota2.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        gota2.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         gota2.setOrientation(0.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota2.addToListBehaviour(new PathFollowingWithoutPathOffset(gota2, 40.0f, listaDePuntos, 20.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
         gota2.setMaxSpeed(20.0f); // Limitamos la velocidad del objeto para que no se nos vaya de madre.
         
+        // Creamos otro personaje. Con lista de puntos vacia.
+        gota3 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota3.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
+        gota3.setOrientation(0.0f);
+        gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        gota3.addToListBehaviour(new PathFollowingWithoutPathOffset(gota2, 40.0f, new LinkedList<Vector3>(), 20.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+        gota3.setMaxSpeed(20.0f); // Limitamos la velocidad del objeto para que no se nos vaya de madre.
+      
 	}
 	
 	@Override
@@ -88,6 +98,7 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         batch.begin();
         gota.draw(batch);
 		gota2.draw(batch);
+		gota3.draw(batch);
         batch.end();
     	
 		renderer.begin(ShapeType.Filled);
