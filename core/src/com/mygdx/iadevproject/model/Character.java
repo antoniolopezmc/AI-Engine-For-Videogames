@@ -74,7 +74,9 @@ public class Character extends WorldObject {
 	
 	/**
 	 * Método que crea la lista de comportamientos. Se ha creado este método para evitar
-	 * repetir el código en los constructores
+	 * repetir el código en los constructores. IMPORTANTE: LA CREACIÓN DEL MAP PERMITE
+	 * QUE SE LE PASE CUALQUIER VALOR COMO CLAVE, YA SEA UN float O UN new Float() Y
+	 * NO SE SUSTITUYE.
 	 */
 	private void createListBehaviour() {
 		// Añadimos el comparador porque si no, el TreeMap por defecto, si se encuentra
