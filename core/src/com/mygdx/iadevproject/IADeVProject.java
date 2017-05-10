@@ -157,6 +157,9 @@ public class IADeVProject extends ApplicationAdapter {
         
         // --> La distancia de Manhattan es una basura. El personaje da muchísimas vueltas. La mejor es la de CHEBYSHEV.
         listaDePuntos = pf.applyPathFinding(MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, GRID_WIDTH, GRID_HEIGHT, 870.06006f, 390.63998f, 1293.0f, 391.7f);
+        
+        // Inicializamos las estructuras para el manejo de los waypoints de los puentes.
+        Waypoints.initializeBridgesWaypoints();
 	}
 	
 	@Override
@@ -194,9 +197,8 @@ public class IADeVProject extends ApplicationAdapter {
 		}
 		renderer.end();
 		
-		renderer.begin(ShapeType.Filled);
-        renderer.setColor(Color.RED);
-		renderer.end();
+        Waypoints.drawWaypointsOfBases(); // Dibujamos los waypoints de ambas bases.
+        Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
 	}
 
 	@Override
