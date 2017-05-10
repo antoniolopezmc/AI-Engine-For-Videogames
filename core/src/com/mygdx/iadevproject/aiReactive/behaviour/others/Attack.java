@@ -1,12 +1,29 @@
 package com.mygdx.iadevproject.aiReactive.behaviour.others;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.model.Character;
 
 public class Attack implements Behaviour {
 
+	/**
+	 * Método para pintar las líneas de debug del Behaviour
+	 */
+	private void debug() {
+		if (IADeVProject.PRINT_PATH_BEHAVIOUR) {
+			IADeVProject.renderer.begin(ShapeType.Line);
+			IADeVProject.renderer.setColor(Color.VIOLET);
+			
+			IADeVProject.renderer.line(this.source.getPosition(), this.target.getPosition());
+						
+			IADeVProject.renderer.end();
+		}
+	}
+	
 	private Character source;
 	private Character target; // El target también debe ser un Character.
 	// Salud que se le restará al target en el ataque.
@@ -73,6 +90,8 @@ public class Attack implements Behaviour {
 		if (distance <= this.maxDistance) {
 			// Realizamos el ataque, reduciendo vida al target.
 			target.reduceHealth(this.health);
+			
+			this.debug(); // Mostramos información de depuración, si procede. SOLO SI PODEMOS ATACAR.
 		}
 		
 		// Devolvemos null, puesto que lo importante de este Behaviour no es el propio Behavior sino la reducción de vida del target.

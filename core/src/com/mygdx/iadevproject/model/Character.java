@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
@@ -318,5 +320,16 @@ public class Character extends WorldObject {
 		/*
 		 * if (this.currentHealth == 0) {this.muerto()} --> PENSAR.
 		 */
+	}
+	
+	/**
+	 * Método para dibujar la cantidad de vida que tiene el personaje.
+	 * @param batch
+	 * @param font
+	 */
+	public void drawHealth (SpriteBatch batch, BitmapFont font) {
+		batch.begin();
+		font.draw(batch, "Health: " + this.getCurrentHealth(), this.getPosition().x + 20, this.getPosition().y); // Dibujamos la vida a la derecha del personaje.
+        batch.end();
 	}
 }

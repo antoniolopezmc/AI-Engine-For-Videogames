@@ -75,7 +75,7 @@ public class IADeVProject extends ApplicationAdapter {
     
 	
 	/** VARIABLES LOCALES **/
-	private SpriteBatch batch;
+	private SpriteBatch batch; // TODO Para dibujar letras hace falta un batch. Ponerlo también como global.
 	private TiledMapRenderer tiledMapRenderer;
 	private InputProcessorIADeVProject inputProcessor;		// InputProcessor
 	
@@ -199,6 +199,7 @@ public class IADeVProject extends ApplicationAdapter {
 		
         Waypoints.drawWaypointsOfBases(); // Dibujamos los waypoints de ambas bases.
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
+        drop.drawHealth(batch, font);
 	}
 
 	@Override
