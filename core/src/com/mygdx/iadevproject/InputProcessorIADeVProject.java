@@ -87,6 +87,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			IADeVProject.camera.unproject(touchPos);
 			
 			
+			System.out.println(touchPos);
 			
 			IADeVProject.bucket.setPosition(touchPos);
 			
@@ -108,9 +109,9 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		
 		// Mostramos la lista de objetos seleccionados para asegurarnos de que se ha introducido.
 		if (!IADeVProject.selectedObjects.isEmpty()) {
-			System.out.println("\n--------------\nSelected objects:");
+//			System.out.println("\n--------------\nSelected objects:");
 			for (WorldObject obj : IADeVProject.selectedObjects) {
-				System.out.println(obj.getX() + " - " + obj.getY());
+//				System.out.println(obj.getX() + " - " + obj.getY());
 			}
 		}
 		
