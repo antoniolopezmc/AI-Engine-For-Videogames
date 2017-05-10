@@ -214,15 +214,15 @@ public class Character extends WorldObject {
 	
 	
 	
-	public Map<Float, Behaviour> initializeTacticalRole(TacticalRole role) {
+	public void initializeTacticalRole(TacticalRole role) {
 		this.role = role;
 		// Devolver lista de comportamientos inicial llamando 
-		return this.role.initialize();
-		
+		this.role.initialize(this);
 	}	
 	
 	public void updateTacticalRole() {
-		
+		this.role.update(this);
+		this.applyBehaviour();
 	}
 	
 	

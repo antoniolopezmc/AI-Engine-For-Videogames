@@ -1,12 +1,14 @@
 package com.mygdx.iadevproject.aiTactical.roles;
 
-import java.util.Map;
-
-import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.State;
 import com.mygdx.iadevproject.map.Ground;
+import com.mygdx.iadevproject.model.Character;
 
 public class DefensiveArcher extends Archer {
 
+	DefaultStateMachine<Character, State<Character>> stateMachine;
+	
 	public DefensiveArcher() {
 		// TODO Auto-generated constructor stub
 	}
@@ -24,15 +26,15 @@ public class DefensiveArcher extends Archer {
 	}
 
 	@Override
-	public Map<Float, Behaviour> initialize() {
+	public void initialize(Character source) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
-	public Map<Float, Behaviour> update() {
+	public void update(Character source) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 }
