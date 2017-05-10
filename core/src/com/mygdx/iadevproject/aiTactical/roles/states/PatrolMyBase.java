@@ -3,12 +3,12 @@ package com.mygdx.iadevproject.aiTactical.roles.states;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 
+import com.mygdx.iadevproject.model.Character;
+
 public class PatrolMyBase implements State<Character> {
 
-	public PatrolMyBase() {
-		// TODO Auto-generated constructor stub
-	}
-
+	public PatrolMyBase() { /* Empty constructor */ }
+	
 	@Override
 	public void enter(Character entity) {
 		// TODO Auto-generated method stub

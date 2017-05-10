@@ -32,7 +32,7 @@ public class Checks {
 	 * @param distance Distancia máxima a la que se considera que un objeto está cerca de otro.
 	 * @return true si hay enemigos cerca, false en caso contrario.
 	 */
-	public static boolean areThereEnemiesNear (Character source, float distance) {
+	public static boolean areThereEnemiesLessThanDistance (Character source, float distance) {
 		for (WorldObject obj : IADeVProject.worldObjects) {
 			if (obj instanceof Character) {
 				Character target = (Character)obj;
@@ -60,7 +60,7 @@ public class Checks {
 	 * @return true si hay enemigos cerca, false en caso contrario.
 	 */
 	public static boolean areThereEnemiesNear (Character source) {
-		return areThereEnemiesNear(source, NEAR);
+		return areThereEnemiesLessThanDistance(source, NEAR);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class Checks {
 	 * @param distance Distancia máxima a la que se considera que un objeto está cerca de otro.
 	 * @return true si hay alidos cerca, false en caso contrario.
 	 */
-	public static boolean areThereCompanionsNear (Character source, float distance) {
+	public static boolean areThereCompanionsLessThanDistance (Character source, float distance) {
 		for (WorldObject obj : IADeVProject.worldObjects) {
 			if (obj instanceof Character) {
 				Character target = (Character)obj;
@@ -98,7 +98,7 @@ public class Checks {
 	 * @return true si hay aliados cerca, false en caso contrario.
 	 */
 	public static boolean areThereCompanionsNear (Character source) {
-		return areThereCompanionsNear(source, NEAR);
+		return areThereCompanionsLessThanDistance(source, NEAR);
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class Checks {
 	 * @param distance Distancia máxima a la que se considera que un objeto está cerca de otro.
 	 * @return la cantidad de enemigos que hay cerca.
 	 */
-	public static int howManyEnemiesAreThereNear (Character source, float distance) {
+	public static int howManyEnemiesAreThereLessThanDistance (Character source, float distance) {
 		int resultado = 0;
 		for (WorldObject obj : IADeVProject.worldObjects) {
 			if (obj instanceof Character) {
@@ -136,7 +136,7 @@ public class Checks {
 	 * @return la cantidad de enemigos que hay cerca.
 	 */
 	public static int howManyEnemiesAreThereNear (Character source) {
-		return howManyEnemiesAreThereNear(source, NEAR);
+		return howManyEnemiesAreThereLessThanDistance(source, NEAR);
 	}
 	
 	/**
@@ -145,7 +145,7 @@ public class Checks {
 	 * @param distance Distancia máxima a la que se considera que un objeto está cerca de otro.
 	 * @return la cantidad de enemigos que hay cerca.
 	 */
-	public static int howManyCompanionsAreThereNear (Character source, float distance) {
+	public static int howManyCompanionsAreThereLessThanDistance (Character source, float distance) {
 		int resultado = 0;
 		for (WorldObject obj : IADeVProject.worldObjects) {
 			if (obj instanceof Character) {
@@ -174,7 +174,7 @@ public class Checks {
 	 * @return la cantidad de enemigos que hay cerca.
 	 */
 	public static int howManyCompanionsAreThereNear (Character source) {
-		return howManyCompanionsAreThereNear(source, NEAR);
+		return howManyCompanionsAreThereLessThanDistance(source, NEAR);
 	}
 	
 	/**
@@ -316,5 +316,21 @@ public class Checks {
 	 */
 	public static boolean amIFromNeutralTeam(Character source) {
 		return source.getTeam() == Team.NEUTRAL;
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' está a menos de 'distance' distancia
+	 * de su base.
+	 * @param source Personaque que realiza la pregunta.
+	 * @param distance Distancia que se quiere consultar.
+	 * @return true si está a menos de esa distancia, false en caso contrario.
+	 */
+	public static boolean amILessThanDistanceFromMyBase(Character source, float distance) {
+		// Obtenemos la posición de la base
+		Vector3 basePosition = IADeVProject.getPositionOfTeamBase(source.getTeam());
+		// Obtenemos la distancia entre la base y el personaje.
+		float dst = basePosition.dst(source.getPosition());
+		// Comprobamos la distancia.
+		return dst < distance;
 	}
 }

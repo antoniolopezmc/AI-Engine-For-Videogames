@@ -3,6 +3,8 @@ package com.mygdx.iadevproject.aiTactical.roles.states;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 
+import com.mygdx.iadevproject.model.Character;
+
 public class GoToMyManantial implements State<Character> {
 
 	public GoToMyManantial() {
