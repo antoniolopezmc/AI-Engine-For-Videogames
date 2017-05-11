@@ -14,6 +14,7 @@ import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
+import com.mygdx.iadevproject.aiReactive.behaviour.others.Cure;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -116,6 +117,11 @@ public class CircularFormation extends Formation {
 			// Este comportamiento debe estar en la segunda posición de la lista para que siempre se ejecute, excepto cuando nos
 			// 	vayamos a chocar.
 			map.put(40.0f, new Attack(source, target_attack, health_attack, max_distance_attack));
+		}
+		if (this.flag_cure) {
+			// Este comportamiento debe estar en la segunda posición de la lista para que siempre se ejecute, excepto cuando nos
+			// 	vayamos a chocar.
+			map.put(42.0f, new Cure(source, health_cure));
 		}
 		
 		// Devolvemos el comportamiento que nos diga el árbitro.

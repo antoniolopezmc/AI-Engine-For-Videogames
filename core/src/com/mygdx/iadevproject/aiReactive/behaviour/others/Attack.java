@@ -29,7 +29,9 @@ public class Attack implements Behaviour {
 		}
 	}
 	
+	// Personaje que realiza el ataque.
 	private Character source;
+	// Personaje que recibe el ataque.
 	private Character target; // El target también debe ser un Character.
 	// Salud que se le restará al target en el ataque.
 	private float health;

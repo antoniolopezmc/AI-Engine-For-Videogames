@@ -323,6 +323,15 @@ public class Character extends WorldObject {
 	}
 	
 	/**
+	 * Método para aumentar la vida del personaje.
+	 * @param health Vida que queremos sumar.
+	 */
+	public void addHealth (float health) {
+		this.currentHealth = Math.min(this.maxHealth, this.currentHealth + health);
+		this.previousHealth = this.currentHealth; // TODO Pensar.
+	}
+	
+	/**
 	 * Método para dibujar la cantidad de vida que tiene el personaje.
 	 * @param batch
 	 * @param font

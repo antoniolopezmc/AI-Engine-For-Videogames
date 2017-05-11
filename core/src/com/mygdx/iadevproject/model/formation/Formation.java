@@ -105,8 +105,8 @@ public abstract class Formation extends Character {
 	
 	// ===> EXTREMADAMENTE IMPORTANTE  <===
 	// Cuando una formación ataca, el behaviour de atacar no se añadirá a la lista de comportamientos de la propia formación, sino a la lista ¡¡¡¡DE LOS INTEGRANTES!!!! (la que se mete a pelo en los hijos).
-	// 	Por tanto, pata saber cuando estoy atacando voy a neceistar 2 nuevos atributos: un flag de ataque y la distancia máxima de ataque. Si ese flag está a true, el behaviour de attack se añadirá a los hijos.
-	protected boolean flag_attack = false;
+	// 	Por tanto, para saber cuando estoy atacando voy a neceistar varios nuevos atributos: 
+	protected boolean flag_attack = false; // Si este flag está a true, el behaviour de attack se añadirá a los hijos.
 	protected float max_distance_attack = 0.0f;
 	protected Character target_attack;
 	protected float health_attack = 0.0f;
@@ -129,6 +129,28 @@ public abstract class Formation extends Character {
 	 */
 	public void disableAttackMode() {
 		this.flag_attack = false;
+	}
+	
+	// ===> EXTREMADAMENTE IMPORTANTE  <===
+	// Cuando una formación se cura, el behaviour de curar no se añadirá a la lista de comportamientos de la propia formación, sino a la lista ¡¡¡¡DE LOS INTEGRANTES!!!! (la que se mete a pelo en los hijos).
+	// 	Por tanto, para saber cuando estoy curándome voy a necesitar varios nuevos atributos: 
+	protected boolean flag_cure = false; // Si este flag está a true, el behaviour de cure se añadirá a los hijos.
+	protected float health_cure = 0.0f;
+	
+	/**
+	 * Indica a los componentes de la formación que deben curarse.
+	 * @param health_cure Salud que se incrementa en la curación.
+	 */
+	public void enableCure (float health_cure) {
+		this.flag_cure = true;
+		this.health_cure = health_cure;
+	}
+	
+	/**
+	 * Indica a los componentes de la formación que ya no deben curarse.
+	 */
+	public void disableCure() {
+		this.flag_cure = false;
 	}
 	
 	/**
@@ -242,6 +264,10 @@ public abstract class Formation extends Character {
 		return (float) Math.toDegrees(MathUtils.atan2(-vector.x, vector.y));
 	}
 	
+	/**
+	 * Método para reducir la vida de la formación.
+	 * @param health Vida que queremos restar.
+	 */
 	public void reduceHealth (float health) {
 		// MUY MUY MUY MUY MUY IMPORTANTE.
 		// --> Las formaciones no pierden vida.
@@ -250,6 +276,18 @@ public abstract class Formation extends Character {
 		// Por tanto, este método no hace nada.
 	}
 	
+	/**
+	 * Método para aumentar la vida de la formación.
+	 * @param health Vida que queremos sumar.
+	 */
+	public void addHealth (float health) {
+		// MUY MUY MUY MUY MUY IMPORTANTE.
+		// --> Las formaciones no ganan vida.
+		// --> A un objeto formación como tal no le puede atacar ni puede perder ni ganar vida.
+		
+		// Por tanto, este método no hace nada.
+	}
+
 	/**
 	 * Método que dibuja las posiciones donde se deben colocar los componentes de la formación.
 	 * @param renderer Renderer sobre el que dibujar.
