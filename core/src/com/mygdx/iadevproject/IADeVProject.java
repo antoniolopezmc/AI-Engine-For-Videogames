@@ -75,10 +75,6 @@ public class IADeVProject extends ApplicationAdapter {
 	public static ShapeRenderer renderer = new ShapeRenderer();	// Para dibujar líneas
 	public static Map<Team, Rectangle> bases;				// Bases de los equipos. Cada equipo tiene su base. 
 	public static Map<Team, Rectangle> manantials;			// Manantiales de los equipos. Cada equipo tiene su manantial.
-	
-	// Distancia máxima de ataque de cada tipo de personaje.
-	public static float SOLDIER_ATTACK_DISTANCE = 5.0f;
-	public static float ARCHER_ATTACK_DISTANCE = 30.0f;
     
 	
 	/** VARIABLES LOCALES **/
