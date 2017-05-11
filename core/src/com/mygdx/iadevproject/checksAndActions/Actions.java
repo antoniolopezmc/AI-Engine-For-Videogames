@@ -14,9 +14,11 @@ import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithou
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
+import com.mygdx.iadevproject.aiReactive.behaviour.others.Cure;
 import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.Formation;
 
 public class Actions {
 	
@@ -75,6 +77,49 @@ public class Actions {
 		map.put(10.0f, new Attack(source, target, health, maxDistance));
 		return map;
 	}
+	
+	/**
+	 * Método que refleja la acción de curar.
+	 * @param source Personaje que realiza el ataque.
+	 * @param health Salud que se sumará a la vida del personaje.
+	 * @return El Map de comportamientos correspondiente a esta acción.
+	 */
+	public Map<Float, Behaviour> cure (Character source, float health) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		// Ponemos un peso. Da igual el que sea.
+		map.put(10.0f, new Cure(source, health));
+		return map;
+	}
+	
+	/**
+	 * Método que refleja la acción de dejar de curar.
+	 * @param source Personaje que realiza el ataque.
+	 * @return Map vacío
+	 */
+	public Map<Float, Behaviour> leaveCure (Character source) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		if (source instanceof Formation) {
+			Formation formation = (Formation)source;
+			formation.disableCure();
+		}
+		return map;
+	}
+	
+	/**
+	 * Método que refleja la acción de dejar de atacar.
+	 * @param source Personaje que realiza el ataque.
+	 * @return Map vacío
+	 */
+	public Map<Float, Behaviour> leaveAttack (Character source) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		if (source instanceof Formation) {
+			Formation formation = (Formation)source;
+			formation.disableAttackMode();
+		}
+		return map;
+	}
+	
+	
 	
 	// TODO Atacar mirando al objetivo.
 	
