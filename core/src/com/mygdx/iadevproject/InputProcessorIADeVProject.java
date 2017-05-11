@@ -86,14 +86,6 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			touchPos.set(screenX, screenY, 0);
 			IADeVProject.camera.unproject(touchPos);
 			
-			
-			System.out.println(touchPos);
-			
-			IADeVProject.bucket.setPosition(touchPos);
-			
-			
-			
-			
 			// Para todo objeto del mundo
 			for (WorldObject obj : IADeVProject.worldObjects) {
 				// Comprobamos si se ha pinchado sobre él

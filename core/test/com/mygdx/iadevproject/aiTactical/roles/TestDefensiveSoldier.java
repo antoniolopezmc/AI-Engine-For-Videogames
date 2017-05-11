@@ -16,12 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.InputProcessorIADeVProject;
-import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
@@ -64,21 +59,8 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         drop.setMaxSpeed(50.0f);
-       
-        
-        bucket = new Character(new PriorityArbitrator(1e-5f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-    	bucket.setBounds(800.0f, 600.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
-        bucket.setOrientation(60.0f);
-        bucket.setVelocity(new Vector3(0,0.0f,0));
-
-        WallAvoidance wallAvoidance = new WallAvoidance(drop, 300.0f, IADeVProject.worldObstacles, 300.0f, 20.0f, 100.0f);
-        drop.addToListBehaviour(wallAvoidance, 60);
-        Seek_Accelerated seek = new Seek_Accelerated(drop, bucket, 20.0f);
-        seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_MILLINGTON);
-        drop.addToListBehaviour(seek);
-        drop.addToListBehaviour(new Face(drop, bucket, 30.0f, 30.0f, 1.0f, 10.0f, 1.0f));
-        drop.addToListBehaviour(new CollisionAvoidance(drop, IADeVProject.worldObstacles, 200.0f)); 
-                
+        drop.setTeam(Team.LDANIEL);
+                       
         defensiveSoldier = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         defensiveSoldier.setBounds(1418.0f,170.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         defensiveSoldier.setOrientation(60.0f);
@@ -88,7 +70,7 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         defensiveSoldier.initializeTacticalRole(new DefensiveSoldier());
         
         
-        IADeVProject.addToWorldObjectList(drop, bucket, defensiveSoldier);
+        IADeVProject.addToWorldObjectList(drop, defensiveSoldier);
         
         // Inicializamos las estructuras para el manejo de los waypoints de los puentes.
         Waypoints.initializeBridgesWaypoints();
@@ -96,6 +78,8 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
 	
 	@Override
 	public void render() {
+		processMouseEvent();
+		
 		// Cada vez que renderiza, indicamos al InputProcessor que procese si hay una tecla pulsada. Esto se hace aquí
         // porque InputProcessor no tiene ningún método para indicar que se mantiene pulsada una tecla. Nosotros queremos
         // que mientras se pulse una de las teclas de movimiento de la cámara, la cámara se mueva sin tener que estar pulsando
@@ -109,9 +93,6 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         renderer.setProjectionMatrix(camera.combined);
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-        
-        
-        drop.applyBehaviour();
         
         defensiveSoldier.updateTacticalRole();
         
@@ -138,6 +119,20 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
 		tiledMap.dispose();
         batch.dispose();
 	}
+	
+	/**
+	 * Este método es para evitar llamar al inputProcessor si tenemos que mover personajes con el ratón
+	 */
+	private void processMouseEvent() {
+		if (Gdx.input.isTouched()) {
+			Vector3 touchPos = new Vector3();
+			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+			camera.unproject(touchPos);
+
+			drop.setPosition(touchPos);
+		}
+	}
+	
 	
 	/** MÉTODOS DE DIBUJO DE LÍNEAS **/
 	/**
