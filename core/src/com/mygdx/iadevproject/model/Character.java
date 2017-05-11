@@ -324,17 +324,19 @@ public class Character extends WorldObject {
 	// Método privado que calcula el factor de velocidad del personaje. Este factor de velocidad se usará en 'update'.
 	// 	Es método pertenece a la parte táctica.
 	private float getVelocityFactorOfThisCharacter() {
-		// Primero, obtenemos el terreno sobre el que se encuentra el personaje.
-		Ground g = IADeVProject.getGroundOfPosition(this.getPosition());
 		float velocityFactor;
 		// A la hora de comprobar si debe aplicarse un factor de velocidad o ralentización de velocidad, hay varias alternativas.
 		if ((this.role == null) && (this.formation == null)) {
 			// Si el personaje no tiene rol y no pertenece a ninguna formación, se asigna 1 (es decir, no hay ralentización).
 			velocityFactor = 1.0f;
 		} else if ((this.role == null) && (this.formation != null)) {
+			// Obtenemos el terreno sobre el que se encuentra el personaje.
+			Ground g = IADeVProject.getGroundOfPosition(this.getPosition());
 			// Si el personaje forma parte de una formación, se accede al rol de la formación.
 			velocityFactor = this.formation.getRole().getVelocityFactor(g);
 		} else if (this.role != null) {
+			// Obtenemos el terreno sobre el que se encuentra el personaje.
+			Ground g = IADeVProject.getGroundOfPosition(this.getPosition());
 			// Si el personaje tiene un rol, consultamos a dicho rol.
 			velocityFactor = this.role.getVelocityFactor(g);
 		} else {
