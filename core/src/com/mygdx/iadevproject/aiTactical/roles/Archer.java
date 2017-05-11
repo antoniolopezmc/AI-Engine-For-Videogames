@@ -16,7 +16,7 @@ public abstract class Archer implements TacticalRole {
 	private static final int TRAIL_COST 		= 20;
 	
 	// Distancia máxima de ataque.
-	private static float ARCHER_ATTACK_MAX_DISTANCE = 30.0f;
+	private static float ARCHER_ATTACK_MAX_DISTANCE = 50.0f;
 	// Vida que quita este personaje al atacar.
 	private static float ARCHER_ATTACK_DAMAGE_TO_DONE = 25.0f;
 
