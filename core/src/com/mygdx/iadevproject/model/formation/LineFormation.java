@@ -165,7 +165,7 @@ public class LineFormation extends Formation {
 			// Este comportamiento debe estar en la segunda posición de la lista para que siempre se ejecute, excepto cuando nos
 			// 	vayamos a chocar.
 			map.put(42.0f, new Cure(source, health_cure));
-		}
+		} 
 		
 		// Devolvemos el comportamiento que nos diga el árbitro.
 		return arbitrator.getSteering(map);
