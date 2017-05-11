@@ -175,24 +175,22 @@ public class Waypoints {
 	/**
 	 * Asocia un waypoint a un personaje.
 	 * @param source El personaje a asociar.
-	 * @return Lista de waypoints (2 waypoints) que el personaje deberá patrullar. Uno de ellos es el que le ha sido asignado (y el otro es el vecino de éste).
+	 * @return Lista de waypoints (2 waypoints) que el personaje deberá patrullar. Uno de ellos es el que le ha sido asignado y el otro es el vecino de éste. Si el personaje es neutral o no quedan waypoints libres, se devuelve la lista vacía.
 	 */
-	public List<Vector3> bookBridgeWaypoint (Character source) {
+	public static List<Vector3> bookBridgeWaypoint (Character source) {
 		// Si el personaje es neutral no puede acceder a esta funcionalidad.
 		if (source.getTeam() == Team.NEUTRAL) {
 			return new LinkedList<Vector3>(); // Al aplicar una lista vacia al comportamiento Pathfollowing, el personaje se quedará quieto.
 		} else {
 			// Recuperamos las estructuras correspondientes en función del equipo del personaje.
 			Map<Character, Vector3> bridges_CharacterAndWaypointAssociation = getBridges_CharacterAndWaypointAssociation(source.getTeam());
-			Map<Vector3, Map<Boolean, Vector3>> bridgesWayPoints = getBridgesWayPoints(source.getTeam());
+			Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints = getBridgesWayPoints(source.getTeam());
 			// Reservamos un waypoint.
 			if (bridges_CharacterAndWaypointAssociation.containsKey(source)) {
-				// Se el personaje ya está asociado a un waypoint, devolvemos ese y su vecino. (No se modifica la otra estructura).
+				// Si el personaje ya está asociado a un waypoint, devolvemos ese y su vecino. (No se modifica la otra estructura).
 				Vector3 waypointAsociado = bridges_CharacterAndWaypointAssociation.get(source);
-				Vector3 waypointVecino = null;
-				Map<Boolean, Vector3> waypointAsociado_bridgesWayPoints = bridgesWayPoints.get(waypointAsociado); // Esto devuelve un Map<Boolean, Vector3> CON UNA ÚNICA ENTRADA.
-				// --> EL BOOLEANO ESTARÁ A TRUE PORQUE ESTE WAYPOINT YA ESTABA ASOCIADO A UN PERSONAJE.
-				waypointVecino = new LinkedList<Vector3>(waypointAsociado_bridgesWayPoints.values()).get(0);
+				Vector3 waypointVecino = bridgesWayPoints.get(waypointAsociado).getWaypointVecino();
+				// Devolvemos el waypoint asociado y su vecino.
 				List<Vector3> salida = new LinkedList<Vector3>();
 				salida.add(waypointAsociado);
 				salida.add(waypointVecino);
@@ -202,11 +200,12 @@ public class Waypoints {
 				// 	-> Primero, buscamos un waypoint libre.
 				Vector3 waypointLibre = null;
 				Vector3 vecinoDelWaypointLibre = null;
-				for (Entry<Vector3, Map<Boolean, Vector3>> entrada: bridgesWayPoints.entrySet()) {
-					Boolean disponible = (new LinkedList<Boolean>(entrada.getValue().keySet())).get(0);
-					if (disponible) {
+				// Recorremos el Map.
+				for (Entry<Vector3, ValueOfBridgeWaypoint> entrada: bridgesWayPoints.entrySet()) {
+					Boolean disponible = entrada.getValue().getOcupacion();
+					if (disponible) { // Si hemos encontrado un waypoint libre, lo almacenamos.
 						waypointLibre = entrada.getKey();
-						vecinoDelWaypointLibre = (new LinkedList<Vector3>(entrada.getValue().values())).get(0);
+						vecinoDelWaypointLibre = entrada.getValue().getWaypointVecino();
 					}
 				}
 				if (waypointLibre == null) { // Si no hay ninguno libre.
@@ -230,23 +229,50 @@ public class Waypoints {
 	 * Desligamos un personaje y su waypoints del puente asociado.
 	 * @param source Personaje a desligar.
 	 */
-	public void freeBridgeWaypoint (Character source) {
+	public static void freeBridgeWaypoint (Character source) {
 		if (source.getTeam() != Team.NEUTRAL) { // Si el personaje es neutral, no tiene acceso a esta funcionalidad.
 			// Recuperamos las estructuras correspondientes en función del equipo del personaje.
 			Map<Character, Vector3> bridges_CharacterAndWaypointAssociation = getBridges_CharacterAndWaypointAssociation(source.getTeam());
-			Map<Vector3, Map<Boolean, Vector3>> bridgesWayPoints = getBridgesWayPoints(source.getTeam());
+			Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints = getBridgesWayPoints(source.getTeam());
 			// Comprobamos si el personaje realmente está asociado a un waypoint del puente.
 			if (bridges_CharacterAndWaypointAssociation.containsKey(source)) { // Si lo está, lo desligamos.
 				Vector3 waypointAsociado = bridges_CharacterAndWaypointAssociation.get(source); // Obtenemos el waypoint asociado al personaje de entrada.
 				// También debemos obtener su waypoint vecino.
-				Vector3 waypointVecino = null;
-				Map<Boolean, Vector3> waypointAsociado_bridgesWayPoints = bridgesWayPoints.get(waypointAsociado); // Esto devuelve un Map<Boolean, Vector3> CON UNA ÚNICA ENTRADA.
-				// --> EL BOOLEANO ESTARÁ A TRUE PORQUE ESTE WAYPOINT YA ESTABA ASOCIADO A UN PERSONAJE.
-				waypointVecino = new LinkedList<Vector3>(waypointAsociado_bridgesWayPoints.values()).get(0);
+				Vector3 waypointVecino = bridgesWayPoints.get(waypointAsociado).getWaypointVecino();
 				// Eliminamos la asociación de la lista de asociaciones.
 				bridges_CharacterAndWaypointAssociation.remove(source); // Eliminamos de la lista de asociaciones.
 				// Ahora, debemos volver a poner el waypoint como desocupado.
 				bridgesWayPoints.put(waypointAsociado, getValueOfBridgeWaypoint(false, waypointVecino));
+			}
+		}
+	}
+	
+	/**
+	 * Método que devuelve el waypoint del puente asociado a un personaje y su vecino.
+	 * @param source Personaje sobre el que consultamos.
+	 * @return Lista de waypoints (2 waypoints) que el personaje deberá patrullar. Uno de ellos es el que tiene asignado y el otro es el vecino de éste. Si el personaje es neutral o no tiene un waypoint asociado, se devuelve la lista vacía.
+	 */
+	public static List<Vector3> getAssociatedWaypointAndNeighboring (Character source) {
+		// Si el personaje es neutral no puede acceder a esta funcionalidad.
+		if (source.getTeam() == Team.NEUTRAL) {
+			return new LinkedList<Vector3>(); // Al aplicar una lista vacia al comportamiento Pathfollowing, el personaje se quedará quieto.
+		} else {
+			// Recuperamos las estructuras correspondientes en función del equipo del personaje.
+			Map<Character, Vector3> bridges_CharacterAndWaypointAssociation = getBridges_CharacterAndWaypointAssociation(source.getTeam());
+			Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints = getBridgesWayPoints(source.getTeam());
+			
+			// Comprobamos si el personaje está asociado a un waypoint.
+			if (bridges_CharacterAndWaypointAssociation.containsKey(source)) {
+				// Si sí lo está, devolvemos su waypoint y el vecino.
+				Vector3 waypointAsociado = bridges_CharacterAndWaypointAssociation.get(source);
+				Vector3 waypointVecino = bridgesWayPoints.get(waypointAsociado).getWaypointVecino();
+				List<Vector3> salida = new LinkedList<Vector3>();
+				salida.add(waypointAsociado);
+				salida.add(waypointVecino);
+				return salida;
+			} else {
+				// Si el personaje no tiene ningún waypoint asociado, devolvemos la lista vacia.
+				return new LinkedList<Vector3>();
 			}
 		}
 	}
