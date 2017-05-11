@@ -29,6 +29,7 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
 	private Character gota;
 	private Character gota2;
 	private Character gota3;
+	private Character gota4;
 	private Character cubo;
 	
 	private List<Vector3> listaDePuntos;
@@ -77,8 +78,18 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         gota3.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         gota3.setOrientation(0.0f);
         gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
-        gota3.addToListBehaviour(new PathFollowingWithoutPathOffset(gota2, 40.0f, new LinkedList<Vector3>(), 20.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+        gota3.addToListBehaviour(new PathFollowingWithoutPathOffset(gota3, 40.0f, new LinkedList<Vector3>(), 20.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
         gota3.setMaxSpeed(20.0f); // Limitamos la velocidad del objeto para que no se nos vaya de madre.
+        
+        // Creamos el personaje. Con una lista de SOLO UN ELEMENTO.
+        gota4 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        gota4.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
+        gota4.setOrientation(0.0f);
+        gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        List<Vector3> listaSoloUnPunto = new LinkedList<Vector3>();
+        listaSoloUnPunto.add(listaDePuntos.get(2));
+        gota4.addToListBehaviour(new PathFollowingWithoutPathOffset(gota4, 40.0f, listaSoloUnPunto, 20.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+        gota4.setMaxSpeed(20.0f); // Limitamos la velocidad del objeto para que no se nos vaya de madre.
       
 	}
 	
@@ -94,11 +105,14 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         
         gota.applyBehaviour();
         gota2.applyBehaviour();
+        gota3.applyBehaviour();
+        gota4.applyBehaviour();
         
         batch.begin();
         gota.draw(batch);
 		gota2.draw(batch);
 		gota3.draw(batch);
+		gota4.draw(batch);
         batch.end();
     	
 		renderer.begin(ShapeType.Filled);

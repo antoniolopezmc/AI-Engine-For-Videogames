@@ -127,7 +127,7 @@ public class Waypoints {
 			return null;
 		}
 	}
-	// -------------------------------------> Hasta aquí revisado.
+	
 	// *************************************************************************************************************************
 	/**
 	 * Devuelve el valor del Map para un elemento de bridgesWayPoints.
@@ -135,10 +135,8 @@ public class Waypoints {
 	 * @param waypointVecino Vecino del waypoint.
 	 * @return el valor del Map para un elemento de bridgesWayPoints.
 	 */
-	private static Map<Boolean, Vector3> getValueOfBridgeWaypoint (Boolean ocupado, Vector3 waypointVecino) {
-		Map<Boolean, Vector3> salida = new HashMap<Boolean, Vector3>();
-		salida.put(ocupado, waypointVecino);
-		return salida;
+	private static ValueOfBridgeWaypoint getValueOfBridgeWaypoint (Boolean ocupacion, Vector3 waypointVecino) {
+		return new ValueOfBridgeWaypoint(ocupacion, waypointVecino);
 	}
 	
 	/**
@@ -149,8 +147,8 @@ public class Waypoints {
 		bridges_CharacterAndWaypointAssociation_team_FJAVIER = new HashMap<Character, Vector3>();
 		//bridges_CharacterAndWaypointAssociation_team_FJAVIER.put(new Character(new WeightedBlendArbitrator_Accelerated(2.0f, 2.0f)), new Vector3(2.0f, 2.0f, 2.0f));
 		bridges_CharacterAndWaypointAssociation_team_LDANIEL = new HashMap<Character, Vector3>();
-		bridgesWayPoints_team_FJAVIER = new HashMap<Vector3, Map<Boolean, Vector3>>();
-		bridgesWayPoints_team_LDANIEL = new HashMap<Vector3, Map<Boolean, Vector3>>();
+		bridgesWayPoints_team_FJAVIER = new HashMap<Vector3, ValueOfBridgeWaypoint>();
+		bridgesWayPoints_team_LDANIEL = new HashMap<Vector3, ValueOfBridgeWaypoint>();
 		// Añadimos todos los waypointa en la estructura de los waypoints.
 		// 		-> Equipo FJAVIER (el de arriba)
 		bridgesWayPoints_team_FJAVIER.put(new Vector3(482.00006f, 683.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(606.0f, 852.0001f, 0.0f)));
@@ -173,7 +171,7 @@ public class Waypoints {
 		bridgesWayPoints_team_FJAVIER.put(new Vector3(1874.0001f, 1601.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1694.0001f, 1506.0001f, 0.0f)));
 		
 	}
-	
+	// -------------------------------------> Hasta aquí revisado.
 	/**
 	 * Asocia un waypoint a un personaje.
 	 * @param source El personaje a asociar.
