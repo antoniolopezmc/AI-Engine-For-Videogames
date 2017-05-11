@@ -21,13 +21,13 @@ import com.mygdx.iadevproject.model.Character;
 public class Waypoints {
 
 	// Waypoints de la base del equipo fjavier. Servirán para que los personajes sigan un camino preestablecido al patrullar su base.
-	private static List<Vector3> fjavierWayPoints = new LinkedList<Vector3>(Arrays.asList(new Vector3(1592.2f,52.9f,0.0f), 
+	private static List<Vector3> fjavierWayPoints = new LinkedList<Vector3>(Arrays.asList(new Vector3(1592.2f,70.9f,0.0f), 
 			new Vector3(1589.8f,197.8f,0.0f),
 			new Vector3(1589.8f,335.8f,0.0f),
 			new Vector3(1661.2f,434.7f,0.0f),
 			new Vector3(1776.2f,439.3f,0.0f),
 			new Vector3(1893.5f,439.3f,0.0f),
-			new Vector3(1990.1f,439.3f,0.0f)));
+			new Vector3(1980.1f,439.3f,0.0f)));
 	
 	// Waypoints de la base del equipo ldaniel. Servirán para que los personajes sigan un camino preestablecido al patrullar su base.
 	private static List<Vector3> ldanielWayPoints = new LinkedList<Vector3>(Arrays.asList(new Vector3(49.5f,1613.3f,0.0f), 

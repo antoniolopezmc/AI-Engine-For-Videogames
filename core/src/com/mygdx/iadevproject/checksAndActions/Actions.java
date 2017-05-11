@@ -205,7 +205,7 @@ public class Actions {
 		Map<Float, Behaviour> map = createListBehaviour();
 		// Obtenemos los waypoints de la base del personaje a patrullar.
 		List<Vector3> pointsList = Waypoints.getWaypointsOfMyBase(source);
-		map.put(weight, new PathFollowingWithoutPathOffset(source, maxAcceleration, pointsList, 1.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+		map.put(weight, new PathFollowingWithoutPathOffset(source, maxAcceleration, pointsList, 13.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
 		return map;
 	}
 	
