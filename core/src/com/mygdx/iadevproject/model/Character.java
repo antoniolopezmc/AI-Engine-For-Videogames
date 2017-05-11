@@ -318,9 +318,6 @@ public class Character extends WorldObject {
 	 */
 	public void reduceHealth (float health) {
 		this.currentHealth = Math.max(0.0f, this.currentHealth - health);
-		/*
-		 * if (this.currentHealth == 0) {this.muerto()} --> PENSAR.
-		 */
 	}
 	
 	/**
