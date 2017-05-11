@@ -23,7 +23,7 @@ public class Character extends WorldObject {
 	// Constante que indica la importancia por defecto que tienen los comportamientos que se añaden
 	// al personaje.
 	private static float DEFAULT_IMPORTANCE = 1;
-	private static float DEFAULT_HEALTH = 20000.0f; // La vida baja rápido. Hay que poner un valor adecuado apra que se vea el descenso.
+	public static float DEFAULT_HEALTH = 20000.0f; // La vida baja rápido. Hay que poner un valor adecuado apra que se vea el descenso.
 	
 	// Mapa de posibles comportamientos del personaje con los valores de importancia de los mismos para el personaje.
 	// Está <Float, Behaviour> porque si se quiere tener ordenado por valor de importancia (lo que nos ahorraría muchas comprobaciones

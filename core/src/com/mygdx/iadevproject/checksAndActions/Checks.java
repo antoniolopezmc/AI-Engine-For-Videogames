@@ -13,7 +13,8 @@ public class Checks {
 	// Distancia por defecto a la que nosotros consideramos que objeto está "cerca" de otro. 
 	private static final float NEAR = 10;
 	// Cantidad por defecto de salud que nosotros consideramos como "poca" salud.
-	private static final float LITTLE_HEALTH = 20;
+	// 		Depende de la salud por defecto del personaje.
+	private static final float LITTLE_HEALTH = Character.DEFAULT_HEALTH * 0.2f;
 	
 	/**
 	 * Método que cumprueba si me están atacando.
