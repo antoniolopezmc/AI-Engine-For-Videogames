@@ -23,14 +23,14 @@ public abstract class Soldier implements TacticalRole {
 	@Override
 	public float getVelocityFactor(Ground ground) {
 		switch (ground) {
-			case MOUNTAINS: return 0.0f; // Terreno infranqueable.
-			case WATER:		return 0.0f; // Terreno infranqueable.
+			case MOUNTAINS: return 0.1f; // Terreno infranqueable.
+			case WATER:		return 0.1f; // Terreno infranqueable.
 			case WAY: 		return 1.0f;
 			case FOREST:	return 0.4f;
 			case MEADOW: 	return 0.6f;
 			case DESERT:	return 0.4f;
 			case TRAIL:		return 1.0f;
-			default:		return 0.0f;		
+			default:		return 0.1f;		
 		}
 	}
 

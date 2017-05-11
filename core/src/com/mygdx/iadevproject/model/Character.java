@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.steering.*;
 import com.mygdx.iadevproject.aiTactical.roles.TacticalRole;
+import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.model.formation.Formation;
 
 
@@ -269,13 +271,20 @@ public class Character extends WorldObject {
 	 * @param time Parámetro tiempo. Indica el tiempo transcurrido entre un frame y en siguiente.
 	 */
 	public void update(Steering steering, float time) {
+		// ESTO ES DE LA PARTE TÁCTICA
+		// Calculamos el factor de velocidad a aplicar al personaje.
+		float velocityFactor = this.getVelocityFactorOfThisCharacter();
+		
+		
 		// --> Si en algún momento 'steering' vale null, da igual porque tampoco entraría a ninguno de los ifs.
 		if (steering instanceof Steering_NoAcceleratedUnifMov) {
 			Steering_NoAcceleratedUnifMov newSteering = (Steering_NoAcceleratedUnifMov) steering;
 			// Si el Steering es de tipo uniforme no acelerado, se modifica la posición y orientación del personaje en función de la velocidad y rotación del Steering.
 			
 			// Modificamos la posición del personaje.
-			Vector3 velPRODtime = new Vector3(newSteering.getVelocity().x * time, newSteering.getVelocity().y * time, newSteering.getVelocity().z * time);
+			Vector3 velPRODtime = new Vector3(newSteering.getVelocity().x * time * velocityFactor,
+					newSteering.getVelocity().y * time * velocityFactor,
+					newSteering.getVelocity().z * time * velocityFactor);
 			this.setPosition(this.getPosition().add(velPRODtime));
 			
 			//Modificamos la orientación del personaje.
@@ -300,7 +309,9 @@ public class Character extends WorldObject {
 			this.setRotation_angularSpeed(this.getRotation_angularSpeed() + angPRODtime);
 			
 			// Modificamos la posición del personaje.
-			Vector3 velPRODtime = new Vector3(this.getVelocity().x * time, this.getVelocity().y * time, this.getVelocity().z * time);
+			Vector3 velPRODtime = new Vector3(this.getVelocity().x * time * velocityFactor,
+					this.getVelocity().y * time * velocityFactor,
+					this.getVelocity().z * time * velocityFactor);
 			this.setPosition(this.getPosition().add(velPRODtime));
 			
 			// Modificamos la orientación del personaje.
@@ -308,6 +319,29 @@ public class Character extends WorldObject {
 			this.setOrientation(this.getOrientation() + rotPRODtime);
 			
 		}
+	}
+	
+	// Método privado que calcula el factor de velocidad del personaje. Este factor de velocidad se usará en 'update'.
+	// 	Es método pertenece a la parte táctica.
+	private float getVelocityFactorOfThisCharacter() {
+		// Primero, obtenemos el terreno sobre el que se encuentra el personaje.
+		Ground g = IADeVProject.getGroundOfPosition(this.getPosition());
+		float velocityFactor;
+		// A la hora de comprobar si debe aplicarse un factor de velocidad o ralentización de velocidad, hay varias alternativas.
+		if ((this.role == null) && (this.formation == null)) {
+			// Si el personaje no tiene rol y no pertenece a ninguna formación, se asigna 1 (es decir, no hay ralentización).
+			velocityFactor = 1.0f;
+		} else if ((this.role == null) && (this.formation != null)) {
+			// Si el personaje forma parte de una formación, se accede al rol de la formación.
+			velocityFactor = this.formation.getRole().getVelocityFactor(g);
+		} else if (this.role != null) {
+			// Si el personaje tiene un rol, consultamos a dicho rol.
+			velocityFactor = this.role.getVelocityFactor(g);
+		} else {
+			// Por defecto, 1
+			velocityFactor = 1.0f;
+		}
+		return velocityFactor;
 	}
 	
 	// **********************************************************************************************
