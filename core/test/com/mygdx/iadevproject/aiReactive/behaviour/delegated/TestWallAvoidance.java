@@ -57,7 +57,7 @@ public class TestWallAvoidance extends ApplicationAdapter {
         Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
         Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs2.setBounds(180.0f, 130.0f, 64.0f, 64.0f);
+        obs2.setBounds(150.0f, -200.0f, 64.0f, 64.0f);
         Obstacle obs3 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs3.setBounds(100.0f, 250.0f, 64.0f, 64.0f);
         Obstacle obs4 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
@@ -72,7 +72,7 @@ public class TestWallAvoidance extends ApplicationAdapter {
         drop.addToListBehaviour(seek);
         
 //        worldsObstacles.add(obs1);
-//        worldsObstacles.add(obs2);
+        worldsObstacles.add(obs2);
 //        worldsObstacles.add(obs3);
         worldsObstacles.add(obs4);
 //        worldsObstacles.add(obs5);

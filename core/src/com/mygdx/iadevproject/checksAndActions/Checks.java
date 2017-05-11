@@ -7,6 +7,7 @@ import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.Formation;
 
 public class Checks {
 	
@@ -35,7 +36,8 @@ public class Checks {
 	 */
 	public static boolean areThereEnemiesLessThanDistance (Character source, float distance) {
 		for (WorldObject obj : IADeVProject.worldObjects) {
-			if (obj instanceof Character) {
+			// Consideramos los personajes que no sean formaciones
+			if (obj instanceof Character && !(obj instanceof Formation)) {
 				Character target = (Character)obj;
 				
 				if (isItFromEnemyTeam(source, target)) {
@@ -72,7 +74,8 @@ public class Checks {
 	 */
 	public static boolean areThereCompanionsLessThanDistance (Character source, float distance) {
 		for (WorldObject obj : IADeVProject.worldObjects) {
-			if (obj instanceof Character) {
+			// Consideramos los personajes que no sean formaciones
+			if (obj instanceof Character && !(obj instanceof Formation)) {
 				Character target = (Character)obj;
 				
 				// --> Es muy importante comprobar si el elemento actual no soy yo mismo.
@@ -111,7 +114,8 @@ public class Checks {
 	public static int howManyEnemiesAreThereLessThanDistance (Character source, float distance) {
 		int resultado = 0;
 		for (WorldObject obj : IADeVProject.worldObjects) {
-			if (obj instanceof Character) {
+			// Consideramos los personajes que no sean formaciones
+			if (obj instanceof Character && !(obj instanceof Formation)) {
 				Character target = (Character)obj;
 				
 				if (isItFromEnemyTeam(source, target)) {
@@ -149,7 +153,8 @@ public class Checks {
 	public static int howManyCompanionsAreThereLessThanDistance (Character source, float distance) {
 		int resultado = 0;
 		for (WorldObject obj : IADeVProject.worldObjects) {
-			if (obj instanceof Character) {
+			// Consideramos los personajes que no sean formaciones
+			if (obj instanceof Character && !(obj instanceof Formation)) {
 				Character target = (Character)obj;
 				
 				if ((!source.equals(target)) && isItFromMyTeam(source, target)) {
@@ -213,7 +218,8 @@ public class Checks {
 	 */
 	public static boolean areThereEnemyInMyBase(Character source) {
 		for (WorldObject obj : IADeVProject.worldObjects) {
-			if (obj instanceof Character) {
+			// Consideramos los personajes que no sean formaciones
+			if (obj instanceof Character && !(obj instanceof Formation)) {
 				Character target = (Character)obj;
 				
 				// Si el target es del equipo contrario y está en la base enemiga (está en mi base), entonces
@@ -322,7 +328,7 @@ public class Checks {
 	/**
 	 * Método que comprueba si el personaje 'source' está a menos de 'distance' distancia
 	 * de su base.
-	 * @param source Personaque que realiza la pregunta.
+	 * @param source Personaje que realiza la pregunta.
 	 * @param distance Distancia que se quiere consultar.
 	 * @return true si está a menos de esa distancia, false en caso contrario.
 	 */
@@ -333,5 +339,23 @@ public class Checks {
 		float dst = basePosition.dst(source.getPosition());
 		// Comprobamos la distancia.
 		return dst < distance;
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' está cerca de su base.
+	 * @param source Personaje que realiza la pregunta.
+	 * @return true si está cerca de su base, false en caso contrario.
+	 */
+	public static boolean amINearFromMyBase(Character source) {
+		return amILessThanDistanceFromMyBase(source, NEAR);
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' está lejos de su base.
+	 * @param source Personaje que realiza la pregunta.
+	 * @return true si está lejos de su base, false en caso contrario.
+	 */
+	public static boolean amIFarFromMyBase(Character source) {
+		return !amINearFromMyBase(source);
 	}
 }

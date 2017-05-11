@@ -49,7 +49,7 @@ public class TestCollisionAvoidance extends ApplicationAdapter {
         camera.update();
         
         Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
+        obs1.setBounds(400.0f, 400.0f, 64.0f, 64.0f);
         Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         obs2.setBounds(180.0f, 100.0f, 64.0f, 64.0f);
         Obstacle obs3 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
