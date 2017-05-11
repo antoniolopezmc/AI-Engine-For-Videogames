@@ -272,4 +272,7 @@ public abstract class Formation extends Character {
 		}
 		renderer.end();
 	}
+	
+	// TODO Muy importante.
+	// Los método relacionados con la salud deben ser sobreescritos. En una formación se comprueba la media de salud de cada uno de sus integrantes.
 }

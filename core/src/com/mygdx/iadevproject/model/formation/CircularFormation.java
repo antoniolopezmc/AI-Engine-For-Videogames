@@ -113,7 +113,9 @@ public class CircularFormation extends Formation {
 		}
 		
 		if (this.flag_attack) {
-			map.put(5.0f, new Attack(source, target_attack, health_attack, max_distance_attack));
+			// Este comportamiento debe estar en la segunda posición de la lista para que siempre se ejecute, excepto cuando nos
+			// 	vayamos a chocar.
+			map.put(40.0f, new Attack(source, target_attack, health_attack, max_distance_attack));
 		}
 		
 		// Devolvemos el comportamiento que nos diga el árbitro.

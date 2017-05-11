@@ -21,7 +21,7 @@ import com.mygdx.iadevproject.model.WorldObject;
 public class Actions {
 	
 	// =============> EXTREMADAMENTE IMPORTANTE <===============
-	// En la acción atacar debemos comprobrar que no sea una formación.
+	// En la acción atacar debemos comprobrar que no sea una formación. COMPROBAMOS AQUÍ Y EN EL AUTÓMATA / ÁRBOL DE DECISIÓN ...
 	// 	-> No podemos atacar a un objeto formación como tal.
 	
 	// =============> EXTREMADAMENTE IMPORTANTE <===============
