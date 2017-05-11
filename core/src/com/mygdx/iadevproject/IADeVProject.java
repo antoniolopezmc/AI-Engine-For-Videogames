@@ -68,9 +68,9 @@ public class IADeVProject extends ApplicationAdapter {
 	public static Set<WorldObject> selectedObjects; 		// Lista de objetos seleccionados
 	public static OrthographicCamera camera;				// Cámara (es pública para que se pueda acceder el InputProcessorIADeVProject)
 	public static boolean PRINT_PATH_BEHAVIOUR; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
-	public static BitmapFont font;							// Para dibujar letras 
-	public static SpriteBatch batch; 						// Para dibujar letras hace falta tanto un font como un batch.
-	public static ShapeRenderer renderer;					// Para dibujar líneas
+	public static BitmapFont font = new BitmapFont();		// Para dibujar letras 
+	public static SpriteBatch batch = new SpriteBatch();	// Para dibujar letras hace falta tanto un font como un batch.
+	public static ShapeRenderer renderer = new ShapeRenderer();	// Para dibujar líneas
 	public static Map<Team, Rectangle> bases;				// Bases de los equipos. Cada equipo tiene su base. 
 	public static Map<Team, Rectangle> manantials;			// Manantiales de los equipos. Cada equipo tiene su manantial.
 	
@@ -99,9 +99,7 @@ public class IADeVProject extends ApplicationAdapter {
 		// Creación de las variables globales
 		selectedObjects 		= new HashSet<WorldObject>();
 		worldObjects 			= new LinkedList<WorldObject>();
-		PRINT_PATH_BEHAVIOUR 	= true;
-		font 					= new BitmapFont();
-		renderer 				= new ShapeRenderer();
+		PRINT_PATH_BEHAVIOUR 	= true;				
 		bases 					= new HashMap<Team, Rectangle>();	
 		manantials 				= new HashMap<Team, Rectangle>(); 	
 				
@@ -113,7 +111,6 @@ public class IADeVProject extends ApplicationAdapter {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
-        batch 				= new SpriteBatch();
         tiledMap 			= new TmxMapLoader().load("../core/assets/map.tmx");
         tiledMapRenderer 	= new TiledMapIADeVProject(tiledMap);
         
