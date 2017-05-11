@@ -64,6 +64,7 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	
 	/** VARIABLES GLOBALES **/
+	// IMPORTANTE -> En la lista de objetos del mundo están tanto las formaciones como sus integrantes. Está todo.
 	public static List<WorldObject> worldObjects;			// Objetos del mundo
 	public static List<WorldObject> worldObstacles;			// Obstáculos del mundo
 	public static Set<WorldObject> selectedObjects; 		// Lista de objetos seleccionados
