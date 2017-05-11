@@ -37,7 +37,7 @@ public class Actions {
 	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
 	 * @return El Map de comportamientos correspondiente a esta acción.
 	 */
-	public Map<Float, Behaviour> goToMyBase (float weight, Character source, float maxAcceleration) {
+	public static Map<Float, Behaviour> goToMyBase (float weight, Character source, float maxAcceleration) {
 		// Obtenemos la posición de la base del personaje.
 		Vector3 position = IADeVProject.getPositionOfTeamBase(source.getTeam());
 		// Devolvemos el comportamiento de ir hacia la posición de la base.
@@ -51,7 +51,7 @@ public class Actions {
 	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
 	 * @return El Map de comportamientos correspondiente a esta acción.
 	 */
-	public Map<Float, Behaviour> goToEnemyBase (float weight, Character source, float maxAcceleration) {
+	public static Map<Float, Behaviour> goToEnemyBase (float weight, Character source, float maxAcceleration) {
 		// Obtenemos la posición de la base enemiga del personaje.
 		Vector3 position = IADeVProject.getPositionOfTeamBase(source.getTeam().getEnemyTeam());
 		// Devolvemos el comportamiento de ir hacia la posición de la base enemiga.
@@ -71,10 +71,21 @@ public class Actions {
 	//	de reducir vida del target del ataque.
 	// IMPORTANTE -> Debemos comprobar que ambos personajes son enemigos. PERO ESA COMPROBACIÓN NO SE HACE AQUÍ.
 	// 		Se hará en la maquina de estados/árbol de decisión... correspondiente.
-	public Map<Float, Behaviour> attack (Character source, Character target, float health, float maxDistance) {
+	public static Map<Float, Behaviour> attack (Character source, Character target, float health, float maxDistance) {
 		Map<Float, Behaviour> map = createListBehaviour();
-		// Ponemos un peso. Da igual el que sea.
-		map.put(10.0f, new Attack(source, target, health, maxDistance));
+		// Comprobamos el equipo al que pertenecen ambos personajes.
+		// 		Aunque en teoría eso ya se ha comprobado antes de llegar a este método, lo volvemos a hacer para tener un mayor control 
+		//		de la acción de atacar.
+		if (Checks.isItFromMyTeam(source, target)) {return map;} // Si es de mi equipo no puedo atacarle.
+		// Si el source es una formación, solemente indicamos que sus componentes deben atacar al objetivo,
+		// 		PERO EL MAP SE DEVUELVE VACÍO (YA QUE EL BEHAVIOUR ATTACK NO SE INTRODUCE EN LA LISTA DE COMPORTAMIENTOS DE LA PROPIA FORMACIÓN).
+		if (source instanceof Formation) {
+			Formation formation = (Formation)source;
+			formation.enableAttackMode(maxDistance, target, health);
+			return map;
+		} 
+		// Si el source es un personaje normal, se añade le behaviour attack.
+		map.put(500.0f, new Attack(source, target, health, maxDistance)); // El peso debe ser alto para que el behavior tenga una prioridad alta (en caso de tener un árbitro por prioridad).
 		return map;
 	}
 	
@@ -84,10 +95,20 @@ public class Actions {
 	 * @param health Salud que se sumará a la vida del personaje.
 	 * @return El Map de comportamientos correspondiente a esta acción.
 	 */
-	public Map<Float, Behaviour> cure (Character source, float health) {
+	// Esta acción no va a necesitar un peso. Tal y como se explica en el comportamiento Cure, realmente lo que nos
+	// 	interesa del comportamiento cure no es el comportamiento en sí, si no el hecho de que se ejecute el método
+	//	de aumentar vida del source.
+	public static Map<Float, Behaviour> cure (Character source, float health) {
 		Map<Float, Behaviour> map = createListBehaviour();
-		// Ponemos un peso. Da igual el que sea.
-		map.put(10.0f, new Cure(source, health));
+		// Si el source es una formación, solemente indicamos que sus componentes deben curarse,
+		// 		PERO EL MAP SE DEVUELVE VACÍO (YA QUE EL BEHAVIOUR CURE NO SE INTRODUCE EN LA LISTA DE COMPORTAMIENTOS DE LA PROPIA FORMACIÓN).
+		if (source instanceof Formation) {
+			Formation formation = (Formation)source;
+			formation.enableCure(health);
+			return map;
+		}
+		// Si el source es un personaje normal, se añade le behaviour cure.
+		map.put(520.0f, new Cure(source, health));
 		return map;
 	}
 	
@@ -96,8 +117,9 @@ public class Actions {
 	 * @param source Personaje que realiza el ataque.
 	 * @return Map vacío
 	 */
-	public Map<Float, Behaviour> leaveCure (Character source) {
+	public static Map<Float, Behaviour> leaveCure (Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
+		// Para el caso concreto de las formaciones, debemos ejecutar este método para indicar a los componentes que dejen de curarse.
 		if (source instanceof Formation) {
 			Formation formation = (Formation)source;
 			formation.disableCure();
@@ -110,18 +132,15 @@ public class Actions {
 	 * @param source Personaje que realiza el ataque.
 	 * @return Map vacío
 	 */
-	public Map<Float, Behaviour> leaveAttack (Character source) {
+	public static Map<Float, Behaviour> leaveAttack (Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
+		// Para el caso concreto de las formaciones, debemos ejecutar este método para indicar a los componentes que dejen de atacar.
 		if (source instanceof Formation) {
 			Formation formation = (Formation)source;
 			formation.disableAttackMode();
 		}
 		return map;
 	}
-	
-	
-	
-	// TODO Atacar mirando al objetivo.
 	
 	/**
 	 * Método que refleja la acción de huir de un objetivo.
@@ -131,7 +150,7 @@ public class Actions {
 	 * @param maxAcceleration Máxima aceleración a la que se quiere huir.
 	 * @return El comportamiento correspondiente a la acción de huir con su correspondiente peso.
 	 */
-	public Map<Float, Behaviour> flee(float weight, Character source, WorldObject target, float maxAcceleration) {
+	public static Map<Float, Behaviour> flee(float weight, Character source, WorldObject target, float maxAcceleration) {
 		Map<Float, Behaviour> map = createListBehaviour();
 		map.put(weight, new Flee_Accelerated(source, target, maxAcceleration));
 		return map;
@@ -145,7 +164,7 @@ public class Actions {
 	 * @param maxAcceleration Máxima acceleración a la que se quiere ir
 	 * @return El comportamiento correspondiente a la acción de ir a la posición con su correspondiente peso.
 	 */
-	public Map<Float, Behaviour> goTo(float weight, Character source, Vector3 position, float maxAcceleration) {
+	public static Map<Float, Behaviour> goTo(float weight, Character source, Vector3 position, float maxAcceleration) {
 		PathFinding pf = new PathFinding();
 		List<Vector3> pointsList = pf.applyPathFinding(IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT, 
 				source.getPosition().x, source.getPosition().y, position.x, position.y);
@@ -162,7 +181,7 @@ public class Actions {
 	 * @param maxAcceleration Máxima acceleración a la que se quiere ir
 	 * @return El comportamiento correspondiente a la acción de ir a curarse con su correspondiente peso.
 	 */
-	public Map<Float, Behaviour> goToCure(float weight, Character source, float maxAcceleration) {
+	public static Map<Float, Behaviour> goToCure(float weight, Character source, float maxAcceleration) {
 		// Obtenemos la posición del manantial del personaje.
 		Vector3 position = IADeVProject.getPositionOfTeamManantial(source.getTeam());
 		// Devolvemos el comportamiento de ir hacia la posición del manantial.
@@ -176,7 +195,7 @@ public class Actions {
 	 * @param target
 	 * @return
 	 */
-	public Map<Float, Behaviour> supportAnAlly(float weight, Character source, Character target) {
+	public static Map<Float, Behaviour> supportAnAlly(float weight, Character source, Character target) {
 		//TODO
 		return null;
 	}
@@ -187,7 +206,7 @@ public class Actions {
 	 * @param source Personaje que quiere aplicar la acción.
 	 * @return
 	 */
-	public Map<Float, Behaviour> patrolYourBase(float weight, Character source) {
+	public static Map<Float, Behaviour> patrolYourBase(float weight, Character source) {
 		//TODO
 		return null;
 	}
@@ -199,7 +218,7 @@ public class Actions {
 	 * @param source Personaje que quiere aplicar la acción.
 	 * @return El comportamiento correspondiente a la acción de hacer cosas aleatorias con su correspondiente peso.
 	 */
-	public Map<Float, Behaviour> doRandomThings(float weight, Character source) {
+	public static Map<Float, Behaviour> doRandomThings(float weight, Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
 		map.put(weight, new Wander_Delegated(source, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, 45.0f, 10.0f));
 		return map;
@@ -212,7 +231,7 @@ public class Actions {
 	 * @param source Personaje que quiere aplicar la acción.
 	 * @return El comportamiento correspondiente a la acción de no colisionar con su correspondiente peso.
 	 */
-	public Map<Float, Behaviour> notCollide(float weight, Character source) {
+	public static Map<Float, Behaviour> notCollide(float weight, Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
 		map.put(weight, new WallAvoidance(source, 300.0f, IADeVProject.worldObjects, 300.0f, 20.0f, 100.0f));
 		map.put(weight, new CollisionAvoidance(source, IADeVProject.worldObjects, 200.0f));
@@ -225,7 +244,7 @@ public class Actions {
 	 * QUE SE LE PASE CUALQUIER VALOR COMO CLAVE, YA SEA UN float O UN new Float() Y
 	 * NO SE SUSTITUYE.
 	 */
-	private Map<Float, Behaviour> createListBehaviour() {
+	private static Map<Float, Behaviour> createListBehaviour() {
 		// Añadimos el comparador porque si no, el TreeMap por defecto, si se encuentra
 		// dos claves que tengan el mismo valor (aunque sean objetos distintos) se queda con 
 		// el último que introduces

@@ -38,6 +38,7 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.waypoints.Waypoints;
  
 public class IADeVProject extends ApplicationAdapter {
 	

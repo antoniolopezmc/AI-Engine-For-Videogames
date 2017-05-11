@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject;
+package com.mygdx.iadevproject.waypoints;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.model.Team;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.model.Character;
 /**
  * Clase para encapsular el manejo de los Waypoints. Será todo static.
@@ -84,29 +85,26 @@ public class Waypoints {
 	// Cada puente consta de 2 puntos en cada extremo (2 para cada equipo). Cuando un personaje patrulle un puente, se moverá de un punto al otro y del otro al uno (sin parar de uno a otro).
 	
 	// Para que a cada personaje se le asigne un waypoint y todas las consultas necesarias se hagan en tiempo constante, vamos a tener las siguientes estructuras:
-	// - Un Map formado por Character (clave) Vector3/Waypoint (valor). Este Map almacenará la correspondencia entre un personaje con el waypoint que se le ha asignado.
+	// - Un Map de Character (clave) y Vector3(el waypoint) (valor). Este Map almacenará la correspondencia entre un personaje con el waypoint que se le ha asignado.
 	// 		No puede haber más de un personaje asignado a un waypoint.
 	//		Cuando asignamos un waypoint a un personaje, se almacena la tupla en el Map (y se pone a true un booleano de la siguiente estructura).
 	// 		Cuando un personaje que estaba patrullando muere, debemos "desasignarlo". Esto se hace eliminando la tupla de este Map y poniendo un booleano de la siguiente estructura a false.
-	// - Un Map formado por un Vector3/Waypoint (clave) y un valor con 2 elementos de distinto tipo: un booleano que indica si ese waypoint está asignado o no y su waypoint vecino del mismo lado del mismo puente.
+	// - Un Map formado por un Vector3(el waypoint) (clave) y un valor con 2 elementos de distinto tipo: un booleano que indica si ese waypoint está asignado o no y su waypoint vecino del mismo lado del mismo puente.
 	// 		Este Map se inicializa al principio y tendrá siempre la misma cantidad de elementos (solo se modificarán los booleanos).
 	// 		MUY IMPORTANTE.
-	// 		Necesitamos almacenar una tripleta (3 objetos de distinto tipo). Como tal, Java no ofrece ese tipo de estructura.
-	// 		Para solucionar este problema hemos usado un Map, tal que su valor es a su vez otro Map (¡CON UNA SOLA ENTRADA!).
-	// 				Esto último es lo que nos permie poder almacenar otros 2 objetos de distinto tipo (a parte del primero).
-	// ---> Es decir, cada equipo tendrá sus 2 estructuras correspondientes.
+	// 		Para poder almacenar un valor con 2 elementos de distinto tipo, hemos creado la clase 'ValueOfBridgeWaypoint'.
 	
 	// TAMBIEN MUY IMPORTANTE.
 	// 		Aunque a un personaje solo se le asigne un waypoint, al patrullar el puente irá de un waypoint a otro de su lado. Por tanto, en la segunda estructura, junto con cada waypoint también se almacena
-	//			otro Vector3 que representa el otro waypoint del mismo lado del mismo puente.
+	//			otro Vector3 que representa el otro waypoint del mismo lado del mismo puente (el waypoint vecino).
 	
 	// Equipo FJAVIER (el de arriba)
 	private static Map<Character, Vector3> bridges_CharacterAndWaypointAssociation_team_FJAVIER;
-	private static Map<Vector3, Map<Boolean, Vector3>> bridgesWayPoints_team_FJAVIER; // Da igual que la clave del Map interior sea un Boolean, ya que en el Map interior de un elemento del Map exterior SOLO HABRÁ UNA ENTRADA.
+	private static Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints_team_FJAVIER; // Da igual que la clave del Map interior sea un Boolean, ya que en el Map interior de un elemento del Map exterior SOLO HABRÁ UNA ENTRADA.
 	
 	// Equipo LDANIEL (el de abajo)
 	private static Map<Character, Vector3> bridges_CharacterAndWaypointAssociation_team_LDANIEL;
-	private static Map<Vector3, Map<Boolean, Vector3>> bridgesWayPoints_team_LDANIEL; // Da igual que la clave del Map interior sea un Boolean, ya que en el Map interior de un elemento del Map exterior SOLO HABRÁ UNA ENTRADA.
+	private static Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints_team_LDANIEL; // Da igual que la clave del Map interior sea un Boolean, ya que en el Map interior de un elemento del Map exterior SOLO HABRÁ UNA ENTRADA.
 	
 	// Para obtener la estructura bridges_CharacterAndWaypointAssociation del equipo correspondiente.
 	private static Map<Character, Vector3> getBridges_CharacterAndWaypointAssociation (Team team) {
@@ -120,7 +118,7 @@ public class Waypoints {
 	}
 	
 	// Para obtener la estructura bridgesWayPoints del equipo correspondiente.
-	private static Map<Vector3, Map<Boolean, Vector3>> getBridgesWayPoints (Team team) {
+	private static Map<Vector3, ValueOfBridgeWaypoint> getBridgesWayPoints (Team team) {
 		if (team == Team.FJAVIER) {
 			return bridgesWayPoints_team_FJAVIER;
 		} else if (team == Team.LDANIEL) {
@@ -129,7 +127,7 @@ public class Waypoints {
 			return null;
 		}
 	}
-	
+	// -------------------------------------> Hasta aquí revisado.
 	// *************************************************************************************************************************
 	/**
 	 * Devuelve el valor del Map para un elemento de bridgesWayPoints.

@@ -37,6 +37,7 @@ public class Character extends WorldObject {
 	// Rol del personaje
 	private TacticalRole role;
 	
+	// MUY IMPORTANTE -> A las formaciones también hay que ponerles el equipo al que pertenecen.
 	private Team team;
 	private float currentHealth;
 	private float maxHealth;
