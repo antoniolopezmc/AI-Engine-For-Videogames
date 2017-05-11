@@ -1,38 +1,42 @@
 package com.mygdx.iadevproject.aiTactical.roles.states;
 
+import java.util.Map;
+
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
-
+import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.mygdx.iadevproject.checksAndActions.Actions;
 import com.mygdx.iadevproject.model.Character;
 
 public class AttackEnemies implements State<Character> {
 
-	public AttackEnemies() {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void enter(Character entity) {
-		// TODO Auto-generated method stub
-
-	}
+	public AttackEnemies() { /* empty constructor */ }
 
 	@Override
 	public void update(Character entity) {
-		// TODO Auto-generated method stub
-
+		/** IMPORTANTE: SOLAMENTE SE INCLUYE EL NO CHOCAR. */
+		
+		// Obtenemos los comportamientos para no colisionar
+		Map<Float, Behaviour> behaviours = Actions.notCollide(200.0f, entity);
+		// Obtenemos los comportamientos para atacar al enemigo más cercano
+		Map<Float, Behaviour> patrol = Actions.attackTheNearestEnemy(entity, entity.getRole().getDamageToDone(), entity.getRole().getMaxDistanceOfAttack());
+		// Juntamos ambos comportamientos
+		behaviours.putAll(patrol);
+				
+		// Establecemos los nuevos comportamientos al personaje.
+		entity.setListBehaviour(behaviours);
 	}
 
 	@Override
 	public void exit(Character entity) {
-		// TODO Auto-generated method stub
-
+		// Cuando salimos de este estado, dejamos de atacar
+		Actions.leaveAttack(entity);
 	}
 
 	@Override
-	public boolean onMessage(Character entity, Telegram telegram) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public void enter(Character entity) { /* empty method */ }
+
+	@Override
+	public boolean onMessage(Character entity, Telegram telegram) { return false; }
 
 }

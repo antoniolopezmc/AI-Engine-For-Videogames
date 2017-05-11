@@ -19,6 +19,7 @@ import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.Formation;
+import com.mygdx.iadevproject.waypoints.Waypoints;
 
 public class Actions {
 	
@@ -115,31 +116,25 @@ public class Actions {
 	/**
 	 * Método que refleja la acción de dejar de curar.
 	 * @param source Personaje que realiza el ataque.
-	 * @return Map vacío
 	 */
-	public static Map<Float, Behaviour> leaveCure (Character source) {
-		Map<Float, Behaviour> map = createListBehaviour();
+	public static void leaveCure (Character source) {
 		// Para el caso concreto de las formaciones, debemos ejecutar este método para indicar a los componentes que dejen de curarse.
 		if (source instanceof Formation) {
 			Formation formation = (Formation)source;
 			formation.disableCure();
 		}
-		return map;
 	}
 	
 	/**
 	 * Método que refleja la acción de dejar de atacar.
 	 * @param source Personaje que realiza el ataque.
-	 * @return Map vacío
 	 */
-	public static Map<Float, Behaviour> leaveAttack (Character source) {
-		Map<Float, Behaviour> map = createListBehaviour();
+	public static void leaveAttack (Character source) {
 		// Para el caso concreto de las formaciones, debemos ejecutar este método para indicar a los componentes que dejen de atacar.
 		if (source instanceof Formation) {
 			Formation formation = (Formation)source;
 			formation.disableAttackMode();
 		}
-		return map;
 	}
 	
 	/**
@@ -201,14 +196,17 @@ public class Actions {
 	}
 	
 	/**
-	 * Método que refleja la acción de patrullar la zona del personaje
+	 * Método que refleja la acción de patrullar la base del personaje
 	 * @param weight Peso que tiene esta acción.
 	 * @param source Personaje que quiere aplicar la acción.
-	 * @return
+	 * @return El comportamiento correspondiente esta acción.
 	 */
-	public static Map<Float, Behaviour> patrolYourBase(float weight, Character source) {
-		//TODO
-		return null;
+	public static Map<Float, Behaviour> patrolYourBase(float weight, Character source, float maxAcceleration) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		// Obtenemos los waypoints de la base del personaje a patrullar.
+		List<Vector3> pointsList = Waypoints.getWaypointsOfMyBase(source);
+		map.put(weight, new PathFollowingWithoutPathOffset(source, maxAcceleration, pointsList, 1.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+		return map;
 	}
 	
 	/**
@@ -236,6 +234,83 @@ public class Actions {
 		map.put(weight, new WallAvoidance(source, 300.0f, IADeVProject.worldObjects, 300.0f, 20.0f, 100.0f));
 		map.put(weight, new CollisionAvoidance(source, IADeVProject.worldObjects, 200.0f));
 		return map;
+	}
+	
+	/**
+	 * Método que devuelve el enemigo más cercano del personaje 'source'
+	 * @param source Personaje que quiere obtener el enemigo más cercano.
+	 * @return Personaje más cercano o null en caso contrario.
+	 */
+	public static Character getTheNearestEnemy(Character source) {
+		Character target = null;
+		float minDistance = Float.MAX_VALUE;
+		
+		for (WorldObject obj : IADeVProject.worldObjects) {
+			// Consideramos los personajes que no sean formaciones
+			if (obj instanceof Character && !(obj instanceof Formation)) {	
+				Character character = (Character)obj;
+				
+				// Comprobamos que sea del equipo contrario. No comprobamos que el personaje obtenido no sea el 'source' porque este método 
+				// cuando se compruebe, va a devolver un 'false', ya que es el mismo objeto. 
+				// La comprobación de si el personaje está muerto, es para evitar que cuando se ataque, si uno de sus componentes está muerto,
+				// como solo se va a eliminar la formación si se ha matado a todos los de la formación, el 'source' ataque a otro personaje.
+				if (Checks.isItFromEnemyTeam(source, character) && !Checks.haveIDead(character)) {
+					// Obtenemos las posiciones del source y del personaje
+					Vector3 srcPostion = source.getPosition();
+					Vector3 charPosition = character.getPosition();
+					// Calculamos la distancia 
+					float distance = srcPostion.dst(charPosition);
+					
+					// Comprobamos que la distancia sea menor que la mínima calculada y 
+					// si es así actualizamos.
+					if (distance < minDistance) {
+						minDistance = distance;
+						target = character;
+					}
+				}
+			}
+		}
+		
+		return target;
+	}
+	
+	/**
+	 * Método que mueve un personaje a una posición concreta A PELO. Este método es una método
+	 * recursivo para las formaciones, ya que hay que mover a todos los integrantes de las formaciones
+	 * al mismo punto. Con esto se permite que las formaciones complejas se muevan todas al mismo punto.
+	 * @param source Personaje que se va a modificar su posición
+	 * @param position Nueva posición del personaje.
+	 */
+	public static void moveToPosition(Character source, Vector3 position) {
+		if (source instanceof Formation) {
+			// Si el personaje es una formación:
+			Formation formation = (Formation)source;
+			// Establecemos la nueva posición de la formación.
+			formation.setPosition(position);
+			for (Character c : formation.getCharactersList()) {
+				// Para cada componente de la formación, lo movemos a esa formación.
+				moveToPosition(c, position);
+			}
+		} else {
+			source.setPosition(position);
+		}
+	}
+	
+	
+	/**
+	 * Método que realiza la acción de atacar al enemigo más cercano. Hace uso de las acciones
+	 * 'attack' y 'getTheNearestEnemy'.
+	 * @param source Personaje que realiza el ataque.
+	 * @param target Personaje que recibe el ataque.
+	 * @param health Salud que restará el ataque.
+	 * @param maxDistance Máxima distancia a la que el ataque se puede realizar.
+	 * @return El Map de comportamientos correspondiente a esta acción.
+	 */
+	public static Map<Float, Behaviour> attackTheNearestEnemy(Character source, float health, float maxDistance) {
+		// Obtenemos el enemigo más cercano
+		Character target = getTheNearestEnemy(source);
+		// Lo atacamos.
+		return attack(source, target, health, maxDistance);
 	}
 	
 	/**
