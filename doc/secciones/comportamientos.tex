@@ -125,6 +125,8 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
  	\item El modo de funcionamiento del comportamiento.
  \end{itemize}
  
+ \item \texttt{PathFollowingWithoutPathOffset\_Arrive}. Este comportamiento funciona exactamente igual que el anterior, excepto que en este caso hereda del Arrive en vez de del Seek. La única diferencia relevante a tener en cuenta es que en el comportamiento anterior teníamos un atributo llamado \texttt{radius}. En este caso no lo tenemos, puesto que ese radio será el \texttt{targetRadious} del padre (del Arrive). En cuanto a los parámetros, no introduce nada nuevo con respecto a los parámetro propios del comportamiento \texttt{Arrive} acelerado y a la lista de puntos y el modo (que también estaban presentes en el otro PathFollowing).
+ 
  \item \texttt{WallAvoidance}. Este comportamiento consiste en evitar colisiones con otros objetos. La diferencia entre este comportamiento y el anterior, es que la colisión no se detecta cuando el círculo que envuelve al personaje interseca con el círculo de alguno de los objetivos, sino que desde el personaje se lanzan tres rayos (separados un ángulo y longitud determinada), donde el rayo central sigue la dirección de la velocidad del personaje, y si alguno de esos rayos interseca con algún objetivo, entonces lo evita. Es un tipo de \texttt{Seek\_Accelerated}, por lo que recibe los mismos parámetros que él, exceptuando el objetivo, pues este es calculado por el comportamiento. Para la creación de este comportamiento, son necesarios los siguientes parámetros (además de los necesarios para el \texttt{Seek\_Accelerated}):
  \begin{itemize}
   \item La lista de objetivos a evitar.
