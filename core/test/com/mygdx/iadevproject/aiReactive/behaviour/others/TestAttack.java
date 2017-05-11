@@ -34,9 +34,13 @@ public class TestAttack extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
         font = IADeVProject.font;
         renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -51,7 +55,7 @@ public class TestAttack extends ApplicationAdapter {
         bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
         bucket.setOrientation(0.0f);
         bucket.setVelocity(new Vector3(0,0,0));
-        bucket.addToListBehaviour(new Attack(bucket, drop, 10.0f, 10.0f));
+        bucket.addToListBehaviour(new Attack(bucket, drop, 10.0f, 220.0f));
 	}
 	
 	@Override

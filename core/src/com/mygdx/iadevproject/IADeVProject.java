@@ -69,6 +69,7 @@ public class IADeVProject extends ApplicationAdapter {
 	public static OrthographicCamera camera;				// Cámara (es pública para que se pueda acceder el InputProcessorIADeVProject)
 	public static boolean PRINT_PATH_BEHAVIOUR; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
 	public static BitmapFont font;							// Para dibujar letras 
+	public static SpriteBatch batch; 						// Para dibujar letras hace falta tanto un font como un batch.
 	public static ShapeRenderer renderer;					// Para dibujar líneas
 	public static Map<Team, Rectangle> bases;				// Bases de los equipos. Cada equipo tiene su base. 
 	public static Map<Team, Rectangle> manantials;			// Manantiales de los equipos. Cada equipo tiene su manantial.
@@ -79,7 +80,6 @@ public class IADeVProject extends ApplicationAdapter {
     
 	
 	/** VARIABLES LOCALES **/
-	private SpriteBatch batch; // TODO Para dibujar letras en los debug de los behaviours hace falta un batch. Ponerlo también como global.
 	private TiledMapRenderer tiledMapRenderer;
 	private InputProcessorIADeVProject inputProcessor;		// InputProcessor
 	

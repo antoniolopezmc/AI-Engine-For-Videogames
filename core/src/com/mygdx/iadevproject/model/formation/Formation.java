@@ -5,6 +5,8 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -274,5 +276,69 @@ public abstract class Formation extends Character {
 	}
 	
 	// TODO Muy importante.
-	// Los método relacionados con la salud deben ser sobreescritos. En una formación se comprueba la media de salud de cada uno de sus integrantes.
+	// Los método relacionados con la salud deben ser sobreescritos. La salud de un formación será la suma de la de cada uno de sus integrantes.
+	public float getCurrentHealth() {
+		// Un integrante de una formación puede ser un personaje u otra formación. Eso hay que tenerlo en cuenta.
+		float resultado = 0;
+		for (Character character : this.charactersList) {
+			if (character instanceof Formation) {
+				Formation charForm = (Formation) character;
+				resultado = resultado + charForm.getCurrentHealth();
+			} else { 
+				resultado = resultado + character.getCurrentHealth();
+			}
+		}
+		return resultado;
+	}
+
+	public void setCurrentHealth(float currentHealth) {
+		// Los sets de salud no hacen nada.
+	}
+
+	public float getMaxHealth() {
+		// Un integrante de una formación puede ser un personaje u otra formación. Eso hay que tenerlo en cuenta.
+		float resultado = 0;
+		for (Character character : this.charactersList) {
+			if (character instanceof Formation) {
+				Formation charForm = (Formation) character;
+				resultado = resultado + charForm.getMaxHealth();
+			} else { 
+				resultado = resultado + character.getMaxHealth();
+			}
+		}
+		return resultado;
+	}
+
+	public void setMaxHealth(float maxHealth) {
+		// Los sets de salud no hacen nada.
+	}
+
+	public float getPreviousHealth() {
+		// Un integrante de una formación puede ser un personaje u otra formación. Eso hay que tenerlo en cuenta.
+		float resultado = 0;
+		for (Character character : this.charactersList) {
+			if (character instanceof Formation) {
+				Formation charForm = (Formation) character;
+				resultado = resultado + charForm.getPreviousHealth();
+			} else { 
+				resultado = resultado + character.getPreviousHealth();
+			}
+		}
+		return resultado;
+	}
+
+	public void setPreviousHealth(float previousHealth) {
+		// Los sets de salud no hacen nada.
+	}
+	
+	/**
+	 * Método para dibujar la cantidad de vida que tiene la formación.
+	 * @param batch
+	 * @param font
+	 */
+	public void drawHealth (SpriteBatch batch, BitmapFont font) {
+		batch.begin();
+		font.draw(batch, "Formation health: " + this.getCurrentHealth(), this.getPosition().x + 20, this.getPosition().y); // Dibujamos la vida a la derecha del personaje.
+        batch.end();
+	}
 }

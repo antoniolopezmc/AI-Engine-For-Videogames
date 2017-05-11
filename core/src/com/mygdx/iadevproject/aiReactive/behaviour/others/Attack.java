@@ -21,6 +21,11 @@ public class Attack implements Behaviour {
 			IADeVProject.renderer.line(this.source.getPosition(), this.target.getPosition());
 						
 			IADeVProject.renderer.end();
+			
+			IADeVProject.batch.begin();
+			// Imprimimos la palabra Attack para representar que un personaje está atacando.
+			IADeVProject.font.draw(IADeVProject.batch, "Attack", source.getPosition().x + 20, source.getPosition().y + 20);
+			IADeVProject.batch.end();
 		}
 	}
 	
