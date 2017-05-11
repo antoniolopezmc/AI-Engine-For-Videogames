@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
@@ -11,9 +12,7 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
-// TODO Esto funciona. Los he probado con el Seek NO ACELERADO y funciona. Con el Seek acelerado el personaje se va a tomar por culo (porque el cambio de velocidad no es inmediato).
-// TODO Preguntárselo a Luis Daniel.
-public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements Behaviour {
+public class PathFollowingWithoutPathOffset_Arrive extends Arrive_Accelerated implements Behaviour {
 
 	public static int MODO_PARAR_AL_FINAL = 0; // Cuando el personaje llega al último punto, terminamos.
 	public static int MODO_IDA_Y_VUELTA = 1; // El personaje va y viene infinitamente.
@@ -21,18 +20,11 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 	private List<Vector3> pointsList; // Lista de puntos aún no visitados.
 	// -> Esta segunda lista es útil para cuando haya que recordar los puntos ya visitados. (Por ej. en MODO_IDA_Y_VUELTA)
 	private List<Vector3> removedPointsList; // Lista de puntos ya visitados.
-	// No hace falta que el personaje llegue extactamente al mismo punto.
-	// 	Es suficiente con acercarse lo suficiente. Eso es lo que indica este atributo.	
-	private float radius;
+	
+	// MUY IMPORTANTE -> En este caso, el atributo radius que tenia el otro PathFollowing es ahora el targetRadious del Arrive.
+	// 		Por eso, en este caso no será necesario añadirlo aquí.
+	
 	private int modo;
-	
-	public float getRadius() {
-		return radius;
-	}
-	
-	public void setRadius(float radius) {
-		this.radius = radius;
-	}
 
 	public int getModo() {
 		return modo;
@@ -42,10 +34,10 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 		this.modo = modo;
 	}
 
-	public PathFollowingWithoutPathOffset(Character source, float maxAcceleration, List<Vector3> pointsList, float radius, int modo) {
-		super(source, null, maxAcceleration);
+	public PathFollowingWithoutPathOffset_Arrive(Character source, float maxAcceleration, float maxSpeed, float targetRadious,
+			float slowRadiuos, float timeToTarget, List<Vector3> pointsList, int modo) {
+		super(source, null, maxAcceleration, maxSpeed, targetRadious, slowRadiuos, timeToTarget);
 		this.pointsList = new LinkedList<Vector3>(pointsList); // IMPORTANTE -> Como la lista se va a modificar, almacenamos una copia.
-		this.radius = radius;
 		this.modo = modo;
 		this.removedPointsList = new LinkedList<Vector3>();
 	}
@@ -72,7 +64,7 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 			
 			// Si la distancia hasta el siguiente objetivo es menor que el radio, eso quiere decir que ya hemos llegado al punto deseado.
 			// 		(o al menos nos hemos acercado la distancia necesaria).
-			if (distance < this.radius) {
+			if (distance < this.getTargetRadious()) {
 				// IMPORTANTE -> En esta segunda lista, los puntos se van añadiendo en orden INVERSO a como estaban en la lista original.
 				//		Esto nos permite tener al final justo el camino inverso.
 				this.removedPointsList.add(0, nextTarget); // Añadimos el punto alcanzado a la lista de puntos eliminados.
