@@ -101,6 +101,34 @@ public abstract class Formation extends Character {
 	 */
 	protected abstract Steering getComponentFormationSteerginToApply(Character source, WorldObject fakeTarget);// ---> Patrón método plantilla.
 	
+	// ===> EXTREMADAMENTE IMPORTANTE  <===
+	// Cuando una formación ataca, el behaviour de atacar no se añadirá a la lista de comportamientos de la propia formación, sino a la lista ¡¡¡¡DE LOS INTEGRANTES!!!! (la que se mete a pelo en los hijos).
+	// 	Por tanto, pata saber cuando estoy atacando voy a neceistar 2 nuevos atributos: un flag de ataque y la distancia máxima de ataque. Si ese flag está a true, el behaviour de attack se añadirá a los hijos.
+	protected boolean flag_attack = false;
+	protected float max_distance_attack = 0.0f;
+	protected Character target_attack;
+	protected float health_attack = 0.0f;
+
+	/**
+	 * Indica a los componentes de la formación que deben atacar a un enemigo.
+	 * @param max_distance_attack Máxima distancia para realizar el ataque.
+	 * @param target_attack Objetivo del ataque.
+	 * @param health_attack Salud que se resta al objetivo en el ataque.
+	 */
+	public void enableAttackMode (float max_distance_attack, Character target_attack, float health_attack) {
+		this.flag_attack = true;
+		this.max_distance_attack = max_distance_attack;
+		this.target_attack = target_attack;
+		this.health_attack = health_attack;
+	}
+	
+	/**
+	 * Indica a los componentes de la formación que no deben atacar a nadie.
+	 */
+	public void disableAttackMode() {
+		this.flag_attack = false;
+	}
+	
 	/**
 	 * Añade un personaje a la formación, solo sí no está ya en una formación.
 	 * @param character Personaje a añadir a la formación,

@@ -13,6 +13,7 @@ import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
@@ -109,6 +110,10 @@ public class CircularFormation extends Formation {
 		} else if (this.getComponentFormationOrientationMode() == Formation.SAME_ORIENTATION) {
 			// Nos alineamos con la formación. Es decir, todos los integrantes tendrán la misma orientación que la formación.
 			map.put(20.0f, new Align_Accelerated(source, this, 30.0f, 20.0f, 1.0f, 10.0f, 1.0f));
+		}
+		
+		if (this.flag_attack) {
+			map.put(5.0f, new Attack(source, target_attack, health_attack, max_distance_attack));
 		}
 		
 		// Devolvemos el comportamiento que nos diga el árbitro.
