@@ -14,7 +14,7 @@ import com.mygdx.iadevproject.model.Character;
 public class SimpleMapOfInfluence {
 	
 	// Valor por defecto de influencia que ejerce una unidad cualquiera. Valor estándar para todas las unidades.
-	private static int defautl_influenceValue = 10;
+	private static int default_influenceValue = 10;
 	// Valor por defecto de la distancia (¡¡¡¡HORIZONTAL/VERTICAL!!!!) a la que llega la influencia de una unidad.
 	// IMPORTANTE -> DISNTACIA 0 QUIERE DECIR QUE EL PERSONAJE SOLO TIENE INFLUENCIA SOBRE LA CASILLA EN LA QUE SE ENCUENTRA.
 	private static int default_influenceDistance = 4;
@@ -139,7 +139,8 @@ public class SimpleMapOfInfluence {
 		for (WorldObject wo : worldObjects) {
 			// Solo se tendrán en cuenta los personajes como tal a la hora de crear el mapa de influencia.
 			if ((wo instanceof Character) && (!(wo instanceof Formation))) {
-				addInfluenceOfCharacter (wo, mapPositionTOgridPosition(grid_cell_size, wo.getPosition()), default_influenceDistance, default_influenceValue);
+				Character character = (Character) wo;
+				addInfluenceOfCharacter (character, mapPositionTOgridPosition(grid_cell_size, wo.getPosition()), default_influenceDistance, default_influenceValue);
 			}
 		}
 	}
