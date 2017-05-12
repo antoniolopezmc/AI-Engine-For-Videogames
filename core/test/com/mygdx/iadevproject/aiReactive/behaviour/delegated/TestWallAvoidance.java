@@ -46,24 +46,31 @@ public class TestWallAvoidance extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
+
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
         font = IADeVProject.font;
         renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
+        
         worldsObstacles = new LinkedList<WorldObject>();
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
         Obstacle obs1 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs1.setBounds(100.0f, 100.0f, 64.0f, 64.0f);
+        obs1.setBounds(100.0f, 100.0f, 32.0f, 32.0f);
         Obstacle obs2 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs2.setBounds(150.0f, -200.0f, 64.0f, 64.0f);
+        obs2.setBounds(150.0f, -200.0f, 32.0f, 32.0f);
         Obstacle obs3 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs3.setBounds(100.0f, 250.0f, 64.0f, 64.0f);
+        obs3.setBounds(100.0f, 250.0f, 32.0f, 32.0f);
         Obstacle obs4 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs4.setBounds(210.0f, 300.0f, 64.0f, 64.0f);
+        obs4.setBounds(210.0f, 300.0f, 32.0f, 32.0f);
         Obstacle obs5 = new Obstacle(new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        obs5.setBounds(300.0f, 100.0f, 64.0f, 64.0f);
+        obs5.setBounds(300.0f, 100.0f, 32.0f, 32.0f);
         
         drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet-normal.png")));
         drop.setBounds(600, 100, 64, 64);

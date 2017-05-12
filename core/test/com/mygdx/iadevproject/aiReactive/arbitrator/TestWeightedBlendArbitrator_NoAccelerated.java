@@ -44,7 +44,7 @@ public class TestWeightedBlendArbitrator_NoAccelerated extends ApplicationAdapte
         camera.update();
         
         drop = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        drop.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        drop.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         Character target = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f));
@@ -53,28 +53,28 @@ public class TestWeightedBlendArbitrator_NoAccelerated extends ApplicationAdapte
         drop.addToListBehaviour(seek);
      
         bucket = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
         bucket.setOrientation(0.0f);
         bucket.setVelocity(new Vector3(0,0,0));
         bucket.addToListBehaviour(new Arrive_NoAccelerated(bucket, drop, 60.0f, 10.0f, 0.5f));
         bucket.addToListBehaviour(new Flee_NoAccelerated(bucket, drop, 20.0f));
         
         bucket1 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket1.setBounds(187.0f, 210.0f, 64.0f, 64.0f);
+        bucket1.setBounds(187.0f, 210.0f, 32.0f, 32.0f);
         bucket1.setOrientation(0.0f);
         bucket1.setVelocity(new Vector3(0,0,0));
         bucket1.addToListBehaviour(new Arrive_NoAccelerated(bucket1, drop, 60.0f, 10.0f, 0.5f));
         bucket1.addToListBehaviour(new Flee_NoAccelerated(bucket1, drop, 20.0f));
         
         bucket2 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket2.setBounds(0.0f, 302.0f, 64.0f, 64.0f);
+        bucket2.setBounds(0.0f, 302.0f, 32.0f, 32.0f);
         bucket2.setOrientation(0.0f);
         bucket2.setVelocity(new Vector3(0,0,0));
         bucket2.addToListBehaviour(new Arrive_NoAccelerated(bucket2, drop, 60.0f, 10.0f, 0.5f));
         bucket2.addToListBehaviour(new Flee_NoAccelerated(bucket2, drop, 20.0f));
                 
         bucket3 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket3.setBounds(10.0f, 200.0f, 64.0f, 64.0f);
+        bucket3.setBounds(10.0f, 200.0f, 32.0f, 32.0f);
         bucket3.setOrientation(0.0f);
         bucket3.setVelocity(new Vector3(0,0,0));
         bucket3.addToListBehaviour(new Arrive_NoAccelerated(bucket3, drop, 60.0f, 10.0f, 0.5f));

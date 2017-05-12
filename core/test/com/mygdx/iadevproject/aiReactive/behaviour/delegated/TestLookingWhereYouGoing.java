@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.model.Character;
@@ -31,15 +32,21 @@ public class TestLookingWhereYouGoing extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
         bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
         bucket.setOrientation(90.0f);
         bucket.setVelocity(new Vector3(0,20,0));
         bucket.addToListBehaviour(new LookingWhereYouGoing(bucket, 60.0f, 20.0f, 5.0f, 10.0f, 1.0f));

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_NoAccelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
@@ -45,9 +46,15 @@ public class TestCircularFormation extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -57,35 +64,35 @@ public class TestCircularFormation extends ApplicationAdapter {
         
         // Creamos el personaje.
         gota = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        gota.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         gota.setOrientation(0.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota2 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota2.setBounds(150.0f, 150.0f, 64.0f, 64.0f);
+        gota2.setBounds(150.0f, 150.0f, 32.0f, 32.0f);
         gota2.setOrientation(30.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota2.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota3 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota3.setBounds(250.0f, 250.0f, 64.0f, 64.0f);
+        gota3.setBounds(250.0f, 250.0f, 32.0f, 32.0f);
         gota3.setOrientation(30.0f);
         gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota3.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota4 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota4.setBounds(350.0f, 350.0f, 64.0f, 64.0f);
+        gota4.setBounds(350.0f, 350.0f, 32.0f, 32.0f);
         gota4.setOrientation(30.0f);
         gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota4.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota5 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota5.setBounds(450.0f, 450.0f, 64.0f, 64.0f);
+        gota5.setBounds(450.0f, 450.0f, 32.0f, 32.0f);
         gota5.setOrientation(30.0f);
         gota5.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota5.addToListBehaviour(new Wander_NoAccelerated(gota5, 50.0f, 20.0f)); // En formación, el wander no deberia tenerse en cuenta.
@@ -93,14 +100,14 @@ public class TestCircularFormation extends ApplicationAdapter {
         
         // Creamos el personaje.
         gota6 = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota6.setBounds(550.0f, 550.0f, 64.0f, 64.0f);
+        gota6.setBounds(550.0f, 550.0f, 32.0f, 32.0f);
         gota6.setOrientation(30.0f);
         gota6.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota6.setMaxSpeed(50.0f);
         
         // Creamos la formación.
         formacion = new CircularFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f, new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        formacion.setBounds(500.0f, 500.0f, 64.0f, 64.0f);
+        formacion.setBounds(500.0f, 500.0f, 32.0f, 32.0f);
         formacion.setOrientation(0.0f);
         formacion.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         formacion.addCharacterToCharactersList(gota);
@@ -112,7 +119,6 @@ public class TestCircularFormation extends ApplicationAdapter {
         formacion.setSeparationDistance(100.0f);
         formacion.setComponentFormationOrientationMode(Formation.LOOK_OUTSIDE);
         
-        renderer = new ShapeRenderer();
         gota.addToListBehaviour(new Wander_Delegated(gota, 50.0f, 60.0f, 0.0f, 10.0f, 1.0f, 20.0f, 5.0f, 20.0f, 0.0f, 50.0f));
         Seek_Accelerated seek = new Seek_Accelerated(formacion, fakeMouse, 50.0f);
         seek.setMode(Seek_Accelerated.SEEK_ACCELERATED_REYNOLDS);

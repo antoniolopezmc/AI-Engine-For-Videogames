@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.group.Separation;
 import com.mygdx.iadevproject.model.Character;
@@ -45,51 +46,57 @@ public class TestSeparation extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
         // Creamos el personaje.
         gota = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota.setBounds(50.0f, 60.0f, 64.0f, 64.0f);
+        gota.setBounds(50.0f, 60.0f, 32.0f, 32.0f);
         gota.setOrientation(30.0f);
         gota.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota2 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota2.setBounds(50.0f, 80.0f, 64.0f, 64.0f);
+        gota2.setBounds(50.0f, 80.0f, 32.0f, 32.0f);
         gota2.setOrientation(30.0f);
         gota2.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota2.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota3 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota3.setBounds(50.0f, 100.0f, 64.0f, 64.0f);
+        gota3.setBounds(50.0f, 100.0f, 32.0f, 32.0f);
         gota3.setOrientation(30.0f);
         gota3.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota3.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota4 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota4.setBounds(50.0f, 120.0f, 64.0f, 64.0f);
+        gota4.setBounds(50.0f, 120.0f, 32.0f, 32.0f);
         gota4.setOrientation(30.0f);
         gota4.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota4.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota5 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota5.setBounds(50.0f, 140.0f, 64.0f, 64.0f);
+        gota5.setBounds(50.0f, 140.0f, 32.0f, 32.0f);
         gota5.setOrientation(30.0f);
         gota5.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota5.setMaxSpeed(50.0f);
         
         // Creamos el personaje.
         gota6 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        gota6.setBounds(50.0f, 160.0f, 64.0f, 64.0f);
+        gota6.setBounds(50.0f, 160.0f, 32.0f, 32.0f);
         gota6.setOrientation(30.0f);
         gota6.setVelocity(new Vector3(0.0f,0.0f,0.0f));
         gota6.setMaxSpeed(50.0f);
@@ -104,7 +111,7 @@ public class TestSeparation extends ApplicationAdapter {
         
         // Creamos el personaje.
         cubo = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        cubo.setBounds(350.0f, 100.0f, 64.0f, 64.0f);
+        cubo.setBounds(350.0f, 100.0f, 32.0f, 32.0f);
         cubo.setOrientation(30.0f);
         cubo.setVelocity(new Vector3(-30.0f,0.0f,0.0f)); // Hacía la izquierda.
         cubo.setMaxSpeed(50.0f);

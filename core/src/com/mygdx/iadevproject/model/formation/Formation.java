@@ -58,6 +58,10 @@ public abstract class Formation extends Character {
 		return charactersList;
 	}
 	
+	/**
+	 * Devuelve la cantidad de PERSONAJES COMO TAL que hay en la formación. Es decir, si en la formación hay otra formación, explora los personajes de dicha formación (aunque no cuenta al propio objeto formación).
+	 * @return la cantidad de PERSONAJES COMO TAL que hay en la formación.
+	 */
 	public int getNumberOfCharacters() {
 		// Un integrante de una formación puede ser un personaje u otra formación. Eso hay que tenerlo en cuenta.
 		int resultado = 0;
@@ -70,6 +74,14 @@ public abstract class Formation extends Character {
 			}
 		}
 		return resultado;
+	}
+	
+	/**
+	 * Devuelve la cantidad de COMPONENTES DIRECTOS que hay en la formación. Si un elemento de la formación es otra formación, solo se cuenta 1 vez y no se explora hacia dentro.
+	 * @return la cantidad de COMPONENTES DIRECTOS que hay en la formación.
+	 */
+	public int getNumberOfComponents() {
+		return this.charactersList.size();
 	}
 	
 	// No hay método set para el atributo 'charactersList'.

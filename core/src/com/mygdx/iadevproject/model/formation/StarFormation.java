@@ -38,13 +38,13 @@ public class StarFormation extends CircularFormation {
 	// MÉTODOS.
 	@Override
 	protected List<Vector3> getCharactersPosition() {
-		int numCharacters = this.getNumberOfCharacters();
+		int numCharacters = this.getNumberOfComponents();
 		// Si se cumplen las condiciones necesarias, calculamos la formación en estrella.
 		if ((numCharacters > 3) && ((numCharacters % 2) == 0)) {
 			List<Vector3> salida = new LinkedList<Vector3>();
 			
 			// Calculamos el ángulo de separación entre cada uno de los personajes.
-			float numberOfCharactersAsFloat = (float) this.getNumberOfCharacters();
+			float numberOfCharactersAsFloat = (float) this.getNumberOfComponents();
 			float theta = 360.0f / numberOfCharactersAsFloat;
 			
 			

@@ -49,9 +49,9 @@ public class CircularFormation extends Formation {
 		List<Vector3> salida = new LinkedList<Vector3>();
 		
 		// Si hay personajes en la formación.
-		if (this.getNumberOfCharacters() > 0) {
+		if (this.getNumberOfComponents() > 0) {
 			// Calculamos el ángulo de separación entre cada uno de los personajes.
-			float numberOfCharactersAsFloat = (float) this.getNumberOfCharacters();
+			float numberOfCharactersAsFloat = (float) this.getNumberOfComponents();
 			float theta = 360.0f / numberOfCharactersAsFloat;
 			
 			

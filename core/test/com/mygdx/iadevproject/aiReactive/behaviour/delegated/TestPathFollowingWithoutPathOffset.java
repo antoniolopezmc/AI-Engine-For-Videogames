@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset;
 import com.mygdx.iadevproject.model.Character;
@@ -42,9 +43,15 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();

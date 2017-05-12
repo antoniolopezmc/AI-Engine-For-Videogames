@@ -33,17 +33,21 @@ public class TestAlign_Accelerated extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
-        font = IADeVProject.font;
-        renderer = IADeVProject.renderer;
         
         IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
         drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        drop.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        drop.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0,0));
         // Esto está hecho, una vez que se ha comprobado que el Wander funciona!
@@ -51,7 +55,7 @@ public class TestAlign_Accelerated extends ApplicationAdapter {
         
         
         bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
         bucket.setOrientation(0.0f);
         bucket.setVelocity(new Vector3(0,0,0));
         bucket.addToListBehaviour(new Align_Accelerated(bucket, drop, 50.0f, 20.0f, 5.0f, 10.0f, 1.0f));

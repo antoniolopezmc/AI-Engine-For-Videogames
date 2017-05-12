@@ -44,7 +44,7 @@ public class TestWeightedBlendArbitrator_Accelerated extends ApplicationAdapter 
         camera.update();
         
         drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        drop.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        drop.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         Character target = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f));
@@ -54,7 +54,7 @@ public class TestWeightedBlendArbitrator_Accelerated extends ApplicationAdapter 
         drop.addToListBehaviour(seek);
      
         bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
         bucket.setOrientation(0.0f);
         bucket.setVelocity(new Vector3(0,0,0));
         bucket.addToListBehaviour(new Arrive_Accelerated(bucket, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));
@@ -62,7 +62,7 @@ public class TestWeightedBlendArbitrator_Accelerated extends ApplicationAdapter 
         bucket.addToListBehaviour(new Face(bucket, drop, 30.0f, 10.0f, 10.0f, 5.0f, 1.0f), 60.0f);
         
         bucket1 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket1.setBounds(187.0f, 210.0f, 64.0f, 64.0f);
+        bucket1.setBounds(187.0f, 210.0f, 32.0f, 32.0f);
         bucket1.setOrientation(0.0f);
         bucket1.setVelocity(new Vector3(0,0,0));
         bucket1.addToListBehaviour(new Arrive_Accelerated(bucket1, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));
@@ -70,7 +70,7 @@ public class TestWeightedBlendArbitrator_Accelerated extends ApplicationAdapter 
         bucket1.addToListBehaviour(new Face(bucket1, drop, 30.0f, 10.0f, 10.0f, 5.0f, 1.0f), 60.0f);
         
         bucket2 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket2.setBounds(0.0f, 302.0f, 64.0f, 64.0f);
+        bucket2.setBounds(0.0f, 302.0f, 32.0f, 32.0f);
         bucket2.setOrientation(0.0f);
         bucket2.setVelocity(new Vector3(0,0,0));
         bucket2.addToListBehaviour(new Arrive_Accelerated(bucket2, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));
@@ -78,7 +78,7 @@ public class TestWeightedBlendArbitrator_Accelerated extends ApplicationAdapter 
         bucket2.addToListBehaviour(new Face(bucket2, drop, 30.0f, 10.0f, 10.0f, 5.0f, 1.0f), 60.0f);
         
         bucket3 = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket3.setBounds(10.0f, 200.0f, 64.0f, 64.0f);
+        bucket3.setBounds(10.0f, 200.0f, 32.0f, 32.0f);
         bucket3.setOrientation(0.0f);
         bucket3.setVelocity(new Vector3(0,0,0));
         bucket3.addToListBehaviour(new Arrive_Accelerated(bucket3, drop, 60.0f, 40.0f, 5.0f, 1.0f, 0.5f));

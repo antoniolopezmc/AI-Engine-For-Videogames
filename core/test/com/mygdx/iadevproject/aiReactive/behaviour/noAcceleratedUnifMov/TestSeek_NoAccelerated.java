@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_NoAccelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Seek_NoAccelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Wander_NoAccelerated;
@@ -32,22 +33,28 @@ public class TestSeek_NoAccelerated extends ApplicationAdapter {
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
         camera = new OrthographicCamera(w, h);
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        renderer = new ShapeRenderer();
+
+        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+        
+        IADeVProject.font = new BitmapFont();
+        IADeVProject.renderer = new ShapeRenderer();
+        IADeVProject.batch = new SpriteBatch();
+        font = IADeVProject.font;
+        renderer = IADeVProject.renderer;
+        batch = IADeVProject.batch;
         
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
         drop = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        drop.setBounds(50.0f, 50.0f, 64.0f, 64.0f);
+        drop.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
         drop.setOrientation(0.0f);
         // Esto está hecho, una vez que se ha comprobado que el Wander funciona!
         drop.addToListBehaviour(new Wander_NoAccelerated(drop, 50.0f, 10.0f));
         
         
         bucket = new Character(new WeightedBlendArbitrator_NoAccelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
         bucket.setOrientation(0.0f);
         bucket.addToListBehaviour(new Seek_NoAccelerated(bucket, drop, 50.0f));
 	}

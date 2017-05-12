@@ -44,7 +44,7 @@ public class TestPriorityArbitrator extends ApplicationAdapter {
         camera.update();
         
         drop = new Character(new PriorityArbitrator(1.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        drop.setBounds(-100.0f, -100.0f, 64.0f, 64.0f);
+        drop.setBounds(-100.0f, -100.0f, 32.0f, 32.0f);
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         Character target = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f));
@@ -54,7 +54,7 @@ public class TestPriorityArbitrator extends ApplicationAdapter {
         drop.addToListBehaviour(seek);
      
         bucket = new Character(new PriorityArbitrator(1e-10f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(200.0f, 200.0f, 64.0f, 64.0f);
+        bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
         bucket.setOrientation(0.0f);
         bucket.setVelocity(new Vector3(0,0,0));
 //        Seek_Accelerated seek1 = new Seek_Accelerated(bucket, drop, 30.0f);
@@ -64,7 +64,7 @@ public class TestPriorityArbitrator extends ApplicationAdapter {
         bucket.addToListBehaviour(new Align_Accelerated(bucket, drop, 60.0f, 30.0f, 2.0f, 10.0f, 1.0f));
         
         bucket1 = new Character(new PriorityArbitrator(1e-10f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket1.setBounds(187.0f, 210.0f, 64.0f, 64.0f);
+        bucket1.setBounds(187.0f, 210.0f, 32.0f, 32.0f);
         bucket1.setOrientation(0.0f);
         bucket1.setVelocity(new Vector3(0,0,0));
 //        Seek_Accelerated seek2 = new Seek_Accelerated(bucket1, drop, 30.0f);
@@ -74,7 +74,7 @@ public class TestPriorityArbitrator extends ApplicationAdapter {
         bucket1.addToListBehaviour(new Align_Accelerated(bucket1, drop, 60.0f, 30.0f, 2.0f, 10.0f, 1.0f));
         
         bucket2 = new Character(new PriorityArbitrator(1e-10f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket2.setBounds(0.0f, 302.0f, 64.0f, 64.0f);
+        bucket2.setBounds(0.0f, 302.0f, 32.0f, 32.0f);
         bucket2.setOrientation(0.0f);
         bucket2.setVelocity(new Vector3(0,0,0));
 //        Seek_Accelerated seek3 = new Seek_Accelerated(bucket2, drop, 30.0f);
@@ -84,7 +84,7 @@ public class TestPriorityArbitrator extends ApplicationAdapter {
         bucket2.addToListBehaviour(new Align_Accelerated(bucket2, drop, 60.0f, 30.0f, 2.0f, 10.0f, 1.0f));
         
         bucket3 = new Character(new PriorityArbitrator(1e-10f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket3.setBounds(10.0f, 200.0f, 64.0f, 64.0f);
+        bucket3.setBounds(10.0f, 200.0f, 32.0f, 32.0f);
         bucket3.setOrientation(0.0f);
         bucket3.setVelocity(new Vector3(0,0,0));
 //        Seek_Accelerated seek4 = new Seek_Accelerated(bucket3, drop, 30.0f);
