@@ -1,5 +1,7 @@
 package com.mygdx.iadevproject.checksAndActions;
 
+import java.util.List;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -8,11 +10,14 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.Formation;
+import com.mygdx.iadevproject.waypoints.Waypoints;
 
 public class Checks {
 	
 	// Distancia por defecto a la que nosotros consideramos que objeto está "cerca" de otro. 
 	private static final float NEAR = 300;
+	// Distancia por defecto a la que nosotros condieramos que la el personaje está cerca de su base
+	private static final float NEAR_OF_BASE = 600;
 	// Cantidad por defecto de salud que nosotros consideramos como "poca" salud.
 	// 		Depende de la salud por defecto del personaje.
 	private static final float LITTLE_HEALTH = Character.DEFAULT_HEALTH * 0.2f;
@@ -298,6 +303,16 @@ public class Checks {
 	}
 	
 	/**
+	 * Método que comprueba si el personaje 'source' tiene un waypoint asociado.
+	 * @param source Personaje que realiza la pregunta.
+	 * @return true si tiene un waypoint asociado, false en caso contrario.
+	 */
+	public static boolean haveIGotWayPoint(Character source) {
+		List<Vector3> waypoints = Waypoints.getAssociatedWaypointAndNeighboring(source);
+		return !waypoints.isEmpty();
+	}
+	
+	/**
 	 * Método que comprueba si el personaje 'target' es del equipo enemigo al personaje 'source'.
 	 * @param source Personaje que quiere saber si 'target' es del equipo contrario.
 	 * @param target Personaje del que se quiere saber si es del equipo contrario.
@@ -329,6 +344,21 @@ public class Checks {
 	
 	/**
 	 * Método que comprueba si el personaje 'source' está a menos de 'distance' distancia
+	 * del punto 'point'.
+	 * @param source Personaje que realiza la pregunta.
+	 * @param point Punto al que se quiere saber su distancia.
+	 * @param distance Distancia que se quiere consultar.
+	 * @return true si está a menos de esa distancia, false en caso contrario.
+	 */
+	public static boolean amILessThanDistanceFromPoint(Character source, Vector3 point, float distance) {
+		// Obtenemos la distancia entre la base y el personaje.
+		float dst = point.dst(source.getPosition());
+		// Comprobamos la distancia.
+		return dst < distance;
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' está a menos de 'distance' distancia
 	 * de su base.
 	 * @param source Personaje que realiza la pregunta.
 	 * @param distance Distancia que se quiere consultar.
@@ -337,10 +367,34 @@ public class Checks {
 	public static boolean amILessThanDistanceFromMyBase(Character source, float distance) {
 		// Obtenemos la posición de la base
 		Vector3 basePosition = IADeVProject.getPositionOfTeamBase(source.getTeam());
-		// Obtenemos la distancia entre la base y el personaje.
-		float dst = basePosition.dst(source.getPosition());
-		// Comprobamos la distancia.
-		return dst < distance;
+		return amILessThanDistanceFromPoint(source, basePosition, distance);
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' está cerca de su Waypoint. Si
+	 * no tiene waypoint asociado, devuelve false.
+	 * @param source Personaje que realiza la pregunta.
+	 * @return true si está cerca del waypoint, false en caso contrario.
+	 */
+	public static boolean amINearFromMyWayPoint(Character source) {
+		List<Vector3> listWaypoints = Waypoints.getAssociatedWaypointAndNeighboring(source);
+		if (listWaypoints.isEmpty()) return false;
+		
+		Vector3 myWaypoint = listWaypoints.get(0);
+		
+		return amILessThanDistanceFromPoint(source, myWaypoint, NEAR);
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' está lejos de su Waypoint. 
+	 * IMPORTANTE: si no tiene waypoint asociado, devolverá un true, ya que se basa
+	 * en el método 'amINearFromMyWayPoint()' y este devuelve false si no tiene asociado
+	 * un waypoint.
+	 * @param source Personaje que realiza la pregunta.
+	 * @return true si está lejos de su waypoint, false en caso contrario.
+	 */
+	public static boolean amIFarFromMyWayPoint(Character source) {
+		return !amINearFromMyWayPoint(source);
 	}
 	
 	/**
@@ -349,7 +403,7 @@ public class Checks {
 	 * @return true si está cerca de su base, false en caso contrario.
 	 */
 	public static boolean amINearFromMyBase(Character source) {
-		return amILessThanDistanceFromMyBase(source, NEAR);
+		return amILessThanDistanceFromMyBase(source, NEAR_OF_BASE);
 	}
 	
 	/**

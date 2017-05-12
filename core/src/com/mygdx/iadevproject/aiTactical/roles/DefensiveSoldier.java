@@ -18,12 +18,12 @@ public class DefensiveSoldier extends Soldier {
 	// Estados de la máquina de estados. Están como variables porque la máquina de estados,
 	// cuando comprueba si está en un estado, la comprobación no es con el 'equals', si no 
 	// que utiliza el '==', por lo que es necesario tener el mismo objeto para hacer la comprobación.
-	private PatrolMyBase patrolMyBase;
-	private AttackEnemies attackEnemies;
-	private CureMe cureMe;
-	private GoToMyBase goToMyBase;
-	private IAmDead iAmDead;
-	private GoToMyManantial goToMyManantial;
+	private PatrolMyBase 		patrolMyBase;
+	private AttackEnemies 		attackEnemies;
+	private CureMe 				cureMe;
+	private GoToMyBase 			goToMyBase;
+	private IAmDead 			iAmDead;
+	private GoToMyManantial 	goToMyManantial;
 	
 	public DefensiveSoldier() {
 		// Establecemos a null la máquina de estados porque se ha de crear cuando se utilice

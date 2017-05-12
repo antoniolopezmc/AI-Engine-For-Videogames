@@ -24,7 +24,7 @@ public class IAmDead implements State<Character> {
 	public void enter(Character entity)  { 
 		// Cuando entramos a este estado, liberamos el waypoint que esté asociado el personaje.
 		// Aunque sea el personaje no tenga asociado ningún waypoint, no pasaría nada.
-		Waypoints.freeBridgeWaypoint(entity);
+		Actions.leaveWaypoint(entity);
 	}
 	
 	@Override

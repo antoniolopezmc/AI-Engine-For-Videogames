@@ -61,6 +61,24 @@ public class Actions {
 	}
 	
 	/**
+	 * Método que refleja la acción de ir al waypoint de un personaje que se pasa como parámetro.
+	 * @param weight Peso que tiene esta acción.
+	 * @param source Personaje que quiere aplicar la acción.
+	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
+	 * @return El Map de comportamientos correspondiente a esta acción. Si el personaje no tiene waypoint
+	 * asociado, devuelve un map vacío.
+	 */
+	public static Map<Float, Behaviour> goToMyWayPoint (float weight, Character source, float maxAcceleration) {
+		// Obtenemos los waypoints del personaje.
+		List<Vector3> waypoints = Waypoints.getAssociatedWaypointAndNeighboring(source);
+		if (!waypoints.isEmpty()) {
+			// Devolvemos el comportamiento de ir hacia el waypoint asociado
+			return goTo(weight, source, waypoints.get(0), maxAcceleration);
+		}
+		return createListBehaviour();
+	}
+	
+	/**
 	 * Método que refleja la acción de atacar.
 	 * @param source Personaje que realiza el ataque.
 	 * @param target Personaje que recibe el ataque.
@@ -139,6 +157,14 @@ public class Actions {
 	}
 	
 	/**
+	 * Método que refleja la acción de liberar un waypoint.
+	 * @param source Personaje que quiere liberar el waypoint.
+	 */
+	public static void leaveWaypoint(Character source) {
+		Waypoints.freeBridgeWaypoint(source);
+	}
+	
+	/**
 	 * Método que refleja la acción de huir de un objetivo.
 	 * @param weight Peso que tiene esta acción.
 	 * @param source Personaje que quiere aplicar la acción.
@@ -208,10 +234,42 @@ public class Actions {
 		Map<Float, Behaviour> map = createListBehaviour();
 		// Obtenemos los waypoints de la base del personaje a patrullar.
 		List<Vector3> pointsList = Waypoints.getWaypointsOfMyBase(source);
+		// Introducimos los comportamientos
 		map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
 		map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
 				15.0f, 30.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_IDA_Y_VUELTA));
 		return map;
+	}
+	
+	/**
+	 * Método que refleja la acción de patrullar el waypoint del personaje.
+	 * @param weight Peso que tiene esta acción.
+	 * @param source Personaje que quiere aplicar la acción.
+	 * @return El comportamiento correspondiente esta acción. Si el personaje
+	 * no tiene asociado un waypoint, entonces el comportamiento es vacío.
+	 */
+	public static Map<Float, Behaviour> patrolYourWaypoint(float weight, Character source, float maxAcceleration) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		
+		// Comprobamos si el personaje tiene asociado un waypoint.
+		if (Checks.haveIGotWayPoint(source)) {
+			// Obtenemos los waypoints del personaje a patrullar.
+			List<Vector3> pointsList = Waypoints.getAssociatedWaypointAndNeighboring(source);
+			// Introducimos los comportamientos
+			map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
+			map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
+					15.0f, 30.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_IDA_Y_VUELTA));
+		}
+		
+		return map;
+	}
+	
+	/**
+	 * Método que refleja la acción de reservar un waypoint.
+	 * @param source Personaje que quiere reservar el waypoint.
+	 */
+	public static void bookWaypoint(Character source) {
+		Waypoints.bookBridgeWaypoint(source);
 	}
 	
 	/**
@@ -223,7 +281,7 @@ public class Actions {
 	 */
 	public static Map<Float, Behaviour> doRandomThings(float weight, Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
-		map.put(weight, new Wander_Delegated(source, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, 45.0f, 10.0f));
+		map.put(weight, new Wander_Delegated(source, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, source.getOrientation(), 10.0f));
 		return map;
 	}
 	
