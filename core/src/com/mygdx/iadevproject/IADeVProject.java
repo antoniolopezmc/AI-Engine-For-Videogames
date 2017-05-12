@@ -249,7 +249,7 @@ public class IADeVProject extends ApplicationAdapter {
 		// Eliminamos los decimales haciendo el casting.
 		int gridPosition_x = (int) mapPosition.x/grid_cell_size;
 		int gridPosition_y = (int) mapPosition.y/grid_cell_size;
-		int gridPosition_z = (int) mapPosition.z/grid_cell_size;
+		int gridPosition_z = 0;
 		return new Vector3(gridPosition_x, gridPosition_y, gridPosition_z);
 	}
 	
@@ -263,7 +263,7 @@ public class IADeVProject extends ApplicationAdapter {
 		// Además de la propia tranformación también se aplica un desplazamiento para situar el objeto en el centro del tile.
 		float mapPosition_x = (gridPosition.x * ((float) grid_cell_size)) + ((float) grid_cell_size/2);
 		float mapPosition_y = (gridPosition.y * ((float) grid_cell_size)) + ((float) grid_cell_size/2);
-		float mapPosition_z = (gridPosition.z * ((float) grid_cell_size)) + ((float) grid_cell_size/2);
+		float mapPosition_z = 0.0f;
 		return new Vector3(mapPosition_x, mapPosition_y, mapPosition_z);
 	}
 	

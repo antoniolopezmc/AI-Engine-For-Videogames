@@ -94,6 +94,7 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         
+//        drop.applyBehaviour();
         defensiveSoldier.updateTacticalRole();
         
         drawRegionsOfBasesAndManantials();	// Dibujamos las regiones de las bases y los manantiales.
@@ -130,6 +131,11 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
 			camera.unproject(touchPos);
 
 			drop.setPosition(touchPos);
+			
+//			Map<Float, Behaviour> goTo = Actions.goTo(50.0f, drop, touchPos, 20.0f); 
+//			
+//			drop.setListBehaviour(goTo);
+//			System.out.println(drop.getListBehaviour());
 		}
 	}
 	

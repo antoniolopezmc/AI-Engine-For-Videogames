@@ -74,6 +74,8 @@ public class Character extends WorldObject {
 		this.maxHealth = DEFAULT_HEALTH;
 		this.previousHealth = DEFAULT_HEALTH;
 		this.team = Team.NEUTRAL;
+		this.role = null;
+		this.formation = null;
 	}
 	
 	

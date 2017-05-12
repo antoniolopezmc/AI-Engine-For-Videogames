@@ -16,7 +16,7 @@ public abstract class Soldier implements TacticalRole {
 	private static final int TRAIL_COST 		= IADeVProject.DEFAULT_COST;
 	
 	// Distancia máxima de ataque.
-	private static float SOLDIER_ATTACK_MAX_DISTANCE = 20.0f;
+	private static float SOLDIER_ATTACK_MAX_DISTANCE = 100.0f;
 	// Vida que quita este personaje al atacar.
 	private static float SOLDIER_ATTACK_DAMAGE_TO_DONE = 50.0f;
 

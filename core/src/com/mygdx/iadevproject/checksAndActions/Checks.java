@@ -12,7 +12,7 @@ import com.mygdx.iadevproject.model.formation.Formation;
 public class Checks {
 	
 	// Distancia por defecto a la que nosotros consideramos que objeto está "cerca" de otro. 
-	private static final float NEAR = 10;
+	private static final float NEAR = 300;
 	// Cantidad por defecto de salud que nosotros consideramos como "poca" salud.
 	// 		Depende de la salud por defecto del personaje.
 	private static final float LITTLE_HEALTH = Character.DEFAULT_HEALTH * 0.2f;
@@ -40,7 +40,8 @@ public class Checks {
 			if (obj instanceof Character && !(obj instanceof Formation)) {
 				Character target = (Character)obj;
 				
-				if (isItFromEnemyTeam(source, target)) {
+				// Comprobamos también que el personaje no esté muerto.
+				if (isItFromEnemyTeam(source, target) && !Checks.haveIDead(target)) {
 					// Calculamos la distancia entre ambos personajes.
 					Vector3 targetPosition = new Vector3(target.getPosition());
 					Vector3 sourcePosition = new Vector3(source.getPosition());
@@ -118,7 +119,8 @@ public class Checks {
 			if (obj instanceof Character && !(obj instanceof Formation)) {
 				Character target = (Character)obj;
 				
-				if (isItFromEnemyTeam(source, target)) {
+				// Comprobamos también que el personaje no esté muerto.
+				if (isItFromEnemyTeam(source, target) && !Checks.haveIDead(target)) {
 					// Calculamos la distancia entre ambos personajes.
 					Vector3 targetPosition = new Vector3(target.getPosition());
 					Vector3 sourcePosition = new Vector3(source.getPosition());
