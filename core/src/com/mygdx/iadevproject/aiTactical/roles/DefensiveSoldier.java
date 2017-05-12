@@ -58,8 +58,8 @@ public class DefensiveSoldier extends Soldier {
 			// Estamos en el estado -> Patrullar la base (estoy en mi base)
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
-			if (Checks.areThereEnemiesNear(source)) {
-				// Si hay enemigos cerca, cambio al estado -> Atacar a los enemigos
+			if (Checks.areThereEnemiesNear(source) && !Checks.amIFarFromMyBase(source)) {
+				// Si hay enemigos cerca Y no estoy lejos de mi base, cambio al estado -> Atacar a los enemigos
 				this.stateMachine.changeState(this.attackEnemies);
 			
 			} else if (Checks.haveILittleHealth(source)) {

@@ -104,6 +104,7 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         Waypoints.drawWaypointsOfBases(); // Dibujamos los waypoints de ambas bases.
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
         drop.drawHealth(batch, font);
+        defensiveSoldier.drawHealth(batch, font);
 	}
 
 	@Override
@@ -132,10 +133,7 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
 
 			drop.setPosition(touchPos);
 			
-//			Map<Float, Behaviour> goTo = Actions.goTo(50.0f, drop, touchPos, 20.0f); 
-//			
-//			drop.setListBehaviour(goTo);
-//			System.out.println(drop.getListBehaviour());
+			defensiveSoldier.setCurrentHealth(Character.DEFAULT_HEALTH * 0.2f - 10);
 		}
 	}
 	

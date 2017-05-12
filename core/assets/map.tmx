@@ -1064,7 +1064,6 @@
 </data>
  </layer>
  <objectgroup name="obstacles">
-  <object id="29" gid="253" x="788.667" y="1820.67" width="32" height="32"/>
   <object id="30" gid="253" x="847.333" y="1622.67" width="32" height="32"/>
   <object id="32" gid="253" x="288" y="1168" width="32" height="32"/>
   <object id="34" gid="253" x="198" y="544" width="32" height="32"/>

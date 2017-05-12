@@ -11,6 +11,7 @@ import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Flee_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset_Arrive;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
@@ -165,7 +166,8 @@ public class Actions {
 				source.getPosition().x, source.getPosition().y, position.x, position.y);
 		
 		Map<Float, Behaviour> map = createListBehaviour();
-		map.put(weight, new PathFollowingWithoutPathOffset(source, maxAcceleration, pointsList, 1.0f, PathFollowingWithoutPathOffset.MODO_PARAR_AL_FINAL));
+		map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
+							30.0f, 40.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_PARAR_AL_FINAL));
 		return map;
 	}
 	
