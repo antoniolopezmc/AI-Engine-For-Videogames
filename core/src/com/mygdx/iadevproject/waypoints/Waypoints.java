@@ -102,13 +102,15 @@ public class Waypoints {
 	// 		Aunque a un personaje solo se le asigne un waypoint, al patrullar el puente irá de un waypoint a otro de su lado. Por tanto, en la segunda estructura, junto con cada waypoint también se almacena
 	//			otro Vector3 que representa el otro waypoint del mismo lado del mismo puente (el waypoint vecino).
 	
-	// Equipo FJAVIER (el de arriba)
+	// Equipo LDANIEL (el de arriba)
+	private static Map<Character, Vector3> bridges_CharacterAndWaypointAssociation_team_LDANIEL;
+	private static Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints_team_LDANIEL; // Da igual que la clave del Map interior sea un Boolean, ya que en el Map interior de un elemento del Map exterior SOLO HABRÁ UNA ENTRADA.
+		
+	
+	// Equipo FJAVIER (el de abajo)
 	private static Map<Character, Vector3> bridges_CharacterAndWaypointAssociation_team_FJAVIER;
 	private static Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints_team_FJAVIER; // Da igual que la clave del Map interior sea un Boolean, ya que en el Map interior de un elemento del Map exterior SOLO HABRÁ UNA ENTRADA.
 	
-	// Equipo LDANIEL (el de abajo)
-	private static Map<Character, Vector3> bridges_CharacterAndWaypointAssociation_team_LDANIEL;
-	private static Map<Vector3, ValueOfBridgeWaypoint> bridgesWayPoints_team_LDANIEL; // Da igual que la clave del Map interior sea un Boolean, ya que en el Map interior de un elemento del Map exterior SOLO HABRÁ UNA ENTRADA.
 	
 	// Para obtener la estructura bridges_CharacterAndWaypointAssociation del equipo correspondiente.
 	private static Map<Character, Vector3> getBridges_CharacterAndWaypointAssociation (Team team) {
@@ -153,26 +155,25 @@ public class Waypoints {
 		bridgesWayPoints_team_FJAVIER = new HashMap<Vector3, ValueOfBridgeWaypoint>();
 		bridgesWayPoints_team_LDANIEL = new HashMap<Vector3, ValueOfBridgeWaypoint>();
 		// Añadimos todos los waypointa en la estructura de los waypoints.
-		// 		-> Equipo FJAVIER (el de arriba)
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(482.00006f, 683.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(606.0f, 852.0001f, 0.0f)));
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(606.0f, 852.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(482.00006f, 683.00006f, 0.0f)));
+		// 		-> Equipo LDANIEL (el de arriba)
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(482.00006f, 683.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(606.0f, 852.0001f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(606.0f, 852.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(482.00006f, 683.00006f, 0.0f)));
 		
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(928.0001f, 1178.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(991.0001f, 1251.0001f, 0.0f)));
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(991.0001f, 1251.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(928.0001f, 1178.0001f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(928.0001f, 1178.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(991.0001f, 1251.0001f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(991.0001f, 1251.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(928.0001f, 1178.0001f, 0.0f)));
 		
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(1670.0001f, 1855.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1890.0001f, 1905.0001f, 0.0f)));
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(1890.0001f, 1905.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1670.0001f, 1855.0001f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(1670.0001f, 1855.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1890.0001f, 1905.0001f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(1890.0001f, 1905.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1670.0001f, 1855.0001f, 0.0f)));
 		
-		// 		-> Equipo LDANIEL (el de abajo)
-		bridgesWayPoints_team_LDANIEL.put(new Vector3(693.00006f, 418.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(866.00006f, 551.00006f, 0.0f)));
-		bridgesWayPoints_team_LDANIEL.put(new Vector3(866.00006f, 551.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(693.00006f, 418.00006f, 0.0f)));
+		// 		-> Equipo FJAVIER (el de abajo)
+		bridgesWayPoints_team_FJAVIER.put(new Vector3(693.00006f, 418.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(866.00006f, 551.00006f, 0.0f)));
+		bridgesWayPoints_team_FJAVIER.put(new Vector3(866.00006f, 551.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(693.00006f, 418.00006f, 0.0f)));
 		
-		bridgesWayPoints_team_LDANIEL.put(new Vector3(1122.0f, 845.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1276.0f, 1000.0f, 0.0f)));
-		bridgesWayPoints_team_LDANIEL.put(new Vector3(1276.0f, 1000.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1122.0f, 845.0f, 0.0f)));
+		bridgesWayPoints_team_FJAVIER.put(new Vector3(1122.0f, 845.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1276.0f, 1000.0f, 0.0f)));
+		bridgesWayPoints_team_FJAVIER.put(new Vector3(1276.0f, 1000.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1122.0f, 845.0f, 0.0f)));
 		
-		bridgesWayPoints_team_LDANIEL.put(new Vector3(1694.0001f, 1506.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1874.0001f, 1601.0001f, 0.0f)));
-		bridgesWayPoints_team_LDANIEL.put(new Vector3(1874.0001f, 1601.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1694.0001f, 1506.0001f, 0.0f)));
-		
+		bridgesWayPoints_team_FJAVIER.put(new Vector3(1694.0001f, 1506.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1874.0001f, 1601.0001f, 0.0f)));
+		bridgesWayPoints_team_FJAVIER.put(new Vector3(1874.0001f, 1601.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1694.0001f, 1506.0001f, 0.0f)));
 	}
 	
 	/**
@@ -287,11 +288,11 @@ public class Waypoints {
 		ShapeRenderer renderer = IADeVProject.renderer;
 		renderer.begin(ShapeType.Filled);
 		renderer.setColor(Color.BLACK);
-		// Equipo FJAVIER (el de arriba)
+		// Equipo FJAVIER (el de abajo)
 		for (Vector3 vector3 : bridgesWayPoints_team_FJAVIER.keySet()) {
 			renderer.circle(vector3.x, vector3.y, 4);
 		}
-		// Equipo LDANIEL (el de abajo)
+		// Equipo LDANIEL (el de arriba)
 		for (Vector3 vector3 : bridgesWayPoints_team_LDANIEL.keySet()) {
 			renderer.circle(vector3.x, vector3.y, 4);
 		}
