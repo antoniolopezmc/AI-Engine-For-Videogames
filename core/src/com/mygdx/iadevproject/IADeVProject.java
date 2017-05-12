@@ -103,6 +103,8 @@ public class IADeVProject extends ApplicationAdapter {
         WORLD_OBJECT_WIDTH = (Integer) tiledMap.getProperties().get("tilewidth");
         WORLD_OBJECT_HEIGHT = (Integer) tiledMap.getProperties().get("tileheight");
         
+        // Inicializamos las estructuras para el manejo de los waypoints de los puentes.
+        Waypoints.initializeBridgesWaypoints();
         
         initializeMaps();		// Inicializamos los mapas a los valores por defecto.
         MapsCreatorIADeVProject.createMaps(tiledMap, GRID_CELL_SIZE); 				// Creamos los mapas (de costes, de terreno, etc)
@@ -113,9 +115,6 @@ public class IADeVProject extends ApplicationAdapter {
         worldObstacles = MapsCreatorIADeVProject.getObstaclesOfMap(tiledMap);
         // Los añadimos a los objetos del mundo
         worldObjects.addAll(worldObstacles);
-               
-        // Inicializamos las estructuras para el manejo de los waypoints de los puentes.
-        Waypoints.initializeBridgesWaypoints();
 	}
 	
 	@Override

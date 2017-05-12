@@ -24,7 +24,7 @@ import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.waypoints.Waypoints;
 
-public class TestDefensiveSoldier extends ApplicationAdapter {
+public class TestDefensiveArcher extends ApplicationAdapter {
 	
 	public static OrthographicCamera camera;				// Cámara (es pública para que se pueda acceder el InputProcessorIADeVProject)
 	public static boolean PRINT_PATH_BEHAVIOUR; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
@@ -64,16 +64,17 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         drop.setVelocity(new Vector3(0,0.0f,0));
         drop.setMaxSpeed(50.0f);
         drop.setTeam(Team.FJAVIER);
-                       
+
+   
         defensiveSoldier = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        defensiveSoldier.setBounds(300.6f,1400.3f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        defensiveSoldier.setBounds(600.0f, 1200.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         defensiveSoldier.setOrientation(60.0f);
         defensiveSoldier.setVelocity(new Vector3(0,0.0f,0));
         defensiveSoldier.setMaxSpeed(50.0f);
         defensiveSoldier.setTeam(Team.LDANIEL);
-        defensiveSoldier.initializeTacticalRole(new DefensiveSoldier());
+        defensiveSoldier.initializeTacticalRole(new DefensiveArcher());
         
-        drop.addToListBehaviour(new Attack(drop, defensiveSoldier, defensiveSoldier.getRole().getDamageToDone()+10, defensiveSoldier.getRole().getMaxDistanceOfAttack()));
+        drop.addToListBehaviour(new Attack(drop, defensiveSoldier, defensiveSoldier.getRole().getDamageToDone()-20, defensiveSoldier.getRole().getMaxDistanceOfAttack()));
         
         IADeVProject.addToWorldObjectList(drop, defensiveSoldier);
 	}

@@ -1,7 +1,5 @@
 package com.mygdx.iadevproject.waypoints;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;

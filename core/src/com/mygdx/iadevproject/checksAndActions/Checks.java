@@ -16,8 +16,10 @@ public class Checks {
 	
 	// Distancia por defecto a la que nosotros consideramos que objeto está "cerca" de otro. 
 	private static final float NEAR = 300;
-	// Distancia por defecto a la que nosotros condieramos que la el personaje está cerca de su base
+	// Distancia por defecto a la que nosotros consideramos que el personaje está cerca de su base
 	private static final float NEAR_OF_BASE = 600;
+	// Distancia por defecto a la que nosotros consideramos que el personaje está en su waypoint.
+	private static final float DISTANCE_OF_WAYPOINT = 30.0f;
 	// Cantidad por defecto de salud que nosotros consideramos como "poca" salud.
 	// 		Depende de la salud por defecto del personaje.
 	private static final float LITTLE_HEALTH = Character.DEFAULT_HEALTH * 0.2f;
@@ -413,5 +415,20 @@ public class Checks {
 	 */
 	public static boolean amIFarFromMyBase(Character source) {
 		return !amINearFromMyBase(source);
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'source' está en su waypoint. Consideramos
+	 * que un personaje está en su waypoint cuando la distancia que lo separa es menor
+	 * que DISTANCE_OF_WAYPOINT
+	 * @param source Personaje que realiza la pregunta
+	 * @return true si está en su waypoint, false en caso contrario.
+	 */
+	public static boolean amIInMyWayPoint(Character source) {
+		List<Vector3> waypoints = Waypoints.getAssociatedWaypointAndNeighboring(source);
+		// Si el personaje no tiene asociado un waypoint, devolvemos false
+		if (waypoints.isEmpty()) return false;
+		
+		return amILessThanDistanceFromPoint(source, waypoints.get(0), DISTANCE_OF_WAYPOINT);
 	}
 }

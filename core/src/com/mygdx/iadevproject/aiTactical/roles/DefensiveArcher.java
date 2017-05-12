@@ -56,8 +56,7 @@ public class DefensiveArcher extends Archer {
 	}
 
 	@Override
-	public void update(Character source) {
-		
+	public void update(Character source) {		
 		if (this.stateMachine.isInState(this.bookWaypoint)) {
 			// Estamos en el estado -> Reservar waypoint (y hacer lo que sea)
 			
@@ -71,8 +70,8 @@ public class DefensiveArcher extends Archer {
 		} else if (this.stateMachine.isInState(this.goToMyWayPoint)) {
 			// Estamos en el estado -> Ir a mi WayPoint
 			
-			if (Checks.amINearFromMyWayPoint(source)) {
-				// Si estoy cerca de mi waypoint, cambio al estado -> Patrullar mi waypoint.
+			if (Checks.amIInMyWayPoint(source)) {
+				// Si estoy en mi waypoint, cambio al estado -> Patrullar mi waypoint.
 				this.stateMachine.changeState(this.patrolMyWayPoint);
 				
 			} else if (Checks.haveILittleHealth(source)) {

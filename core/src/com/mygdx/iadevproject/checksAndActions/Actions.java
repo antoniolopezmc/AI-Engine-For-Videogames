@@ -10,6 +10,7 @@ import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Flee_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset_Arrive;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
@@ -281,7 +282,7 @@ public class Actions {
 	 */
 	public static Map<Float, Behaviour> doRandomThings(float weight, Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
-		map.put(weight, new Wander_Delegated(source, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, source.getOrientation(), 10.0f));
+		map.put(weight, new Wander_Delegated(source, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, 20.0f, 10.0f));
 		return map;
 	}
 	
@@ -375,6 +376,21 @@ public class Actions {
 		// Lo atacamos.
 		return attack(source, target, health, maxDistance);
 	}
+	
+	/**
+	 * Método que realiza la acción de mirar a un objetivo.
+	 * @param weight Peso que tiene esta acción.
+	 * @param source Personaje que quiere aplicar la acción.
+	 * @param target Personaje al que se quiere mirar.
+	 * @return El comportamiento correspondiente a esta acción.
+	 */
+	public static Map<Float, Behaviour> faceToTarget(float weight, Character source, Character target) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		
+		map.put(weight, new Face(source, target, 20.0f, 30.0f, 2.0f, 7.0f, 1.0f));
+		return map;
+	}
+	
 	
 	/**
 	 * Método que crea la lista de comportamientos. Se ha creado este método para evitar
