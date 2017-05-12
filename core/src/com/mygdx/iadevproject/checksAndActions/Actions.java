@@ -10,7 +10,7 @@ import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Flee_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset_Arrive;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
@@ -166,6 +166,7 @@ public class Actions {
 				source.getPosition().x, source.getPosition().y, position.x, position.y);
 		
 		Map<Float, Behaviour> map = createListBehaviour();
+		map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
 		map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
 							30.0f, 40.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_PARAR_AL_FINAL));
 		return map;
@@ -207,7 +208,9 @@ public class Actions {
 		Map<Float, Behaviour> map = createListBehaviour();
 		// Obtenemos los waypoints de la base del personaje a patrullar.
 		List<Vector3> pointsList = Waypoints.getWaypointsOfMyBase(source);
-		map.put(weight, new PathFollowingWithoutPathOffset(source, maxAcceleration, pointsList, 13.0f, PathFollowingWithoutPathOffset.MODO_IDA_Y_VUELTA));
+		map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
+		map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
+				15.0f, 30.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_IDA_Y_VUELTA));
 		return map;
 	}
 	
@@ -233,7 +236,7 @@ public class Actions {
 	 */
 	public static Map<Float, Behaviour> notCollide(float weight, Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
-		map.put(weight, new WallAvoidance(source, 300.0f, IADeVProject.worldObjects, 300.0f, 20.0f, 100.0f));
+		map.put(weight, new WallAvoidance(source, 300.0f, IADeVProject.worldObjects, 100.0f, 20.0f, 100.0f));
 		map.put(weight, new CollisionAvoidance(source, IADeVProject.worldObjects, 200.0f));
 		return map;
 	}

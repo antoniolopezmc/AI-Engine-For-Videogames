@@ -30,13 +30,12 @@ public class Waypoints {
 			new Vector3(1980.1f,439.3f,0.0f)));
 	
 	// Waypoints de la base del equipo ldaniel. Servirán para que los personajes sigan un camino preestablecido al patrullar su base.
-	private static List<Vector3> ldanielWayPoints = new LinkedList<Vector3>(Arrays.asList(new Vector3(49.5f,1613.3f,0.0f), 
-			new Vector3(158.6f,1613.3f,0.0f),
+	private static List<Vector3> ldanielWayPoints = new LinkedList<Vector3>(Arrays.asList(new Vector3(100.5f,1613.3f,0.0f), 
 			new Vector3(258.2f,1613.3f,0.0f),
 			new Vector3(401.1f,1613.3f,0.0f),
 			new Vector3(461.2f,1692.2f,0.0f),
 			new Vector3(457.5f,1769.3f,0.0f),
-			new Vector3(457.5f,1974.2f,0.0f)));
+			new Vector3(457.5f,1950.2f,0.0f)));
 	
 	/**
 	 * Método que devuelve la lista de los waypoints de la base de un personaje.

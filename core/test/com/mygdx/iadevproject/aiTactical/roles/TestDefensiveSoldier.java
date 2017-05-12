@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
@@ -59,16 +60,17 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         drop.setMaxSpeed(50.0f);
-        drop.setTeam(Team.LDANIEL);
+        drop.setTeam(Team.FJAVIER);
                        
         defensiveSoldier = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        defensiveSoldier.setBounds(1418.0f,170.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        defensiveSoldier.setBounds(300.6f,1400.3f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         defensiveSoldier.setOrientation(60.0f);
         defensiveSoldier.setVelocity(new Vector3(0,0.0f,0));
         defensiveSoldier.setMaxSpeed(50.0f);
-        defensiveSoldier.setTeam(Team.FJAVIER);
+        defensiveSoldier.setTeam(Team.LDANIEL);
         defensiveSoldier.initializeTacticalRole(new DefensiveSoldier());
         
+        drop.addToListBehaviour(new Attack(drop, defensiveSoldier, defensiveSoldier.getRole().getDamageToDone()+10, defensiveSoldier.getRole().getMaxDistanceOfAttack()));
         
         IADeVProject.addToWorldObjectList(drop, defensiveSoldier);
         
@@ -94,7 +96,7 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         
-//        drop.applyBehaviour();
+        drop.applyBehaviour();
         defensiveSoldier.updateTacticalRole();
         
         drawRegionsOfBasesAndManantials();	// Dibujamos las regiones de las bases y los manantiales.
@@ -132,8 +134,6 @@ public class TestDefensiveSoldier extends ApplicationAdapter {
 			camera.unproject(touchPos);
 
 			drop.setPosition(touchPos);
-			
-			defensiveSoldier.setCurrentHealth(Character.DEFAULT_HEALTH * 0.2f - 10);
 		}
 	}
 	
