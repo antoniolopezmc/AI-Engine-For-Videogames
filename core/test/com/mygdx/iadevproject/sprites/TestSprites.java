@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject.aiReactive.behaviour.others;
+package com.mygdx.iadevproject.sprites;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -14,15 +14,18 @@ import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.model.Character;
 
-public class TestAttack extends ApplicationAdapter {
+public class TestSprites extends ApplicationAdapter {
 	
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private BitmapFont font;
 	private ShapeRenderer renderer;
 	
-	private Character drop;
-	private Character bucket;
+	private Character drop_archer;
+	private Character bucket_archer;
+	
+	private Character drop_soldier;
+	private Character bucket_soldier;
 	
 	@Override
 	public void create() {
@@ -45,17 +48,27 @@ public class TestAttack extends ApplicationAdapter {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         
-        drop = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-        bucket = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        drop_archer = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet-archer.png")));
+        bucket_archer = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket-archer.png")));
         
-        drop.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
-        drop.setOrientation(0.0f);
-        drop.setVelocity(new Vector3(0,0,0));
+        drop_soldier = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/droplet-soldier.png")));
+        bucket_soldier = new Character(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), new Texture(Gdx.files.internal("../core/assets/bucket-soldier.png")));
         
-        bucket.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
-        bucket.setOrientation(0.0f);
-        bucket.setVelocity(new Vector3(0,0,0));
-        bucket.addToListBehaviour(new Attack(bucket, drop, 10.0f, 220.0f));
+        drop_archer.setBounds(50.0f, 50.0f, 32.0f, 32.0f);
+        drop_archer.setOrientation(0.0f);
+        drop_archer.setVelocity(new Vector3(0,0,0));
+        
+        bucket_archer.setBounds(200.0f, 200.0f, 32.0f, 32.0f);
+        bucket_archer.setOrientation(0.0f);
+        bucket_archer.setVelocity(new Vector3(0,0,0));
+        
+        drop_soldier.setBounds(0.0f, 0.0f, 32.0f, 32.0f);
+        drop_soldier.setOrientation(0.0f);
+        drop_soldier.setVelocity(new Vector3(0,0,0));
+        
+        bucket_soldier.setBounds(150.0f, 150.0f, 32.0f, 32.0f);
+        bucket_soldier.setOrientation(0.0f);
+        bucket_soldier.setVelocity(new Vector3(0,0,0));
 	}
 	
 	@Override
@@ -68,24 +81,22 @@ public class TestAttack extends ApplicationAdapter {
         
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        drop.applyBehaviour();       
-        bucket.applyBehaviour();
-        
         batch.begin();
-        drop.draw(batch);
-		bucket.draw(batch);
+        drop_archer.draw(batch);
+		bucket_archer.draw(batch);
+		
+        drop_soldier.draw(batch);
+		bucket_soldier.draw(batch);
         batch.end();
-        
-        drop.drawHealth(batch, font); // Dibujamos la vida del tarjet del ataque.
-        
-        // Distancia entre ambos personajes.
-        System.out.println("Distancia entre ambos personajes: " + new Vector3(drop.getPosition()).sub(new Vector3(bucket.getPosition())).len());
 	}
 	
 	@Override
 	public void dispose() {
-		drop.getTexture().dispose();
-		bucket.getTexture().dispose();
+		drop_archer.getTexture().dispose();
+		bucket_archer.getTexture().dispose();
+		drop_soldier.getTexture().dispose();
+		bucket_soldier.getTexture().dispose();
+		
 		batch.dispose();
 		font.dispose();
 		renderer.dispose();
