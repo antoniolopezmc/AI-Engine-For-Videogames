@@ -78,6 +78,8 @@ public class Waypoints {
 		renderer.end();
 	}
 	
+	// *************************************************************************************************************************
+	
 	// MUY IMPORTANTE.
 	// A parte de los waypoints de las bases, cada equipo tendrá también una serie de waypoints en su lado correspondiente de cada uno de los puentes (3 puentes, 6 waypoints por equipo, 12 waypoints en total en los puentes).
 	// 		Estos waypoints servirán para patrullar los puentes.
@@ -88,10 +90,13 @@ public class Waypoints {
 	// 		No puede haber más de un personaje asignado a un waypoint.
 	//		Cuando asignamos un waypoint a un personaje, se almacena la tupla en el Map (y se pone a true un booleano de la siguiente estructura).
 	// 		Cuando un personaje que estaba patrullando muere, debemos "desasignarlo". Esto se hace eliminando la tupla de este Map y poniendo un booleano de la siguiente estructura a false.
-	// - Un Map formado por un Vector3(el waypoint) (clave) y un valor con 2 elementos de distinto tipo: un booleano que indica si ese waypoint está asignado o no y su waypoint vecino del mismo lado del mismo puente.
+	// - Un Map formado por un Vector3(el waypoint) (clave) y un valor con 2 elementos de distinto tipo: un booleano que indica si ese waypoint está ocupado o no y su waypoint vecino del mismo lado del mismo puente.
 	// 		Este Map se inicializa al principio y tendrá siempre la misma cantidad de elementos (solo se modificarán los booleanos).
 	// 		MUY IMPORTANTE.
 	// 		Para poder almacenar un valor con 2 elementos de distinto tipo, hemos creado la clase 'ValueOfBridgeWaypoint'.
+	// -------------------> VALORES DE BOOLEANO.
+	// 		- false -> Waypoint no ocupado, es decir, LIBRE.
+	// 		- true -> Waypoint OCUPADO.
 	
 	// TAMBIEN MUY IMPORTANTE.
 	// 		Aunque a un personaje solo se le asigne un waypoint, al patrullar el puente irá de un waypoint a otro de su lado. Por tanto, en la segunda estructura, junto con cada waypoint también se almacena
@@ -127,7 +132,6 @@ public class Waypoints {
 		}
 	}
 	
-	// *************************************************************************************************************************
 	/**
 	 * Devuelve el valor del Map para un elemento de bridgesWayPoints.
 	 * @param ocupado Ocupación del waypoint.
@@ -160,17 +164,17 @@ public class Waypoints {
 		bridgesWayPoints_team_FJAVIER.put(new Vector3(1890.0001f, 1905.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1670.0001f, 1855.0001f, 0.0f)));
 		
 		// 		-> Equipo LDANIEL (el de abajo)
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(693.00006f, 418.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(866.00006f, 551.00006f, 0.0f)));
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(866.00006f, 551.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(693.00006f, 418.00006f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(693.00006f, 418.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(866.00006f, 551.00006f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(866.00006f, 551.00006f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(693.00006f, 418.00006f, 0.0f)));
 		
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(1122.0f, 845.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1276.0f, 1000.0f, 0.0f)));
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(1276.0f, 1000.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1122.0f, 845.0f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(1122.0f, 845.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1276.0f, 1000.0f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(1276.0f, 1000.0f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1122.0f, 845.0f, 0.0f)));
 		
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(1694.0001f, 1506.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1874.0001f, 1601.0001f, 0.0f)));
-		bridgesWayPoints_team_FJAVIER.put(new Vector3(1874.0001f, 1601.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1694.0001f, 1506.0001f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(1694.0001f, 1506.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1874.0001f, 1601.0001f, 0.0f)));
+		bridgesWayPoints_team_LDANIEL.put(new Vector3(1874.0001f, 1601.0001f, 0.0f), getValueOfBridgeWaypoint(false, new Vector3(1694.0001f, 1506.0001f, 0.0f)));
 		
 	}
-	// -------------------------------------> Hasta aquí revisado.
+	
 	/**
 	 * Asocia un waypoint a un personaje.
 	 * @param source El personaje a asociar.
@@ -201,8 +205,8 @@ public class Waypoints {
 				Vector3 vecinoDelWaypointLibre = null;
 				// Recorremos el Map.
 				for (Entry<Vector3, ValueOfBridgeWaypoint> entrada: bridgesWayPoints.entrySet()) {
-					Boolean disponible = entrada.getValue().getOcupacion();
-					if (disponible) { // Si hemos encontrado un waypoint libre, lo almacenamos.
+					Boolean ocupado = entrada.getValue().getOcupacion();
+					if (!ocupado) { // Si hemos encontrado un waypoint no ocupado (libre), lo almacenamos.
 						waypointLibre = entrada.getKey();
 						vecinoDelWaypointLibre = entrada.getValue().getWaypointVecino();
 					}
@@ -287,7 +291,7 @@ public class Waypoints {
 		for (Vector3 vector3 : bridgesWayPoints_team_FJAVIER.keySet()) {
 			renderer.circle(vector3.x, vector3.y, 4);
 		}
-		// Equipo FJAVIER (el de arriba)
+		// Equipo LDANIEL (el de abajo)
 		for (Vector3 vector3 : bridgesWayPoints_team_LDANIEL.keySet()) {
 			renderer.circle(vector3.x, vector3.y, 4);
 		}
