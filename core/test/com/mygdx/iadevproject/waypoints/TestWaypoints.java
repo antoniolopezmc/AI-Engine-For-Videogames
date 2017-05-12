@@ -73,7 +73,7 @@ public class TestWaypoints {
 		personaje14.setTeam(Team.NEUTRAL);
 	}
 	
-	public void testReservarPosiciones_Team_FJAVIER () {
+	public void ejecutarPruebas () {
 		// ********************************************************************************************************************
 		List<Vector3> reservaPersonaje1 = Waypoints.bookBridgeWaypoint(personaje1);
 		if (reservaPersonaje1.size() == 2) {
@@ -154,18 +154,58 @@ public class TestWaypoints {
 			System.err.println("La reserva del Waypoint por el personaje 6 no se ha realizado correctamente");
 		}
 		// ********************************************************************************************************************
+		List<Vector3> reservaPersonaje8 = Waypoints.bookBridgeWaypoint(personaje8);
+		if (reservaPersonaje8.size() == 2) {
+			System.out.println("El personaje 8 ha reservado el waypoint correctamente.");
+		} else {
+			System.err.println("La reserva del Waypoint por el personaje 8 no se ha realizado correctamente");
+		}
+		// ********************************************************************************************************************
 		List<Vector3> reservaPersonajeExtra1 = Waypoints.bookBridgeWaypoint(personajeExtra1);
 		if (reservaPersonajeExtra1.size() == 0) {
-			System.out.println("Ya no quedan más waypoints.");
+			System.out.println("Personaje extra 1 intenta reservar. Ya no quedan más waypoints.");
 		} else {
 			System.err.println("Salida incorrecta.");
 		}
 		// ********************************************************************************************************************
 		List<Vector3> reservaPersonajeExtra1_otroIntento = Waypoints.bookBridgeWaypoint(personajeExtra1);
 		if (reservaPersonajeExtra1_otroIntento.size() == 0) {
-			System.out.println("Ya no quedan más waypoints.");
+			System.out.println("Personaje extra 1 intenta reservar. Ya no quedan más waypoints.");
 		} else {
 			System.err.println("Salida incorrecta.");
+		}
+		// ********************************************************************************************************************
+		List<Vector3> reservaPersonaje9 = Waypoints.bookBridgeWaypoint(personaje9);
+		if (reservaPersonaje9.size() == 2) {
+			System.out.println("El personaje 9 ha reservado el waypoint correctamente.");
+		} else {
+			System.err.println("La reserva del Waypoint por el personaje 9 no se ha realizado correctamente.");
+		}
+		// ********************************************************************************************************************
+		List<Vector3> reservaPersonajeExtra1_otroOtroIntento = Waypoints.bookBridgeWaypoint(personajeExtra1);
+		if (reservaPersonajeExtra1_otroOtroIntento.size() == 0) {
+			System.out.println("Personaje extra 1 intenta reservar. Ya no quedan más waypoints.");
+		} else {
+			System.err.println("Salida incorrecta.");
+		}
+		// ********************************************************************************************************************
+		List<Vector3> consultaPersonaje1 = Waypoints.getAssociatedWaypointAndNeighboring(personaje1);
+		if ((consultaPersonaje1.size() == 2) && 
+				(consultaPersonaje1.get(0).equals(reservaPersonaje1.get(0))) && 
+				(consultaPersonaje1.get(1).equals(reservaPersonaje1.get(1)))) {
+			System.out.println("La consulta del personaje 1 se ha realizado correctamente.");
+		} else {
+			System.err.println("Salida incorrecta.");
+		}
+		// ********************************************************************************************************************
+		Waypoints.freeBridgeWaypoint(personaje2);
+		System.out.println("El personaje 2 libera su waypoint del puente.");
+		// ********************************************************************************************************************
+		List<Vector3> reservaPersonajeExtra1_otroOtroOtroIntento = Waypoints.bookBridgeWaypoint(personajeExtra1);
+		if (reservaPersonajeExtra1_otroOtroOtroIntento.size() == 2) {
+			System.out.println("El personaje extra 1 ha reservado el waypoint correctamente.");
+		} else {
+			System.err.println("La reserva del Waypoint por el personaje extra 1 no se ha realizado correctamente.");
 		}
 	}
 	
@@ -173,6 +213,6 @@ public class TestWaypoints {
 	public static void main(String[] args) {
 		TestWaypoints tests = new TestWaypoints();
 		tests.inicializar();
-		tests.testReservarPosiciones_Team_FJAVIER();
+		tests.ejecutarPruebas();
 	}
 }
