@@ -8,9 +8,9 @@ import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.checksAndActions.Actions;
 import com.mygdx.iadevproject.model.Character;
 
-public class GoToMyBase implements State<Character> {
+public class GoToMyWayPoint implements State<Character> {
 
-	public GoToMyBase() { /* empty constructor */ }
+	public GoToMyWayPoint() { /* empty constructor */ }
 
 	@Override
 	public void update(Character entity) {
@@ -19,10 +19,10 @@ public class GoToMyBase implements State<Character> {
 		
 		// Obtenemos los comportamientos para no colisionar
 		Map<Float, Behaviour> behaviours = Actions.notCollide(200.0f, entity);
-		// Obtenemos los comportamientos para ir a mi base
-		Map<Float, Behaviour> goToMyBase = Actions.goToMyBase(20.0f, entity, 20.0f);
+		// Obtenemos los comportamientos para ir a mi waypoint
+		Map<Float, Behaviour> goToMyWaypoint = Actions.goToMyWayPoint(20.0f, entity, 20.0f);
 		// Juntamos ambos comportamientos
-		behaviours.putAll(goToMyBase);
+		behaviours.putAll(goToMyWaypoint);
 		
 		// Establecemos los nuevos comportamientos al personaje.
 		entity.setListBehaviour(behaviours);
