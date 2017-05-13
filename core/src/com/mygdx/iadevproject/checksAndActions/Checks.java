@@ -37,9 +37,9 @@ public class Checks {
 	// - Cuando hay jugadores del equipo contrario en una base, los puntos de moral de esa base van decreciendo.
 	// 		EL VALOR DE RECUPERACIÓN DE LOS PUNTOS DE MORAL DEBE SER MAYOR QUE EL DE PÉRDIDA.
 	// - Cuando los puntos de moral de una base llegan a 0, ESE EQUIPO PIERDE.
-	private static int moralPointsByDefault = 50000;
-	private static int moralPointSubtractedByCharacter = 5;
-	private static int moralPointAddedByCharacter = moralPointSubtractedByCharacter + 2; // IMPORTANTE -> ESTE VALOR DEBE SER SIEMPRE MAYOR QUE EL DE ARRIBA.
+	private static int moralPointsByDefault = 10000;
+	private static int moralPointsSubtractedByCharacter = 5;
+	private static int moralPointsAddedByCharacter = moralPointsSubtractedByCharacter + 2; // IMPORTANTE -> ESTE VALOR DEBE SER SIEMPRE MAYOR QUE EL DE ARRIBA.
 	private static int moralPoints_base_LDANIEL = moralPointsByDefault;
 	private static int moralPoints_base_FJAVIER = moralPointsByDefault;
 	
@@ -62,11 +62,11 @@ public class Checks {
 	 */
 	private static void addMoralPointsToMyBase (Character source) {
 		Team myTeam = source.getTeam();
-		int moralPointToAdd = moralPointAddedByCharacter;
+		int moralPointToAdd = moralPointsAddedByCharacter;
 		// Si el personaje es una formación, hay que contar a todos los integrantes de la misma.
 		if (source instanceof Formation) {
 			Formation f = (Formation) source;
-			moralPointToAdd = moralPointAddedByCharacter * f.getNumberOfCharacters();
+			moralPointToAdd = moralPointsAddedByCharacter * f.getNumberOfCharacters();
 		}
 		if (myTeam == Team.LDANIEL) {
 			moralPoints_base_LDANIEL = Math.min(moralPointsByDefault, moralPoints_base_LDANIEL + moralPointToAdd);
@@ -81,11 +81,11 @@ public class Checks {
 	 */
 	private static void subtractMoralPointsToEnemyBase (Character source) {
 		Team enemyTeam = source.getTeam().getEnemyTeam();
-		int moralPointToSubtract = moralPointSubtractedByCharacter;
+		int moralPointToSubtract = moralPointsSubtractedByCharacter;
 		// Si el personaje es una formación, hay que contar a todos los integrantes de la misma.
 		if (source instanceof Formation) {
 			Formation f = (Formation) source;
-			moralPointToSubtract = moralPointSubtractedByCharacter * f.getNumberOfCharacters();
+			moralPointToSubtract = moralPointsSubtractedByCharacter * f.getNumberOfCharacters();
 		}
 		if (enemyTeam == Team.LDANIEL) {
 			moralPoints_base_LDANIEL = Math.max(0, moralPoints_base_LDANIEL - moralPointToSubtract);
@@ -104,7 +104,7 @@ public class Checks {
 		Rectangle base_FJAVIER = IADeVProject.getBaseOfTeam(Team.FJAVIER);
 		
 		batch.begin();
-		font.draw(batch, "Moral de LDANIEL: " + moralPoints_base_LDANIEL, base_LDANIEL.x, base_LDANIEL.y);
+		font.draw(batch, "Moral de LDANIEL: " + moralPoints_base_LDANIEL, base_LDANIEL.x, base_LDANIEL.y + base_LDANIEL.height + 15);
 		font.draw(batch, "Moral de FJAVIER: " + moralPoints_base_FJAVIER, base_FJAVIER.x, base_FJAVIER.y);
         batch.end();
 	}
