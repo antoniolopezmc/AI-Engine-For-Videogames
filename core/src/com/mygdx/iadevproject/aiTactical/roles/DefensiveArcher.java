@@ -78,11 +78,9 @@ public class DefensiveArcher extends Archer {
 				// Si me queda poca vida, cambio al estado -> Ir al manantial
 				this.stateMachine.changeState(this.goToMyManantial);
 				
-			} else {
-				// Si no cambio de estado, termino. El personaje ya tendrá el comportamiento de este estado cuando
-				// he cambiado a él.
-				return;
-			}
+			} 
+			// Si no cambio de estado, no termino, ya que hay seguir aplicando el pathfinding
+			// creado al entrar a este estado.
 			
 		} else if (this.stateMachine.isInState(this.patrolMyWayPoint)) {
 			// Estamos en el estado -> Patrullar mi waypoint
@@ -144,11 +142,9 @@ public class DefensiveArcher extends Archer {
 				// Si estoy en mi manantial, cambio al estado -> Curarme
 				this.stateMachine.changeState(this.cureMe);
 			
-			} else {
-				// Si no cambio de estado, termino. El personaje ya tendrá el comportamiento de este estado cuando
-				// he cambiado a él.
-				return;
-			}
+			} 
+			// Si no cambio de estado, no termino, ya que hay seguir aplicando el pathfinding
+			// creado al entrar a este estado.
 			
 		} else if (this.stateMachine.isInState(this.cureMe)) {
 			// Estamos en el estado -> Curarme (estoy en el manantial)

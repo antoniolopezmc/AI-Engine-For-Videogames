@@ -19,7 +19,6 @@ public class AttackEnemies implements State<Character> {
 		/** IMPORTANTE: SOLAMENTE SE INCLUYE EL NO CHOCAR. 
 		 * CUANDO ATACAMOS, MIRAMOS AL OBJETIVO */
 		
-		System.out.println("Entra Attack");
 		// Obtenemos los comportamientos para no colisionar
 		Map<Float, Behaviour> behaviours = Actions.notCollide(200.0f, entity);
 		
@@ -48,9 +47,7 @@ public class AttackEnemies implements State<Character> {
 		enemy.setPosition(targetPos);
 		
 		// Obtenemos los comportamientos para ir hacia el target
-		System.out.println("Entra al arrive");
 		Map<Float, Behaviour> goToTarget = Actions.arrive(150.0f, entity, enemy, 30.0f);
-		System.out.println("Sale del arrive");
 		// Obtenemos los comportamientos para atacar al enemigo más cercano
 		Map<Float, Behaviour> attack = Actions.attack(entity, target, entity.getRole().getDamageToDone(), entity.getRole().getMaxDistanceOfAttack());
 		// Obtenemos los comportamientos para mirar al objetivo 
@@ -63,7 +60,6 @@ public class AttackEnemies implements State<Character> {
 		
 		// Establecemos los nuevos comportamientos al personaje.
 		entity.setListBehaviour(behaviours);
-		System.out.println("Sale del Attack");
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class GoToMyBase implements State<Character> {
 		// Obtenemos los comportamientos para no colisionar
 		Map<Float, Behaviour> behaviours = Actions.notCollide(200.0f, entity);
 		// Obtenemos los comportamientos para ir a mi base
-		Map<Float, Behaviour> goToMyBase = Actions.goTo(50.0f, entity, pf, 50.0f);
+		Map<Float, Behaviour> goToMyBase = Actions.goTo(100.0f, entity, pf, 50.0f);
 		// Juntamos ambos comportamientos
 		behaviours.putAll(goToMyBase);
 		

@@ -23,8 +23,8 @@ public class GoToMyManantial implements State<Character> {
 		
 		// Obtenemos los comportamientos para no colisionar
 		Map<Float, Behaviour> behaviours = Actions.notCollide(200.0f, entity);
-		// Obtenemos los comportamientos para patrullar la base
-		Map<Float, Behaviour> goToMyManantial = Actions.goTo(50.0f, entity, pf, 50.0f);
+		// Obtenemos los comportamientos para ir al manantial
+		Map<Float, Behaviour> goToMyManantial = Actions.goTo(100.0f, entity, pf, 50.0f);
 		// Juntamos ambos comportamientos
 		behaviours.putAll(goToMyManantial);
 		

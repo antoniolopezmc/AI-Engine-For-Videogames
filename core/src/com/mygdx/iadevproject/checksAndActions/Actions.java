@@ -144,7 +144,7 @@ public class Actions {
 	 */
 	public static Map<Float, Behaviour> arrive(float weight, Character source, WorldObject target, float maxAcceleration) {
 		Map<Float, Behaviour> map = createListBehaviour();
-		map.put(weight, new Arrive_Accelerated(source, target, maxAcceleration, 50.0f, 5.0f, 10.0f, 1.0f));
+		map.put(weight, new Arrive_Accelerated(source, target, maxAcceleration, 50.0f, 15.0f, 25.0f, 1.0f));
 		return map;
 	}
 	
@@ -156,7 +156,7 @@ public class Actions {
 	 * @return Objeto PointToPoint_PathFinding creado.
 	 */
 	public static PointToPoint_PathFinding createPathFinding(Character source, Vector3 position) {
-		PointToPoint_PathFinding pf = new PointToPoint_PathFinding(source, 15.0f, PointToPoint_PathFinding.EUCLIDEAN_DISTANCE, IADeVProject.GRID_CELL_SIZE, 
+		PointToPoint_PathFinding pf = new PointToPoint_PathFinding(source, 30.0f, PointToPoint_PathFinding.EUCLIDEAN_DISTANCE, IADeVProject.GRID_CELL_SIZE, 
 				source.getPosition().x, source.getPosition().y, position.x, position.y, IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT);
 		return pf;
 	}
@@ -180,7 +180,7 @@ public class Actions {
 		Map<Float, Behaviour> map = createListBehaviour();
 		map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
 		map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
-							30.0f, 40.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_PARAR_AL_FINAL));
+							30.0f, 30.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_PARAR_AL_FINAL));
 		return map;
 	}
 	
@@ -210,7 +210,7 @@ public class Actions {
 		// Introducimos los comportamientos
 		map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
 		map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
-				15.0f, 30.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_IDA_Y_VUELTA));
+				25.0f, 35.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_IDA_Y_VUELTA));
 		return map;
 	}
 	
@@ -231,7 +231,7 @@ public class Actions {
 			// Introducimos los comportamientos
 			map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
 			map.put(weight, new PathFollowingWithoutPathOffset_Arrive(source, maxAcceleration, source.getMaxSpeed(), 
-					15.0f, 30.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_IDA_Y_VUELTA));
+					25.0f, 35.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_IDA_Y_VUELTA));
 		}
 		
 		return map;
@@ -254,7 +254,7 @@ public class Actions {
 	 */
 	public static Map<Float, Behaviour> doRandomThings(float weight, Character source) {
 		Map<Float, Behaviour> map = createListBehaviour();
-		map.put(weight, new Wander_Delegated(source, 10.0f, 10.0f, 10.0f, 30.0f, 1.0f, 100.0f, 30.0f, 30.0f, 20.0f, 10.0f));
+		map.put(weight, new Wander_Delegated(source, 50.0f, 50.0f, 5.0f, 15.0f, 1.0f, 100.0f, 50.0f, 60.0f, source.getOrientation(), 10.0f));
 		return map;
 	}
 	
