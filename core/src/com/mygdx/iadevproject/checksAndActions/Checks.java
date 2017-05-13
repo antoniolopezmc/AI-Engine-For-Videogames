@@ -203,16 +203,6 @@ public class Checks {
 	}
 	
 	/**
-	 * Método que comprueba si hemos dado una orden manual a un pesonaje.
-	 * @param source Personaje a comprobar.
-	 * @return true si hemos dado una orden manual al personaje, false en caso contrario.
-	 */
-	public static boolean manualMovement (Character source) {
-		// return source.getManualPosition != null
-		return false;
-	}
-	
-	/**
 	 * Método que comprueba si hay enemigos en la base del personaje 'source'
 	 * @param source Personaje que quiere saber si hay enemigos en su base
 	 * @return true si hay personajes en su base, false en caso contrario

@@ -11,6 +11,13 @@ import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.Formation;
 import com.mygdx.iadevproject.model.Character;
 
+/**
+ * Muy importante.
+ * Para usar el mapa de influencia en el pathfinding táctico, habría que pasar el mapa DEL EQUIPO CONTRARÍA.
+ * El pathfinding debe tener en cuenta la influencia de equipo rival (coste añadido) para NO IR por esas zonas.
+ * No tiene sentido usar el pathfinding de mi propio equipo, ya que estaría penalizando las zonas controladas por mí. 
+ *
+ */
 public class SimpleMapOfInfluence {
 	
 	// Valor por defecto de influencia que ejerce una unidad cualquiera. Valor estándar para todas las unidades.
@@ -50,11 +57,12 @@ public class SimpleMapOfInfluence {
 	}
 	
 	/**
-	 * Método de calcula todas las posiones adyacente de una posición determinada.
+	 * Método que calcula las posiones adyacente de una posición determinada CUYO VALOR SEA 0.
 	 * @param position Posición a la que se calcularán sus adyacentes.
+	 * @param simpleMapOfInfluence Mapa de influencia.
 	 * @return Lista de posiciones adyacentes.
 	 */
-	private static List<Vector3> generateSuccessors (Vector3 position) {
+	private static List<Vector3> generateSuccessors (Vector3 position, int[][] simpleMapOfInfluence) {
 		// Creamos la lista que será devuelta.
 		List<Vector3> result = new LinkedList<Vector3>();
 		
@@ -63,29 +71,46 @@ public class SimpleMapOfInfluence {
 		float y = position.y;
 		
 		if (x > 0) {
-			result.add(new Vector3(x-1, y, 0.0f));
+			if (simpleMapOfInfluence[(int)x-1][(int)y] == 0) {
+				result.add(new Vector3(x-1, y, 0.0f));
+			}
+			
 		}
 		if (x < (grid_width-1)) {
-			result.add(new Vector3(x+1, y, 0.0f));
+			if (simpleMapOfInfluence[(int)x+1][(int)y] == 0) {
+				result.add(new Vector3(x+1, y, 0.0f));
+			}
 		}
 		if (y > 0) {
-			result.add(new Vector3(x, y-1, 0.0f));
+			if (simpleMapOfInfluence[(int)x][(int)y-1] == 0) {
+				result.add(new Vector3(x, y-1, 0.0f));
+			}
 		}
 		if (y < (grid_height-1)) {
-			result.add(new Vector3(x, y+1, 0.0f));
+			if (simpleMapOfInfluence[(int)x][(int)y+1] == 0) {
+				result.add(new Vector3(x, y+1, 0.0f));
+			}
 		}
 
 		if ((x > 0) && (y > 0)) {
-			result.add(new Vector3(x-1, y-1, 0.0f));
+			if (simpleMapOfInfluence[(int)x-1][(int)y-1] == 0) {
+				result.add(new Vector3(x-1, y-1, 0.0f));
+			}
 		}
 		if ((x > 0) && (y < (grid_height-1))) {
-			result.add(new Vector3(x-1, y+1, 0.0f));
+			if (simpleMapOfInfluence[(int)x-1][(int)y+1] == 0) {
+				result.add(new Vector3(x-1, y+1, 0.0f));
+			}
 		}
 		if ((x < (grid_width-1)) && (y > 0)) {
-			result.add(new Vector3(x+1, y-1, 0.0f));
+			if (simpleMapOfInfluence[(int)x+1][(int)y-1] == 0) {
+				result.add(new Vector3(x+1, y-1, 0.0f));
+			}
 		}
 		if ((x < (grid_width-1)) && (y < (grid_height-1))) {
-			result.add(new Vector3(x+1, y+1, 0.0f));
+			if (simpleMapOfInfluence[(int)x+1][(int)y+1] == 0) {
+				result.add(new Vector3(x+1, y+1, 0.0f));
+			}
 		}
 		// IMPORTANTE -> En esta lista hay siempre como mínimo 3 elementos.
 		return result;
@@ -105,8 +130,15 @@ public class SimpleMapOfInfluence {
 			if (simpleMapOfInfluence[(int)cell.x][(int)cell.y] != 0) {
 				// Añadimos el valor de la influencia a la matriz de influencia.
 				simpleMapOfInfluence[(int)cell.x][(int)cell.y] = value;
-				// Obtenemos las celdas adyacentes.
-				List<Vector3> vecinas = generateSuccessors(cell);
+				// Obtenemos las celdas adyacentes CUYO VALOR SEA 0 (es decir, aquellas vecinas a la que realmente debemos ir).
+				List<Vector3> vecinas = generateSuccessors(cell, simpleMapOfInfluence);
+				// IMPORTANTE -> Antes de llamar recursivamente a las vecinas, añadimos su influencia.
+				// 	Esto se hace para que una vecina no "retroceda" y no vaya a otras vecinas que no le corresponden.
+				for (Vector3 vector3 : vecinas) {
+					if (simpleMapOfInfluence[(int)vector3.x][(int)vector3.y] == 0) {
+						simpleMapOfInfluence[(int)vector3.x][(int)vector3.y] = value-1;
+					}	
+				}
 				// Recorremos las vecinas.
 				for (Vector3 vector3 : vecinas) {
 					// Conforme nos alejamos del origen, el valor se decrementa en 1.
@@ -118,7 +150,7 @@ public class SimpleMapOfInfluence {
 	}
 
 	/**
-	 * Inicializa las matrices de influencia y todas las variables necesarias.
+	 * Inicializa todas las variables necesarias.
 	 */
 	public static void initializeSimpleMapOfInfluence() {
 		grid_cell_size = IADeVProject.GRID_CELL_SIZE;
@@ -126,16 +158,20 @@ public class SimpleMapOfInfluence {
 		grid_height = IADeVProject.GRID_HEIGHT;
 		map_of_costs = IADeVProject.MAP_OF_COSTS;
 		worldObjects = IADeVProject.worldObjects;
-		// Equipo de arriba.
-		simpleMapOfInfluence_LDANIEL = new int[grid_width][grid_height];
-		// Equipo de abajo.
-		simpleMapOfInfluence_FJAVIER = new int[grid_width][grid_height];
+		
+		// Los mapas de influencia de cada jugador no se crean ni se inicializan. Eso se hará en cada update.
 	}
 	
 	/**
 	 * Actualiza las matrices de influencia.
 	 */
 	public static void updateSimpleMapOfInfluence() {
+		// IMPORTANTE -> Cada vez que actualizo, las matrices deben limpiarse.
+		// Equipo de arriba.
+		simpleMapOfInfluence_LDANIEL = new int[grid_width][grid_height];
+		// Equipo de abajo.
+		simpleMapOfInfluence_FJAVIER = new int[grid_width][grid_height];
+		
 		for (WorldObject wo : worldObjects) {
 			// Solo se tendrán en cuenta los personajes como tal a la hora de crear el mapa de influencia.
 			if ((wo instanceof Character) && (!(wo instanceof Formation))) {
@@ -151,7 +187,7 @@ public class SimpleMapOfInfluence {
 	 * @param mapPosition Posición real del mapa.
 	 * @return Posición del grid.
 	 */
-	public static Vector3 mapPositionTOgridPosition (int grid_cell_size, Vector3 mapPosition) {
+	private static Vector3 mapPositionTOgridPosition (int grid_cell_size, Vector3 mapPosition) {
 		// Eliminamos los decimales haciendo el casting.
 		int gridPosition_x = (int) mapPosition.x/grid_cell_size;
 		int gridPosition_y = (int) mapPosition.y/grid_cell_size;

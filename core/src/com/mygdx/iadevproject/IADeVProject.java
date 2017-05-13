@@ -73,6 +73,26 @@ public class IADeVProject extends ApplicationAdapter {
 	public static Map<Team, Rectangle> manantials;			// Manantiales de los equipos. Cada equipo tiene su manantial.
     public static TiledMapRenderer tiledMapRenderer;			// Renderer del mapa
     public static InputProcessorIADeVProject inputProcessor;		// InputProcessor
+    
+    // *********************************************************************************
+    // Equipo LDANIEL (el de arriba)
+    public static boolean LDANIEL_win = false;
+    // Equipo FJAVIER (el de abajo)
+    public static boolean FJAVIER_win = false;
+    
+    /**
+     * Método para establecer una ganador de la partida.
+     * @param team Ganador de la partida.
+     */
+    public static void setWinner (Team team) {
+    	if (team == Team.LDANIEL) {
+    		LDANIEL_win = true;
+    	} else if (team == Team.FJAVIER) {
+    		FJAVIER_win = true;
+    	}
+    }
+    // IMPORTANTE -> Si en la misma interación de render se producen las condiciones de victoria de ambos equipos (los 2 booleanos a true), la partida quedaría en EMPATE.
+    // *********************************************************************************
 	
 	public static Character drop, bucket, defensiveSoldier;
 	
@@ -234,6 +254,19 @@ public class IADeVProject extends ApplicationAdapter {
 		// Ahora mismo se calcula como el centro de la base. Ya que las coordenadas (x,y) están 
 		// abajo izquierda.
 		return new Vector3(base.x+base.width/2, base.y+base.height/2, 0.0f);
+	}
+	
+	/**
+	 * Método que dado un equipo, devuelve la posición de la base enemiga.
+	 * @param team Equipo.
+	 * @return Posición de la base enemiga.
+	 */
+	public static Vector3 getPositionOfEnemyBase(Team team) {
+		// Primero, obtenemos el equipo enemigo.
+		Team enemyTeam = team.getEnemyTeam();
+		
+		// Ahora, llamamos al método superior.
+		return getPositionOfTeamBase(enemyTeam);
 	}
 	
 	/**
