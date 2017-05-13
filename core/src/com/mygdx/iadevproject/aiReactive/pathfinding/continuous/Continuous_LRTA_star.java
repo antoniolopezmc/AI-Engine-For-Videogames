@@ -1,12 +1,13 @@
-package com.mygdx.iadevproject.aiReactive.pathfinding;
+package com.mygdx.iadevproject.aiReactive.pathfinding.continuous;
 
 import java.util.*;
 
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.aiReactive.pathfinding.Distance;
 
 
 // IMPORTANTE -> LRTA* con espacio de búsqueda minimal, es decir, el espacio de búsqueda es solo el estado actual.
-public class LRTA_star {
+public class Continuous_LRTA_star {
 
 	// --> Coste de pasar de una celda a otra adyacente (tanto en diagonal, como en horizontal, como en vertical).
 	private static final float default_action_cost = 1.0f;
@@ -24,7 +25,7 @@ public class LRTA_star {
 	private int xGoal, yGoal;
 	
 	// Constructor.
-	public LRTA_star(int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xSource, int ySource, int xGoal, int yGoal) {
+	public Continuous_LRTA_star(int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xSource, int ySource, int xGoal, int yGoal) {
 		this.map_of_costs = map_of_costs;
 		this.distance = distance;
 		this.matrix_width = matrix_width;
@@ -73,7 +74,7 @@ public class LRTA_star {
 	 * @return f(p) = coste de acción + coste heurístico en ese punto + coste del terreno en ese punto
 	 */
 	private float getFx (float[][] distancesMatrix, Vector3 position) {
-		return LRTA_star.default_action_cost + distancesMatrix[(int) position.x][(int) position.y] + (float) this.map_of_costs[(int) position.x][(int) position.y];
+		return Continuous_LRTA_star.default_action_cost + distancesMatrix[(int) position.x][(int) position.y] + (float) this.map_of_costs[(int) position.x][(int) position.y];
 	}
 	
 	/**

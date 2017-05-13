@@ -3,6 +3,7 @@ package com.mygdx.iadevproject.aiReactive.pathfinding;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.aiReactive.pathfinding.continuous.Continuous_LRTA_star;
 
 public class TestLRTA_star2 {
 
@@ -38,7 +39,7 @@ public class TestLRTA_star2 {
 		
 		System.out.println("********************************************");
 		
-		LRTA_star lrta_star = new LRTA_star(costesDelTerreno, new EuclideanDistance(), 10, 10, 0, 0, 0, 9);
+		Continuous_LRTA_star lrta_star = new Continuous_LRTA_star(costesDelTerreno, new EuclideanDistance(), 10, 10, 0, 0, 0, 9);
 		List<Vector3> lista = lrta_star.applyLRTA_start();
 		
 		int contador = 0;
