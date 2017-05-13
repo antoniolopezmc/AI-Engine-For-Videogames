@@ -3,6 +3,7 @@ package com.mygdx.iadevproject.model;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 /**
@@ -149,6 +150,24 @@ public abstract class WorldObject extends Sprite {
 	public void setMaxSpeed(float maxSpeed) {
 		this.maxSpeed = maxSpeed;
 	}
+	
+	
+	/**
+	 * Método sobreescrito para que devuelva el rectángulo en su posición
+	 * correcta. Ya que por defecto, LibGDX toma las posiciones del rectángulo
+	 * como la posición del personaje (que está en el centro). Por lo que hay que 
+	 * modificar la posición del rectángulo.
+	 */
+	@Override
+	public Rectangle getBoundingRectangle() {
+		Rectangle rec = super.getBoundingRectangle();
+		
+		rec.x = rec.x - rec.width/2;
+		rec.y = rec.y - rec.height/2;
+		
+		return rec;
+	}
+	
 	
 	/**
 	 * Método que obtiene el radio que recubre al objeto.

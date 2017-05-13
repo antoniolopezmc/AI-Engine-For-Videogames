@@ -14,6 +14,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -23,6 +24,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
+import com.mygdx.iadevproject.aiTactical.roles.DefensiveArcher;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
@@ -59,7 +63,7 @@ public class IADeVProject extends ApplicationAdapter {
 	// IMPORTANTE -> En la lista de objetos del mundo están tanto las formaciones como sus integrantes. Está todo.
 	public static List<WorldObject> worldObjects;			// Objetos del mundo
 	public static List<WorldObject> worldObstacles;			// Obstáculos del mundo
-	public static Set<WorldObject> selectedObjects; 		// Lista de objetos seleccionados
+	public static Set<Character> selectedCharacters; 		// Lista de personajes seleccionados
 	public static OrthographicCamera camera;				// Cámara (es pública para que se pueda acceder el InputProcessorIADeVProject)
 	public static boolean PRINT_PATH_BEHAVIOUR; 			// Dibujar el camino/recorrido obtenido por la función getSteering de los Behaviours.
 	public static BitmapFont font; //= new BitmapFont();		// Para dibujar letras 
@@ -79,7 +83,7 @@ public class IADeVProject extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(inputProcessor);
 	
 		// Creación de las variables globales
-		selectedObjects 		= new HashSet<WorldObject>();
+		selectedCharacters 		= new HashSet<Character>();
 		worldObjects 			= new LinkedList<WorldObject>();
 		PRINT_PATH_BEHAVIOUR 	= true;				
 		bases 					= new HashMap<Team, Rectangle>();	
@@ -115,6 +119,22 @@ public class IADeVProject extends ApplicationAdapter {
         worldObstacles = MapsCreatorIADeVProject.getObstaclesOfMap(tiledMap);
         // Los añadimos a los objetos del mundo
         worldObjects.addAll(worldObstacles);
+        
+        drop = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+    	drop.setBounds(600.0f, 600.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        drop.setOrientation(60.0f);
+        drop.setVelocity(new Vector3(0,0.0f,0));
+        drop.setMaxSpeed(50.0f);
+        drop.setTeam(Team.FJAVIER);
+
+        bucket = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
+        bucket.setBounds(500.0f, 500.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        bucket.setOrientation(60.0f);
+        bucket.setVelocity(new Vector3(0,0.0f,0));
+        bucket.setMaxSpeed(50.0f);
+        bucket.setTeam(Team.FJAVIER);
+        
+        IADeVProject.addToWorldObjectList(drop, bucket);
 	}
 	
 	@Override
@@ -133,11 +153,16 @@ public class IADeVProject extends ApplicationAdapter {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         
+        updateTacticalRoleOfWorldCharacters(); // Actualizamos los roles de todos los personajes
+        
         drawRegionsOfBasesAndManantials();	// Dibujamos las regiones de las bases y los manantiales.
+        drawRegionsOfSelectedCharacters();	// Dibujamos las regiones de los personajes seleccionados.
         drawAllObjects();					// Dibujamos todos los objetos del mundo.
-       
+        
         Waypoints.drawWaypointsOfBases(); // Dibujamos los waypoints de ambas bases.
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
+        
+        drawHealthOfWorldCharacters(); // Dibujamos la vida de todos los personajes del mundo  
 	}
 
 	@Override
@@ -301,8 +326,8 @@ public class IADeVProject extends ApplicationAdapter {
 	/**
 	 * Método que limpia la lista de objetos seleccionados.
 	 */
-	public static void clearSelectedObjectsList() {
-		selectedObjects.clear();
+	public static void clearSelectedCharactersList() {
+		selectedCharacters.clear();
 	}
 	
 	/**
@@ -312,27 +337,29 @@ public class IADeVProject extends ApplicationAdapter {
 	 * 
 	 * @param obj
 	 */
-	public static void addToSelectedObjectsList(WorldObject obj) {
+	public static void addToSelectedCharactersList(Character obj) {
 		if (!Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
-			clearSelectedObjectsList();
+			clearSelectedCharactersList();
 		}
 
-		selectedObjects.add(obj);
+		selectedCharacters.add(obj);
 	}
 
 	
 	/** MÉTODOS DE DIBUJO DE LÍNEAS **/
 	/**
-	 * Método para dibujar los centros de los obstáculos en el mapa
+	 * Método que dibuja las regiones de los personajes seleccionados por el usuario.
 	 */
-//	private void drawCenterOfObstacles() {
-//		renderer.begin(ShapeType.Filled);
-//        	for (WorldObject obs : worldObstacles) {
-//        		renderer.circle(obs.getPosition().x, obs.getPosition().y, 2);
-//        	}
-//        renderer.end();
-//	}	
-	
+	private void drawRegionsOfSelectedCharacters() {
+		Rectangle rec;
+		for (WorldObject character : selectedCharacters) {
+			rec = character.getBoundingRectangle();
+			renderer.begin(ShapeType.Line);
+			renderer.setColor(Color.CHARTREUSE);
+			renderer.rect(rec.x, rec.y, rec.width, rec.height);
+			renderer.end();
+		}
+	}
 	/**
 	 * Método que dibuja las regiones de las bases y los manantiales, para que 
 	 * visualmente se vea lo que abarca cada una de las bases y manantiales.

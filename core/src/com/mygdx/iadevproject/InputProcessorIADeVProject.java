@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.Character;
 
 /**
  * Clase que implementa el InputProcessor del projecto.
@@ -33,19 +34,15 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		switch (keycode) {
 		case Input.Keys.LEFT: 				// Movimiento hacia la izquierda
 			IADeVProject.camera.translate(-5, 0, 0);
-//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(-5,0,0));
 			break;
 		case Input.Keys.RIGHT:				// Movimiento hacia la derecha
 			IADeVProject.camera.translate(5, 0, 0);
-//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(5, 0, 0));
 			break;
 		case Input.Keys.DOWN:				// Movimiento hacia abajo
 			IADeVProject.camera.translate(0, -5, 0);
-//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(0, -5, 0));
 			break;
 		case Input.Keys.UP:					// Movimiento hacia arriba
 			IADeVProject.camera.translate(0, 5, 0);
-//			IADeVProject.drop.setPosition(IADeVProject.drop.getPosition().add(0, 5, 0));
 			break;
 		case Input.Keys.A:					// Alejar la cámara
 			IADeVProject.camera.zoom += 0.02;	
@@ -86,25 +83,20 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			touchPos.set(screenX, screenY, 0);
 			IADeVProject.camera.unproject(touchPos);
 			
-			// Para todo objeto del mundo
+			// Para todo personaje
 			for (WorldObject obj : IADeVProject.worldObjects) {
-				// Comprobamos si se ha pinchado sobre él
-				if (obj.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) { 
-					// Si se ha pinchado sobre él, añadimos a la lista de objetos seleccionados
-					IADeVProject.addToSelectedObjectsList(obj);
+				if (obj instanceof Character) {
+					Character c = (Character)obj;
+					// Comprobamos si se ha pinchado sobre él
+					if (c.getBoundingRectangle().contains(new Vector2(touchPos.x, touchPos.y))) { 
+						// Si se ha pinchado sobre él, añadimos a la lista de objetos seleccionados
+						IADeVProject.addToSelectedCharactersList(c);
+					}
 				}
 			}
 		} else if (button == Input.Buttons.RIGHT) {
 			// Si el botón presionado es el botón DERECHO, limpiamos la lista de objetos seleccionados.
-			IADeVProject.clearSelectedObjectsList();
-		}
-		
-		// Mostramos la lista de objetos seleccionados para asegurarnos de que se ha introducido.
-		if (!IADeVProject.selectedObjects.isEmpty()) {
-//			System.out.println("\n--------------\nSelected objects:");
-			for (WorldObject obj : IADeVProject.selectedObjects) {
-//				System.out.println(obj.getX() + " - " + obj.getY());
-			}
+			IADeVProject.clearSelectedCharactersList();
 		}
 		
 		// Devolvemos true indicando que se ha procesado el evento

@@ -113,12 +113,9 @@ public class DefensiveSoldier extends Soldier {
 			} else if (Checks.amIInMyManantial(source)) {
 				// Si estoy en mi manantial, cambio al estado -> Curarme
 				this.stateMachine.changeState(this.cureMe);
-			
-			} else {
-				// Si no cambio de estado, termino. El personaje ya tendrá el comportamiento de este estado cuando
-				// he cambiado a él.
-				return;
-			}
+			} 
+			// Si no cambio de estado, no termino, ya que hay seguir aplicando el pathfinding
+			// creado al entrar a este estado.
 			
 		} else if (this.stateMachine.isInState(this.cureMe)) {
 			// Estamos en el estado -> Curarme (estoy en el manantial)
@@ -145,12 +142,9 @@ public class DefensiveSoldier extends Soldier {
 			} else if (Checks.amIInMyBase(source)) {
 				// Si estoy en mi base, cambio al estado -> Patrullar mi base
 				this.stateMachine.changeState(this.patrolMyBase);
-			
-			} else {
-				// Si no cambio de estado, termino. El personaje ya tendrá el comportamiento de este estado cuando
-				// he cambiado a él.
-				return;
-			}
+			} 
+			// Si no cambio de estado, no termino, ya que hay seguir aplicando el pathfinding
+			// creado al entrar a este estado.
 		}
 		
 		// Actualizamos la máquina de estados -> Se llama el método 'update' del estado actual de la máquina

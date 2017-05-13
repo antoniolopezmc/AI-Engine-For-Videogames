@@ -4,13 +4,11 @@ import java.util.Map;
 
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.checksAndActions.Actions;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.Obstacle;
 
 public class AttackEnemies implements State<Character> {
 
@@ -41,16 +39,18 @@ public class AttackEnemies implements State<Character> {
 		// Obtenemos la posicion como el vector director anterior normalizado, escalado a la distancia y movido a la posición del target.
 		targetPos = direction.nor().scl(distance).add(targetPos);
 		
-		IADeVProject.renderer.begin(ShapeType.Filled);
-		IADeVProject.renderer.setColor(Color.BLACK);
-		IADeVProject.renderer.line(target.getPosition(), targetPos);
-		IADeVProject.renderer.circle(targetPos.x, targetPos.y, 2.0f);
-		IADeVProject.renderer.end();
+		/**
+		 * Importante: en este caso, como estamos cerca del personaje, simplemente hacemos un arrive
+		 * a la posición calculada, sin cálculo de pathfinding
+		 */
+		// Creamos un objeto al que aplicar el arrive con la posición calculada
+		Obstacle enemy = new Obstacle();
+		enemy.setPosition(targetPos);
 		
 		// Obtenemos los comportamientos para ir hacia el target
-		System.out.println("Entra al goto");
-		Map<Float, Behaviour> goToTarget = Actions.goTo(150.0f, entity, targetPos, 30.0f);
-		System.out.println("Sale del goto");
+		System.out.println("Entra al arrive");
+		Map<Float, Behaviour> goToTarget = Actions.arrive(150.0f, entity, enemy, 30.0f);
+		System.out.println("Sale del arrive");
 		// Obtenemos los comportamientos para atacar al enemigo más cercano
 		Map<Float, Behaviour> attack = Actions.attack(entity, target, entity.getRole().getDamageToDone(), entity.getRole().getMaxDistanceOfAttack());
 		// Obtenemos los comportamientos para mirar al objetivo 

@@ -4,11 +4,15 @@ import java.util.Map;
 
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.mygdx.iadevproject.aiReactive.pathfinding.pointToPoint.PointToPoint_PathFinding;
 import com.mygdx.iadevproject.checksAndActions.Actions;
 import com.mygdx.iadevproject.model.Character;
 
 public class GoToMyWayPoint implements State<Character> {
+
+	private PointToPoint_PathFinding pf; 	// Objeto pathfinding para ir hacia mi base
 
 	public GoToMyWayPoint() { /* empty constructor */ }
 
@@ -20,7 +24,7 @@ public class GoToMyWayPoint implements State<Character> {
 		// Obtenemos los comportamientos para no colisionar
 		Map<Float, Behaviour> behaviours = Actions.notCollide(200.0f, entity);
 		// Obtenemos los comportamientos para ir a mi waypoint
-		Map<Float, Behaviour> goToMyWaypoint = Actions.goToMyWayPoint(20.0f, entity, 20.0f);
+		Map<Float, Behaviour> goToMyWaypoint = Actions.goTo(20.0f, entity, pf, 20.0f);
 		// Juntamos ambos comportamientos
 		behaviours.putAll(goToMyWaypoint);
 		
@@ -29,7 +33,10 @@ public class GoToMyWayPoint implements State<Character> {
 	}
 
 	@Override
-	public void enter(Character entity) { /* empty method */ }
+	public void enter(Character entity) { 
+		// Cuando entramos a este estado, calculamos el pathfinding hacia el waypoint
+		pf = Actions.createPathFinding(entity, IADeVProject.getPositionOfTeamBase(entity.getTeam()));
+	}
 
 	@Override
 	public void exit(Character entity) { /* empty method */ }

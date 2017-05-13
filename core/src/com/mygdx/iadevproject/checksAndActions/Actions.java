@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
+import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Flee_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
@@ -17,7 +18,7 @@ import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Cure;
-import com.mygdx.iadevproject.aiReactive.pathfinding.continuous.Continuous_PathFinding;
+import com.mygdx.iadevproject.aiReactive.pathfinding.pointToPoint.PointToPoint_PathFinding;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.Formation;
@@ -32,52 +33,6 @@ public class Actions {
 	// =============> EXTREMADAMENTE IMPORTANTE <===============
 	// LAS FORMACIONES TAMPOCO VAN A ATACAR.
 	// SINO QUE SI QUIEREN ATACAR SE VA A MODIFICAR LA LISTA DE BEHAVIOURS DE SUS INTEGRANTES. --> Pensar.
-	
-	/**
-	 * Método que refleja la acción de ir a la base de un personaje que se pasa como parámetro.
-	 * @param weight Peso que tiene esta acción.
-	 * @param source Personaje que quiere aplicar la acción.
-	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
-	 * @return El Map de comportamientos correspondiente a esta acción.
-	 */
-	public static Map<Float, Behaviour> goToMyBase (float weight, Character source, float maxAcceleration) {
-		// Obtenemos la posición de la base del personaje.
-		Vector3 position = IADeVProject.getPositionOfTeamBase(source.getTeam());
-		// Devolvemos el comportamiento de ir hacia la posición de la base.
-		return goTo(weight, source, position, maxAcceleration);
-	}
-	
-	/**
-	 * Método que refleja la acción de ir a la base enemiga de un personaje que se pasa como parámetro.
-	 * @param weight Peso que tiene esta acción.
-	 * @param source Personaje que quiere aplicar la acción.
-	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
-	 * @return El Map de comportamientos correspondiente a esta acción.
-	 */
-	public static Map<Float, Behaviour> goToEnemyBase (float weight, Character source, float maxAcceleration) {
-		// Obtenemos la posición de la base enemiga del personaje.
-		Vector3 position = IADeVProject.getPositionOfTeamBase(source.getTeam().getEnemyTeam());
-		// Devolvemos el comportamiento de ir hacia la posición de la base enemiga.
-		return goTo(weight, source, position, maxAcceleration);
-	}
-	
-	/**
-	 * Método que refleja la acción de ir al waypoint de un personaje que se pasa como parámetro.
-	 * @param weight Peso que tiene esta acción.
-	 * @param source Personaje que quiere aplicar la acción.
-	 * @param maxAcceleration Máxima aceleración a la que queremos ir.
-	 * @return El Map de comportamientos correspondiente a esta acción. Si el personaje no tiene waypoint
-	 * asociado, devuelve un map vacío.
-	 */
-	public static Map<Float, Behaviour> goToMyWayPoint (float weight, Character source, float maxAcceleration) {
-		// Obtenemos los waypoints del personaje.
-		List<Vector3> waypoints = Waypoints.getAssociatedWaypointAndNeighboring(source);
-		if (!waypoints.isEmpty()) {
-			// Devolvemos el comportamiento de ir hacia el waypoint asociado
-			return goTo(weight, source, waypoints.get(0), maxAcceleration);
-		}
-		return createListBehaviour();
-	}
 	
 	/**
 	 * Método que refleja la acción de atacar.
@@ -180,17 +135,47 @@ public class Actions {
 	}
 	
 	/**
+	 * Método que refleja la acción de llegar a un objetivo.
+	 * @param weight Peso que tiene esta acción.
+	 * @param source Personaje que quiere aplicar la acción.
+	 * @param target Objetivo al que se quiere llegar
+	 * @param maxAcceleration Máxima aceleración a la que se quiere llegar.
+	 * @return El comportamiento correspondiente a la acción de llegar con su correspondiente peso.
+	 */
+	public static Map<Float, Behaviour> arrive(float weight, Character source, WorldObject target, float maxAcceleration) {
+		Map<Float, Behaviour> map = createListBehaviour();
+		map.put(weight, new Arrive_Accelerated(source, target, maxAcceleration, 50.0f, 5.0f, 10.0f, 1.0f));
+		return map;
+	}
+	
+	/**
+	 * Método que crea un objeto PointToPoint_PathFinding que va desde la posición del personaje 'source' a la
+	 * posición 'position'
+	 * @param source Personaje desde el que se realiza el PathFinding.
+	 * @param position Posición a la que se quiere llegar.
+	 * @return Objeto PointToPoint_PathFinding creado.
+	 */
+	public static PointToPoint_PathFinding createPathFinding(Character source, Vector3 position) {
+		PointToPoint_PathFinding pf = new PointToPoint_PathFinding(source, 15.0f, PointToPoint_PathFinding.EUCLIDEAN_DISTANCE, IADeVProject.GRID_CELL_SIZE, 
+				source.getPosition().x, source.getPosition().y, position.x, position.y, IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT);
+		return pf;
+	}
+	
+	/**
+	 * EXTREMADAMENTE IMPORTANTE: Solamente necesitamos un método 'goTo' porque este recibe el objeto PathFinding que hay que aplicar.
+	 * En la creación de este PathFinding ya se le ha introducido el origen y el destino. Por lo que en este método solamente
+	 * tenemos que aplicarlo
+	 */
+	/**
 	 * Método que refleja la acción de ir hacia una determinada posición.
 	 * @param weight Peso que tiene esta acción.
 	 * @param source Personaje que quiere aplicar la acción.
-	 * @param position Posición a la que se quiere ir.
+	 * @param pf Objeto PathFinding que aplicamos.
 	 * @param maxAcceleration Máxima acceleración a la que se quiere ir
 	 * @return El comportamiento correspondiente a la acción de ir a la posición con su correspondiente peso.
 	 */
-	public static Map<Float, Behaviour> goTo(float weight, Character source, Vector3 position, float maxAcceleration) {
-		Continuous_PathFinding pf = new Continuous_PathFinding();
-		List<Vector3> pointsList = pf.applyPathFinding(IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, Continuous_PathFinding.CHEBYSHEV_DISTANCE, IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT, 
-				source.getPosition().x, source.getPosition().y, position.x, position.y);
+	public static Map<Float, Behaviour> goTo(float weight, Character source, PointToPoint_PathFinding pf,  float maxAcceleration) {
+		List<Vector3> pointsList = pf.applyPathFinding();
 		
 		Map<Float, Behaviour> map = createListBehaviour();
 		map.put(weight, new LookingWhereYouGoing(source, 20.0f, 45.0f, 10.0f, 20.0f, 1.0f));
@@ -199,19 +184,6 @@ public class Actions {
 		return map;
 	}
 	
-	/**
-	 * Método que refleja la acción de ir a curarse a una posición 'position' dada como parámetro.
-	 * @param weight Peso que tiene esta acción.
-	 * @param source Personaje que quiere aplicar la acción.
-	 * @param maxAcceleration Máxima acceleración a la que se quiere ir
-	 * @return El comportamiento correspondiente a la acción de ir a curarse con su correspondiente peso.
-	 */
-	public static Map<Float, Behaviour> goToCure(float weight, Character source, float maxAcceleration) {
-		// Obtenemos la posición del manantial del personaje.
-		Vector3 position = IADeVProject.getPositionOfTeamManantial(source.getTeam());
-		// Devolvemos el comportamiento de ir hacia la posición del manantial.
-		return goTo(weight, source, position, maxAcceleration);
-	}
 	
 	/**
 	 * Método que refleja la acción de apoyar a un aliado
