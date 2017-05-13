@@ -362,24 +362,6 @@ public abstract class Formation extends Character {
 	public void setMaxHealth(float maxHealth) {
 		// Los sets de salud no hacen nada.
 	}
-
-	public float getPreviousHealth() {
-		// Un integrante de una formación puede ser un personaje u otra formación. Eso hay que tenerlo en cuenta.
-		float resultado = 0;
-		for (Character character : this.charactersList) {
-			if (character instanceof Formation) {
-				Formation charForm = (Formation) character;
-				resultado = resultado + charForm.getPreviousHealth();
-			} else { 
-				resultado = resultado + character.getPreviousHealth();
-			}
-		}
-		return resultado;
-	}
-
-	public void setPreviousHealth(float previousHealth) {
-		// Los sets de salud no hacen nada.
-	}
 	
 	/**
 	 * Método para dibujar la cantidad de vida que tiene la formación.
