@@ -25,8 +25,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
-import com.mygdx.iadevproject.aiTactical.roles.DefensiveArcher;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
