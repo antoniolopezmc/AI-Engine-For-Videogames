@@ -7,6 +7,7 @@ import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.GoToMyManantial
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.IAmDead;
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.Node;
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.Win;
+import com.mygdx.iadevproject.checksAndActions.Checks;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.model.Character;
 
@@ -46,7 +47,115 @@ public class OffensiveSoldier extends Soldier {
 	@Override
 	public void update(Character source) {
 		// El árbol se va a implementar como una serie de REGLAS.
-		
+		if (Checks.haveIDead(source)) { // NODO IAmDead.
+			// *****
+			if (lastNode != iAmDead) {
+				if (lastNode != null) {
+					lastNode.exit(source);
+				}
+				lastNode = iAmDead;
+				lastNode.enter(source);
+			}
+			if (lastNode != null) {
+				lastNode.update(source);
+			}
+			// *****
+		} else if (Checks.haveILittleHealth(source)) {
+			if (!Checks.amIInMyManantial(source)) { // NODO GoToMyManantial
+				// *****
+				if (lastNode != goToMyManantial) {
+					if (lastNode != null) {
+						lastNode.exit(source);
+					}
+					lastNode = goToMyManantial;
+					lastNode.enter(source);
+				}
+				if (lastNode != null) {
+					lastNode.update(source);
+				}
+				// *****
+			} else if (Checks.amIInMyManantial(source)) { // NODO CureMe
+				// *****
+				if (lastNode != cureMe) {
+					if (lastNode != null) {
+						lastNode.exit(source);
+					}
+					lastNode = cureMe;
+					lastNode.enter(source);
+				}
+				if (lastNode != null) {
+					lastNode.update(source);
+				}
+				// *****
+			}
+		} else if (Checks.amIInMyManantial(source)) {
+			if (!Checks.haveIFullyRecoveredMyHealth(source)) { // NODO CureMe
+				// *****
+				if (lastNode != cureMe) {
+					if (lastNode != null) {
+						lastNode.exit(source);
+					}
+					lastNode = cureMe;
+					lastNode.enter(source);
+				}
+				if (lastNode != null) {
+					lastNode.update(source);
+				}
+				// *****
+			} else if (Checks.haveIFullyRecoveredMyHealth(source)) { // NODO GoToEnemyBase
+				// *****
+				if (lastNode != goToEnemyBase) {
+					if (lastNode != null) {
+						lastNode.exit(source);
+					}
+					lastNode = goToEnemyBase;
+					lastNode.enter(source);
+				}
+				if (lastNode != null) {
+					lastNode.update(source);
+				}
+				// *****
+			}
+		} else if (Checks.areThereEnemiesNear(source)) { // NODO AttackEnemies
+			// *****
+			if (lastNode != attackEnemies) {
+				if (lastNode != null) {
+					lastNode.exit(source);
+				}
+				lastNode = attackEnemies;
+				lastNode.enter(source);
+			}
+			if (lastNode != null) {
+				lastNode.update(source);
+			}
+			// *****
+		} else if ((Checks.amIInEnemyBase(source)) && (Checks.haveIWin(source))) { // NODO Win
+			// *****
+			if (lastNode != win) {
+				if (lastNode != null) {
+					lastNode.exit(source);
+				}
+				lastNode = win;
+				lastNode.enter(source);
+			}
+			if (lastNode != null) {
+				lastNode.update(source);
+			}
+			// *****
+		} else if (!Checks.amIInEnemyBase(source)) { // Nodo GoToEnemyBase.
+			// *****
+			if (lastNode != goToEnemyBase) {
+				if (lastNode != null) {
+					lastNode.exit(source);
+				}
+				lastNode = goToEnemyBase;
+				lastNode.enter(source);
+			}
+			if (lastNode != null) {
+				lastNode.update(source);
+			}
+			// *****
+		}
 	}
 
 }

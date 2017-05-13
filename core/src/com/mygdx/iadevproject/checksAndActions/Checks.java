@@ -2,6 +2,8 @@ package com.mygdx.iadevproject.checksAndActions;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -27,6 +29,7 @@ public class Checks {
 	// 		Depende de la salud por defecto del personaje.
 	private static final float LITTLE_HEALTH = Character.DEFAULT_HEALTH * 0.2f;
 	
+	//-------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------
 	// CONDICIONES DE VICTORIA. Esto lo he hecho aquí porque es donde se comprueba directamente si estoy en mi base o en la base enemiga.
 	// Inicialmente, ambas bases tienen una cantidad de puntos de moral por defecto.
@@ -92,6 +95,21 @@ public class Checks {
 	}
 	
 	/**
+	 * Dibuja los puntos de moral de ambas bases.
+	 * @param batch Batch.
+	 * @param font Font.
+	 */
+	public static void drawMoralPointsOfBases (SpriteBatch batch, BitmapFont font) {
+		Rectangle base_LDANIEL = IADeVProject.getBaseOfTeam(Team.LDANIEL);
+		Rectangle base_FJAVIER = IADeVProject.getBaseOfTeam(Team.FJAVIER);
+		
+		batch.begin();
+		font.draw(batch, "Moral de LDANIEL: " + moralPoints_base_LDANIEL, base_LDANIEL.x, base_LDANIEL.y);
+		font.draw(batch, "Moral de FJAVIER: " + moralPoints_base_FJAVIER, base_FJAVIER.x, base_FJAVIER.y);
+        batch.end();
+	}
+	
+	/**
 	 * Comprueba si he ganado (si los puntos de moral de la base contraria son 0).
 	 * @param source Persoaneje.
 	 * @return true si he ganado, false en caso contrario.
@@ -106,6 +124,7 @@ public class Checks {
 			return false; // Por defecto, devolvemos false.
 		}
 	}
+	//-------------------------------------------------------------------------------------
 	//-------------------------------------------------------------------------------------
 	
 	/**
