@@ -158,6 +158,30 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	/** MÉTODOS ÚTILES **/
 	/**
+	 * Método que actualiza todos los personajes actualizando sus roles.
+	 */
+	private void updateTacticalRoleOfWorldCharacters() {
+		for (WorldObject obj : IADeVProject.worldObjects) {
+			if (obj instanceof Character) {
+				Character character = (Character)obj;
+				character.updateTacticalRole();
+			}
+		}
+	}
+	
+	/**
+	 * Método que dibuja la vida de todos los personajes del mundo.
+	 */
+	private void drawHealthOfWorldCharacters() {
+		for (WorldObject obj : IADeVProject.worldObjects) {
+			if (obj instanceof Character) {
+				Character character = (Character)obj;
+				character.drawHealth(batch, font);
+			}
+		}
+	}
+	
+	/**
 	 * Método que dado un equipo, devuelve su base.
 	 * @param team Equipo.
 	 * @return Base del equipo.

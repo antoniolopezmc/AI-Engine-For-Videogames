@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.checksAndActions.Actions;
 import com.mygdx.iadevproject.model.Character;
-import com.mygdx.iadevproject.waypoints.Waypoints;
 
 public class IAmDead implements State<Character> {
 
