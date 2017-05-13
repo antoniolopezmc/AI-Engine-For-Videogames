@@ -129,7 +129,7 @@ public class OffensiveArcher extends Archer {
 				lastNode.update(source);
 			}
 			// *****
-		} else if ((Checks.amIInEnemyBase(source)) /*&& (FIESTAAAAA)*/) { // NODO Win
+		} else if ((Checks.amIInEnemyBase(source)) && (Checks.haveIWin(source))) { // NODO Win
 			// *****
 			if (lastNode != win) {
 				if (lastNode != null) {

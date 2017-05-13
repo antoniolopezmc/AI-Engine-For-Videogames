@@ -27,6 +27,87 @@ public class Checks {
 	// 		Depende de la salud por defecto del personaje.
 	private static final float LITTLE_HEALTH = Character.DEFAULT_HEALTH * 0.2f;
 	
+	//-------------------------------------------------------------------------------------
+	// CONDICIONES DE VICTORIA. Esto lo he hecho aquí porque es donde se comprueba directamente si estoy en mi base o en la base enemiga.
+	// Inicialmente, ambas bases tienen una cantidad de puntos de moral por defecto.
+	// - Cuando un personaje está en su base, los puntos de moral de su base se incrementan (hasta llegar al máximo).
+	// - Cuando hay jugadores del equipo contrario en una base, los puntos de moral de esa base van decreciendo.
+	// 		EL VALOR DE RECUPERACIÓN DE LOS PUNTOS DE MORAL DEBE SER MAYOR QUE EL DE PÉRDIDA.
+	// - Cuando los puntos de moral de una base llegan a 0, ESE EQUIPO PIERDE.
+	private static int moralPointsByDefault = 50000;
+	private static int moralPointSubtractedByCharacter = 5;
+	private static int moralPointAddedByCharacter = moralPointSubtractedByCharacter + 2; // IMPORTANTE -> ESTE VALOR DEBE SER SIEMPRE MAYOR QUE EL DE ARRIBA.
+	private static int moralPoints_base_LDANIEL = moralPointsByDefault;
+	private static int moralPoints_base_FJAVIER = moralPointsByDefault;
+	
+	/**
+	 * Resetea los puntos de moral de mi base.
+	 * @param source Personaje.
+	 */
+	private static void resetMoralPointsOfMyBase (Character source) {
+		Team myTeam = source.getTeam();
+		if (myTeam == Team.LDANIEL) {
+			moralPoints_base_LDANIEL = moralPointsByDefault;
+		} else if (myTeam == Team.FJAVIER) {
+			moralPoints_base_FJAVIER = moralPointsByDefault;
+		}
+	}
+	
+	/**
+	 * Añade puntos de moral a mi base.
+	 * @param source Personaje.
+	 */
+	private static void addMoralPointsToMyBase (Character source) {
+		Team myTeam = source.getTeam();
+		int moralPointToAdd = moralPointAddedByCharacter;
+		// Si el personaje es una formación, hay que contar a todos los integrantes de la misma.
+		if (source instanceof Formation) {
+			Formation f = (Formation) source;
+			moralPointToAdd = moralPointAddedByCharacter * f.getNumberOfCharacters();
+		}
+		if (myTeam == Team.LDANIEL) {
+			moralPoints_base_LDANIEL = Math.min(moralPointsByDefault, moralPoints_base_LDANIEL + moralPointToAdd);
+		} else if (myTeam == Team.FJAVIER) {
+			moralPoints_base_FJAVIER = Math.min(moralPointsByDefault, moralPoints_base_FJAVIER + moralPointToAdd);
+		}
+	}
+	
+	/**
+	 * Resta puntos de moral a la base del equipo contrario.
+	 * @param source Personaje.
+	 */
+	private static void subtractMoralPointsToEnemyBase (Character source) {
+		Team enemyTeam = source.getTeam().getEnemyTeam();
+		int moralPointToSubtract = moralPointSubtractedByCharacter;
+		// Si el personaje es una formación, hay que contar a todos los integrantes de la misma.
+		if (source instanceof Formation) {
+			Formation f = (Formation) source;
+			moralPointToSubtract = moralPointSubtractedByCharacter * f.getNumberOfCharacters();
+		}
+		if (enemyTeam == Team.LDANIEL) {
+			moralPoints_base_LDANIEL = Math.max(0, moralPoints_base_LDANIEL - moralPointToSubtract);
+		} else if (enemyTeam == Team.FJAVIER) {
+			moralPoints_base_FJAVIER = Math.max(0, moralPoints_base_FJAVIER - moralPointToSubtract);
+		}
+	}
+	
+	/**
+	 * Comprueba si he ganado (si los puntos de moral de la base contraria son 0).
+	 * @param source Persoaneje.
+	 * @return true si he ganado, false en caso contrario.
+	 */
+	public static boolean haveIWin (Character source) {
+		Team enemyTeam = source.getTeam().getEnemyTeam();
+		if (enemyTeam == Team.LDANIEL && moralPoints_base_LDANIEL == 0) {
+			return true;
+		} else if (enemyTeam == Team.FJAVIER && moralPoints_base_FJAVIER == 0) {
+			return true;
+		} else {
+			return false; // Por defecto, devolvemos false.
+		}
+	}
+	//-------------------------------------------------------------------------------------
+	
 	/**
 	 * Método que comprueba si hay enemigos a menos de una distancia pasada como parámetro.
 	 * @param source Personaje que cumprueba si hay enemigos cerca.
@@ -238,8 +319,6 @@ public class Checks {
 		return myManantial.contains(position);
 	}
 	
-	// TODO Pensar -> ¿Hay aliados en mi base? ¿Hay aliados en la base enemiga? ¿Hay enemigos en la base enemiga (en su propia base)?
-	
 	/**
 	 * Método que comprueba si el personaje 'source' se encuentra en su base.
 	 * @param source Personaje que quiere saber si está en su base.
@@ -250,8 +329,16 @@ public class Checks {
 		Rectangle myBase = IADeVProject.getBaseOfTeam(source.getTeam());
 		// Obtenemos la posición del personaje
 		Vector2 position = new Vector2(source.getPosition().x, source.getPosition().y);
-		// Devolvemos si la base contiene a la posición del personaje
-		return myBase.contains(position);
+		// Comprobamos si la base contiene a la posición del personaje
+		boolean amIInMyBase = myBase.contains(position);
+		
+		// En caso afirmativo, debemos incrementar los puntos de moral de mi base.
+		if (amIInMyBase) {
+			addMoralPointsToMyBase(source);
+		}
+		
+		// Devolvemos el booleano
+		return amIInMyBase;
 	}
 	
 	/**
@@ -264,8 +351,16 @@ public class Checks {
 		Rectangle enemyBase = IADeVProject.getBaseOfTeam(source.getTeam().getEnemyTeam());
 		// Obtenemos la posición del personaje
 		Vector2 position = new Vector2(source.getPosition().x, source.getPosition().y);
-		// Devolvemos si la base contiene a la posición del personaje
-		return enemyBase.contains(position);
+		// Comprobamos si la base contiene a la posición del personaje
+		boolean amIInEnemyBase = enemyBase.contains(position);
+		
+		// En caso afirmativo, debemos sustraer puntos de moral de la base enemiga.
+		if (amIInEnemyBase) {
+			subtractMoralPointsToEnemyBase(source);
+		}
+			
+		// Devolvemos el booleano
+		return amIInEnemyBase;
 	}
 	
 	/**
