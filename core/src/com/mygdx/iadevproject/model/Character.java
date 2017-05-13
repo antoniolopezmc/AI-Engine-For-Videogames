@@ -201,16 +201,8 @@ public class Character extends WorldObject {
 		return this.getOrientation();
 	}
 	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
+	// **********************************************************************************************
+	// **********************************************************************************************
 	public void initializeTacticalRole(TacticalRole role) {
 		this.role = role;
 		// Devolver lista de comportamientos inicial llamando 
@@ -218,21 +210,15 @@ public class Character extends WorldObject {
 	}	
 	
 	public void updateTacticalRole() {
-		this.role.update(this);
+		if (this.role != null) {
+			this.role.update(this);
+		}
 		this.applyBehaviour();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	// **********************************************************************************************
+	// **********************************************************************************************
+	
 	/**
 	 * Aplicar un determinado comportamiento hacia un objetivo (otro personaje). La aplicación de ese comportamiento provocará la actualización del personaje actual (this).
 	 */
