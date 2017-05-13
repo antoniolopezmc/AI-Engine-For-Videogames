@@ -17,7 +17,7 @@ import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Wander_Delegated;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Cure;
-import com.mygdx.iadevproject.aiReactive.pathfinding.PathFinding;
+import com.mygdx.iadevproject.aiReactive.pathfinding.continuous.Continuous_PathFinding;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.Formation;
@@ -188,8 +188,8 @@ public class Actions {
 	 * @return El comportamiento correspondiente a la acción de ir a la posición con su correspondiente peso.
 	 */
 	public static Map<Float, Behaviour> goTo(float weight, Character source, Vector3 position, float maxAcceleration) {
-		PathFinding pf = new PathFinding();
-		List<Vector3> pointsList = pf.applyPathFinding(IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, PathFinding.CHEBYSHEV_DISTANCE, IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT, 
+		Continuous_PathFinding pf = new Continuous_PathFinding();
+		List<Vector3> pointsList = pf.applyPathFinding(IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, Continuous_PathFinding.CHEBYSHEV_DISTANCE, IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT, 
 				source.getPosition().x, source.getPosition().y, position.x, position.y);
 		
 		Map<Float, Behaviour> map = createListBehaviour();

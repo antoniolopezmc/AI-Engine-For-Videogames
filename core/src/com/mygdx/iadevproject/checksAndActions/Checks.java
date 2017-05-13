@@ -18,22 +18,14 @@ public class Checks {
 	private static final float NEAR = 300;
 	// Distancia por defecto a la que nosotros consideramos que el personaje está cerca de su base
 	private static final float NEAR_OF_BASE = 600;
+	
+	// Ambas constantes no pueden ser iguales porque si el personaje se queda justo a la misma distancia entre un enemigo y la base la liamos.
+	
 	// Distancia por defecto a la que nosotros consideramos que el personaje está en su waypoint.
 	private static final float DISTANCE_OF_WAYPOINT = 30.0f;
 	// Cantidad por defecto de salud que nosotros consideramos como "poca" salud.
 	// 		Depende de la salud por defecto del personaje.
 	private static final float LITTLE_HEALTH = Character.DEFAULT_HEALTH * 0.2f;
-	
-	/**
-	 * Método que cumprueba si me están atacando.
-	 * @param source Personaje que quiere saber si le están atacando.
-	 * @return true si me están atacando, false en caso contrario.
-	 */
-	public static boolean doTheyAttackMe (Character source) {
-		// Consideramos que a un personaje lo están atacando cuando su vida se reduce con respecto al frame anterior
-		// 		(por eso hemos creado el atributo 'previousHealth').
-		return source.getCurrentHealth() != source.getPreviousHealth();
-	}
 	
 	/**
 	 * Método que comprueba si hay enemigos a menos de una distancia pasada como parámetro.

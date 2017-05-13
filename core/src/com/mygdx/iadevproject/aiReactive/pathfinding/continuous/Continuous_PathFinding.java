@@ -1,11 +1,15 @@
-package com.mygdx.iadevproject.aiReactive.pathfinding;
+package com.mygdx.iadevproject.aiReactive.pathfinding.continuous;
 
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
+import com.mygdx.iadevproject.aiReactive.pathfinding.ChebyshevDistance;
+import com.mygdx.iadevproject.aiReactive.pathfinding.Distance;
+import com.mygdx.iadevproject.aiReactive.pathfinding.EuclideanDistance;
+import com.mygdx.iadevproject.aiReactive.pathfinding.ManhattanDistance;
 
-public class PathFinding {
+public class Continuous_PathFinding {
 	
 	public static final int MANHATTAN_DISTANCE = 0;
 	public static final int EUCLIDEAN_DISTANCE = 1;
@@ -44,7 +48,7 @@ public class PathFinding {
 		}
 		
 		// Ahora, aplicamos el algoritmo LRTA*.
-		LRTA_star lrta_star = new LRTA_star(map_of_costs, d, matrix_width, matrix_height, xSource, ySource, xGoal, yGoal);
+		Continuous_LRTA_star lrta_star = new Continuous_LRTA_star(map_of_costs, d, matrix_width, matrix_height, xSource, ySource, xGoal, yGoal);
 		List<Vector3> list = lrta_star.applyLRTA_start();
 		
 		// Finalmente, pasamos las coordenadas obtenidas (coordenadas del grid) a coordenadas reales del plano.

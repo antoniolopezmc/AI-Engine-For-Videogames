@@ -43,7 +43,6 @@ public class Character extends WorldObject {
 	private Team team;
 	private float currentHealth;
 	private float maxHealth;
-	private float previousHealth; // Este atributo es para la comprobación de si están pegando a un personaje
 	
 
 	// CONSTRUCTORES.
@@ -72,7 +71,6 @@ public class Character extends WorldObject {
 		this.arbitrator = arbitrator;
 		this.currentHealth = DEFAULT_HEALTH;
 		this.maxHealth = DEFAULT_HEALTH;
-		this.previousHealth = DEFAULT_HEALTH;
 		this.team = Team.NEUTRAL;
 		this.role = null;
 		this.formation = null;
@@ -183,14 +181,6 @@ public class Character extends WorldObject {
 
 	public void setMaxHealth(float maxHealth) {
 		this.maxHealth = maxHealth;
-	}
-
-	public float getPreviousHealth() {
-		return previousHealth;
-	}
-
-	public void setPreviousHealth(float previousHealth) {
-		this.previousHealth = previousHealth;
 	}
 
 	// MÉTODOS.
@@ -364,7 +354,6 @@ public class Character extends WorldObject {
 	 */
 	public void addHealth (float health) {
 		this.currentHealth = Math.min(this.maxHealth, this.currentHealth + health);
-		this.previousHealth = this.currentHealth; // TODO Pensar.
 	}
 	
 	/**
