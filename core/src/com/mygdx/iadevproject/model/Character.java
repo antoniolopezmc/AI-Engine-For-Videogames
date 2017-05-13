@@ -38,6 +38,10 @@ public class Character extends WorldObject {
 	private Arbitrator arbitrator;
 	// Rol del personaje
 	private TacticalRole role;
+	// Atributo booleano que indica si el rol del personaje está activo o no. Este atributo para añadir la integración
+	// de las acciones del usuario. Ya que cuando el usuario quiere realizar alguna acción, los personajes seleccionados
+	// dejan de tener activo su rol y pasan a hacer lo que le mande el usuario.
+	private boolean enabledRole;
 	
 	// MUY IMPORTANTE -> A las formaciones también hay que ponerles el equipo al que pertenecen.
 	private Team team;
@@ -74,6 +78,7 @@ public class Character extends WorldObject {
 		this.team = Team.NEUTRAL;
 		this.role = null;
 		this.formation = null;
+		this.enabledRole = true;
 	}
 	
 	
@@ -182,6 +187,24 @@ public class Character extends WorldObject {
 	public void setMaxHealth(float maxHealth) {
 		this.maxHealth = maxHealth;
 	}
+	
+	public boolean isEnabledRole() {
+		return this.enabledRole;
+	}
+	
+	/**
+	 * Método que habilita el rol del personaje.
+	 */
+	public void enableRole() {
+		this.enabledRole = true;
+	}
+	
+	/** 
+	 * Método que deshabilita el rol del personaje.
+	 */
+	public void disableRole() {
+		this.enabledRole = false;
+	}
 
 	// MÉTODOS.
 	/**
@@ -210,7 +233,8 @@ public class Character extends WorldObject {
 	}	
 	
 	public void updateTacticalRole() {
-		if (this.role != null) {
+		// Actualizamos el rol del personaje cuando tiene rol y cuando este está habilitado.
+		if (this.role != null && isEnabledRole()) {
 			this.role.update(this);
 		}
 		this.applyBehaviour();
@@ -351,5 +375,29 @@ public class Character extends WorldObject {
 		batch.begin();
 		font.draw(batch, "Health: " + this.getCurrentHealth(), this.getPosition().x + 20, this.getPosition().y); // Dibujamos la vida a la derecha del personaje.
         batch.end();
+	}
+	
+	
+	
+	// **********************************************************************************************
+	/**
+	 * Método que realiza las acciones pertinentes cuando un personaje ha sido seleccionado:
+	 * - Deshabilita su rol.
+	 * - Limpiamos su lista de comportamientos.
+	 * - Pone su velocidad (normal y angular) a 0.
+	 */
+	public void haveBeenSelected() {
+		this.disableRole();
+		this.listBehaviour.clear();
+		this.setVelocity(new Vector3(0,0,0));
+		this.setRotation_angularSpeed(0.0f);
+	}
+	
+	/**
+	 * Método que realiza las acciones pertinentes cuando un personaje ha sido liberado (deseleccionado):
+	 * - Habilitar su rol.
+	 */
+	public void haveBeenReleased() {
+		this.enableRole();
 	}
 }
