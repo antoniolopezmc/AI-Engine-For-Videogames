@@ -8,11 +8,15 @@ import java.util.TreeMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.Arbitrator;
 import com.mygdx.iadevproject.aiReactive.arbitrator.PriorityArbitrator;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.LookingWhereYouGoing;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Cure;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
@@ -128,14 +132,10 @@ public class LineFormation extends Formation {
 			}
 		});
 		
-		// TODO MUY IMPORTANTE -> ¿Los componentes de una formación deben tener en cuenta las colisiones (sería lo primero en el map)? PENSAR. PENSAR EN EL PATHFINDING.
-		
-		// Primer comportamiento del map. -> Desplazamiento hacia 'fakeTarget'.
-//		map.put(30.0f, new Arrive_NoAccelerated(source, fakeTarget, source.getMaxSpeed(), 5.0f, 1.0f));
+		// Comportamiento del map. -> Desplazamiento hacia 'fakeTarget'.
 		map.put(30.0f, new Arrive_Accelerated(source, fakeTarget, source.getMaxSpeed(), source.getMaxSpeed(), 5.0f, 10.0f, 1.0f));
 		
-		
-		// Segundo comportamiento del map (con menor prioridad). -> Rotación/Cambio de orientación.
+		// Comportamiento del map (con menor prioridad que el de arriba). -> Cuando los personajes se paren, se orientan en función del tipo de orientación elegida.
 		// 	--> ESTE CAMBIO DE ORIENTACIÓN SÍ PODRÁ SER CONFIGURADO DESDE EL EXTERIOR (MEDIANTE UNA CONSTANTE).
 		
 		// Para algunos cambios de orientación necesitaremos las posiones de la formación y del integrante actual. 
@@ -165,7 +165,12 @@ public class LineFormation extends Formation {
 			// Este comportamiento debe estar en la segunda posición de la lista para que siempre se ejecute, excepto cuando nos
 			// 	vayamos a chocar.
 			map.put(42.0f, new Cure(source, health_cure));
-		} 
+		}
+		
+		// IMPORTANTE -> Además de todo lo anterior, los componentes de una formación no deben chocarse y deben mirar hacia adelantes AL ANDAR (otra cosa es cuando se paren).
+		map.put(50.0f, new LookingWhereYouGoing(source, 30.0f, 30.0f, 5.0f, 10.0f, 1.0f)); // Lo segundo más prioritario.
+		map.put(60.0f, new WallAvoidance(source, 300.0f, IADeVProject.worldObjects, 100.0f, 20.0f, 100.0f));
+		map.put(61.0f, new CollisionAvoidance(source, IADeVProject.worldObjects, 200.0f));
 		
 		// Devolvemos el comportamiento que nos diga el árbitro.
 		return arbitrator.getSteering(map);
