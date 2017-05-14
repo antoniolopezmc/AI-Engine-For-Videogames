@@ -83,6 +83,12 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		case Input.Keys.Z:					// Habilitar que haya ganador
 			IADeVProject.canBeThereWinner = true;
 			break;
+		case Input.Keys.M:				// Habilitar debug de los comportamientos
+			IADeVProject.PRINT_PATH_BEHAVIOUR = false;
+			break;
+		case Input.Keys.N:				// Deshabilitar debug de los comportamientos
+			IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+			break;
 		default:
 			processState(keycode);
 			break;
