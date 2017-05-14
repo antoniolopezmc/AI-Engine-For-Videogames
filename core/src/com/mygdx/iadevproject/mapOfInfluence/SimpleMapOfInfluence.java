@@ -221,14 +221,14 @@ public class SimpleMapOfInfluence {
 					renderer.rect(positionX + x * output_grid_cell_size, positionY + y * output_grid_cell_size, 
 							output_grid_cell_size, output_grid_cell_size, neutral, neutral, neutral, neutral);
 					
-				} else if (simpleMapOfInfluence_FJAVIER[x][y] > simpleMapOfInfluence_LDANIEL[x][y]) {
+				} else if ((!Ground.isImpassable(map_of_costs[x][y])) && (simpleMapOfInfluence_FJAVIER[x][y] > simpleMapOfInfluence_LDANIEL[x][y])) {
 					// EXTREMADANTE IMPORTANTE -> El equipo con mayor influencia en una casilla, controla la casilla (es decir, se usa su color).
 					// De todas formas, el color final dibujado sí tendra en cuenta la influencia de los 2 bando.
 					int finalValue = (simpleMapOfInfluence_FJAVIER[x][y] - simpleMapOfInfluence_LDANIEL[x][y]) / 5; // Se divide entre 5 porque hay 5 colores posibles
 					renderer.setColor(fjavier[finalValue]);
 					renderer.rect(positionX + x * output_grid_cell_size, positionY + y * output_grid_cell_size, 
 							output_grid_cell_size, output_grid_cell_size, fjavier[finalValue], fjavier[finalValue], fjavier[finalValue], fjavier[finalValue]);
-				} else if (simpleMapOfInfluence_LDANIEL[x][y] > simpleMapOfInfluence_FJAVIER[x][y]) {
+				} else if ((!Ground.isImpassable(map_of_costs[x][y])) && (simpleMapOfInfluence_LDANIEL[x][y] > simpleMapOfInfluence_FJAVIER[x][y])) {
 					// EXTREMADANTE IMPORTANTE -> El equipo con mayor influencia en una casilla, controla la casilla (es decir, se usa su color).
 					// De todas formas, el color final dibujado sí tendra en cuenta la influencia de los 2 bando.
 					int finalValue = (simpleMapOfInfluence_LDANIEL[x][y] - simpleMapOfInfluence_FJAVIER[x][y]) / 5; // Se divide entre 5 porque hay 5 colores posibles

@@ -4,6 +4,8 @@ import java.util.*;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.pathfinding.Distance;
+import com.mygdx.iadevproject.mapOfInfluence.SimpleMapOfInfluence;
+import com.mygdx.iadevproject.model.Character;
 
 
 // IMPORTANTE -> LRTA* con espacio de búsqueda minimal, es decir, el espacio de búsqueda es solo el estado actual.
@@ -69,7 +71,7 @@ public class PointToPoint_LRTA_star {
 		return nextCell;
 	}
 	
-	// f(x) = coste de acción + coste heurístico en ese punto + coste del terreno en ese punto.
+	// f(x) = coste de acción + coste heurístico en ese punto + coste del terreno en ese punto + (influencia DEL ENEMIGO en ese punto)
 	/**
 	 * Calcula f(p) en un punto.
 	 * @param distancesMatrix Matriz de distancias a un punto.
@@ -77,7 +79,16 @@ public class PointToPoint_LRTA_star {
 	 * @return f(p) = coste de acción + coste heurístico en ese punto + coste del terreno en ese punto
 	 */
 	private float getFx (float[][] distancesMatrix, Vector3 position) {
-		return PointToPoint_LRTA_star.default_action_cost + distancesMatrix[(int) position.x][(int) position.y] + (float) this.map_of_costs[(int) position.x][(int) position.y];
+		float fx = PointToPoint_LRTA_star.default_action_cost + distancesMatrix[(int) position.x][(int) position.y] + (float) this.map_of_costs[(int) position.x][(int) position.y];
+		// La información táctica se añade directamente al cálculo de f(x) de una determinada casilla.
+		if (tacticalInformation) {
+			int[][] influenceMatrix = SimpleMapOfInfluence.getSimpleMapOfInfluenceOfEnemyTeam(this.character);
+			// Hay que llevar cuidado aqui. Si le pasas un personaje cuyo equipo es NEUTRAL, la matriz de influencia es null.
+			if (influenceMatrix != null) {
+				fx = fx + ((float)influenceMatrix[(int) position.x][(int) position.y]);
+			}
+		}
+		return fx;
 	}
 	
 	/**

@@ -85,7 +85,7 @@ public class PointToPoint_PathFinding {
 		// Con esta transformación estamos consiguiendo que el personaje se situe en el centro del tile.
 		this.objetivoActual = new Vector3(IADeVProject.mapPositionTOgridPosition(grid_cell_size, this.source.getPosition()));
 		
-		lrta_star = new PointToPoint_LRTA_star(map_of_costs, this.distance, matrix_width, matrix_height, xGoal, yGoal);
+		lrta_star = new PointToPoint_LRTA_star(source, map_of_costs, this.distance, matrix_width, matrix_height, xGoal, yGoal);
 		
 		this.tacticalInformation = false;
 	}
@@ -140,7 +140,6 @@ public class PointToPoint_PathFinding {
 		} else {
 			lrta_star.notUseTacticalInformation();
 		}
-		
 		
 		// Ahora, aplicamos el algoritmo LRTA*.
 		Vector3 vector3 = lrta_star.applyLRTA_start((int)objetivoActual.x, (int)objetivoActual.y);
