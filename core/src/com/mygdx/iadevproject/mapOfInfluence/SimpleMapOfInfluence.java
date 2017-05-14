@@ -79,7 +79,7 @@ public class SimpleMapOfInfluence {
 			// Recorremos la zona más próxima al personaje en la matriz de influencia (según la distancia), para asignar el valor que corresponda.
 			for (int x = (int)Math.max(0, character_grid_position.x-distance); x <= (int)Math.min(grid_width-1, character_grid_position.x + distance); x++) {
 				for (int y = (int)Math.max(0, character_grid_position.y-distance); y <= (int)Math.min(grid_height-1, character_grid_position.y + distance); y++) {
-					// Calculamos el valor que se AÑADIRÁ A LA CELDA ACTUAL.
+					// Calculamos el valor que se AÑADIRÁ A LA CELDA ACTUAL. Distancia de CHEBYSHEV.
 					int valueToAdd = value - (int) Math.max(Math.abs(character_grid_position.x - x), Math.abs(character_grid_position.y - y));
 					// Si al añadir ese valor a la celda que corresponde, se supera el valor máximo, entonces a la celda se le asigna el valor máximo.
 					if ((valueToAdd + simpleMapOfInfluence[x][y]) > value) {
@@ -171,17 +171,17 @@ public class SimpleMapOfInfluence {
 		// Inicializamos los colores. LOS VALORES ESTÁN ENTRE 0 y 1.
 		Color neutral = new Color(1, 1, 1, 0);
 		Color[] ldaniel = new Color[5];
-		ldaniel[4] = new Color(0, 0, 139/255.0f, 0);
-		ldaniel[3] = new Color(16.0f/255.0f, 78.0f/255.0f, 139.0f/255.0f, 0);
-		ldaniel[2] = new Color(24.0f/255.0f, 116.0f/255.0f, 205.0f/255.0f, 0);
-		ldaniel[1] = new Color(122.0f/255.0f, 197.0f/255.0f, 205.0f/255.0f, 0);
-		ldaniel[0] = new Color(142.0f/255.0f, 229.0f/255.0f, 238.0f/255.0f, 0);
+		ldaniel[4] = new Color(0.0f, 0.0f, 139.0f/255.0f, 0.0f);
+		ldaniel[3] = new Color(16.0f/255.0f, 78.0f/255.0f, 139.0f/255.0f, 0.0f);
+		ldaniel[2] = new Color(24.0f/255.0f, 116.0f/255.0f, 205.0f/255.0f, 0.0f);
+		ldaniel[1] = new Color(122.0f/255.0f, 197.0f/255.0f, 205.0f/255.0f, 0.0f);
+		ldaniel[0] = new Color(142.0f/255.0f, 229.0f/255.0f, 238.0f/255.0f, 0.0f);
 		Color[] fjavier = new Color[5];
-		fjavier[4] = new Color(139.0f/255.0f, 35.0f/255.0f, 35.0f/255.0f, 0);
-		fjavier[3] = new Color(205.0f/255.0f, 51.0f/255.0f, 51.0f/255.0f, 0);
-		fjavier[2] = new Color(238.0f/255.0f, 59.0f/255.0f, 59.0f/255.0f, 0);
-		fjavier[1] = new Color(255.0f/255.0f, 64.0f/255.0f, 64.0f/255.0f, 0);
-		fjavier[0] = new Color(238.0f/255.0f, 180.0f/255.0f, 180.0f/255.0f, 0);
+		fjavier[4] = new Color(139.0f/255.0f, 35.0f/255.0f, 35.0f/255.0f, 0.0f);
+		fjavier[3] = new Color(205.0f/255.0f, 51.0f/255.0f, 51.0f/255.0f, 0.0f);
+		fjavier[2] = new Color(238.0f/255.0f, 59.0f/255.0f, 59.0f/255.0f, 0.0f);
+		fjavier[1] = new Color(255.0f/255.0f, 64.0f/255.0f, 64.0f/255.0f, 0.0f);
+		fjavier[0] = new Color(238.0f/255.0f, 180.0f/255.0f, 180.0f/255.0f, 0.0f);
 		
 		// Dibujamos el mapa de influencia.
 		if (filled) {
