@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiTactical.roles.DefensiveSoldier;
 import com.mygdx.iadevproject.aiTactical.roles.OffensiveArcher;
+import com.mygdx.iadevproject.aiTactical.roles.OffensiveSoldier;
 import com.mygdx.iadevproject.checksAndActions.MoralPoints;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
@@ -111,8 +112,6 @@ public class IADeVProject extends ApplicationAdapter {
     // IMPORTANTE -> Si en la misma interación de render se producen las condiciones de victoria de ambos equipos (los 2 booleanos a true), la partida quedaría en EMPATE.
     // *********************************************************************************
 	
-	public static Character drop, bucket, defensiveSoldier;
-	
 	@Override
 	public void create() {
 		// Establecemos a LibGDX el InputProcessor implementado en la clase InputProcessorIADeVProject
@@ -153,30 +152,16 @@ public class IADeVProject extends ApplicationAdapter {
         bases = MapsCreatorIADeVProject.getBasesOfMap(tiledMap, HEIGHT);			// Obtenemos las bases
         manantials = MapsCreatorIADeVProject.getManantialsOfMap(tiledMap, HEIGHT); 	// Obtenemos los manantiales
         
+        CreateCharacters.createCharacters();
+ 
         // Obtenemos los obstáculos del mapa
         worldObstacles = MapsCreatorIADeVProject.getObstaclesOfMap(tiledMap);
         // Los añadimos a los objetos del mundo
         worldObjects.addAll(worldObstacles);
         
-        drop = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-    	drop.setBounds(270.92f, 1803.31f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
-        drop.setOrientation(60.0f);
-        drop.setVelocity(new Vector3(0,0.0f,0));
-        drop.setMaxSpeed(50.0f);
-        drop.setTeam(Team.LDANIEL);
-        drop.initializeTacticalRole(new DefensiveSoldier());
-        
-        bucket = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(500.0f, 900.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
-        bucket.setOrientation(60.0f);
-        bucket.setVelocity(new Vector3(0,0.0f,0));
-        bucket.setMaxSpeed(50.0f);
-        bucket.setTeam(Team.FJAVIER);
-        bucket.initializeTacticalRole(new OffensiveArcher());
-        
-        IADeVProject.addToWorldObjectList(drop, bucket);
-        
         SimpleMapOfInfluence.initializeSimpleMapOfInfluence();
+        
+        
 	}
 	
 	@Override

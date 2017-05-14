@@ -35,30 +35,25 @@ public class CreateCharacters {
 		
 	private static List<Character> FJTeam, LDTeam;
 	
-	public static void createCharacters() {
-		// Limpiamos los objetos del IADeVProject para utilizar solamnte los que se crean en esta clase
-		// y le añadimos los obstáculos del mundo.
-		IADeVProject.worldObjects.clear();
-		IADeVProject.worldObjects.addAll(IADeVProject.worldObstacles);
-		   
+	public static void createCharacters() {		   
 		// Equipo FJAVIER (abajo)
 		
 		// 2 soldados defensivos.
 		FJsoldier1 = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket-soldier.png")));
-		FJsoldier1.setBounds(1899.2f, 74.8f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
-		FJsoldier1.setOrientation(60.0f);
-		FJsoldier1.setVelocity(new Vector3(0,0.0f,0));
-		FJsoldier1.setTeam(Team.FJAVIER);
-		FJsoldier1.initializeTacticalRole(new DefensiveSoldier());
-		FJsoldier1.setMaxSpeed(FJsoldier1.getRole().getMaxSpeed());
-		        
-		FJsoldier2 = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket-soldier.png")));
+        FJsoldier1.setBounds(1899.2f, 74.8f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        FJsoldier1.setOrientation(60.0f);
+        FJsoldier1.setVelocity(new Vector3(0,0.0f,0));
+        FJsoldier1.setMaxSpeed(50.0f);
+        FJsoldier1.setTeam(Team.FJAVIER);
+        FJsoldier1.initializeTacticalRole(new DefensiveSoldier());
+        
+        FJsoldier2 = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket-soldier.png")));
         FJsoldier2.setBounds(1943.9f,245.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         FJsoldier2.setOrientation(60.0f);
         FJsoldier2.setVelocity(new Vector3(0,0.0f,0));
+        FJsoldier2.setMaxSpeed(50.0f);
         FJsoldier2.setTeam(Team.FJAVIER);
         FJsoldier2.initializeTacticalRole(new DefensiveSoldier());
-        FJsoldier2.setMaxSpeed(FJsoldier2.getRole().getMaxSpeed());
         
         // 2 soldados ofensivos.
 		FJsoldier3 = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket-soldier.png")));
@@ -161,17 +156,17 @@ public class CreateCharacters {
         LDsoldier1.setBounds(61.64f,1836.8f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         LDsoldier1.setOrientation(60.0f);
         LDsoldier1.setVelocity(new Vector3(0,0.0f,0));
+        LDsoldier1.setMaxSpeed(50.0f);
         LDsoldier1.setTeam(Team.LDANIEL);
         LDsoldier1.initializeTacticalRole(new DefensiveSoldier());
-        LDsoldier1.setMaxSpeed(LDsoldier1.getRole().getMaxSpeed());
         
         LDsoldier2 = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet-soldier.png")));
         LDsoldier2.setBounds(199.34f,1958.3f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         LDsoldier2.setOrientation(60.0f);
         LDsoldier2.setVelocity(new Vector3(0,0.0f,0));
+        LDsoldier2.setMaxSpeed(50.0f);
         LDsoldier2.setTeam(Team.LDANIEL);
         LDsoldier2.initializeTacticalRole(new DefensiveSoldier());
-        LDsoldier2.setMaxSpeed(LDsoldier2.getRole().getMaxSpeed());
         
         // 2 soldados ofensivos.
         LDsoldier3 = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet-soldier.png")));
