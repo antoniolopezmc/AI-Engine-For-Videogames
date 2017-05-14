@@ -19,7 +19,7 @@ import com.mygdx.iadevproject.model.Character;
 public class InputProcessorIADeVProject implements InputProcessor {
 	private boolean keyPressed = false;		// Indica que se ha pulsado una tecla
 	private int lastKey;					// Última tecla pulsada
-	private Vector3 touchPos, anchorPos;
+	private Vector3 touchPos, anchorPos, pathFindingPos;
 	private Character target; 
 	
 	/**
@@ -30,6 +30,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		JUST_SELECTED_CHARACTERS, 	// Refleja el estado de que el usuario acaba de seleccionar personajes
 		ACCELERATED,				// El usuario quiere hacer un comportamiento acelerado
 		DELEGATED,					// El usuario quiere hacer un comportamiento delegado
+		PATHFINDING,				// El usuario quiere realizar un pathfinding
 		GROUP,						// El usuario quiere hacer un comportamiento de grupo
 		OTHERS,						// El usuario quiere hacer otros comportamientos
 		MAKE_FORMATION				// El usuario quiere hacer una formación.
@@ -74,6 +75,14 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			break;
 		case Input.Keys.U:
 			IADeVProject.showInfluenceMap = false;
+			break;
+		case Input.Keys.X:
+			IADeVProject.canBeThereWinner = false;
+			IADeVProject.paused = false;
+			break;
+		case Input.Keys.Z:
+			IADeVProject.canBeThereWinner = true;
+			break;
 		default:
 			processState(keycode);
 			break;
@@ -109,6 +118,13 @@ public class InputProcessorIADeVProject implements InputProcessor {
 					return;
 				}
 				processDelegated(keycode);
+				break;
+			case PATHFINDING:
+				if (pathFindingPos == null) {
+					System.out.println("You must select a valid position");
+					return;
+				}
+				processPathFinding(keycode);
 				break;
 			case GROUP:
 				if (target == null) {
@@ -167,12 +183,17 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			System.out.println("Select the character (it must have been selected yet) with which you want to apply the behaviour");
 			state = UserState.GROUP;
 			break;
-		case Input.Keys.NUM_4: // Others behaviours
+		case Input.Keys.NUM_4: // Pathfinding
+			UserInteraction.printPathFinding();
+			System.out.println("Select the position where you want to apply pathfinding");
+			state = UserState.PATHFINDING;
+			break;
+		case Input.Keys.NUM_5: // Others behaviours
 			UserInteraction.printOthersBehaviours();
 			System.out.println("Select the character with which you want to apply the behaviour");
 			state = UserState.OTHERS;
 			break;
-		case Input.Keys.NUM_5: // Make formation
+		case Input.Keys.NUM_6: // Make formation
 			UserInteraction.printMakeFormation();
 			System.out.println("Select the point where situate the anchor");
 			state = UserState.MAKE_FORMATION;
@@ -251,7 +272,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			break;
 		case Input.Keys.NUM_4: // Pathfinding
 			System.out.println("4) Pathfinding");
-			UserInteraction.applyPathFinding(touchPos);
+			UserInteraction.applyContinuousPathFinding(touchPos);
 			break;
 		case Input.Keys.NUM_5: // Persue
 			System.out.println("5) Persue");
@@ -296,6 +317,24 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		default:
 			break;
 		}
+	}
+	
+	/**
+	 * Método que procesa la interacción de realizar un pathfinding
+	 */
+	private void processPathFinding(int keycode) {
+		switch (keycode) {
+		case Input.Keys.NUM_1:
+			UserInteraction.applyContinuousPathFinding(pathFindingPos);
+			break;
+		case Input.Keys.NUM_2:// Return
+			returnActions();
+			break;
+		default:
+			break;
+			
+		}
+		
 	}
 	
 	/**
@@ -405,7 +444,10 @@ public class InputProcessorIADeVProject implements InputProcessor {
 					System.out.println("The character has been selected. Press some number to apply a behaviour");
 				} else if (state == UserState.MAKE_FORMATION) {
 					anchorPos = touchPos;
-					System.out.println("The anchor has been selected");
+					System.out.println("The anchor has been selected. Press some number to make formation");
+				} else if (state == UserState.PATHFINDING) {
+					pathFindingPos = touchPos;
+					System.out.println("The position has been selected. Press some number to apply pathfinding");
 				} else {
 					System.out.println("The target character has been released. Select another character.");
 				}

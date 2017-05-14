@@ -26,6 +26,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiTactical.roles.DefensiveSoldier;
+import com.mygdx.iadevproject.aiTactical.roles.OffensiveArcher;
+import com.mygdx.iadevproject.checksAndActions.MoralPoints;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
@@ -82,6 +84,18 @@ public class IADeVProject extends ApplicationAdapter {
     public static boolean LDANIEL_win = false;
     // Equipo FJAVIER (el de abajo)
     public static boolean FJAVIER_win = false;
+    // Atributo que indica si hay ganador o no. Esto es para permitir que el usuario pueda manipular si 
+    // en el juego hay ganador o no.
+    public static boolean canBeThereWinner = true;
+    
+    
+    // Atributos que contienen los valores del rectángulo que aparece cuando termina el juego.
+    private float endGameHeight = 100.0f;	// Alto
+	private float endGameWidth = 300.0f;	// Ancho
+	private float endGameX, endGameY;		// X e Y (dependen de la cámara)
+	
+    
+    
     
     /**
      * Método para establecer una ganador de la partida.
@@ -145,19 +159,20 @@ public class IADeVProject extends ApplicationAdapter {
         worldObjects.addAll(worldObstacles);
         
         drop = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
-    	drop.setBounds(600.0f, 600.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+    	drop.setBounds(270.92f, 1803.31f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         drop.setMaxSpeed(50.0f);
-        drop.setTeam(Team.FJAVIER);
-
+        drop.setTeam(Team.LDANIEL);
+        drop.initializeTacticalRole(new DefensiveSoldier());
+        
         bucket = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
         bucket.setBounds(500.0f, 900.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         bucket.setOrientation(60.0f);
         bucket.setVelocity(new Vector3(0,0.0f,0));
         bucket.setMaxSpeed(50.0f);
         bucket.setTeam(Team.FJAVIER);
-        bucket.initializeTacticalRole(new DefensiveSoldier());
+        bucket.initializeTacticalRole(new OffensiveArcher());
         
         IADeVProject.addToWorldObjectList(drop, bucket);
         
@@ -166,9 +181,6 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	@Override
 	public void render() {
-		// Si el juego está pausado, no hacemos nada
-		if (paused) return;
-		
 		// Cada vez que renderiza, indicamos al InputProcessor que procese si hay una tecla pulsada. Esto se hace aquí
         // porque InputProcessor no tiene ningún método para indicar que se mantiene pulsada una tecla. Nosotros queremos
         // que mientras se pulse una de las teclas de movimiento de la cámara, la cámara se mueva sin tener que estar pulsando
@@ -183,7 +195,10 @@ public class IADeVProject extends ApplicationAdapter {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         
-        updateTacticalRoleOfWorldCharacters(); // Actualizamos los roles de todos los personajes
+        if (!paused) {
+        	// Si el juego no está pausado, actualizamos a los personajes.
+        	updateTacticalRoleOfWorldCharacters(); // Actualizamos los roles de todos los personajes
+        }
         
         drawRegionsOfBasesAndManantials();	// Dibujamos las regiones de las bases y los manantiales.
         drawRegionsOfSelectedCharacters();	// Dibujamos las regiones de los personajes seleccionados.
@@ -193,6 +208,7 @@ public class IADeVProject extends ApplicationAdapter {
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
         
         drawHealthOfWorldCharacters(); // Dibujamos la vida de todos los personajes del mundo  
+        MoralPoints.drawMoralPointsOfBases(batch, font);
         
         SimpleMapOfInfluence.updateSimpleMapOfInfluence();
         
@@ -200,6 +216,11 @@ public class IADeVProject extends ApplicationAdapter {
             SimpleMapOfInfluence.drawInfluenceMap(renderer, 32, 0, 0, false);        	
         }
         SimpleMapOfInfluence.drawInfluenceMap(renderer, 10, 2048, 0, true);
+        
+        // Si puede haber ganador, entonces comprobamos si alguno ha ganado.
+        if (canBeThereWinner) {
+        	checkIfSomeTeamHasWon();
+        }
 	}
 
 	@Override
@@ -219,6 +240,37 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	
 	/** MÉTODOS ÚTILES **/
+	private void checkIfSomeTeamHasWon() {
+		
+		if (LDANIEL_win && FJAVIER_win) {
+			drawEndGame("There has been a tie!!");
+		} else if (LDANIEL_win) {
+			drawEndGame("LDANIEL Team has won!!");
+		} else if (FJAVIER_win) {
+			drawEndGame("FJAVIER Team has won!!");
+		} else {
+			
+		}
+	}
+
+	private void calculatePositionOfEndGame() {
+		endGameX = camera.position.x - endGameWidth/2;
+		endGameY = camera.position.y - endGameHeight/2;
+	}
+	
+	private void drawEndGame(String message) {
+		calculatePositionOfEndGame();
+		paused = true;
+		renderer.begin(ShapeType.Filled);
+		renderer.rect(endGameX, endGameY, endGameWidth, endGameHeight);
+		renderer.end();
+		batch.begin();
+		font.setColor(Color.BLACK);
+		font.draw(batch, message, endGameX+50, endGameY+endGameHeight/2);
+		font.setColor(Color.WHITE);
+		batch.end();
+	}	
+	
 	/**
 	 * Método que actualiza todos los personajes actualizando sus roles.
 	 */
