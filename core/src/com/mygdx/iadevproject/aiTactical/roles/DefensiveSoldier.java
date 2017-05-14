@@ -74,8 +74,10 @@ public class DefensiveSoldier extends Soldier {
 				
 				// Si no cambiamos de estado, quiere decir que el personaje está en su base (patrullando su base) y no le están atacando.
 				//  Si se cumplen esas condiciones, entonces también debe ir incrementando los puntos de moral de su base.
-				MoralPoints.addMoralPointsToMyBase(source);
-				
+				// IMPORTANTE -> PARA SUBIR LOS PUNTOS DE MORAL, MEJOR COMPROBAR DIRECTAMENTE SI ESTOY CERCA DE MI BASE.
+				if (Checks.amINearFromMyBase(source)) {
+					MoralPoints.addMoralPointsToMyBase(source);
+				}
 				return;
 			}
 			
