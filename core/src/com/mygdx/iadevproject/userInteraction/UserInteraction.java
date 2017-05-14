@@ -1,9 +1,11 @@
 package com.mygdx.iadevproject.userInteraction;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
+import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.AntiAlign_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
@@ -23,6 +25,10 @@ import com.mygdx.iadevproject.checksAndActions.Actions;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.CircularFormation;
+import com.mygdx.iadevproject.model.formation.Formation;
+import com.mygdx.iadevproject.model.formation.LineFormation;
+import com.mygdx.iadevproject.model.formation.StarFormation;
 
 public class UserInteraction {
 
@@ -114,11 +120,15 @@ public class UserInteraction {
 		}
 	}
 	
-	/** IMPORTANTE: ESTE MÉTODO UTILIZA EL PATHFINDING CONTINUO, NO EL PUNTO A PUNTO **/
-	public static void applyPathFinding(Vector3 position) {
+	private static boolean checkIfCorrectPosition(Vector3 position) {
 		Ground ground = IADeVProject.getGroundOfPosition(position);
 		
-		if (ground == Ground.MOUNTAINS || ground == Ground.WATER) {
+		return (ground != Ground.MOUNTAINS && ground != Ground.WATER);
+	}
+	
+	/** IMPORTANTE: ESTE MÉTODO UTILIZA EL PATHFINDING CONTINUO, NO EL PUNTO A PUNTO **/
+	public static void applyPathFinding(Vector3 position) {
+		if (!checkIfCorrectPosition(position)){
 			System.out.println("Destination not allowed");
 			return;
 		}
@@ -180,8 +190,18 @@ public class UserInteraction {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
 			source.setListBehaviour(Actions.notCollide(200.0f, source));
+			
+			float damageToDone = 50;	// Daño por defecto
+			float maxDistance = 250;	// Máxima distancia por defecto
+			
+			// Si el personaje tiene un rol, entonces obtenemos sus valores de daño y distancia
+			if (source.getRole() != null) { 
+				damageToDone = source.getRole().getDamageToDone();
+				maxDistance = source.getRole().getMaxDistanceOfAttack();
+			}
+			
 			// Creamos el comportamiento y se lo añadimos al personaje
-			source.getListBehaviour().putAll(Actions.attack(source, target, source.getRole().getDamageToDone(), source.getRole().getMaxDistanceOfAttack()));
+			source.getListBehaviour().putAll(Actions.attack(source, target, damageToDone, maxDistance));
 			// Cuando atacamos, vamos a por él.
 			source.getListBehaviour().putAll(Actions.arrive(30.0f, source, target, 30.0f));
 		}
@@ -196,6 +216,112 @@ public class UserInteraction {
 		}
 	}
 	
+	
+	
+	/** MAKE FORMATION **/
+	public static void applyCircularLookOutSideFormation(Vector3 position) {
+		if (!checkIfCorrectPosition(position)){
+			System.out.println("Anchor position not allowed");
+			return;
+		}
+		CircularFormation formation = new CircularFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f);
+        formation.setBounds(position.x, position.y, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        formation.setOrientation(0.0f);
+        formation.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        for (Character c : IADeVProject.selectedCharacters) {
+        	formation.addCharacterToCharactersList(c);
+        }
+        formation.setSeparationDistance(150.0f);
+        formation.setComponentFormationOrientationMode(Formation.LOOK_OUTSIDE);
+        Iterator<Character> it = IADeVProject.selectedCharacters.iterator();
+        if (it.hasNext()) formation.setTeam(it.next().getTeam()); 
+        
+        IADeVProject.addToWorldObjectList(formation);
+	}
+
+	public static void applyCircularLookInSideFormation(Vector3 position) {
+		if (!checkIfCorrectPosition(position)){
+			System.out.println("Anchor position not allowed");
+			return;
+		}
+		CircularFormation formation = new CircularFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f);
+        formation.setBounds(position.x, position.y, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        formation.setOrientation(0.0f);
+        formation.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        for (Character c : IADeVProject.selectedCharacters) {
+        	formation.addCharacterToCharactersList(c);
+        }
+        formation.setSeparationDistance(150.0f);
+        formation.setComponentFormationOrientationMode(Formation.LOOK_INSIDE);
+        Iterator<Character> it = IADeVProject.selectedCharacters.iterator();
+        if (it.hasNext()) formation.setTeam(it.next().getTeam());
+        
+        IADeVProject.addToWorldObjectList(formation);
+	}
+	
+	public static void applyLineFormation(Vector3 position) {
+		if (!checkIfCorrectPosition(position)){
+			System.out.println("Anchor position not allowed");
+			return;
+		}
+		
+		LineFormation formation = new LineFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f);
+		formation.setBounds(position.x, position.y, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        formation.setOrientation(0.0f);
+        formation.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        for (Character c : IADeVProject.selectedCharacters) {
+        	formation.addCharacterToCharactersList(c);
+        }
+        formation.setSeparationDistance(150.0f);
+        formation.setComponentFormationOrientationMode(Formation.FREE_ORIENTATION);
+        Iterator<Character> it = IADeVProject.selectedCharacters.iterator();
+        if (it.hasNext()) formation.setTeam(it.next().getTeam());
+        
+        IADeVProject.addToWorldObjectList(formation);
+	}
+	
+	public static void applyStarLookOutSideFormation(Vector3 position) {
+		if (!checkIfCorrectPosition(position)){
+			System.out.println("Anchor position not allowed");
+			return;
+		}
+		
+		StarFormation formation = new StarFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f);
+		formation.setBounds(position.x, position.y, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        formation.setOrientation(0.0f);
+        formation.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        for (Character c : IADeVProject.selectedCharacters) {
+        	formation.addCharacterToCharactersList(c);
+        }
+        formation.setSeparationDistance(150.0f);
+        formation.setComponentFormationOrientationMode(Formation.LOOK_OUTSIDE);
+        Iterator<Character> it = IADeVProject.selectedCharacters.iterator();
+        if (it.hasNext()) formation.setTeam(it.next().getTeam());
+
+        IADeVProject.addToWorldObjectList(formation);
+	}
+	
+	public static void applyStarLookInSideFormation(Vector3 position) {
+		if (!checkIfCorrectPosition(position)){
+			System.out.println("Anchor position not allowed");
+			return;
+		}
+		
+		StarFormation formation = new StarFormation(new WeightedBlendArbitrator_Accelerated(200.0f, 200.0f), 50.0f);
+		formation.setBounds(position.x, position.y, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        formation.setOrientation(0.0f);
+        formation.setVelocity(new Vector3(0.0f,0.0f,0.0f));
+        for (Character c : IADeVProject.selectedCharacters) {
+        	formation.addCharacterToCharactersList(c);
+        }
+        formation.setSeparationDistance(150.0f);
+        formation.setComponentFormationOrientationMode(Formation.LOOK_INSIDE);
+        Iterator<Character> it = IADeVProject.selectedCharacters.iterator();
+        if (it.hasNext()) formation.setTeam(it.next().getTeam());
+        
+        IADeVProject.addToWorldObjectList(formation);
+	}
+
 	
 	/** MÉTODOS DE MOSTRAR POR CONSOLA **/
 	
@@ -295,7 +421,11 @@ public class UserInteraction {
 	public static void printMakeFormation() {
 		System.out.println();
 		System.out.println("/** MAKE FORMATION **/");
-		System.out.println("\t1) Return");
-		
+		System.out.println("\t1) Circular - Look outside");
+		System.out.println("\t2) Circular - Look inside");
+		System.out.println("\t3) Line");
+		System.out.println("\t4) Star - Look outside");
+		System.out.println("\t5) Star - Look inside");
+		System.out.println("\t6) Return");
 	}
 }

@@ -17,6 +17,7 @@ import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.Formation;
 
 public class WallAvoidance extends Seek_Accelerated {
 
@@ -295,13 +296,18 @@ public class WallAvoidance extends Seek_Accelerated {
 		float distance;
 		
 		for (WorldObject target : this.targets) {
-			distance = position.dst(target.getPosition());
-			// Comprobamos que la distancia sea distinta de 0 para que, si en la lista
-			// de 'targets' el está el propio personaje, no se tenga en cuenta como
-			// objetivo más cercano.
-			if (distance != 0 && distance < minDistance) {
-				obj = target;
-				minDistance = distance;
+			
+			// IMPORTANTE: SOLO CONSIDERAMOS AQUELLOS OBJETOS QUE NO SEAN FORMACIONES. PARA QUE NO CHOQUEN CON
+			// EL ANCLA DE UNA FORMACIÓN (YA QUE NO HAY PERSONAJE FÍSICO AHÍ)
+			if (!(target instanceof Formation)) {
+				distance = position.dst(target.getPosition());
+				// Comprobamos que la distancia sea distinta de 0 para que, si en la lista
+				// de 'targets' el está el propio personaje, no se tenga en cuenta como
+				// objetivo más cercano.
+				if (distance != 0 && distance < minDistance) {
+					obj = target;
+					minDistance = distance;
+				}
 			}
 		}
 		

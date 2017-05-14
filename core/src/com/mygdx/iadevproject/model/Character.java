@@ -407,11 +407,24 @@ public class Character extends WorldObject {
 	 * Método que realiza las acciones pertinentes cuando un personaje ha sido liberado (deseleccionado):
 	 * - Habilitar su rol.
 	 * - Inicializar de nuevo su rol.
+	 * Para las formaciones, este método es recursivo: recorre toda la lista de personajes y llama a esta
+	 * función para cada uno de los personajes.
 	 */
 	public void haveBeenReleased() {
-		this.enableRole();
-		if (this.role != null) {
-			this.initializeTacticalRole(this.role);
+		
+		if (this instanceof Formation) {
+			Formation formation = (Formation) this;
+			
+			for (Character c : formation.getCharactersList()) {
+				c.haveBeenReleased();
+			}
+			formation.clearCharactersList();
+			
+		} else {
+			this.enableRole();
+			if (this.role != null) {
+				this.initializeTacticalRole(this.role);
+			}
 		}
 	}
 }

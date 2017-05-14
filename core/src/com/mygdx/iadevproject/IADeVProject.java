@@ -29,10 +29,12 @@ import com.mygdx.iadevproject.aiTactical.roles.DefensiveSoldier;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
+import com.mygdx.iadevproject.mapOfInfluence.SimpleMapOfInfluence;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.Formation;
 import com.mygdx.iadevproject.waypoints.Waypoints;
  
 public class IADeVProject extends ApplicationAdapter {
@@ -72,6 +74,8 @@ public class IADeVProject extends ApplicationAdapter {
 	public static Map<Team, Rectangle> manantials;			// Manantiales de los equipos. Cada equipo tiene su manantial.
     public static TiledMapRenderer tiledMapRenderer;			// Renderer del mapa
     public static InputProcessorIADeVProject inputProcessor;		// InputProcessor
+    public static boolean paused;							// Refleja que el juego está pausado
+    public static boolean showInfluenceMap;					// Refleja que se muestra el mapa de influencia sobre el mapa completo
     
     // *********************************************************************************
     // Equipo LDANIEL (el de arriba)
@@ -110,6 +114,7 @@ public class IADeVProject extends ApplicationAdapter {
 		font 					= new BitmapFont();
 		batch 					= new SpriteBatch();
 		renderer 				= new ShapeRenderer();	
+		paused 					= false;
 		
 		float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -155,10 +160,15 @@ public class IADeVProject extends ApplicationAdapter {
         bucket.initializeTacticalRole(new DefensiveSoldier());
         
         IADeVProject.addToWorldObjectList(drop, bucket);
+        
+        SimpleMapOfInfluence.initializeSimpleMapOfInfluence();
 	}
 	
 	@Override
 	public void render() {
+		// Si el juego está pausado, no hacemos nada
+		if (paused) return;
+		
 		// Cada vez que renderiza, indicamos al InputProcessor que procese si hay una tecla pulsada. Esto se hace aquí
         // porque InputProcessor no tiene ningún método para indicar que se mantiene pulsada una tecla. Nosotros queremos
         // que mientras se pulse una de las teclas de movimiento de la cámara, la cámara se mueva sin tener que estar pulsando
@@ -183,6 +193,13 @@ public class IADeVProject extends ApplicationAdapter {
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
         
         drawHealthOfWorldCharacters(); // Dibujamos la vida de todos los personajes del mundo  
+        
+        SimpleMapOfInfluence.updateSimpleMapOfInfluence();
+        
+        if (showInfluenceMap) {
+            SimpleMapOfInfluence.drawInfluenceMap(renderer, 32, 0, 0, false);        	
+        }
+        SimpleMapOfInfluence.drawInfluenceMap(renderer, 10, 2048, 0, true);
 	}
 
 	@Override
@@ -374,6 +391,12 @@ public class IADeVProject extends ApplicationAdapter {
 		for (Character c : selectedCharacters) {
 			// Indicamos que el personaje ha sido deseleccionado
 			c.haveBeenReleased();
+			
+			if (c instanceof Formation) {
+				// Y si el personaje es una formación, la eliminamos de los objetos
+				// del mundo.
+				worldObjects.remove(c);
+			}
 		}
 		// Limpiamos la lista de personajes seleccionados
 		selectedCharacters.clear();
@@ -391,9 +414,9 @@ public class IADeVProject extends ApplicationAdapter {
 			clearSelectedCharactersList();
 		}
 		// Indicamos que el personaje ha sido seleccionado.
-		obj.haveBeenSelected();
+		Character c = obj.haveBeenSelected();
 		// Lo añadimos a la lista de seleccionados
-		selectedCharacters.add(obj);
+		selectedCharacters.add(c);
 	}
 
 	

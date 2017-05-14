@@ -10,6 +10,7 @@ import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.Formation;
 
 public class CollisionAvoidance implements Behaviour {
 	
@@ -57,36 +58,40 @@ public class CollisionAvoidance implements Behaviour {
 		// Recorremos los posibles objetivos 
 		for (WorldObject tar : targets) {
 			
-			// Calculamos el tiempo de colisión
-			Vector3 relativePos = new Vector3(tar.getCenterOfMass());
-			relativePos.sub(source.getCenterOfMass());
-			
-			Vector3 relativeVel = new Vector3(tar.getVelocity());
-			relativeVel.sub(source.getVelocity());
-			
-			float relativeSpeed = relativeVel.len();
-			float timeToCollision = - ((relativePos.dot(relativeVel)) / (relativeSpeed * relativeSpeed));
-			
-			// Comprobamos si va a haber una colisión
-			float distance = relativePos.len();
-			// Calculamos la distancia más pequeña
-			float minSeparation = distance - relativeSpeed * timeToCollision;
-			
-			// Comprobamos si hay colisión entre el personaje y el objetivo. Hay colisión si la separación
-			// mínima es menor que la suma de los radios de los personajes.
-			float sumRadius = (source.getBoundingRadius() + tar.getBoundingRadius());
-			if (minSeparation <= sumRadius) {
+			// IMPORTANTE: SOLO CONSIDERAMOS AQUELLOS OBJETOS QUE NO SEAN FORMACIONES. PARA QUE NO CHOQUEN CON
+			// EL ANCLA DE UNA FORMACIÓN (YA QUE NO HAY PERSONAJE FÍSICO AHÍ)
+			if (!(tar instanceof Formation)) {	
+				// Calculamos el tiempo de colisión
+				Vector3 relativePos = new Vector3(tar.getCenterOfMass());
+				relativePos.sub(source.getCenterOfMass());
 				
-				// Si hay colisión, tenemos que comprobar si la colisión se produce antes que las anteriores
-				if (timeToCollision > 0 && timeToCollision < shortestTime) {
+				Vector3 relativeVel = new Vector3(tar.getVelocity());
+				relativeVel.sub(source.getVelocity());
+				
+				float relativeSpeed = relativeVel.len();
+				float timeToCollision = - ((relativePos.dot(relativeVel)) / (relativeSpeed * relativeSpeed));
+				
+				// Comprobamos si va a haber una colisión
+				float distance = relativePos.len();
+				// Calculamos la distancia más pequeña
+				float minSeparation = distance - relativeSpeed * timeToCollision;
+				
+				// Comprobamos si hay colisión entre el personaje y el objetivo. Hay colisión si la separación
+				// mínima es menor que la suma de los radios de los personajes.
+				float sumRadius = (source.getBoundingRadius() + tar.getBoundingRadius());
+				if (minSeparation <= sumRadius) {
 					
-					// Si se produce antes que los ya vistos, entonces actualizamos los valores para utilizarlos después en el cálculo
-					// del steering:
-					shortestTime 		= timeToCollision;
-					firstTarget 		= tar;
-					firstMinSeparation 	= minSeparation;
-					firstDistance 		= distance;
-					firstSumRadius 		= sumRadius;
+					// Si hay colisión, tenemos que comprobar si la colisión se produce antes que las anteriores
+					if (timeToCollision > 0 && timeToCollision < shortestTime) {
+						
+						// Si se produce antes que los ya vistos, entonces actualizamos los valores para utilizarlos después en el cálculo
+						// del steering:
+						shortestTime 		= timeToCollision;
+						firstTarget 		= tar;
+						firstMinSeparation 	= minSeparation;
+						firstDistance 		= distance;
+						firstSumRadius 		= sumRadius;
+					}
 				}
 			}
 		}
