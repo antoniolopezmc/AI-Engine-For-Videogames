@@ -64,23 +64,23 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		case Input.Keys.Q:					// Acercar la cámara
 			IADeVProject.camera.zoom -= 0.02;
 			break;
-		case Input.Keys.P:
-			IADeVProject.paused = true;
+		case Input.Keys.P:					// Pausar el juego
+			IADeVProject.paused = true;		
 			break;
-		case Input.Keys.O:
-			IADeVProject.paused = false;
+		case Input.Keys.O:					// Reanudar el juego
+			IADeVProject.paused = false;	
 			break;
-		case Input.Keys.I:
+		case Input.Keys.I:					// Mostrar mapa de influencia encima del mapa
 			IADeVProject.showInfluenceMap = true;
 			break;
-		case Input.Keys.U:
+		case Input.Keys.U:					// Ocultar el mapa
 			IADeVProject.showInfluenceMap = false;
 			break;
-		case Input.Keys.X:
+		case Input.Keys.X:					// Deshabilitar que haya ganador
 			IADeVProject.canBeThereWinner = false;
 			IADeVProject.paused = false;
 			break;
-		case Input.Keys.Z:
+		case Input.Keys.Z:					// Habilitar que haya ganador
 			IADeVProject.canBeThereWinner = true;
 			break;
 		default:
