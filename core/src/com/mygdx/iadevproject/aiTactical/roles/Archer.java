@@ -19,6 +19,8 @@ public abstract class Archer implements TacticalRole {
 	private static float ARCHER_ATTACK_MAX_DISTANCE = 250.0f;
 	// Vida que quita este personaje al atacar.
 	private static float ARCHER_ATTACK_DAMAGE_TO_DONE = 25.0f;
+	// Máxima velocidad del arquero.
+	private static float ARCHER_MAX_SPEED = 50.0f;
 
 	@Override
 	public float getVelocityFactor(Ground ground) {
@@ -56,4 +58,7 @@ public abstract class Archer implements TacticalRole {
 		return ARCHER_ATTACK_DAMAGE_TO_DONE;
 	}
 
+	public float getMaxSpeed() {
+		return ARCHER_MAX_SPEED;
+	}
 }

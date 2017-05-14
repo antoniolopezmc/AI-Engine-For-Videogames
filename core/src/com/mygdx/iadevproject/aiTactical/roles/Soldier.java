@@ -19,6 +19,8 @@ public abstract class Soldier implements TacticalRole {
 	private static float SOLDIER_ATTACK_MAX_DISTANCE = 100.0f;
 	// Vida que quita este personaje al atacar.
 	private static float SOLDIER_ATTACK_DAMAGE_TO_DONE = 50.0f;
+	// Máxima velocidad del soldado.
+	private static float SOLDIER_MAX_SPEED = 30.0f;
 
 	@Override
 	public float getVelocityFactor(Ground ground) {
@@ -56,4 +58,7 @@ public abstract class Soldier implements TacticalRole {
 		return SOLDIER_ATTACK_DAMAGE_TO_DONE;
 	}
 
+	public float getMaxSpeed() {
+		return SOLDIER_MAX_SPEED;
+	}
 }
