@@ -63,6 +63,17 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		case Input.Keys.Q:					// Acercar la cámara
 			IADeVProject.camera.zoom -= 0.02;
 			break;
+		case Input.Keys.P:
+			IADeVProject.paused = true;
+			break;
+		case Input.Keys.O:
+			IADeVProject.paused = false;
+			break;
+		case Input.Keys.I:
+			IADeVProject.showInfluenceMap = true;
+			break;
+		case Input.Keys.U:
+			IADeVProject.showInfluenceMap = false;
 		default:
 			processState(keycode);
 			break;

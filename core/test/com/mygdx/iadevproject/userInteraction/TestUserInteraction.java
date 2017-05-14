@@ -19,6 +19,7 @@ import com.mygdx.iadevproject.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.aiTactical.roles.DefensiveSoldier;
 import com.mygdx.iadevproject.checksAndActions.Checks;
+import com.mygdx.iadevproject.mapOfInfluence.SimpleMapOfInfluence;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
@@ -95,6 +96,9 @@ public class TestUserInteraction extends ApplicationAdapter {
 	
 	@Override
 	public void render() {
+		// Si el juego está pausado, no hacemos nada
+		if (IADeVProject.paused) return;
+		
 		// Cada vez que renderiza, indicamos al InputProcessor que procese si hay una tecla pulsada. Esto se hace aquí
         // porque InputProcessor no tiene ningún método para indicar que se mantiene pulsada una tecla. Nosotros queremos
         // que mientras se pulse una de las teclas de movimiento de la cámara, la cámara se mueva sin tener que estar pulsando
@@ -121,6 +125,12 @@ public class TestUserInteraction extends ApplicationAdapter {
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
         
         drawHealthOfWorldCharacters(); // Dibujamos la vida de todos los personajes del mundo
+        
+        SimpleMapOfInfluence.updateSimpleMapOfInfluence();
+        if (IADeVProject.showInfluenceMap) {
+            SimpleMapOfInfluence.drawInfluenceMap(renderer, 32, 0, 0, false);        	
+        }
+        SimpleMapOfInfluence.drawInfluenceMap(renderer, 10, 2048, 0, true);
 	}
 
 	@Override

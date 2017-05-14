@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="64" height="64" tilewidth="32" tileheight="32" nextobjectid="895">
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="64" height="64" tilewidth="32" tileheight="32" nextobjectid="897">
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="256" columns="16">
   <image source="tileset.png" width="512" height="512"/>
  </tileset>
@@ -1533,18 +1533,9 @@
   <object id="776" gid="253" x="1216" y="608" width="32" height="32"/>
   <object id="777" gid="81" x="864" y="1440" width="32" height="32"/>
   <object id="778" gid="253" x="1632" y="608" width="32" height="32"/>
-  <object id="779" gid="238" x="1200" y="1345" width="32" height="32"/>
   <object id="780" gid="254" x="1200" y="1377" width="32" height="32"/>
-  <object id="781" gid="237" x="593" y="1397" width="32" height="32"/>
-  <object id="782" gid="221" x="592" y="1365" width="32" height="32"/>
   <object id="785" gid="252" x="657" y="659" width="32" height="32"/>
-  <object id="786" gid="236" x="656" y="626" width="32" height="32"/>
   <object id="787" gid="238" x="785" y="465" width="32" height="32"/>
-  <object id="788" gid="254" x="785" y="498" width="32" height="32"/>
-  <object id="789" gid="239" x="1906" y="494.333" width="32" height="32"/>
-  <object id="790" gid="240" x="1938.33" y="494.333" width="32" height="32"/>
-  <object id="791" gid="255" x="1906.33" y="526.333" width="32" height="32"/>
-  <object id="792" gid="256" x="1938.33" y="526.333" width="32" height="32"/>
   <object id="793" gid="133" x="1952" y="96" width="32" height="32"/>
   <object id="794" gid="117" x="1952" y="64" width="32" height="32"/>
   <object id="795" gid="118" x="1984" y="64" width="32" height="32"/>
@@ -1643,5 +1634,7 @@
   <object id="890" gid="253" x="1600" y="544" width="32" height="32"/>
   <object id="891" gid="253" x="1600" y="576" width="32" height="32"/>
   <object id="892" gid="253" x="1600" y="608" width="32" height="32"/>
+  <object id="895" gid="253" x="591.333" y="1359.33" width="32" height="32"/>
+  <object id="896" gid="253" x="1935" y="529" width="32" height="32"/>
  </objectgroup>
 </map>
