@@ -127,8 +127,7 @@ public class CircularFormation extends Formation {
 			map.put(42.0f, new Cure(source, health_cure));
 		}
 		
-		// IMPORTANTE -> Además de todo lo anterior, los componentes de una formación no deben chocarse y deben mirar hacia adelantes AL ANDAR (otra cosa es cuando se paren).
-		map.put(50.0f, new LookingWhereYouGoing(source, 30.0f, 30.0f, 5.0f, 10.0f, 1.0f)); // Lo segundo más prioritario.
+		// IMPORTANTE -> Además de todo lo anterior, los componentes de una formación no deben chocarse.
 		map.put(60.0f, new WallAvoidance(source, 300.0f, IADeVProject.worldObjects, 100.0f, 20.0f, 100.0f));
 		map.put(61.0f, new CollisionAvoidance(source, IADeVProject.worldObjects, 200.0f));
 		

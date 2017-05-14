@@ -27,6 +27,10 @@ public class PointToPoint_LRTA_star {
 	// Matriz de distancias hacia el objetivo.
 	private float[][] distancesMatrix;
 	
+	// Flag que indica si el algoritmo LRTA* debe usar información táctica (la matriz de influencia, por ejemplo). Por defecto, no se usa.
+	// ESTE FLAG SE PUEDE IR ACTIVANDO O DESACTIVANDO SOBRE LA MARCHA.
+	private boolean tacticalInformation;
+	
 	// Constructor.
 	public PointToPoint_LRTA_star(int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xGoal, int yGoal) {
 		this.map_of_costs = map_of_costs;
@@ -135,4 +139,17 @@ public class PointToPoint_LRTA_star {
 		return result;
 	}
 	
+	/**
+	 * Método para habilitar el uso de información táctica en el algoritmo LRTA*.
+	 */
+	public void useTactialInformation() {
+		this.tacticalInformation = true;
+	}
+	
+	/**
+	 * Método para deshabilitar el uso de información táctica en el algoritmo LRTA*.
+	 */
+	public void notUseTacticalInformation() {
+		this.tacticalInformation = false;
+	}
 }

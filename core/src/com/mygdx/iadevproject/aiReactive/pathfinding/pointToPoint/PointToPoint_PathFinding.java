@@ -43,8 +43,13 @@ public class PointToPoint_PathFinding {
 	// Anchura y altura DEL GRID (del mapa de costes).
 	private int matrix_width, matrix_height;
 	
-	// El pathfinding también debe almacenar el objeto de tipo 'PointToPoint_LRTA_star lrta_star', para no ir recalculando cada vez que se llame.
+	// El pathfinding también debe almacenar el objeto de tipo 'PointToPoint_LRTA_star', para no crearlo cada vez que se llame.
 	private PointToPoint_LRTA_star lrta_star;
+	
+	// Flag que indica si el pathfinding debe usar información táctica (la matriz de influencia, por ejemplo). Por defecto, no se usa.
+	// IMPORTANTE -> En el caso concreto de la matriz de influencia, NO SE DEBE ALMACENAR COMO ATRIBUTO, ya que está matriz estará cambiando continuamente.
+	// ESTE FLAG SE PUEDE IR ACTIVANDO O DESACTIVANDO SOBRE LA MARCHA.
+	private boolean tacticalInformation;
 	
 	/**
 	 * Constructor de la clase pathfinding.
@@ -100,6 +105,8 @@ public class PointToPoint_PathFinding {
 		this.objetivoActual = new Vector3(IADeVProject.mapPositionTOgridPosition(grid_cell_size, this.source.getPosition()));
 		
 		lrta_star = new PointToPoint_LRTA_star(map_of_costs, this.distance, matrix_width, matrix_height, xGoal, yGoal);
+		
+		this.tacticalInformation = false;
 	}
 
 	/**
@@ -146,6 +153,13 @@ public class PointToPoint_PathFinding {
 		}
 		// Si ya hemos llegado y el punto no es el final, seguimos con la ejecución del pathfinding.
 	
+		// Comprobamos si debe usarse información táctica.
+		if (tacticalInformation) {
+			lrta_star.useTactialInformation();
+		} else {
+			lrta_star.notUseTacticalInformation();
+		}
+		
 		// Ahora, aplicamos el algoritmo LRTA*.
 		Vector3 vector3 = lrta_star.applyLRTA_start((int)objetivoActual.x, (int)objetivoActual.y);
 		
@@ -161,5 +175,19 @@ public class PointToPoint_PathFinding {
 		
 		return list;
 		
+	}
+	
+	/**
+	 * Método para habilitar el uso de información táctica en el pathfinding.
+	 */
+	public void useTactialInformation() {
+		this.tacticalInformation = true;
+	}
+	
+	/**
+	 * Método para deshabilitar el uso de información táctica en el pathfinding.
+	 */
+	public void notUseTacticalInformation() {
+		this.tacticalInformation = false;
 	}
 }
