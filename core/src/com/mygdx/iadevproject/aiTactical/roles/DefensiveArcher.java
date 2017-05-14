@@ -48,11 +48,11 @@ public class DefensiveArcher extends Archer {
 		if (this.stateMachine == null) {
 			// Creamos la máquina de estados con el personaje pasado como parámetro
 			this.stateMachine = new DefaultStateMachine<Character, State<Character>>(source);
-			// Establecemos el estado inicial como reservar waypoint
-			this.stateMachine.setInitialState(this.bookWaypoint);
-			// Actualizamos la máquina de estados.
-			this.stateMachine.update();
 		}
+		// Establecemos el estado inicial como reservar waypoint
+		this.stateMachine.setInitialState(this.bookWaypoint);
+		// Actualizamos la máquina de estados.
+		this.stateMachine.update();
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class DefensiveArcher extends Archer {
 			// Estamos en el estado -> Patrullar mi waypoint
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
-			if (Checks.areThereEnemiesNear(source) && !Checks.amIFarFromMyWayPoint(source)) {
+			if (!Checks.amIFarFromMyWayPoint(source) && Checks.areThereEnemiesNear(source)) {
 				// Si hay enemigos cerca Y no estoy lejos de mi waypoint, cambio al estado -> Atacar a los enemigos
 				this.stateMachine.changeState(this.attackEnemies);
 			
@@ -104,7 +104,7 @@ public class DefensiveArcher extends Archer {
 			// Estamos en el estado -> Atacar a los enemigos 
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
-			if (!Checks.areThereEnemiesNear(source) || Checks.amIFarFromMyWayPoint(source)) {
+			if (Checks.amIFarFromMyWayPoint(source) || !Checks.areThereEnemiesNear(source)) {
 				// Si no hay enemigos cerca o estoy lejos de mi waypoint, cambio al estado -> Patrullar el waypoint
 				this.stateMachine.changeState(this.patrolMyWayPoint);
 				

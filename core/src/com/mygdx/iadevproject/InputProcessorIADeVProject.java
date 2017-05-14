@@ -1,11 +1,16 @@
 package com.mygdx.iadevproject;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.userInteraction.UserInteraction;
+import com.mygdx.iadevproject.checksAndActions.Checks;
 import com.mygdx.iadevproject.model.Character;
 
 /**
@@ -80,17 +85,36 @@ public class InputProcessorIADeVProject implements InputProcessor {
 				processJustSelectedCharacters(keycode);
 				break;
 			case ACCELERATED:
-				if (target == null) return;
+				if (target == null) {
+					System.out.println("You must select a character.");
+					return;
+				}
 				processAccelerated(keycode);
 				break;
 			case DELEGATED:
-				if (target == null) return;
+				if (target == null) { 
+					System.out.println("You must select a character.");
+					return;
+				}
 				processDelegated(keycode);
 				break;
 			case GROUP:
+				if (target == null) {
+					System.out.println("You must select a character.");
+					return;
+				} else if (!IADeVProject.selectedCharacters.contains(target)) {
+					// Si el personaje seleccionado no estaba seleccionado ya, mostrarmos
+					// mensaje de error.
+					System.out.println("The selected characters is not in selected characters list.");	
+					return;
+				}
 				processGroup(keycode);
 				break;
 			case OTHERS:
+				if (target == null) {
+					System.out.println("You must select a character.");
+					return;
+				}
 				processOthers(keycode);
 				break;
 			case MAKE_FORMATION:
@@ -120,10 +144,12 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			break;
 		case Input.Keys.NUM_3: // Apply group behaviours
 			UserInteraction.printGroupBehaviours();
+			System.out.println("Select the character (it must have been selected yet) with which you want to apply the behaviour");
 			state = UserState.GROUP;
 			break;
 		case Input.Keys.NUM_4: // Others behaviours
 			UserInteraction.printOthersBehaviours();
+			System.out.println("Select the character with which you want to apply the behaviour");
 			state = UserState.OTHERS;
 			break;
 		case Input.Keys.NUM_5: // Make formation
@@ -133,6 +159,17 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		default:
 			return;
 		}
+	}
+	
+	/**
+	 * Método que encapsula las acciones que se aplica cuando se quiere volver en las acciones
+	 * del usuario.
+	 */
+	private void returnActions() {
+		state = UserState.JUST_SELECTED_CHARACTERS;
+		IADeVProject.resetSelectedCharacters();
+		UserInteraction.printPossibleUserActions();
+		this.target = null;
 	}
 	
 	/**
@@ -166,8 +203,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			UserInteraction.applyVelocityMatching(target);
 			break;
 		case Input.Keys.NUM_7: // Return
-			state = UserState.JUST_SELECTED_CHARACTERS;
-			UserInteraction.printPossibleUserActions();
+			returnActions();
 			break;
 		default:
 			break;
@@ -205,8 +241,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			UserInteraction.applyWander();
 			break;
 		case Input.Keys.NUM_7: // Return
-			state = UserState.JUST_SELECTED_CHARACTERS;
-			UserInteraction.printPossibleUserActions();
+			returnActions();
 			break;
 		default:
 			break;
@@ -218,16 +253,24 @@ public class InputProcessorIADeVProject implements InputProcessor {
 	 * @param keycode tecla pulsada
 	 */
 	private void processGroup(int keycode) {
+		List<WorldObject> list;
 		switch (keycode) {
 		case Input.Keys.NUM_1: // Cohesion
 			System.out.println("1) Cohesion");
+			// Creamos la lista de personajes a las que aplicar el comportamiento quitando el personaje seleccionado
+			list = new LinkedList<WorldObject>(IADeVProject.selectedCharacters);
+			list.remove(target);
+			UserInteraction.applyCohesion(target, list);
 			break;
 		case Input.Keys.NUM_2: // Separation
 			System.out.println("2) Separation");
+			// Creamos la lista de personajes a las que aplicar el comportamiento quitando el personaje seleccionado
+			list = new LinkedList<WorldObject>(IADeVProject.selectedCharacters);
+			list.remove(target);
+			UserInteraction.applySeparation(target, list);
 			break;
 		case Input.Keys.NUM_3: // Return
-			state = UserState.JUST_SELECTED_CHARACTERS;
-			UserInteraction.printPossibleUserActions();
+			returnActions();
 			break;
 		default:
 			break;
@@ -242,13 +285,14 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		switch (keycode) {
 		case Input.Keys.NUM_1: // Attack
 			System.out.println("1) Attack");
+			UserInteraction.applyAttack(target);
 			break;
 		case Input.Keys.NUM_2: // Cure
 			System.out.println("2) Cure");
+			UserInteraction.applyCure();
 			break;
 		case Input.Keys.NUM_3: // Return
-			state = UserState.JUST_SELECTED_CHARACTERS;
-			UserInteraction.printPossibleUserActions();
+			returnActions();
 			break;
 		default:
 			break;
@@ -262,8 +306,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 	private void processMakeFormation(int keycode) {
 		switch (keycode) {
 		case Input.Keys.NUM_1: // Return
-			state = UserState.JUST_SELECTED_CHARACTERS;
-			UserInteraction.printPossibleUserActions();
+			returnActions();
 			break;
 		default:
 			break;
@@ -288,12 +331,15 @@ public class InputProcessorIADeVProject implements InputProcessor {
 				Character character = getCharacterOfPosition(touchPos);
 				
 				if (character != null) {
-					// Si se ha pinchado sobre él, añadimos a la lista de objetos seleccionados
-					IADeVProject.addToSelectedCharactersList(character);
-					// Mostramos las posibles acciones del usuario
-					UserInteraction.printPossibleUserActions();
-					// Cambiamos de estado
-					state = UserState.JUST_SELECTED_CHARACTERS;
+					if (isItSameTeamOfSelectedTeam(character)) {
+						// Si el personaje es del mismo equipo que la lista de personajes seleccionados, lo incluimos.
+						// Si se ha pinchado sobre él, añadimos a la lista de objetos seleccionados
+						IADeVProject.addToSelectedCharactersList(character);
+						// Mostramos las posibles acciones del usuario
+						UserInteraction.printPossibleUserActions();
+						// Cambiamos de estado
+						state = UserState.JUST_SELECTED_CHARACTERS;
+					}
 				}
 			} else {
 				// Si estamos ejecutando algún comportamiento, obtenemos el personaje que se ha seleccionado
@@ -312,6 +358,23 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		}
 		
 		// Devolvemos true indicando que se ha procesado el evento
+		return true;
+	}
+	
+	/**
+	 * Método que comprueba si el personaje 'target' es del mismo equipo que los personajes
+	 * seleccionados. 
+	 * @param target Personaje que se acaba de seleccionar
+	 * @return true si es del mismo equipo o la lista de personajes seleccionados está vacía, false en caso contrario.
+	 */
+	private static boolean isItSameTeamOfSelectedTeam(Character target) {
+		Iterator<Character> it = IADeVProject.selectedCharacters.iterator();
+		
+		while (it.hasNext()) {
+			Character next = it.next();
+			return Checks.isItFromMyTeam(next, target);
+		}
+		
 		return true;
 	}
 	

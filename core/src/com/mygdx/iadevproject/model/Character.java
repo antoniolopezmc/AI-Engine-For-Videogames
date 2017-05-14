@@ -385,19 +385,33 @@ public class Character extends WorldObject {
 	 * - Deshabilita su rol.
 	 * - Limpiamos su lista de comportamientos.
 	 * - Pone su velocidad (normal y angular) a 0.
+	 * Dado que cuando se selecciona un elemento de una formación, se ha de seleccionar toda la formación
+	 * este método comprueba si el personaje está en una formación, devuelve el objeto formación al que
+	 * pertenece. Si no está en una formación, devuelve a sí mismo.
+	 * @return Personaje que ha sido seleccionado o objeto formación que lo contiene.
 	 */
-	public void haveBeenSelected() {
-		this.disableRole();
-		this.listBehaviour.clear();
-		this.setVelocity(new Vector3(0,0,0));
-		this.setRotation_angularSpeed(0.0f);
+	public Character haveBeenSelected() {
+		if (this.isInFormation()) {
+			return this.formation.haveBeenSelected();
+		} else {
+			this.disableRole();
+			this.listBehaviour.clear();
+			this.setVelocity(new Vector3(0,0,0));
+			this.setRotation_angularSpeed(0.0f);
+			
+			return this;	
+		}
 	}
 	
 	/**
 	 * Método que realiza las acciones pertinentes cuando un personaje ha sido liberado (deseleccionado):
 	 * - Habilitar su rol.
+	 * - Inicializar de nuevo su rol.
 	 */
 	public void haveBeenReleased() {
 		this.enableRole();
+		if (this.role != null) {
+			this.initializeTacticalRole(this.role);
+		}
 	}
 }

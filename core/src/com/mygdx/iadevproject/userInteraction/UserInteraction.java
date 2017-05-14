@@ -15,10 +15,14 @@ import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Persue;
+import com.mygdx.iadevproject.aiReactive.behaviour.group.Cohesion;
+import com.mygdx.iadevproject.aiReactive.behaviour.group.Separation;
 import com.mygdx.iadevproject.aiReactive.pathfinding.continuous.Continuous_PathFinding;
+import com.mygdx.iadevproject.aiTactical.roles.TacticalRole;
 import com.mygdx.iadevproject.checksAndActions.Actions;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.model.Character;
+import com.mygdx.iadevproject.model.WorldObject;
 
 public class UserInteraction {
 
@@ -151,6 +155,46 @@ public class UserInteraction {
 	
 	
 	
+	/** GROUP BEHAVIOURS **/
+	public static void applyCohesion(Character source, List<WorldObject> targets) {
+		// Establecemos la lista de comportamientos de no colisionar
+		source.setListBehaviour(Actions.notCollide(200.0f, source));
+		// Creamos el comportamiento y se lo añadimos al personaje
+		// IMPORTANTE: SE LE PONE EL VALOR DE threshold a 3000.0f para que tenga en cuenta
+		// todo el mapa y esté donde esté el personaje, realice el comportamiento.
+		source.addToListBehaviour(new Cohesion(source, targets, 50.0f, 3000.0f));
+	}
+	
+	public static void applySeparation(Character source, List<WorldObject> targets) {
+		// Establecemos la lista de comportamientos de no colisionar
+		source.setListBehaviour(Actions.notCollide(200.0f, source));
+		// Creamos el comportamiento y se lo añadimos al personaje
+		// Para más información, váyase al test del Separation. Gracias =D
+		source.addToListBehaviour(new Separation(source, 20.0f, targets, 300.0f, 10000.0f));
+	}
+	
+	
+	
+	/** OTHERS BEHAVIOURS **/
+	public static void applyAttack(Character target) {
+		for (Character source : IADeVProject.selectedCharacters) {
+			// Establecemos la lista de comportamientos de no colisionar
+			source.setListBehaviour(Actions.notCollide(200.0f, source));
+			// Creamos el comportamiento y se lo añadimos al personaje
+			source.getListBehaviour().putAll(Actions.attack(source, target, source.getRole().getDamageToDone(), source.getRole().getMaxDistanceOfAttack()));
+			// Cuando atacamos, vamos a por él.
+			source.getListBehaviour().putAll(Actions.arrive(30.0f, source, target, 30.0f));
+		}
+	}
+	
+	public static void applyCure() {
+		for (Character source : IADeVProject.selectedCharacters) {
+			// Establecemos la lista de comportamientos de no colisionar
+			source.setListBehaviour(Actions.notCollide(200.0f, source));
+			// Creamos el comportamiento y se lo añadimos al personaje
+			source.getListBehaviour().putAll(Actions.cure(source, TacticalRole.health_cure));
+		}
+	}
 	
 	
 	/** MÉTODOS DE MOSTRAR POR CONSOLA **/
@@ -241,7 +285,7 @@ public class UserInteraction {
 		System.out.println();
 		System.out.println("/** OTHERS BEHAVIOURS **/");
 		System.out.println("\t1) Attack");
-		System.out.println("\t2) Cure");
+		System.out.println("\t2) Healing spell");
 		System.out.println("\t3) Return");
 	}
 	
