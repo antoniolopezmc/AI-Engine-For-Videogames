@@ -1,6 +1,5 @@
 package com.mygdx.iadevproject.mapOfInfluence;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
