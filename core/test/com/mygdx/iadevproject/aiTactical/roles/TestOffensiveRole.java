@@ -22,6 +22,7 @@ import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.checksAndActions.Checks;
+import com.mygdx.iadevproject.checksAndActions.MoralPoints;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
@@ -272,7 +273,7 @@ public class TestOffensiveRole extends ApplicationAdapter {
         Waypoints.drawWaypointsOfBases(); // Dibujamos los waypoints de ambas bases.
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
         drawHealthOfWorldCharacters(); // Dibujamos la vida de todos los personajes del mundo
-        Checks.drawMoralPointsOfBases(batch, font);
+        MoralPoints.drawMoralPointsOfBases(batch, font);
 	}
 
 	@Override

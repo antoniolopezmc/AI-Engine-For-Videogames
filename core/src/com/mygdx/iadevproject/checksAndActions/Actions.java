@@ -204,6 +204,7 @@ public class Actions {
 	 * @return El comportamiento correspondiente esta acción.
 	 */
 	public static Map<Float, Behaviour> patrolYourBase(float weight, Character source, float maxAcceleration) {
+		
 		Map<Float, Behaviour> map = createListBehaviour();
 		// Obtenemos los waypoints de la base del personaje a patrullar.
 		List<Vector3> pointsList = Waypoints.getWaypointsOfMyBase(source);

@@ -3,9 +3,12 @@ package com.mygdx.iadevproject.mapOfInfluence;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
+import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.Formation;
@@ -13,7 +16,7 @@ import com.mygdx.iadevproject.model.Character;
 
 /**
  * Muy importante.
- * Para usar el mapa de influencia en el pathfinding táctico, habría que pasar el mapa DEL EQUIPO CONTRARÍA.
+ * Para usar el mapa de influencia en el pathfinding táctico, habría que pasar el mapa DEL EQUIPO CONTRARIO.
  * El pathfinding debe tener en cuenta la influencia de equipo rival (coste añadido) para NO IR por esas zonas.
  * No tiene sentido usar el pathfinding de mi propio equipo, ya que estaría penalizando las zonas controladas por mí. 
  *
@@ -47,7 +50,7 @@ public class SimpleMapOfInfluence {
 	// 	Tras realizar esta operación, el color final se elije en función del equipo que domina la casilla (valor máximo recordado) y en función del valor de la resta obtenido (tono final de color en función del valor de la resta).
 	
 	/**
-	 * Método que devuelve la matriz de influencia concreta de un personaje de entrada (según su equipo).
+	 * Método que devuelve la matriz de influencia concreta de un personaje de entrada (según su equipo). ¡¡SIN TENER EN CUENTA AL EQUIPO RIVAL!!.
 	 * @param source Personaje de entrada.
 	 * @return matriz de influencia correspondiente al equipo de ese personaje.
 	 */
@@ -156,11 +159,69 @@ public class SimpleMapOfInfluence {
 	}
 	
 	/**
-	 * Método para dibujar el mapa de influencia final.
-	 * @param renderer Renderer sobre el que dibujar.
+	 * Método para dibujar el mapa de influencia final. SE TENDRÁN EN CUENTA LOS MAPAS DE AMBOS BANDOS.
+	 * @param renderer Renderer.
+	 * @param output_grid_cell_size Lado de cada uno de los cuadraditos que se dibujará.
+	 * @param positionX Posición X de la esquina inferior izquierda del mapa de influencia.
+	 * @param positionY Posición Y de la esquina inferior izquierda del mapa de influencia.
+	 * @param filled true para que los cuadrados se rellenen, false para que no.
 	 */
 	// Se dibujarán CUADRADOS de distinto color.
-	public static void drawInfluenceMap (ShapeRenderer renderer) {
+	public static void drawInfluenceMap (ShapeRenderer renderer, int output_grid_cell_size, float positionX, float positionY, boolean filled) {
+		// IMPORTANTE. Por cada equipo habrá 5 colores. 5 tonos de azul (equipo LDANIEL) y 5 tonos de rojo (equipo FJAVIER). A parte, un color neutral que será en blanco.
+		// Inicializamos los colores. LOS VALORES ESTÁN ENTRE 0 y 1.
+		Color neutral = new Color(1, 1, 1, 0);
+		Color[] ldaniel = new Color[5];
+		ldaniel[4] = new Color(0, 0, 139/255.0f, 0);
+		ldaniel[3] = new Color(16.0f/255.0f, 78.0f/255.0f, 139.0f/255.0f, 0);
+		ldaniel[2] = new Color(24.0f/255.0f, 116.0f/255.0f, 205.0f/255.0f, 0);
+		ldaniel[1] = new Color(122.0f/255.0f, 197.0f/255.0f, 205.0f/255.0f, 0);
+		ldaniel[0] = new Color(142.0f/255.0f, 229.0f/255.0f, 238.0f/255.0f, 0);
+		Color[] fjavier = new Color[5];
+		fjavier[4] = new Color(139.0f/255.0f, 35.0f/255.0f, 35.0f/255.0f, 0);
+		fjavier[3] = new Color(205.0f/255.0f, 51.0f/255.0f, 51.0f/255.0f, 0);
+		fjavier[2] = new Color(238.0f/255.0f, 59.0f/255.0f, 59.0f/255.0f, 0);
+		fjavier[1] = new Color(255.0f/255.0f, 64.0f/255.0f, 64.0f/255.0f, 0);
+		fjavier[0] = new Color(238.0f/255.0f, 180.0f/255.0f, 180.0f/255.0f, 0);
 		
+		// Dibujamos el mapa de influencia.
+		if (filled) {
+			renderer.begin(ShapeType.Filled);
+		} else {
+			renderer.begin(ShapeType.Line);
+		}
+		for (int y = 0; y < grid_height; y++) {
+			for (int x = 0; x < grid_width; x++) {
+				if (filled && Ground.isImpassable(map_of_costs[x][y])) {
+					// Si el terreno es infranqueable, se dibuja de color neutral.
+					renderer.setColor(neutral);
+					renderer.rect(positionX + x * output_grid_cell_size, positionY + y * output_grid_cell_size, 
+							output_grid_cell_size, output_grid_cell_size, neutral, neutral, neutral, neutral);
+					
+				} else if (simpleMapOfInfluence_FJAVIER[x][y] > simpleMapOfInfluence_LDANIEL[x][y]) {
+					// EXTREMADANTE IMPORTANTE -> El equipo con mayor influencia en una casilla, controla la casilla (es decir, se usa su color).
+					// De todas formas, el color final dibujado sí tendra en cuenta la influencia de los 2 bando.
+					int finalValue = (simpleMapOfInfluence_FJAVIER[x][y] - simpleMapOfInfluence_LDANIEL[x][y]) / 5; // Se divide entre 5 porque hay 5 colores posibles
+					renderer.setColor(fjavier[finalValue]);
+					renderer.rect(positionX + x * output_grid_cell_size, positionY + y * output_grid_cell_size, 
+							output_grid_cell_size, output_grid_cell_size, fjavier[finalValue], fjavier[finalValue], fjavier[finalValue], fjavier[finalValue]);
+				} else if (simpleMapOfInfluence_LDANIEL[x][y] > simpleMapOfInfluence_FJAVIER[x][y]) {
+					// EXTREMADANTE IMPORTANTE -> El equipo con mayor influencia en una casilla, controla la casilla (es decir, se usa su color).
+					// De todas formas, el color final dibujado sí tendra en cuenta la influencia de los 2 bando.
+					int finalValue = (simpleMapOfInfluence_LDANIEL[x][y] - simpleMapOfInfluence_FJAVIER[x][y]) / 5; // Se divide entre 5 porque hay 5 colores posibles
+					renderer.setColor(ldaniel[finalValue]);
+					renderer.rect(positionX + x * output_grid_cell_size, positionY + y * output_grid_cell_size, 
+							output_grid_cell_size, output_grid_cell_size, ldaniel[finalValue], ldaniel[finalValue], ldaniel[finalValue], ldaniel[finalValue]);
+				} else {
+					if (filled) {
+						// Si la influencia es 0, se dibuja blanco
+						renderer.setColor(neutral);
+						renderer.rect(positionX + x * output_grid_cell_size, positionY + y * output_grid_cell_size, 
+								output_grid_cell_size, output_grid_cell_size, neutral, neutral, neutral, neutral);
+					}
+				}
+			}
+		}
+		renderer.end();
 	}
 }

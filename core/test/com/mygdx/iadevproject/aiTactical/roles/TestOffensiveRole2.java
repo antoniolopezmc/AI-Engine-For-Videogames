@@ -22,6 +22,8 @@ import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.checksAndActions.Checks;
+import com.mygdx.iadevproject.checksAndActions.MoralPoints;
+import com.mygdx.iadevproject.mapOfInfluence.SimpleMapOfInfluence;
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
@@ -241,6 +243,8 @@ public class TestOffensiveRole2 extends ApplicationAdapter {
         
         IADeVProject.addToWorldObjectList(FJsoldier1, FJsoldier2, FJarcher1, FJarcher2, FJarcher3, FJarcher4, FJarcher5, FJarcher6, FJarcher7);
         IADeVProject.addToWorldObjectList(LDsoldier1, LDsoldier2, LDarcher1, LDarcher2, LDarcher3, LDarcher4, LDarcher5, LDarcher6, LDarcher7);
+        
+        SimpleMapOfInfluence.initializeSimpleMapOfInfluence();
 	}
 	
 	@Override
@@ -272,7 +276,11 @@ public class TestOffensiveRole2 extends ApplicationAdapter {
         Waypoints.drawWaypointsOfBases(); // Dibujamos los waypoints de ambas bases.
         Waypoints.drawWaypointsOfBridges(); // Dibujamos los waypoints de los puentes.
         drawHealthOfWorldCharacters(); // Dibujamos la vida de todos los personajes del mundo
-        Checks.drawMoralPointsOfBases(batch, font);
+        MoralPoints.drawMoralPointsOfBases(batch, font);
+        
+        SimpleMapOfInfluence.updateSimpleMapOfInfluence();
+        SimpleMapOfInfluence.drawInfluenceMap(renderer, 32, 0, 0, false);
+        SimpleMapOfInfluence.drawInfluenceMap(renderer, 10, 2048, 0, true);
 	}
 
 	@Override

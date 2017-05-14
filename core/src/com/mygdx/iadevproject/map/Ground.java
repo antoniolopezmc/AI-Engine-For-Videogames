@@ -57,4 +57,23 @@ public enum Ground {
 			default: 				return null;
 		}
 	}
+	
+	/**
+	 * Conprueba si el terreno asociado al coste que se pasa como parámetro es infranqueable o no.
+	 * @param cost Coste de un terreno determinado.
+	 * @return
+	 */
+	public static boolean isImpassable (int cost) {
+		Ground g = getGround(cost);
+		switch (g) {
+			case MOUNTAINS: return true;
+			case WATER:		return true;
+			case WAY: 		return false;
+			case FOREST:	return false;
+			case MEADOW: 	return false;
+			case DESERT:	return false;
+			case TRAIL:		return false;
+			default:		return true; // POR DEFECTO, TRUE.
+		}
+	}
 }

@@ -9,6 +9,7 @@ import com.mygdx.iadevproject.aiTactical.roles.states.GoToMyManantial;
 import com.mygdx.iadevproject.aiTactical.roles.states.IAmDead;
 import com.mygdx.iadevproject.aiTactical.roles.states.PatrolMyBase;
 import com.mygdx.iadevproject.checksAndActions.Checks;
+import com.mygdx.iadevproject.checksAndActions.MoralPoints;
 import com.mygdx.iadevproject.model.Character;
 
 public class DefensiveSoldier extends Soldier {
@@ -67,8 +68,12 @@ public class DefensiveSoldier extends Soldier {
 				this.stateMachine.changeState(this.goToMyManantial);
 			
 			} else {
-				// Si no cambio de estado, termino. El personaje ya tendrá el comportamiento de este estado cuando
-				// he cambiado a él.
+				// Aunque no cambie de estado, el personaje ya tendrá el comportamiento de este estado (ya que se añadió la primera vez que entramos a él).
+				
+				// Si no cambiamos de estado, quiere decir que el personaje está en su base (patrullando su base) y no le están atacando.
+				//  Si se cumplen esas condiciones, entonces también debe ir incrementando los puntos de moral de su base.
+				MoralPoints.addMoralPointsToMyBase(source);
+				
 				return;
 			}
 			
