@@ -77,6 +77,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 	 * @param keycode tecla pulsada
 	 */
 	private void processState(int keycode) {
+		IADeVProject.resetSelectedCharacters();
 		keyPressed = false;
 		switch (state) {
 			case NO_SELECTED_CHARACTERS: 

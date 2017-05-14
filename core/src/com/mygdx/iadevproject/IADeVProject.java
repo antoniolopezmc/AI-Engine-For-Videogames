@@ -324,6 +324,17 @@ public class IADeVProject extends ApplicationAdapter {
 	}
 	
 	/**
+	 * Método que reseta los personajes seleccionados. Como si hubiera sido
+	 * seleccionado otra vez.
+	 */
+	public static void resetSelectedCharacters() {
+		for (Character c : selectedCharacters) {
+			// Reseteamos el personaje como si hubiera sido seleccionado otra vez.
+			c.haveBeenSelected();
+		}
+	}
+	
+	/**
 	 * Método que limpia la lista de objetos seleccionados.
 	 */
 	public static void clearSelectedCharactersList() {
