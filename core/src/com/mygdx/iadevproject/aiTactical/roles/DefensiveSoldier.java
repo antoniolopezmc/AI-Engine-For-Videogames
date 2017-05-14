@@ -46,20 +46,22 @@ public class DefensiveSoldier extends Soldier {
 		if (this.stateMachine == null) {
 			// Creamos la máquina de estados con el personaje pasado como parámetro
 			this.stateMachine = new DefaultStateMachine<Character, State<Character>>(source);
-			// Establecemos el estado inicial como el patrullar la base.
-			this.stateMachine.setInitialState(this.patrolMyBase);
-			// Actualizamos la máquina de estados.
-			this.stateMachine.update();
 		}
+		
+		// Establecemos el estado inicial como el patrullar la base.
+		this.stateMachine.setInitialState(this.patrolMyBase);
+		// Actualizamos la máquina de estados.
+		this.stateMachine.update();
+
 	}
 
 	@Override
 	public void update(Character source) {
 		if (this.stateMachine.isInState(this.patrolMyBase)) {
 			// Estamos en el estado -> Patrullar la base (estoy en mi base)
-			
+
 			// Solo cambio de estado, si ocurre lo siguiente:
-			if (Checks.areThereEnemiesNear(source) && !Checks.amIFarFromMyBase(source)) {
+			if (!Checks.amIFarFromMyBase(source) && Checks.areThereEnemiesNear(source)) {
 				// Si hay enemigos cerca Y no estoy lejos de mi base, cambio al estado -> Atacar a los enemigos
 				this.stateMachine.changeState(this.attackEnemies);
 			
@@ -81,7 +83,9 @@ public class DefensiveSoldier extends Soldier {
 			// Estamos en el estado -> Atacar a los enemigos 
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
-			if (Checks.amIFarFromMyBase(source) || !Checks.areThereEnemiesNear(source)) { 
+
+			if (Checks.amIFarFromMyBase(source) || !Checks.areThereEnemiesNear(source)) {
+
 				// Si no hay enemigos cerca o estoy lejos de mi base, cambio al estado -> Patrullar la base 
 				this.stateMachine.changeState(this.patrolMyBase);
 				

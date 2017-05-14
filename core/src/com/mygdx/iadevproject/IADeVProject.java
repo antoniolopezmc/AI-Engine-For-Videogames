@@ -25,8 +25,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
-import com.mygdx.iadevproject.aiTactical.roles.DefensiveArcher;
+import com.mygdx.iadevproject.aiTactical.roles.DefensiveSoldier;
 import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.map.MapsCreatorIADeVProject;
 import com.mygdx.iadevproject.map.TiledMapIADeVProject;
@@ -148,11 +147,12 @@ public class IADeVProject extends ApplicationAdapter {
         drop.setTeam(Team.FJAVIER);
 
         bucket = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/bucket.png")));
-        bucket.setBounds(500.0f, 500.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        bucket.setBounds(500.0f, 900.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         bucket.setOrientation(60.0f);
         bucket.setVelocity(new Vector3(0,0.0f,0));
         bucket.setMaxSpeed(50.0f);
         bucket.setTeam(Team.FJAVIER);
+        bucket.initializeTacticalRole(new DefensiveSoldier());
         
         IADeVProject.addToWorldObjectList(drop, bucket);
 	}
@@ -357,9 +357,25 @@ public class IADeVProject extends ApplicationAdapter {
 	}
 	
 	/**
+	 * Método que reseta los personajes seleccionados. Como si hubiera sido
+	 * seleccionado otra vez.
+	 */
+	public static void resetSelectedCharacters() {
+		for (Character c : selectedCharacters) {
+			// Reseteamos el personaje como si hubiera sido seleccionado otra vez.
+			c.haveBeenSelected();
+		}
+	}
+	
+	/**
 	 * Método que limpia la lista de objetos seleccionados.
 	 */
 	public static void clearSelectedCharactersList() {
+		for (Character c : selectedCharacters) {
+			// Indicamos que el personaje ha sido deseleccionado
+			c.haveBeenReleased();
+		}
+		// Limpiamos la lista de personajes seleccionados
 		selectedCharacters.clear();
 	}
 	
@@ -374,7 +390,9 @@ public class IADeVProject extends ApplicationAdapter {
 		if (!Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
 			clearSelectedCharactersList();
 		}
-
+		// Indicamos que el personaje ha sido seleccionado.
+		obj.haveBeenSelected();
+		// Lo añadimos a la lista de seleccionados
 		selectedCharacters.add(obj);
 	}
 
