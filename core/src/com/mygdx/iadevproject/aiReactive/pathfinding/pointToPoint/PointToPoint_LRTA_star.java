@@ -12,6 +12,9 @@ public class PointToPoint_LRTA_star {
 	// --> Coste de pasar de una celda a otra adyacente (tanto en diagonal, como en horizontal, como en vertical).
 	private static final float default_action_cost = 1.0f;
 	
+	// Personaje sobre el que se aplica el pathfinding. Esto es necesario en este punto para el pathfinding táctico.
+	private Character character;
+	
 	// Mapa de costes del terreno.
 	private int[][] map_of_costs;
 	// Anchura y altura de las matrices con las que se está trabajando.
@@ -32,7 +35,8 @@ public class PointToPoint_LRTA_star {
 	private boolean tacticalInformation;
 	
 	// Constructor.
-	public PointToPoint_LRTA_star(int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xGoal, int yGoal) {
+	public PointToPoint_LRTA_star(Character character, int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xGoal, int yGoal) {
+		this.character = character;
 		this.map_of_costs = map_of_costs;
 		this.matrix_width = matrix_width;
 		this.matrix_height = matrix_height;

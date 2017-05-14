@@ -30,18 +30,10 @@ public class PointToPoint_PathFinding {
 	private Distance distance;
 	// Longitud del lado de las celdas del grid (map_of_costs).
 	private int grid_cell_size;
-	// Posición inicial real del mapa del personaje.
-	private float xSource_real, ySource_real;
 	// Posición real del mapa del destino.
 	private float xGoal_real, yGoal_real;
-	// Posición inicial DEL GRID del personaje.
-	private int xSource, ySource;
 	// Posición DEL GRID del destino.
 	private int xGoal, yGoal;
-	// Mapa de costes del terreno.
-	private int[][] map_of_costs;
-	// Anchura y altura DEL GRID (del mapa de costes).
-	private int matrix_width, matrix_height;
 	
 	// El pathfinding también debe almacenar el objeto de tipo 'PointToPoint_LRTA_star', para no crearlo cada vez que se llame.
 	private PointToPoint_LRTA_star lrta_star;
@@ -82,23 +74,12 @@ public class PointToPoint_PathFinding {
 		// Almacenamos grid_cell_size
 		this.grid_cell_size = grid_cell_size;
 		
-		// Almacenamos las coordenadas reales del mapa y convertimos de coordenadas reales del plano a coordenadas del GRID.
-		this.xSource_real = xSource_real;
-		this.ySource_real = ySource_real;
+		// Convertimos de coordenadas reales del plano a coordenadas del GRID.
 		this.xGoal_real = xGoal_real;
 		this.yGoal_real = yGoal_real;
-		Vector3 source_gridPosition = IADeVProject.mapPositionTOgridPosition(grid_cell_size, new Vector3(xSource_real, ySource_real, 0.0f));
 		Vector3 goal_gridPosition = IADeVProject.mapPositionTOgridPosition(grid_cell_size, new Vector3(xGoal_real, yGoal_real, 0.0f));
-		this.xSource = (int) source_gridPosition.x;
-		this.ySource = (int) source_gridPosition.y;
 		this.xGoal = (int) goal_gridPosition.x;
 		this.yGoal = (int) goal_gridPosition.y;
-		
-		// Almacenamos el mapa de costes
-		this.map_of_costs = map_of_costs;
-		// Almacenamos las dimesiones de ese mapa.
-		this.matrix_width = matrix_width;
-		this.matrix_height = matrix_height;
 		
 		// Transformamos la posición del mapa al grid, y volvemos a transformar al mapa. ESTE SERÁ EL PRIMER OBJETIVO ACTUAL.
 		// Con esta transformación estamos consiguiendo que el personaje se situe en el centro del tile.
@@ -159,6 +140,7 @@ public class PointToPoint_PathFinding {
 		} else {
 			lrta_star.notUseTacticalInformation();
 		}
+		
 		
 		// Ahora, aplicamos el algoritmo LRTA*.
 		Vector3 vector3 = lrta_star.applyLRTA_start((int)objetivoActual.x, (int)objetivoActual.y);

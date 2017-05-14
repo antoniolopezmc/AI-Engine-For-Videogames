@@ -190,6 +190,16 @@ public abstract class Formation extends Character {
 			this.charactersList.remove(character);
 		}
 	}
+	
+	/**
+	 * Limpia la lista de personajes de la formación.
+	 */
+	public void clearCharactersList() {
+		for (Character character : charactersList) {
+			character.setFormation(null);
+		}
+		charactersList.clear();
+	}
 
 	// No va a haber 'setComponentFormationArbitrator'. En esta ocasión el árbitro será siempre por prioridad.
 	
