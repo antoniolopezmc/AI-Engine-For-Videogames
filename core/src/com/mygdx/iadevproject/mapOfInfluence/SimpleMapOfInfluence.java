@@ -49,7 +49,7 @@ public class SimpleMapOfInfluence {
 	// 	Tras realizar esta operación, el color final se elije en función del equipo que domina la casilla (valor máximo recordado) y en función del valor de la resta obtenido (tono final de color en función del valor de la resta).
 	
 	/**
-	 * Método que devuelve la matriz de influencia concreta de un personaje de entrada (según su equipo). ¡¡SIN TENER EN CUENTA AL EQUIPO RIVAL!!.
+	 * Método que devuelve la matriz de influencia del equipo de un personaje de entrada. ¡¡SIN TENER EN CUENTA AL EQUIPO RIVAL!!.
 	 * @param source Personaje de entrada.
 	 * @return matriz de influencia correspondiente al equipo de ese personaje.
 	 */
@@ -57,6 +57,22 @@ public class SimpleMapOfInfluence {
 		if (source.getTeam() == Team.FJAVIER) {
 			return simpleMapOfInfluence_FJAVIER;
 		} else if (source.getTeam() == Team.LDANIEL) {
+			return simpleMapOfInfluence_LDANIEL;
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Método que devuelve la matriz de influencia del equipo rival de un personaje de entrada.
+	 * @param source Personaje de entrada.
+	 * @return matriz de influencia correspondiente al equipo rival.
+	 */
+	public static int[][] getSimpleMapOfInfluenceOfEnemyTeam(Character source) {
+		Team enemyTeam = source.getTeam().getEnemyTeam();
+		if (enemyTeam == Team.FJAVIER) {
+			return simpleMapOfInfluence_FJAVIER;
+		} else if (enemyTeam == Team.LDANIEL) {
 			return simpleMapOfInfluence_LDANIEL;
 		} else {
 			return null;
@@ -103,7 +119,11 @@ public class SimpleMapOfInfluence {
 		map_of_costs = IADeVProject.MAP_OF_COSTS;
 		worldObjects = IADeVProject.worldObjects;
 		
-		// Los mapas de influencia de cada jugador no se crean ni se inicializan. Eso se hará en cada update.
+		// Creamos los mapas de influencia de cada equipo.
+		// Equipo de arriba.
+		simpleMapOfInfluence_LDANIEL = new int[grid_width][grid_height];
+		// Equipo de abajo.
+		simpleMapOfInfluence_FJAVIER = new int[grid_width][grid_height];
 	}
 	
 	/**
@@ -121,7 +141,11 @@ public class SimpleMapOfInfluence {
 		SimpleMapOfInfluence.map_of_costs = map_of_costs;
 		SimpleMapOfInfluence.worldObjects = worldObjects;
 		
-		// Los mapas de influencia de cada jugador no se crean ni se inicializan. Eso se hará en cada update.
+		// Creamos los mapas de influencia de cada equipo.
+		// Equipo de arriba.
+		simpleMapOfInfluence_LDANIEL = new int[grid_width][grid_height];
+		// Equipo de abajo.
+		simpleMapOfInfluence_FJAVIER = new int[grid_width][grid_height];
 	}
 	
 	/**
