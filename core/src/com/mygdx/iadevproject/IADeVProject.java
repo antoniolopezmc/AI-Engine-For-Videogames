@@ -33,6 +33,7 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.model.formation.Formation;
 import com.mygdx.iadevproject.waypoints.Waypoints;
  
 public class IADeVProject extends ApplicationAdapter {
@@ -374,6 +375,12 @@ public class IADeVProject extends ApplicationAdapter {
 		for (Character c : selectedCharacters) {
 			// Indicamos que el personaje ha sido deseleccionado
 			c.haveBeenReleased();
+			
+			if (c instanceof Formation) {
+				// Y si el personaje es una formación, la eliminamos de los objetos
+				// del mundo.
+				worldObjects.remove(c);
+			}
 		}
 		// Limpiamos la lista de personajes seleccionados
 		selectedCharacters.clear();
@@ -391,9 +398,9 @@ public class IADeVProject extends ApplicationAdapter {
 			clearSelectedCharactersList();
 		}
 		// Indicamos que el personaje ha sido seleccionado.
-		obj.haveBeenSelected();
+		Character c = obj.haveBeenSelected();
 		// Lo añadimos a la lista de seleccionados
-		selectedCharacters.add(obj);
+		selectedCharacters.add(c);
 	}
 
 	

@@ -19,7 +19,6 @@ import com.mygdx.iadevproject.aiReactive.behaviour.noAcceleratedUnifMov.Wander_N
 import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
-import com.mygdx.iadevproject.model.formation.CircularFormation;
 
 public class TestStarFormation extends ApplicationAdapter {
 	private SpriteBatch batch;

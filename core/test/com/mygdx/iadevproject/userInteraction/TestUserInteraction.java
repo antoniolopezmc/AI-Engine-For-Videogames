@@ -17,7 +17,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.aiTactical.roles.DefensiveSoldier;
 import com.mygdx.iadevproject.checksAndActions.Checks;
 import com.mygdx.iadevproject.model.Character;
@@ -37,7 +36,7 @@ public class TestUserInteraction extends ApplicationAdapter {
 	public static TiledMapRenderer tiledMapRenderer;
 	public static InputProcessorIADeVProject inputProcessor;		// InputProcessor
 	
-	public static Character drop, bucket, defensiveSoldier;
+	public static Character drop, bucket, defensiveSoldier, enemy;
 	
 	@Override
 	public void create() {		
@@ -65,8 +64,8 @@ public class TestUserInteraction extends ApplicationAdapter {
         drop.setOrientation(60.0f);
         drop.setVelocity(new Vector3(0,0.0f,0));
         drop.setMaxSpeed(50.0f);
-        drop.setTeam(Team.LDANIEL);
-
+        drop.setTeam(Team.FJAVIER);
+        
         defensiveSoldier = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
         defensiveSoldier.setBounds(660.0f, 660.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
         defensiveSoldier.setOrientation(60.0f);
@@ -82,9 +81,15 @@ public class TestUserInteraction extends ApplicationAdapter {
         bucket.setTeam(Team.FJAVIER);
         bucket.initializeTacticalRole(new DefensiveSoldier());
         
-        drop.addToListBehaviour(new Attack(drop, bucket, 20.0f, 100.0f));
-
-        IADeVProject.addToWorldObjectList(drop, bucket, defensiveSoldier);
+        enemy = new Character(new WeightedBlendArbitrator_Accelerated(50.0f, 20.0f), new Texture(Gdx.files.internal("../core/assets/droplet.png")));
+        enemy.setBounds(800.0f, 300.0f, IADeVProject.WORLD_OBJECT_WIDTH, IADeVProject.WORLD_OBJECT_HEIGHT);
+        enemy.setOrientation(60.0f);
+        enemy.setVelocity(new Vector3(0,0.0f,0));
+        enemy.setMaxSpeed(50.0f);
+        enemy.setTeam(Team.LDANIEL);
+        
+        
+        IADeVProject.addToWorldObjectList(drop, bucket, defensiveSoldier, enemy);
         UserInteraction.printFirstUse();
 	}
 	

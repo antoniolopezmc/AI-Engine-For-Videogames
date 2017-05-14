@@ -19,7 +19,7 @@ import com.mygdx.iadevproject.model.Character;
 public class InputProcessorIADeVProject implements InputProcessor {
 	private boolean keyPressed = false;		// Indica que se ha pulsado una tecla
 	private int lastKey;					// Última tecla pulsada
-	private Vector3 touchPos;
+	private Vector3 touchPos, anchorPos;
 	private Character target; 
 	
 	/**
@@ -119,6 +119,14 @@ public class InputProcessorIADeVProject implements InputProcessor {
 				processOthers(keycode);
 				break;
 			case MAKE_FORMATION:
+				if (IADeVProject.selectedCharacters.size() < 2) {
+					System.out.println("For make formation, you must select almost 3 characters");
+					return;
+				}
+				if (anchorPos == null) {
+					System.out.println("You must select anchor position");
+					return;
+				}
 				processMakeFormation(keycode);
 				break;
 			default:
@@ -155,6 +163,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			break;
 		case Input.Keys.NUM_5: // Make formation
 			UserInteraction.printMakeFormation();
+			System.out.println("Select the point where situate the anchor");
 			state = UserState.MAKE_FORMATION;
 			break;
 		default:
@@ -301,12 +310,48 @@ public class InputProcessorIADeVProject implements InputProcessor {
 	}
 	
 	/**
+	 * Método que encapsula las acciones que se aplican después de crear una formación.
+	 * IMPORTANTE: Después de crear una formación, esta no está seleccionada. Para eliminarla
+	 * hay que seleccionar y deseleccionarla.
+	 */
+	private void afterMakeFormation() {
+		state = UserState.NO_SELECTED_CHARACTERS;
+		IADeVProject.clearSelectedCharactersList();
+		anchorPos = null;
+	}
+	
+	/**
 	 * Método que procesa la interacción de crear una formación
 	 * @param keycode tecla pulsada
 	 */
 	private void processMakeFormation(int keycode) {
 		switch (keycode) {
-		case Input.Keys.NUM_1: // Return
+		case Input.Keys.NUM_1: // Circular Look outside
+			System.out.println("\t1) Circular - Look outside");
+			UserInteraction.applyCircularLookOutSideFormation(anchorPos);
+			afterMakeFormation();
+			break;
+		case Input.Keys.NUM_2: // Circular Look inside
+			System.out.println("\t2) Circular - Look inside");
+			UserInteraction.applyCircularLookInSideFormation(anchorPos);
+			afterMakeFormation();
+			break;	
+		case Input.Keys.NUM_3: // Line
+			System.out.println("\t3) Line");
+			UserInteraction.applyLineFormation(anchorPos);
+			afterMakeFormation();
+			break;
+		case Input.Keys.NUM_4: // Star Look outside
+			System.out.println("\t4) Star - Look outside");
+			UserInteraction.applyStarLookOutSideFormation(anchorPos);
+			afterMakeFormation();
+			break;
+		case Input.Keys.NUM_5: // Star Look inside
+			System.out.println("\t5) Star - Look inside");
+			UserInteraction.applyStarLookInSideFormation(anchorPos);
+			afterMakeFormation();
+			break;
+		case Input.Keys.NUM_6: // Return
 			returnActions();
 			break;
 		default:
@@ -347,6 +392,9 @@ public class InputProcessorIADeVProject implements InputProcessor {
 				target = getCharacterOfPosition(touchPos);
 				if (target != null) { 
 					System.out.println("The character has been selected. Press some number to apply a behaviour");
+				} else if (state == UserState.MAKE_FORMATION) {
+					anchorPos = touchPos;
+					System.out.println("The anchor has been selected");
 				} else {
 					System.out.println("The target character has been released. Select another character.");
 				}
