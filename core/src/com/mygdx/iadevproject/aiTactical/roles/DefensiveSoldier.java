@@ -76,8 +76,7 @@ public class DefensiveSoldier extends Soldier {
 			// Estamos en el estado -> Atacar a los enemigos 
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
-			// TODO IMPORTANTE -> Cambiar el orden de la comprobación. En cuanto lleguen a mi base y me ataquen, si yo persigo a los enemigos SIEMPRE va a haber enemigos cerca.
-			if (!Checks.areThereEnemiesNear(source) || Checks.amIFarFromMyBase(source)) { 
+			if (Checks.amIFarFromMyBase(source) || !Checks.areThereEnemiesNear(source)) { 
 				// Si no hay enemigos cerca o estoy lejos de mi base, cambio al estado -> Patrullar la base 
 				this.stateMachine.changeState(this.patrolMyBase);
 				

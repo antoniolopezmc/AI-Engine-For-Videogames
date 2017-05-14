@@ -104,7 +104,7 @@ public class DefensiveArcher extends Archer {
 			// Estamos en el estado -> Atacar a los enemigos 
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
-			if (!Checks.areThereEnemiesNear(source) || Checks.amIFarFromMyWayPoint(source)) {
+			if (Checks.amIFarFromMyWayPoint(source) || !Checks.areThereEnemiesNear(source)) {
 				// Si no hay enemigos cerca o estoy lejos de mi waypoint, cambio al estado -> Patrullar el waypoint
 				this.stateMachine.changeState(this.patrolMyWayPoint);
 				

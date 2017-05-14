@@ -17,7 +17,7 @@ public enum Ground {
 	private static final int WATER_COST 		= IADeVProject.INFINITY;
 	private static final int MOUNTAINS_COST 	= IADeVProject.INFINITY-1; // Se le resta uno, porque en el método 'getGround' no pueden haber dos con el mismo valor
 	private static final int FOREST_COST 		= 50;
-	private static final int DESERT_COST 		= 35;
+	private static final int DESERT_COST 		= 45;
 	private static final int MEADOW_COST 		= 10;
 	private static final int WAY_COST 			= 2;
 	private static final int TRAIL_COST 		= IADeVProject.DEFAULT_COST;

@@ -129,19 +129,34 @@ public class OffensiveArcher extends Archer {
 				lastNode.update(source);
 			}
 			// *****
-		} else if ((Checks.amIInEnemyBase(source)) && (Checks.haveIWin(source))) { // NODO Win
-			// *****
-			if (lastNode != win) {
-				if (lastNode != null) {
-					lastNode.exit(source);
+		} else if (Checks.amIInEnemyBase(source)) { 
+			if (Checks.haveIWin(source)) { // NODO Win
+				// *****
+				if (lastNode != win) {
+					if (lastNode != null) {
+						lastNode.exit(source);
+					}
+					lastNode = win;
+					lastNode.enter(source);
 				}
-				lastNode = win;
-				lastNode.enter(source);
+				if (lastNode != null) { 
+					lastNode.update(source);
+				}
+				// *****	
+			} else if (!Checks.haveIWin(source)) { // NODO GoToEnemyBase
+				// *****
+				if (lastNode != goToEnemyBase) {
+					if (lastNode != null) {
+						lastNode.exit(source);
+					}
+					lastNode = goToEnemyBase;
+					lastNode.enter(source);
+				}
+				if (lastNode != null) {
+					lastNode.update(source);
+				}
+				// *****
 			}
-			if (lastNode != null) {
-				lastNode.update(source);
-			}
-			// *****
 		} else if (!Checks.amIInEnemyBase(source)) { // Nodo GoToEnemyBase.
 			// *****
 			if (lastNode != goToEnemyBase) {
