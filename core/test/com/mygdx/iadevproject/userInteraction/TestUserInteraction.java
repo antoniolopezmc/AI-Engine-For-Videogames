@@ -96,9 +96,6 @@ public class TestUserInteraction extends ApplicationAdapter {
 	
 	@Override
 	public void render() {
-		// Si el juego está pausado, no hacemos nada
-		if (IADeVProject.paused) return;
-		
 		// Cada vez que renderiza, indicamos al InputProcessor que procese si hay una tecla pulsada. Esto se hace aquí
         // porque InputProcessor no tiene ningún método para indicar que se mantiene pulsada una tecla. Nosotros queremos
         // que mientras se pulse una de las teclas de movimiento de la cámara, la cámara se mueva sin tener que estar pulsando
@@ -113,7 +110,10 @@ public class TestUserInteraction extends ApplicationAdapter {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         
-        updateTacticalRoleOfWorldCharacters(); // Actualizamos los roles de todos los personajes
+        if (!IADeVProject.paused) {
+        	// Si el juego no está pausado, actualizamos a los personajes.
+        	updateTacticalRoleOfWorldCharacters(); // Actualizamos los roles de todos los personajes
+        }
         
         checkIfAnySelectedCharacterHasBeenDead(); // Comprobamos si alguno de los personajes seleccionados ha muerto.
         

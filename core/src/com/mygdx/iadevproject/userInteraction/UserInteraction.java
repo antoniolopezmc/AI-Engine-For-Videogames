@@ -15,7 +15,7 @@ import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.VelocityMa
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Evade;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Face;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.LookingWhereYouGoing;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset;
+import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset_Arrive;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.Persue;
 import com.mygdx.iadevproject.aiReactive.behaviour.group.Cohesion;
 import com.mygdx.iadevproject.aiReactive.behaviour.group.Separation;
@@ -127,9 +127,9 @@ public class UserInteraction {
 	}
 	
 	/** IMPORTANTE: ESTE MÉTODO UTILIZA EL PATHFINDING CONTINUO, NO EL PUNTO A PUNTO **/
-	public static void applyPathFinding(Vector3 position) {
+	public static void applyContinuousPathFinding(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
-			System.out.println("Destination not allowed");
+			System.out.println("Destination not allowed. Select another position.");
 			return;
 		}
 		
@@ -138,10 +138,11 @@ public class UserInteraction {
 			source.setListBehaviour(Actions.notCollide(200.0f, source));
 			// Creamos el comportamiento y se lo añadimos al personaje
 			Continuous_PathFinding pf = new Continuous_PathFinding();
-			List<Vector3> pointsList = pf.applyPathFinding(IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, Continuous_PathFinding.CHEBYSHEV_DISTANCE, 
+			List<Vector3> pointsList = pf.applyPathFinding(IADeVProject.MAP_OF_COSTS, IADeVProject.GRID_CELL_SIZE, Continuous_PathFinding.EUCLIDEAN_DISTANCE, 
 					IADeVProject.GRID_WIDTH, IADeVProject.GRID_HEIGHT, source.getPosition().x, source.getPosition().y, position.x, position.y);
 			
-			source.addToListBehaviour(new PathFollowingWithoutPathOffset(source, 30.0f, pointsList, 30.0f, PathFollowingWithoutPathOffset.MODO_PARAR_AL_FINAL));
+			source.addToListBehaviour(new LookingWhereYouGoing(source, 30.0f, 30.0f, 5.0f, 10.0f, 1.0f));
+			source.addToListBehaviour(new PathFollowingWithoutPathOffset_Arrive(source, 30.0f, 50.0f, 30.0f, 40.0f, 1.0f, pointsList, PathFollowingWithoutPathOffset_Arrive.MODO_PARAR_AL_FINAL));
 		}
 	}
 	
@@ -355,8 +356,9 @@ public class UserInteraction {
 		System.out.println("\t1) Apply accelerated behaviours");
 		System.out.println("\t2) Apply delegated behaviours");
 		System.out.println("\t3) Apply group behaviours");
-		System.out.println("\t4) Others behaviours");
-		System.out.println("\t5) Make formation");
+		System.out.println("\t4) Pathfinding");
+		System.out.println("\t5) Others behaviours");
+		System.out.println("\t6) Make formation");
 	}
 	
 	/**
@@ -385,10 +387,20 @@ public class UserInteraction {
 		System.out.println("\t1) Evade");
 		System.out.println("\t2) Face");
 		System.out.println("\t3) Looking where you going");
-		System.out.println("\t4) Pathfinding");
-		System.out.println("\t5) Persue");
-		System.out.println("\t6) Wander");
-		System.out.println("\t7) Return");
+		System.out.println("\t4) Persue");
+		System.out.println("\t5) Wander");
+		System.out.println("\t6) Return");
+	}
+	
+	/**
+	 * Método que muestra por consola la acción del pathfinding que quiere 
+	 * usar el usuario.
+	 */
+	public static void printPathFinding() {
+		System.out.println();
+		System.out.println("/** PATHFINDING **/");
+		System.out.println("\t1) Continuous PathFinding");
+		System.out.println("\t2) Return");
 	}
 	
 	/**
