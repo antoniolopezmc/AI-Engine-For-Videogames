@@ -1,5 +1,6 @@
 package com.mygdx.iadevproject.aiTactical.roles;
 
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.AttackEnemies;
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.CureMe;
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.GoToEnemyBase;
@@ -45,7 +46,7 @@ public class OffensiveArcher extends Archer {
 	}
 
 	@Override
-	public void update(Character source) {
+	public void update(Character source) {		
 		// El árbol se va a implementar como una serie de REGLAS.
 		if (Checks.haveIDead(source)) { // NODO IAmDead.
 			// *****
@@ -59,6 +60,10 @@ public class OffensiveArcher extends Archer {
 			if (lastNode != null) {
 				lastNode.update(source);
 			}
+			
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "IAmDead");
+			
 			// *****
 		} else if (Checks.haveILittleHealth(source)) {
 			if (!Checks.amIInMyManantial(source)) { // NODO GoToMyManantial
@@ -73,6 +78,10 @@ public class OffensiveArcher extends Archer {
 				if (lastNode != null) {
 					lastNode.update(source);
 				}
+				
+				// Imprimos el estado táctico del source.
+				source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "GoToMyManantial");
+				
 				// *****
 			} else if (Checks.amIInMyManantial(source)) { // NODO CureMe
 				// *****
@@ -86,6 +95,10 @@ public class OffensiveArcher extends Archer {
 				if (lastNode != null) {
 					lastNode.update(source);
 				}
+				
+				// Imprimos el estado táctico del source.
+				source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "CureMe");
+				
 				// *****
 			}
 		} else if (Checks.amIInMyManantial(source)) {
@@ -101,6 +114,10 @@ public class OffensiveArcher extends Archer {
 				if (lastNode != null) {
 					lastNode.update(source);
 				}
+				
+				// Imprimos el estado táctico del source.
+				source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "CureMe");
+				
 				// *****
 			} else if (Checks.haveIFullyRecoveredMyHealth(source)) { // NODO GoToEnemyBase
 				// *****
@@ -114,6 +131,10 @@ public class OffensiveArcher extends Archer {
 				if (lastNode != null) {
 					lastNode.update(source);
 				}
+				
+				// Imprimos el estado táctico del source.
+				source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "GoToEnemyBase");
+				
 				// *****
 			}
 		} else if (Checks.areThereEnemiesNear(source)) { // NODO AttackEnemies
@@ -128,6 +149,10 @@ public class OffensiveArcher extends Archer {
 			if (lastNode != null) {
 				lastNode.update(source);
 			}
+			
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "AttackEnemies");
+			
 			// *****
 		} else if (Checks.amIInEnemyBase(source)) { 
 			if (Checks.haveIWin(source)) { // NODO Win
@@ -142,6 +167,10 @@ public class OffensiveArcher extends Archer {
 				if (lastNode != null) { 
 					lastNode.update(source);
 				}
+				
+				// Imprimos el estado táctico del source.
+				source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "Win");
+				
 				// *****	
 			} else if (!Checks.haveIWin(source)) { // NODO GoToEnemyBase
 				// *****
@@ -155,6 +184,10 @@ public class OffensiveArcher extends Archer {
 				if (lastNode != null) {
 					lastNode.update(source);
 				}
+				
+				// Imprimos el estado táctico del source.
+				source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "GoToEnemyBase");
+				
 				// *****
 			}
 		} else if (!Checks.amIInEnemyBase(source)) { // Nodo GoToEnemyBase.
@@ -169,6 +202,10 @@ public class OffensiveArcher extends Archer {
 			if (lastNode != null) {
 				lastNode.update(source);
 			}
+			
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "GoToEnemyBase");
+			
 			// *****
 		}
 	}

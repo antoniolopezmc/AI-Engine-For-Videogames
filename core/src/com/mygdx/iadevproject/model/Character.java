@@ -3,6 +3,7 @@ package com.mygdx.iadevproject.model;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -426,5 +427,14 @@ public class Character extends WorldObject {
 				this.initializeTacticalRole(this.role);
 			}
 		}
+	}
+	
+	
+	public void drawTalticalState(SpriteBatch batch, BitmapFont font, String state) {
+		batch.begin();
+		font.setColor(Color.PURPLE);
+		font.draw(IADeVProject.batch, state, this.getPosition().x, this.getPosition().y - 30);
+		font.setColor(Color.WHITE);
+		batch.end();
 	}
 }

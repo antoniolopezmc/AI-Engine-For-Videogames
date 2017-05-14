@@ -2,6 +2,7 @@ package com.mygdx.iadevproject.aiTactical.roles;
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.State;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiTactical.roles.states.AttackEnemies;
 import com.mygdx.iadevproject.aiTactical.roles.states.CureMe;
 import com.mygdx.iadevproject.aiTactical.roles.states.GoToMyBase;
@@ -58,6 +59,9 @@ public class DefensiveSoldier extends Soldier {
 	@Override
 	public void update(Character source) {
 		if (this.stateMachine.isInState(this.patrolMyBase)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "patrolMyBase");
+			
 			// Estamos en el estado -> Patrullar la base (estoy en mi base)
 
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -82,6 +86,9 @@ public class DefensiveSoldier extends Soldier {
 			}
 			
 		} else if (this.stateMachine.isInState(this.attackEnemies)) { 
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "attackEnemies");
+			
 			// Estamos en el estado -> Atacar a los enemigos 
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -100,6 +107,9 @@ public class DefensiveSoldier extends Soldier {
 			// a atacar (este puede haber cambiado).
 			
 		} else if (this.stateMachine.isInState(this.iAmDead)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "iAmDead");
+			
 			// Estamos en el estado -> Estoy muerto
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -114,6 +124,9 @@ public class DefensiveSoldier extends Soldier {
 			}
 			
 		} else if (this.stateMachine.isInState(this.goToMyManantial)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "goToMyManantial");
+			
 			// Estamos en el estado -> Ir al manantial (me queda poca vida)
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -129,6 +142,9 @@ public class DefensiveSoldier extends Soldier {
 			// creado al entrar a este estado.
 			
 		} else if (this.stateMachine.isInState(this.cureMe)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "cureMe");
+			
 			// Estamos en el estado -> Curarme (estoy en el manantial)
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -143,6 +159,9 @@ public class DefensiveSoldier extends Soldier {
 			}
 			
 		} else if (this.stateMachine.isInState(this.goToMyBase)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "goToMyBase");
+			
 			// Estamos en el estado -> Ir a mi base
 			
 			// Solo cambio de estado, si ocurre lo siguiente:

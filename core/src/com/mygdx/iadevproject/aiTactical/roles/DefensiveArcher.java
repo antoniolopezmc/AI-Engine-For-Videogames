@@ -2,6 +2,7 @@ package com.mygdx.iadevproject.aiTactical.roles;
 
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.State;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiTactical.roles.states.AttackEnemies;
 import com.mygdx.iadevproject.aiTactical.roles.states.BookWaypoint;
 import com.mygdx.iadevproject.aiTactical.roles.states.CureMe;
@@ -58,6 +59,9 @@ public class DefensiveArcher extends Archer {
 	@Override
 	public void update(Character source) {		
 		if (this.stateMachine.isInState(this.bookWaypoint)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "bookWaypoint");
+			
 			// Estamos en el estado -> Reservar waypoint (y hacer lo que sea)
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -68,6 +72,9 @@ public class DefensiveArcher extends Archer {
 			// Si no cambio de estado no termino, ya que tengo que seguir intentando reservar un waypoint.
 			
 		} else if (this.stateMachine.isInState(this.goToMyWayPoint)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "goToMyWayPoint");
+			
 			// Estamos en el estado -> Ir a mi WayPoint
 			
 			if (Checks.amIInMyWayPoint(source)) {
@@ -83,6 +90,9 @@ public class DefensiveArcher extends Archer {
 			// creado al entrar a este estado.
 			
 		} else if (this.stateMachine.isInState(this.patrolMyWayPoint)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "patrolMyWayPoint");
+			
 			// Estamos en el estado -> Patrullar mi waypoint
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -101,6 +111,9 @@ public class DefensiveArcher extends Archer {
 			}
 			
 		} else if (this.stateMachine.isInState(this.attackEnemies)) { 
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "attackEnemies");
+			
 			// Estamos en el estado -> Atacar a los enemigos 
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -117,6 +130,9 @@ public class DefensiveArcher extends Archer {
 			// a atacar (este puede haber cambiado).
 			
 		} else if (this.stateMachine.isInState(this.iAmDead)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "iAmDead");
+			
 			// Estamos en el estado -> Estoy muerto
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -131,6 +147,9 @@ public class DefensiveArcher extends Archer {
 			}
 			
 		} else if (this.stateMachine.isInState(this.goToMyManantial)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "goToMyManantial");
+			
 			// Estamos en el estado -> Ir al manantial (me queda poca vida)
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
@@ -147,6 +166,9 @@ public class DefensiveArcher extends Archer {
 			// creado al entrar a este estado.
 			
 		} else if (this.stateMachine.isInState(this.cureMe)) {
+			// Imprimos el estado táctico del source.
+			source.drawTalticalState(IADeVProject.batch, IADeVProject.font, "cureMe");
+			
 			// Estamos en el estado -> Curarme (estoy en el manantial)
 			
 			// Solo cambio de estado, si ocurre lo siguiente:

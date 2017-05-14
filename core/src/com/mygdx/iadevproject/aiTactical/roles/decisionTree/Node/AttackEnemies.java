@@ -70,5 +70,7 @@ public class AttackEnemies implements Node {
 		// Cuando salimos de este estado, dejamos de atacar
 		Actions.leaveAttack(entity);
 	}
+	
+	
 
 }
