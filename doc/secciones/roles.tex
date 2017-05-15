@@ -1,10 +1,51 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Roles Tácticos}
+La implementación de los roles tácticos la hemos realizado a través de la interfaz \texttt{TacticalRole} que contiene dos métodos importantes:
+\begin{itemize}
+ \item Método \texttt{initialize()}. Este método realiza la inicialización de la estructura táctica que se va a utilizar. Por ejemplo, en el caso de que un rol se implemente con una máquina de estados, pues crear e inicializar dicha máquina.
+ \item Método \texttt{update()}. Este método realiza la actualización de la estructura táctica inicializada y las acciones pertinentes dependiendo de dicha actualización.
+\end{itemize}
+
+Ambos métodos reciben como parámetro el personaje al que se va a aplicar los comportamientos obtenidos tras la inicialización/actualización de la estructura táctica. \\
+
+También contiene los siguientes métodos:
+\begin{itemize}
+ \item \texttt{getVelocityFactor()}. Devuelve el factor de velocidad que un rol tiene para un determinado terreno. Este método devolverá un valor entre 0 y 1 que se usa para modificar la velocidad que se aplica a un personaje antes de aplicar un determinado steering. Con este método, se permite que los personajes, dependiendo de su rol, vayan a una velocidad dependiendo del terreno por el que vayan.
+ \item \texttt{getTacticalCost()}. Devuelve el coste táctico que un rol tiene asociado a un determinado terreno. 
+ \item \texttt{getMaxDistanceOfAttack()}. Devuelve la máxima distancia de ataque de un rol.
+ \item \texttt{getDamageToDone()}. Devuelve el daño que puede hacer al atacar un rol.
+ \item \texttt{getMaxSpeed()}. Devuelve la máxima velocidad a la que puede ir un rol.
+\end{itemize}
+
+Los roles tácticos que hemos implementado nosotros han sido: soldado y arquero, tanto ofensivos como defensivos. Tanto los ofensivos como los defensivos, tienen los mismos valores para los métodos anteriores (dependiendo de si son arqueros o soldados). La diferencia entre ellos está en la estructura con la que se han implementado: los roles ofensivos (tanto soldados como arqueros) se han implementado con un árbol de decisión; mientras que los roles defensivos (tanto soldados como arqueros) se han implementado con una máquina de estados. En la siguientes subseciones, se comentará más en profundidad sobre cada uno de estos roles. \\
+
+Todo esto se encuentra dentro del paquete \texttt{com.mygdx.iadevproject.aiTactical.roles} del proyecto.
+
 
 %--------------------------------------------------------------------
 \medskip
 \subsection{Roles defensivos}
+Ambos roles defensivos (arquero y soldado) se han implementado como una máquina de estados. Para ello, se ha hecho uso de la interfaz \texttt{StateMachine} proporcionada por la librería LibGDX \cite{stateMachine}. Esta máquina de estados hace uso de la interfaz \texttt{State} proporcionada también por la librería LibGDX, que proporciona los siguientes métodos:
+\begin{itemize}
+  \item \texttt{enter()} que se llama cada vez que se entra al estado. 
+  \item \texttt{update()} que se llama cada vez que la máquina de estados se actualiza y este es el estado actual de la máquina.
+  \item \texttt{exit()} que se llama cuando se sale del estado.
+  \item \texttt{onMessage()} que se llama si la entidad recibe un mensaje del despachador de mensajes mientras está en este estado. 
+\end{itemize}
+
+Estos métodos reciben como parámetro una entidad con la que se puede trabajar en cada método. En nuestro caso, esta entidad será un objeto de la clase \texttt{Character}. \\
+
+La interfaz \texttt{StateMachine} proporciona varios métodos para poder realizar distintas acciones con la máquina de estados. De entre ellas, las que hemos utilizado son:
+\begin{itemize}
+ \item \texttt{setInitialState()}. Se emplea para establecer el estado inicial de la máquina, que se le pasa como parámetro.
+ \item \texttt{isInState()}. Comprueba si la máquina está en el estado pasado como parámetro.
+ \item \texttt{update()}. Actualiza la máquina: esto implica llamar al método \texttt{update()} del estado actual. 
+\end{itemize}
+
+
+
+
 
 %--------------------------------------------------------------------
 \medskip
