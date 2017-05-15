@@ -37,6 +37,7 @@ Una cosa importante a destacar es que \textbf{si una entidad pertenece a una for
 La clase \texttt{Obstacle} representa a un obstáculo fijo y, al igual que la anterior, hereda de la clase \texttt{WorldObject}. La única peculiaridad que tiene esta clase es que todos los métodos como \texttt{getVelocity}, \texttt{getSpeed} o \texttt{setRotation\_angularSpeed}, entre otros, están sobrescritos para que se devuelvan 0 o el vector 0. Esto es así porque, como acabo de comentar, esta clase representa obstáculos estáticos que no se mueven.
 
 \subsection{Formaciones}
+\label{formaciones}
 
 La \textbf{clase abstracta} \texttt{Formation} representa a un conjunto de personajes organizados en formación. Hemos planteado el tema de las formaciones de tal manera que heredan de la clase \texttt{Character}, es decir, las formaciones son un tipo especial de personaje. Además, en la clase \texttt{Formation} se hace uso del \textbf{patrón composite}, lo que va a permitir que uno de los integrantes de una formación pueda ser a su vez otra formación. Esto quiere decir que \textbf{se pueden construir formaciones de formaciones todo lo grandes y profundas que deseemos} (con todos los niveles de profundidad que deseemos). De esta clase heredarán todos los tipos de formaciones concretas que se deseen crear. \\
 

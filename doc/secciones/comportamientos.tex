@@ -100,13 +100,13 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
 \subsection{Comportamientos delegados}
 Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{com.mygdx.iadevproject.aiReactive.behaviour.delegated} del proyecto. Los distintos comportamientos delegados que hemos implementado son:
 \begin{itemize}
- \item \texttt{CollisionAvoidance}. Este comportamiento consiste en evitar colisiones con otros objetos. Este comportamiento supone que todos los objetivos, así como el personaje, están protegidos por un círculo que los envuelve y detecta colisión cuando el círculo del personaje interseca con alguno de los círculos de los objetivos. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
+ \item \texttt{CollisionAvoidance}. Este comportamiento consiste en evitar colisiones con objetos en movimiento. Este comportamiento supone que todos los objetivos, así como el personaje, están protegidos por un círculo que los envuelve y detecta colisión cuando el círculo del personaje interseca con alguno de los círculos de los objetivos. Para la creación de este comportamiento, son necesarios los siguientes parámetros:
  \begin{itemize}
   \item El personaje que va a aplicar el comportamiento.
   \item La lista de objetivos a evitar.
   \item La máxima acceleración que se aplica para evitar el choque.
  \end{itemize}
- Para evitar las colisiones, el comportamiento tiene en cuenta tanto la velocidad del personaje como la velocidad de todos los objetivos, y con ella calcula si en un futuro van a chocar. De todos los objetivos con los que pueda chocar, se queda con el que esté más cercano; es decir, con el que va a chocar antes. Una vez que lo ha calculado, entonces hace uso del comportamiento \texttt{Evade} para evitar chocar con el objetivo obtenido. 
+ Para evitar las colisiones, el comportamiento tiene en cuenta tanto la velocidad del personaje como la velocidad de todos los objetivos, y con ella calcula si en un futuro van a chocar. De todos los objetivos con los que pueda chocar, se queda con el que esté más cercano; es decir, con el que va a chocar antes. Una vez que lo ha calculado, entonces hace uso del comportamiento \texttt{Evade} para evitar chocar con el objetivo obtenido. Es importante destacar que este comportamiento, para evitar las colisiones, no tiene en cuenta los objetos formación pues estos sirven como ancla para la formación y no son un personaje físico como tal (se explican en la sección \ref{formaciones}).
  
  Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
  
@@ -136,7 +136,7 @@ Todo lo referente a esta sección, se encuentra dentro del paquete \\ \texttt{co
  \end{itemize}
  Para detectar las colisiones entre los rayos y los objetos, se hace uso de la clase \texttt{Ray} y el método estático \texttt{intersectRaySphere()} proporcionado por la clase \texttt{Intersector}, que además de indicar si hay colisión, devuelve el punto de intersección en el caso de que haya una colisión. En el caso de que haya varios rayos que intersequen con el mismo objetivo, se obtiene aquella intersección que esté más próxima al personaje. Así, una vez que se tiene el punto de intersección, y teniendo en cuenta que suponemos que todos los objetos están envueltos por un círculo, el cálculo de la normal en el punto de intersección es inmediato. Tras tener la normal, calculamos el punto al que realizar el Seek y delegamos en él para mover el personaje hacia esa posición.
  
- Es importante destacar, que previo a la comprobación de la intersección, se obtiene de la lista de objetivos a evitar, aquél objetivo que esté más cerca del personaje. De tal manera, que no se hace la comprobación de la intersección para todos los objetivos, si no solamente para el objetivo más cercano. 
+ Es importante destacar, que previo a la comprobación de la intersección, se obtiene de la lista de objetivos a evitar, aquél objetivo que esté más cerca del personaje. De tal manera, que no se hace la comprobación de la intersección para todos los objetivos, si no solamente para el objetivo más cercano. También destacar que, al igual que el comportamiento \texttt{CollisionAvoidance}, este comportamiento no tiene en cuenta los objetos de tipo formación. 
  
  Este comportamiento, es uno de los comportamientos que puede mostrar las líneas de debug para visualizar su correcto funcionamiento. 
 
