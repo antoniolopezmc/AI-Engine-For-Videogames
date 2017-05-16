@@ -1,3 +1,11 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Interacción con el usuario}
+\label{interaccion}
+Todo lo referente a esta sección, se encuentra dentro del paquete \texttt{com.mygdx.iadevproject.userInteraction} del proyecto. Para la interacción del sistema con el usuario, se ha hecho uso de la interfaz \texttt{InputProcessor} proporcionada por la librería LibGDX. Esta interfaz proporciona método que se llaman cada vez que, por ejemplo, se pulsa una tecla o se clicka con el ratón en la pantalla. \\
+
+La implementación de la interacción se ha hecho siguiendo una máquina de estados. Debido a que el usuario puede realizar ciertas acciones con los personajes seleccionados, para cada tipo de acción, se ha creado un estado y dentro de ese estado, dependiendo de la tecla pulsada, se hará una acción u otra. El por qué se ha realizado de esta manera es porque hay ciertos comportamientos que requieren que el usuario seleccione a otro personaje, en una situación normal, el programa se quedaría esperando a que el usuario seleccione el personaje. Sin embargo, si se hace eso, el juego se paraliza completamente, incluso el manejo de eventos de la librería, por lo que quedar a la espera de que el usuario seleccione un personaje, no es factible. \\
+
+Con una máquina de estados, sí podemos controlar que, cuando el usuario haya realizado la acción que se espera, se pase a otro estado que la aplique, sin tener que parar la ejecución del programa. \\
+
+Para encapsular los comportamientos y acciones que el usuario pueda hacer, se ha creado la clase \texttt{UserInteraction} que es la encargada de proporcionar con métodos estáticos dichas acciones. También se encarga de mostrar los mensajes con las posibles acciones que puede realizar el usuario.

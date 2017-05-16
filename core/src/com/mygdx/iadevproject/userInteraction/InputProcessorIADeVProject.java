@@ -1,4 +1,4 @@
-package com.mygdx.iadevproject;
+package com.mygdx.iadevproject.userInteraction;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.model.WorldObject;
-import com.mygdx.iadevproject.userInteraction.UserInteraction;
+import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.checksAndActions.Checks;
 import com.mygdx.iadevproject.model.Character;
 

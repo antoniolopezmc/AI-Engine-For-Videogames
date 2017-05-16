@@ -19,7 +19,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
-import com.mygdx.iadevproject.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
 import com.mygdx.iadevproject.checksAndActions.Checks;
 import com.mygdx.iadevproject.checksAndActions.MoralPoints;
@@ -27,6 +26,7 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
+import com.mygdx.iadevproject.userInteraction.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.waypoints.Waypoints;
 
 public class TestOffensiveRole extends ApplicationAdapter {

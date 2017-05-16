@@ -24,6 +24,8 @@ Para representar los terrenos en el proyecto, se ha implementado el enumerado \t
  \item \texttt{getGround(int cost)}. Se trata de un método estático que dado un coste, devuelve el terreno al que pertenece. Si el coste que se pasa como argumento no se corresponde con ningún terreno, devuelve \texttt{null}.
 \end{itemize}
 
+También podemos observar que cada uno de los equipos tiene un manantial donde los personajes pueden curarse y a donde van cuando estos mueren. \\
+
 Para diseñar el mapa, se ha hecho uso de la herramienta \texttt{Tiled Map Editor} \cite{tiledMap} que proporciona una sencilla forma de diseñar mapas por capas, permitiendo que puedas crear capas de distintos tipos (de tiles, de objetos, etc), lo que nos facilita la creación e inicialización de los distintos grids que utilizamos. Lógicamente, las capas que se encuentran en el mapa, se corresponden con los distintos tipos de terrenos mencionados anteriormente (excluyendo la capa de objetos). \\
 
 Para introducir el mapa diseñado en el proyecto, \texttt{LibGDX} nos proporciona la clase \texttt{TiledMap}. Sin embargo, esta clase, a la hora de renderizar, si existe alguna capa de objetos por defecto, no la dibuja. Por este motivo, implementamos la clase \texttt{TiledMapIADeVProject}, que sobreescribe los métodos de renderizado para que se dibujen las capas de objetos. \\

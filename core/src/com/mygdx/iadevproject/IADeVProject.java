@@ -33,6 +33,8 @@ import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.Team;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.Formation;
+import com.mygdx.iadevproject.userInteraction.InputProcessorIADeVProject;
+import com.mygdx.iadevproject.userInteraction.UserInteraction;
 import com.mygdx.iadevproject.waypoints.Waypoints;
  
 public class IADeVProject extends ApplicationAdapter {
@@ -156,7 +158,7 @@ public class IADeVProject extends ApplicationAdapter {
         
         SimpleMapOfInfluence.initializeSimpleMapOfInfluence();
         
-        
+        UserInteraction.printFirstUse();
 	}
 	
 	@Override
@@ -220,6 +222,9 @@ public class IADeVProject extends ApplicationAdapter {
 	
 	
 	/** MÉTODOS ÚTILES **/
+	/**
+	 * Método que comprueba si algún equipo ha ganado.
+	 */
 	private void checkIfSomeTeamHasWon() {
 		
 		if (LDANIEL_win && FJAVIER_win) {
@@ -233,11 +238,20 @@ public class IADeVProject extends ApplicationAdapter {
 		}
 	}
 
+	/**
+	 * Método que calcula la posición donde se ha de colocar
+	 * el cartel de juego terminado.
+	 */
 	private void calculatePositionOfEndGame() {
 		endGameX = camera.position.x - endGameWidth/2;
 		endGameY = camera.position.y - endGameHeight/2;
 	}
 	
+	/**
+	 * Método que dibuja el cartel de juego terminado con el 
+	 * mensaje pasado como parámetro
+	 * @param message mensaje que se va a mostrar en la pantalla.
+	 */
 	private void drawEndGame(String message) {
 		calculatePositionOfEndGame();
 		paused = true;
