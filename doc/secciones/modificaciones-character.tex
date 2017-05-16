@@ -1,3 +1,44 @@
 %--------------------------------------------------------------------
 \medskip
-\section{Modificaciones en la clase Character}
+\section{Modificaciones en el modelo}
+Para incluir la parte táctica hemos tenido que añadir cierta funcionalidad y atributos en la clase \texttt{Character}, así como crear un enumerado que refleje los equipos posibles en el videojuego. 
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Clase Character}
+Las modificaciones que se han hecho dentro de la clase \texttt{Character} explicada en la sección \ref{clase-personaje} han sido las siguientes:
+\begin{itemize}
+ \item Se ha añadido el atributo estático \texttt{DEFAULT\_HEALTH} que refleja la vida por defecto que tienen todos los personajes. Este atributo está inicializado a 20.000.
+ \item Se ha añadido un atributo de tipo \texttt{TacticalRole} (ver sección \ref{roles}) que contiene el rol del personaje.
+ \item Se ha añadido un atributo de tipo \texttt{Team} que contiene el equipo al que pertenece el personaje.
+ \item Se han añadido dos atributos para controlar la vida del personaje: uno para la vida actual y otra para la vida máxima que puede tener un personaje.
+ \item Debido a que puede haber interacción con el usuario y que si un personaje es seleccionado, este debe hacer caso a lo que indica el usuario, se ha añadido un atributo booleano que indica si el rol de un personaje está habilitado o no.
+ \item Debido a que ahora es el rol del personaje el que le indica qué comportamientos tiene que realizar, la aplicación de los comportamientos sigue siendo la misma, pero en vez de llamar directamente al método \texttt{applyBehaviour()}, previamente hay que actualizar el rol para que actualice la lista de comportamientos del personaje (ver sección \ref{roles} donde se explican los roles). Para esto, se ha creado el método \texttt{updateTacticalRole()} que sencillamente lo que hace es, si el rol está activo (no ha sido seleccionado por el usuario) actualizarlo y después llamar al método \texttt{applyBehaviour()} tal y como se explica en la sección \ref{clase-personaje}.
+ \item Un personaje, por defecto, no tiene por qué tener un rol. Para asignarle un rol, se ha creado el método \texttt{initializeTacticalRole()} que recibe como parámetro un objeto del tipo \texttt{TacticalRole} y que lo que hace es asignar el rol al personaje e inicializarlo.
+ \item Para que, dependiendo del rol del personaje, este se mueva más o menos rápido dependiendo del terreno que esté pisando, se ha creado el método \texttt{getVelocityFactorOfThisCharacter()} que devuelve un valor entre 0 y 1, que indica cómo se aplica la velocidad obtenida del steering obtenido al personaje (método \texttt{update()}). Si el personaje no tiene un rol, este método siempre devolverá un 1, es decir, no se verá afectada la velocidad del personaje con respecto al terreno que esté pisando. Sin embargo, si tiene rol, este método devolverá lo que devuelva el método \texttt{getVelocityFactor()} del rol (ver sección \ref{roles}) y si está en una formación, se hará uso del rol de la formación.
+ \item También se han creado dos métodos para reducir y aumentar la vida del personaje, que se usarán en los comportamientos de ataque y curación. Estos métodos reciben como parámetro la vida que se quiere reducir/aumentar. La vida del personaje se visualiza siempre, para ello, también se ha creado otro método que dibuja la vida del personaje al lado del mismo.
+ \item Como se ha comentado, que el usuario seleccione a un personaje, implica que su rol se deshabilite y el personaje haga solamente lo que el usuario le mande. De igual manera, cuando el usuario lo deseleccione, el personaje debe volver a aplicar su rol como si no hubiera pasado nada. Para ello, se han creado dos métodos, uno para indicar que el personaje ha sido seleccionado y otro para indicar que el personaje ha sido deseleccionado.
+ \item Por último, para que se vayan mostrando el estado táctico por el que pasa el personaje, también se ha implementado un método que recibe como parámetro una cadena con el estado en el que está (además de los objetos necesarios para dibujar). Este método se llamará en todos los estados/nodos de los roles tácticos para ir indicando qué es lo que está realizando el personaje.
+\end{itemize}
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Enumerado Team}
+Para poder reflejar los equipos del videojuego, se ha creado el enumerado \texttt{Team} que contiene tres equipos: \texttt{FJAVIER, LDANIEL y NEUTRAL}. Como se puede apreciar, los nombres de los equipos los hemos puesto en honor a los dos profesores de la asignatura. El equipo de \texttt{FJAVIER} es el que se sitúa en la base de abajo a la derecha, mientras que el equipo de \texttt{LDANIEL} es el que sitúa en la base de arriba a la izquierda. El equipo \texttt{NEUTRAL} es un equipo neutral y se añadió para poder poner otros personajes en el videojuego que no pertenezcan a ningún equipo (tal como animales o cosas por el estilo). Sin embargo, en el diseño final no hemos incluido personajes neutrales, pero así, ya está todo preparado por si se quieren introducir. \\
+
+Este enumerado tiene un único método interesante: \texttt{getEnemyTeam()} que devuelve el equipo contrario al objeto que realiza el método: si el equipo es \texttt{LDANIEL} devolverá \texttt{FJAVIER} (y viceversa), pero si es \texttt{NEUTRAL} devolverá \texttt{NEUTRAL}.
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,7 +5,6 @@ import java.util.*;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Seek_Accelerated;
 import com.mygdx.iadevproject.aiReactive.steering.Steering;
 import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
 import com.mygdx.iadevproject.model.Character;

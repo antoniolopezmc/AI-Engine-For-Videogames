@@ -15,7 +15,6 @@ import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Align_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.acceleratedUnifMov.Arrive_Accelerated;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.CollisionAvoidance;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.LookingWhereYouGoing;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.WallAvoidance;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Attack;
 import com.mygdx.iadevproject.aiReactive.behaviour.others.Cure;

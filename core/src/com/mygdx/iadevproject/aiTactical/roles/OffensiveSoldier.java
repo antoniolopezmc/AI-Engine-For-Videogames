@@ -9,7 +9,6 @@ import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.IAmDead;
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.Node;
 import com.mygdx.iadevproject.aiTactical.roles.decisionTree.Node.Win;
 import com.mygdx.iadevproject.checksAndActions.Checks;
-import com.mygdx.iadevproject.map.Ground;
 import com.mygdx.iadevproject.model.Character;
 
 public class OffensiveSoldier extends Soldier {
