@@ -65,7 +65,11 @@ public class DefensiveArcher extends Archer {
 			// Estamos en el estado -> Reservar waypoint (y hacer lo que sea)
 			
 			// Solo cambio de estado, si ocurre lo siguiente:
-			if (Checks.haveIGotWayPoint(source)) {
+			if (Checks.haveILittleHealth(source)) {
+				// Si me queda poca vida, cambio al estado -> Ir al manatial
+				this.stateMachine.changeState(this.goToMyManantial);
+				
+			} else if (Checks.haveIGotWayPoint(source)) {
 				// Si tengo waypoint, cambio al estado -> Ir a mi waypoint
 				this.stateMachine.changeState(this.goToMyWayPoint);
 			}

@@ -22,7 +22,7 @@ public class BookWaypoint implements State<Character> {
 		// Reservamos un waypoint.
 		Actions.bookWaypoint(entity);
 		// Obtenemos los comportamientos de hacer lo que queramos:
-		Map<Float, Behaviour> doRandom = Actions.doRandomThings(20.0f, entity);
+		Map<Float, Behaviour> doRandom = Actions.doRandomThings(100.0f, entity);
 		// Juntamos ambos comportamientos
 		behaviours.putAll(doRandom);
 		
