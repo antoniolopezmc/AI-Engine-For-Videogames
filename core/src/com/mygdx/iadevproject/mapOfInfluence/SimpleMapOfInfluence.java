@@ -17,7 +17,7 @@ import com.mygdx.iadevproject.model.Character;
  * Muy importante.
  * Para usar el mapa de influencia en el pathfinding táctico, habría que pasar el mapa DEL EQUIPO CONTRARIO.
  * El pathfinding debe tener en cuenta la influencia de equipo rival (coste añadido) para NO IR por esas zonas.
- * No tiene sentido usar el pathfinding de mi propio equipo, ya que estaría penalizando las zonas controladas por mí. 
+ * No tiene sentido usar el mapa de influencia de mi propio equipo, ya que estaría penalizando las zonas controladas por mí. 
  *
  */
 public class SimpleMapOfInfluence {
