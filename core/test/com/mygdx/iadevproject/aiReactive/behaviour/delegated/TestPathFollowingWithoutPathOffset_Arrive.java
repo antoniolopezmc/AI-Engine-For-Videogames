@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.iadevproject.IADeVProject;
 import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Accelerated;
-import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset;
 import com.mygdx.iadevproject.model.Character;
 
 public class TestPathFollowingWithoutPathOffset_Arrive extends ApplicationAdapter {
@@ -31,7 +30,6 @@ public class TestPathFollowingWithoutPathOffset_Arrive extends ApplicationAdapte
 	private Character gota2;
 	private Character gota3;
 	private Character gota4;
-	private Character cubo;
 	
 	private List<Vector3> listaDePuntos;
 	

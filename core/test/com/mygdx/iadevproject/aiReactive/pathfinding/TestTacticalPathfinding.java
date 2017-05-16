@@ -25,7 +25,6 @@ import com.mygdx.iadevproject.aiReactive.arbitrator.WeightedBlendArbitrator_Acce
 import com.mygdx.iadevproject.aiReactive.behaviour.Behaviour;
 import com.mygdx.iadevproject.aiReactive.behaviour.delegated.PathFollowingWithoutPathOffset_Arrive;
 import com.mygdx.iadevproject.aiReactive.pathfinding.pointToPoint.PointToPoint_PathFinding;
-import com.mygdx.iadevproject.checksAndActions.Checks;
 import com.mygdx.iadevproject.checksAndActions.MoralPoints;
 import com.mygdx.iadevproject.mapOfInfluence.SimpleMapOfInfluence;
 import com.mygdx.iadevproject.model.Character;

@@ -31,7 +31,6 @@ public class TestPathFollowingWithoutPathOffset extends ApplicationAdapter {
 	private Character gota2;
 	private Character gota3;
 	private Character gota4;
-	private Character cubo;
 	
 	private List<Vector3> listaDePuntos;
 	
