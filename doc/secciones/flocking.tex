@@ -1,3 +1,18 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Flocking}
+En esta sección va a tratar sobre la implementación del Flocking pedido en el proyecto. Todo lo referente a esta sección se encuentra dentro del paquete \texttt{com.mygdx.iadevproject.aiReactive.flocking}, en la carpeta de test. \\
+
+Debido a que la finalidad del videojuego no es muy idílica para incluir un flocking en él, hemos decidido implementar el flocking a parte (de ahí que esté en el apartado de test, y no en la parte de código fuente). \\
+
+Para conseguir este comportamiento, hemos utilizado un árbitro por mezcla ponderada y donde todos los personajes tienen los siguientes comportamientos:
+\begin{itemize}
+ \item \texttt{CollisionAvoidance} para evitar choques.
+ \item \texttt{Separation} para separase del grupo.
+ \item \texttt{Cohesion} para juntarse al grupo.
+ \item \texttt{VelocityMatching} para ajustarse a la velocidad del personaje que guía al flocking.
+ \item \texttt{LookingWhereYouGoing} para que miren por dónde van.
+ \item \texttt{Wander} para que parezca que hacen cosas aleatorias.
+\end{itemize}
+
+Cada uno de estos comportamientos tienen un peso distinto, por ejemplo, el \texttt{CollisionAvoidance} es el que tiene mayor peso, mientras que el \texttt{Wander} es el que tiene menor peso. Para guiar a todo el grupo, se ha creado un personaje que simplemente realiza un \texttt{Arrive} a la posición que se clicka en pantalla. Todos los demás personajes hacen el \texttt{VelocityMatching} a este personaje.
