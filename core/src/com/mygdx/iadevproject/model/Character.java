@@ -373,9 +373,13 @@ public class Character extends WorldObject {
 	 * @param font
 	 */
 	public void drawHealth (SpriteBatch batch, BitmapFont font) {
-		batch.begin();
-		font.draw(batch, "Health: " + this.getCurrentHealth(), this.getPosition().x + 20, this.getPosition().y); // Dibujamos la vida a la derecha del personaje.
-        batch.end();
+		// La vida de un personaje solamente se mostrará si NO FORMA PARTE DE UNA FORMACIÓN.
+		// Tal y como se comentará en le apartado adecuado, estamos tratando a las formaciones (en cuanto a su salud se refiere) de manera compacta.
+		if (!this.isInFormation()) {
+			batch.begin();
+			font.draw(batch, "Health: " + this.getCurrentHealth(), this.getPosition().x + 20, this.getPosition().y); // Dibujamos la vida a la derecha del personaje.
+	        batch.end();
+		}
 	}
 	
 	
