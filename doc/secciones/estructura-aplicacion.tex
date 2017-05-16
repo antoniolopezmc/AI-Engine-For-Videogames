@@ -1,3 +1,16 @@
 %--------------------------------------------------------------------
 \medskip
 \section{Estructura de la aplicación}
+La estructura que hemos llevado a cabo en este proyecto ha sido una estructura en paquetes (típica estructura de cualquier proyecto en Java). Esta estructura es la siguiente:
+\begin{itemize}
+ \item Primero se encuentra el paquete \texttt{com.mygdx.iadevproject} que contiene la clase principal del proyecto, así como la clase que crea todos los personajes del videojuego.
+ \item Seguidamente se encuentra el paquete \texttt{com.mygdx.iadevproject.aiReactive} que contiene toda la parte reactiva de la inteligencia artificial: desde los comportamientos no acelerados, pasando por los comportamientos acelerados, delegados y de grupo; los árbitros y el pathfinding. Cada uno de estos elementos, se encuentra en su paquete correspondiente.
+ \item El paquete \texttt{com.mygdx.iadevproject.aiTactical} contiene toda la parte táctica de la inteligencia artificial: los roles implementados, los estados de las máquinas de estados implementadas, así como los nodos del árbol de decisión implementado.
+ \item El paquete \texttt{com.mygdx.iadevproject.model} contiene todo el modelo de objetos que hemos considerado para este proyecto.
+ \item El paquete \texttt{com.mygdx.iadevproject.map} contiene todo lo referente a la creación del mapa, así como a partir de él, la inicialización de los grids necesarios para el pathfinding.
+ \item El paquete \texttt{com.mygdx.iadevproject.mapOfInfluence} contiene la parte del cálculo de los mapas de influencia. Así como su visualización.
+ \item El paquete \texttt{com.mygdx.iadevproject.userInteraction} encapsula la interacción del sistema con el usuario.
+ \item Y por ultimo, el paquete \texttt{com.mygdx.iadevproject.waypoints} encapsula toda la creación y manejo de los waypoints del juego.
+\end{itemize}
+
+Para poder probar el correcto funcionamiento todas las funcionalidades implementadas, se ha creado una carpeta de test que tiene la misma estructura que la carpeta de fuentes, y que contiene todos los test implementados de toda la funcionalidad del sistema: comportamientos, árbitros, pathfinding, roles, formaciones, etc.
