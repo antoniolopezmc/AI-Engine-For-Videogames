@@ -25,8 +25,9 @@ Al igual que antes, cuando un personaje (no formación) se cura, este comportami
 A la hora de entender los procesos de ataque y cura para el caso de las formaciones, hay que tener muy claro lo siguiente:
 \begin{itemize}
 	\item Cuando un conjunto de personajes están en una formación, la lista de comportamientos propia de cada personaje no se tiene en cuenta. Por el contrario, se usará la lista de comportamiento del propio objeto formación (para mover el ancla de la formación) y un conjunto de comportamientos establecidos directamente ``a pelo'' en el método correspondiente para hacer que los componentes de la formación vayan al punto que les corresponde.
-	\item Los objetos formación como tal \textbf{ni atacan ni se curan}. Los que atacan son los elementos de la formación.
+	\item Los objetos formación como tal \textbf{ni atacan ni se curan}. Los que atacan y se curan son los elementos de la formación.
 	\item Del mismo modo, los objetos de tipo formación no pueden ser atacados (a la hora de atacar se comprueba que el objetivo no sea una formación) ni se pueden curar (ya que, de nuevo, los que se curan son los componentes de la formación).
+	\item Teniendo en cuenta los 2 puntos anteriores, los comportamientos de ataque y cura jamás podrán estar en la lista de comportamientos de un objeto de tipo formación, ya que estas acciones pueden ser realizadas exclusivamente por personajes como tal.
 	\item Los componentes de la formación no tienen estructura táctica (máquina de estados o árbol de decisión). Esta estructura solamente se encuentra en el objeto tipo formación (en la ``raíz'', en caso de haber formaciones de formaciones).
 \end{itemize}
 

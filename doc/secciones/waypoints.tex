@@ -3,21 +3,40 @@
 \section{Waypoints}
 \label{waypoints}
 
-Un Waypoint es una posición preestablecida en el mapa que puede tener cierta finalidad y puede ser usada para un determinado propósito. Estos puntos en el mapa normalmente son establecidos por los propios diseñadores del mapa y pueden tener diversos usos como uso táctico (para este caso, ocupar estas posiciones proporciona algún tipo de ventaja táctica) o pueden representar posiciones defensivas (posiciones más adecuadas para situar personajes defensivos). En cualquier caso, estos puntos deben tener asociada cierta información que dependerá del uso que les queramos dar. \\
+Un Waypoint es una posición preestablecida en el mapa que puede tener cierta finalidad y puede ser usada para un determinado propósito. Estos puntos en el mapa normalmente son establecidos por los propios diseñadores del mapa y pueden tener diversos usos como uso táctico (para este caso, ocupar estas posiciones proporcionaría algún tipo de ventaja táctica) o pueden representar posiciones defensivas (posiciones más adecuadas para situar personajes defensivos). En cualquier caso, estos puntos deben tener asociada cierta información que dependerá del uso que les queramos dar. \\
 
 Para nuestro caso concreto, vamos a implementar y a usar waypoints con finalidad defensiva, es decir, los waypoints establecidos representarán posiciones interesantes a defender. Toda esta funcionalidad se encuentra en el fichero \texttt{Waypoints} del paquete \texttt{com.mygdx.iadevproject.waypoints}. \\
 
 Cada equipo tendrá 2 conjuntos de waypoints:
 \begin{itemize}
 	\item Waypoints de la base $\rightarrow$ Estos waypoints serán usados para defender la base. Los personajes cuyo rol sea soldado defensivo harán un Pathfollowing a la lista de puntos correspondientes a su base.
-	\item Waypoints de los puentes $\rightarrow$ Cada equipo dispone de 6 waypoints de este tipo. Tal y como se ha explicado en el apartado correspondiente, en el mapa hay 4 puentes, aunque solo 3 de ellos serán defendidos por los personajes (cuyo rol sea arquero defensivo) de cada equipo. Para cada puente de esos 3, un equipo tendrá 2 waypoints en su lado correspondiente del puente (lo que harán un total de 6 waypoints para cada equipo). Al igual que antes un personaje aplicará un Pathfollowing para patrullar un lado de uno de los puentes (Pathfollowing con una lista de 2 puntos).
+	\item Waypoints de los puentes $\rightarrow$ Cada equipo dispone de 6 waypoints de este tipo. Tal y como se ha explicado en el apartado correspondiente, en el mapa hay 4 puentes, aunque solo 3 de ellos serán defendidos por los personajes (cuyo rol sea arquero defensivo) de cada equipo. Para cada puente de esos 3, un equipo tendrá 2 waypoints en su lado correspondiente del puente (lo que harán un total de 6 waypoints para cada equipo). Al igual que antes, un personaje aplicará un Pathfollowing para patrullar su lado correspondiente de los puentes (Pathfollowing con una lista de 2 puntos).
 \end{itemize}
 
-Para repartir de manera ordenada los waypoints de los puentes, se ha implementado un sistema de reserva y liberación de waypoints (solamente para los waypoints de los puentes). Como solamente hay 6 waypoints en los puentes en cada equipo, solamente podrá haber 6 arqueros defensivos patrullando los puentes. Si otros personajes intentan reservar un waypoint de los puentes, no podrán y pasarán a moverse de manera aleatoria (mediante el comportamiento Wander). \\
+Para repartir de manera ordenada los waypoints de los puentes y evitar que pueda haber aglomeración de personajes en un mismo puente, se ha implementado un sistema de reserva y liberación de waypoints (solamente para los waypoints de los puentes). Como solamente hay 6 waypoints en los puentes en cada equipo, solamente podrá haber 6 arqueros defensivos patrullando los puentes (2 del mismo equipo en cada puente). Si otros personajes intentan reservar un waypoint de los puentes, no podrán y pasarán a moverse de manera aleatoria (mediante el comportamiento Wander). \\
 
 En la clase correspondiente y para el caso de los waypoints de los puentes, podemos encontrar las siguientes estructuras:
 \begin{itemize}
-	\item \texttt{bridges_CharacterAndWaypointAssociation_team_X} (una para cada equipo) $\rightarrow$ Esta estructura es de tipo \texttt{Map<Character, Vector3>}
-	\item \texttt{bridgesWayPoints_team_X} (una para cada equipo) $\rightarrow$ Esta estructura es de tipo \texttt{Map<Vector3, ValueOfBridgeWaypoint>}, se inicializa al principio de la aplicación y 
+	\item \texttt{bridgesWayPoints\_team\_X} (una para cada equipo) $\rightarrow$ Esta estructura es de tipo \texttt{Map<Vector3, ValueOfBridgeWaypoint>}, se inicializa al principio de la aplicación y contiene la siguiente información:
+		\begin{itemize}
+			\item La clave (de tipo Vector3) del Map es el waypoint del puente que será reservado por el personaje.
+			\item El valor (de tipo ValueOfBridgeWaypoint) del Map está formado a su vez por 2 elementos: un booleano que indica si ese waypoint está ocupado o no (inicialmente todos estarán a false) y un Vector3 donde se almacena el waypoint vecino (el otro waypoint del mismo lado del mismo puente).
+		\end{itemize}
+		Está estructura se inicializará al principio del juego y, durante la partida, solamente se modificará el atributo booleano, pero no se añadirán ni se eliminarán elementos del Map.
+	\item \texttt{bridges\_CharacterAndWaypointAssociation\_team\_X} (una para cada equipo) $\rightarrow$ Esta estructura es de tipo \texttt{Map<Character, Vector3>}, inicialmente está vacía y contiene la siguiente información:
+	\begin{itemize}
+		\item La clave (de tipo Character) del Map es el personaje que ha reservado un determinado waypoint.
+		\item El valor (de tipo Vector3) del Map corresponde con el Waypoint reservado por el personaje.
+	\end{itemize}
+	En está estructura se almacenará qué personaje ha reservado un determinado waypoint y se irá modificando a lo largo de la partida.
 \end{itemize}
+
+Hemos decidido trabajar con este tipo de estructuras para que el proceso de reserva y liberación de los waypoints de los puentes sea lo más rápido posible y no tengamos que estar recorriendo continuamente ciertas estructuras que, realmente, no debería ser necesario. Cabe destacar, que los personajes del equipo neutral no pueden tener acceso a estas estructuras ni a esta funcionalidad. \\
+
+Cuando un personaje va a reservar un waypoint, comprobamos que el personaje no tenga ya uno asociado (indexando al personaje en el Map \texttt{bridges\_CharacterAndWaypointAssociation\_team\_X} de su equipo). Si sí tiene un waypoint ya asociado, simplemente devolvemos ese y su vecino. Si no lo tiene, debemos recorrer la lista \texttt{bridgesWayPoints\_team\_X} de su equipo en busca de un waypoint libre. Si no hay waypoints libres, devolvemos la lista vacía. En caso contrario, se reserva el waypoint para dicho personaje. Esa reserva implica que el booleano de ocupación del waypoint pasará a valer true y a la lista de asociaciones de personaje-waypoint se le añadirá una nueva entrada. Tras dicho proceso de reserva, devolveremos una lista con el waypoint reservado y con su vecino en el puente (en el mismo lado del puente). \\
+
+Cuando un personaje libera un waypoint, lo primero que comprobamos es si, efectivamente, dicho personaje tenía asociado un waypoint. En caso afirmativo, modificamos el booleano de ocupación del puente (vuelve a valor false) y eliminamos la asociación entre el personaje de entrada y el waypoint que tenía reservado. \\
+
+Además de todos los métodos comentados, en esta clase también podemos encontrar diversos métodos para dibujar los waypoints de las bases de los puentes. Estos método podrán servir para mostrar información adicional e información de depuración y, además, para poder comprobar si el personaje está siguiendo el camino que debería seguir.
+
 
