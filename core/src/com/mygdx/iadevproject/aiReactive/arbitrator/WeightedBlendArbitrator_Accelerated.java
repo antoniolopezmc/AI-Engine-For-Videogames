@@ -15,12 +15,17 @@ import com.mygdx.iadevproject.aiReactive.steering.Steering_AcceleratedUnifMov;
  */
 public class WeightedBlendArbitrator_Accelerated implements Arbitrator {
 
-	private float maxAcceleration;
-	private float maxRotation;
+	private float maxAcceleration;	// Máxima aceleración lineal
+	private float maxAngular;		// Máxima aceleración angular
 	
-	public WeightedBlendArbitrator_Accelerated(float maxAcceleration, float maxRotation) {
+	/**
+	 * Constructor.
+	 * @param maxAcceleration Máxima aceleración lineal que se puede aplicar.
+	 * @param maxAngular Máxima aceleración angular que se puede aplicar.
+	 */
+	public WeightedBlendArbitrator_Accelerated(float maxAcceleration, float maxAngular) {
 		this.maxAcceleration = maxAcceleration;
-		this.maxRotation = maxRotation;
+		this.maxAngular = maxAngular;
 	}
 	
 	public float getMaxAcceleration() {
@@ -31,12 +36,12 @@ public class WeightedBlendArbitrator_Accelerated implements Arbitrator {
 		this.maxAcceleration = maxAcceleration;
 	}
 
-	public float getMaxRotation() {
-		return maxRotation;
+	public float getMaxAngular() {
+		return maxAngular;
 	}
 
-	public void setMaxRotation(float maxRotation) {
-		this.maxRotation = maxRotation;
+	public void setMaxAngular(float maxAngular) {
+		this.maxAngular = maxAngular;
 	}
 
 	@Override
@@ -74,7 +79,7 @@ public class WeightedBlendArbitrator_Accelerated implements Arbitrator {
 			lineal.scl(this.maxAcceleration);
 		}
 		
-		angular = (angular > this.maxRotation) ? this.maxRotation : angular;
+		angular = (angular > this.maxAngular) ? this.maxAngular : angular;
 		
 		// Devolvemos el steering
 		steering.setLineal(lineal);

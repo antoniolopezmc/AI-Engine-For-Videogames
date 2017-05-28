@@ -28,6 +28,9 @@ public class DefensiveArcher extends Archer {
 	private IAmDead 			iAmDead;
 	private GoToMyManantial 	goToMyManantial;
 	
+	/**
+	 * Constructor. Crea los estados necesarios para la máquina de estados.
+	 */
 	public DefensiveArcher() {
 		// Establecemos a null la máquina de estados porque se ha de crear cuando se utilice
 		// el método 'initialize()'

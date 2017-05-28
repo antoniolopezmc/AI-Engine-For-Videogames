@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector3;
  */
 public abstract class WorldObject extends Sprite {
 
-	// PARA OBJETOS ESTÁTICOS, TODO LO QUE TENGA QUE VER CON LA VELOCIDAD (DE CUALQUIER TIPO) SERÁ SIEMPRE 0.
+	// PARA OBJETOS ESTÁTICOS, LO QUE TENGA QUE VER CON LA VELOCIDAD (DE CUALQUIER TIPO) SERÁ SIEMPRE 0.
 	// EN OBJETOS EN MOVIMIENTO (PERSONAJES) LA VELOCIDAD SÍ TOMARÁ VALORES DISTINTOS DE 0.
 	
 	// Vector velocidad de 3 componenetes.
@@ -174,9 +174,6 @@ public abstract class WorldObject extends Sprite {
 	 * @return Radio que recubre al objeto.
 	 */
 	public float getBoundingRadius() {
-		//TODO Lo he calculado como el 70% del minimo de los lados del rectángulo que lo recubre.
-		//TODO CONSULTAR CON ANTONIO A VER QUÉ LE PARECE
-		
 		float maxEdge = Math.min(this.getBoundingRectangle().height, this.getBoundingRectangle().width);
 		return (float) maxEdge * 0.7f;
 	}

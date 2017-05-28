@@ -10,10 +10,17 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
-//TODO IMPORTANTE -> PROBAR.
-
 public class LookingWhereYouGoing extends Align_Accelerated implements Behaviour {
 
+	/**
+	 * Constructor de la clase.
+	 * @param source Personaje que realiza el comportamiento (personaje fuente).
+	 * @param maxAngularAcceleration Máxima aceleración angular.
+	 * @param maxRotation Máxima velocidad angular.
+	 * @param targetRadius Ángulo interior (igual o más pequeño que slowRadius).
+	 * @param slowRadius Ángulo exterior (igual o más grande que targetRadius).
+	 * @param timeToTarget Tiempo en el que se realizará este comportamiento.
+	 */
 	public LookingWhereYouGoing(Character source, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
 		super(source, null, maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
 	}

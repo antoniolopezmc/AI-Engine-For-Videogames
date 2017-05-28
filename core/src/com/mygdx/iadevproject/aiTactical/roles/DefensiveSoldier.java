@@ -27,6 +27,9 @@ public class DefensiveSoldier extends Soldier {
 	private IAmDead 			iAmDead;
 	private GoToMyManantial 	goToMyManantial;
 	
+	/**
+	 * Constructor. Crea los estados necesarios para la máquina de estados.
+	 */
 	public DefensiveSoldier() {
 		// Establecemos a null la máquina de estados porque se ha de crear cuando se utilice
 		// el método 'initialize()'

@@ -20,6 +20,12 @@ public class CollisionAvoidance implements Behaviour {
 	private List<WorldObject> targets; // Lista de objetivos a evitar
 	private float maxAcceleration;	 // Máxima aceleración
 	
+	/**
+	 * Constructor.
+	 * @param source Personaje al que se aplica el comportamiento.
+	 * @param targets Objetivos a evitar.
+	 * @param maxAcceleration Máxima aceleración a aplicar para evitar a los objetivos.
+	 */
 	public CollisionAvoidance(Character source, List<WorldObject> targets, float maxAcceleration) {
 		this.source = source;
 		this.targets = targets;

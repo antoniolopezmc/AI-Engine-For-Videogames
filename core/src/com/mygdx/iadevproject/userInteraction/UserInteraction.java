@@ -32,11 +32,14 @@ import com.mygdx.iadevproject.model.formation.StarFormation;
 
 public class UserInteraction {
 
-	
-	
 	/** MÉTODOS DE ACCIONES **/
 	
 	/** ACCELERATED BEHAVIOURS **/
+	/**
+	 * Método que aplica el comportamiento Align a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyAlign(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -46,6 +49,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Anti-Align a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyAntiAlign(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -55,6 +63,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Arrive a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyArrive(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -64,6 +77,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Flee a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyFlee(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -73,6 +91,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Seek a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applySeek(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -82,6 +105,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Velocity Matching a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyVelocityMatching(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -93,6 +121,11 @@ public class UserInteraction {
 	
 	
 	/** DELEGATED BEHAVIOURS **/
+	/**
+	 * Método que aplica el comportamiento Evade a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyEvade(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -102,6 +135,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Face a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyFace(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -111,6 +149,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Looking Where You Going a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyLookingWhereYouGoing() {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -120,6 +163,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que comprueba si la posición pasada como parámetro es correcta (no está en un terreno infranqueable)
+	 * @param position Posición que se quiere saber si es correcta
+	 * @return true si es correcta, false en caso contrario.
+	 */
 	private static boolean checkIfCorrectPosition(Vector3 position) {
 		Ground ground = IADeVProject.getGroundOfPosition(position);
 		
@@ -127,6 +175,11 @@ public class UserInteraction {
 	}
 	
 	/** IMPORTANTE: ESTE MÉTODO UTILIZA EL PATHFINDING CONTINUO, NO EL PUNTO A PUNTO **/
+	/**
+	 * Método que aplica el comportamiento PathFinding CONTINUO a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyContinuousPathFinding(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
 			System.out.println("Destination not allowed. Select another position.");
@@ -146,6 +199,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Persue a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyPersue(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -155,6 +213,11 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Wander a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyWander() {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -167,6 +230,12 @@ public class UserInteraction {
 	
 	
 	/** GROUP BEHAVIOURS **/
+	/**
+	 * Método que aplica el comportamiento Cohesion al personaje 'source' sobre la lista
+	 * de personajes 'targets'
+	 * @param source Personaje fuente.
+	 * @param targets Personajes objetivos.
+	 */
 	public static void applyCohesion(Character source, List<WorldObject> targets) {
 		// Establecemos la lista de comportamientos de no colisionar
 		source.setListBehaviour(Actions.notCollide(200.0f, source));
@@ -176,6 +245,12 @@ public class UserInteraction {
 		source.addToListBehaviour(new Cohesion(source, targets, 50.0f, 3000.0f));
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Separation al personaje 'source' sobre la lista
+	 * de personajes 'targets'
+	 * @param source Personaje fuente.
+	 * @param targets Personajes objetivos.
+	 */
 	public static void applySeparation(Character source, List<WorldObject> targets) {
 		// Establecemos la lista de comportamientos de no colisionar
 		source.setListBehaviour(Actions.notCollide(200.0f, source));
@@ -187,6 +262,11 @@ public class UserInteraction {
 	
 	
 	/** OTHERS BEHAVIOURS **/
+	/**
+	 * Método que aplica el comportamiento Attack a todos los personajes seleccionados 
+	 * hacia el objetivo 'target'
+	 * @param target Objetivo al que aplicar el comportamiento.
+	 */
 	public static void applyAttack(Character target) {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -208,6 +288,9 @@ public class UserInteraction {
 		}
 	}
 	
+	/**
+	 * Método que aplica el comportamiento Cure a todos los personajes seleccionados.
+	 */
 	public static void applyCure() {
 		for (Character source : IADeVProject.selectedCharacters) {
 			// Establecemos la lista de comportamientos de no colisionar
@@ -220,6 +303,10 @@ public class UserInteraction {
 	
 	
 	/** MAKE FORMATION **/
+	/**
+	 * Método que realiza la formación circular mirando hacia fuera cuya ancla es la posición 'position'
+	 * @param position Posición del ancla.
+	 */
 	public static void applyCircularLookOutSideFormation(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
 			System.out.println("Anchor position not allowed");
@@ -240,6 +327,10 @@ public class UserInteraction {
         IADeVProject.addToWorldObjectList(formation);
 	}
 
+	/**
+	 * Método que realiza la formación circular mirando hacia dentro cuya ancla es la posición 'position'
+	 * @param position Posición del ancla.
+	 */
 	public static void applyCircularLookInSideFormation(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
 			System.out.println("Anchor position not allowed");
@@ -260,6 +351,10 @@ public class UserInteraction {
         IADeVProject.addToWorldObjectList(formation);
 	}
 	
+	/**
+	 * Método que realiza la formación en línea cuya ancla es la posición 'position'
+	 * @param position Posición del ancla.
+	 */
 	public static void applyLineFormation(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
 			System.out.println("Anchor position not allowed");
@@ -281,6 +376,10 @@ public class UserInteraction {
         IADeVProject.addToWorldObjectList(formation);
 	}
 	
+	/**
+	 * Método que realiza la formación en estrella mirando hacia fuera cuya ancla es la posición 'position'
+	 * @param position Posición del ancla.
+	 */
 	public static void applyStarLookOutSideFormation(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
 			System.out.println("Anchor position not allowed");
@@ -302,6 +401,10 @@ public class UserInteraction {
         IADeVProject.addToWorldObjectList(formation);
 	}
 	
+	/**
+	 * Método que realiza la formación en estrella mirando hacia dentro cuya ancla es la posición 'position'
+	 * @param position Posición del ancla.
+	 */
 	public static void applyStarLookInSideFormation(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
 			System.out.println("Anchor position not allowed");

@@ -184,19 +184,6 @@ public class Actions {
 		return map;
 	}
 	
-	
-	/**
-	 * Método que refleja la acción de apoyar a un aliado
-	 * @param weight Peso que tiene esta acción.
-	 * @param source Personaje que quiere aplicar la acción.
-	 * @param target
-	 * @return
-	 */
-	public static Map<Float, Behaviour> supportAnAlly(float weight, Character source, Character target) {
-		//TODO
-		return null;
-	}
-	
 	/**
 	 * Método que refleja la acción de patrullar la base del personaje
 	 * @param weight Peso que tiene esta acción.

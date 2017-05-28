@@ -8,8 +8,6 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
-//TODO IMPORTANTE -> PROBAR.
-
 public class Persue extends Seek_Accelerated implements Behaviour {
 	
 	// Tiempo máximo de predicción. En segundos.

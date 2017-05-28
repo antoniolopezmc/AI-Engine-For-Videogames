@@ -17,7 +17,6 @@ import com.mygdx.iadevproject.model.Team;
 
 /**
  * Clase estática que crea todos los personajes del juego. 
- *
  */
 public class CreateCharacters {
 

@@ -14,7 +14,7 @@ public class Flee_NoAccelerated implements Behaviour {
 	private float maxSpeed;
 	
 	/**
-	 * 
+	 * Constructor.
 	 * @param source
 	 * @param target
 	 * @param maxSpeed Máxima velocidad lineal que se aplica en este comportamiento.

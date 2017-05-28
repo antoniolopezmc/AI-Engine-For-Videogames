@@ -12,8 +12,6 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
-//TODO IMPORTANTE -> PROBAR.
-
 public class Wander_Delegated extends Face implements Behaviour {
 
 	private static Random aletorio = new Random();

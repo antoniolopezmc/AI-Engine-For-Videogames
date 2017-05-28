@@ -36,7 +36,10 @@ import com.mygdx.iadevproject.model.formation.Formation;
 import com.mygdx.iadevproject.userInteraction.InputProcessorIADeVProject;
 import com.mygdx.iadevproject.userInteraction.UserInteraction;
 import com.mygdx.iadevproject.waypoints.Waypoints;
- 
+
+/**
+ * Clase principal del proyecto.
+ */
 public class IADeVProject extends ApplicationAdapter {
 	
 	/** CONSTANTES **/

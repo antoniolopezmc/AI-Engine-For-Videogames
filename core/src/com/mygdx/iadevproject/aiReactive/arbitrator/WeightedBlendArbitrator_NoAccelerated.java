@@ -15,9 +15,14 @@ import com.mygdx.iadevproject.aiReactive.steering.Steering_NoAcceleratedUnifMov;
  */
 public class WeightedBlendArbitrator_NoAccelerated implements Arbitrator {
 
-	private float maxSpeed;
-	private float maxRotation;
+	private float maxSpeed;		// Máxima velocidad lineal
+	private float maxRotation;	// Máxima velocidad angular
 	
+	/**
+	 * Constructor.
+	 * @param maxSpeed Máxima velocidad lineal que se puede aplicar.
+	 * @param maxRotation Máxima velocidad lineal que se puede aplicar.
+	 */
 	public WeightedBlendArbitrator_NoAccelerated(float maxSpeed, float maxRotation) {
 		this.maxSpeed = maxSpeed;
 		this.maxRotation = maxRotation;
@@ -31,7 +36,7 @@ public class WeightedBlendArbitrator_NoAccelerated implements Arbitrator {
 		this.maxSpeed = maxSpeed;
 	}
 
-	public float getMaxOrientation() {
+	public float getMaxRotation() {
 		return maxRotation;
 	}
 

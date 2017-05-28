@@ -227,12 +227,20 @@ public class Character extends WorldObject {
 	
 	// **********************************************************************************************
 	// **********************************************************************************************
+	/**
+	 * Método que asigna e inicializa el rol táctico del personaje al rol pasado como parámetro.
+	 * @param role Rol que se le asigna al personaje.
+	 */
 	public void initializeTacticalRole(TacticalRole role) {
 		this.role = role;
 		// Devolver lista de comportamientos inicial llamando 
 		this.role.initialize(this);
 	}	
 	
+	/**
+	 * Método que actualiza el rol táctico del personaje (siempre y cuando este personaje 
+	 * no esté en una formación).
+	 */
 	public void updateTacticalRole() {
 		// Actualizamos el rol del personaje cuando tiene rol y cuando este está habilitado.
 		if (this.role != null && isEnabledRole()) {
@@ -440,7 +448,12 @@ public class Character extends WorldObject {
 		}
 	}
 	
-	
+	/**
+	 * Método que dibuja el estado táctico de un personaje.
+	 * @param batch Batch donde dibujar
+	 * @param font Font donde dibujar
+	 * @param state Cadena con el estado táctico del personaje.
+	 */
 	public void drawTalticalState(SpriteBatch batch, BitmapFont font, String state) {
 		batch.begin();
 		font.setColor(Color.PURPLE);
