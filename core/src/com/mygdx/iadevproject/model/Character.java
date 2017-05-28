@@ -339,7 +339,11 @@ public class Character extends WorldObject {
 			// Obtenemos el terreno sobre el que se encuentra el personaje.
 			Ground g = IADeVProject.getGroundOfPosition(this.getPosition());
 			// Si el personaje forma parte de una formación, se accede al rol de la formación.
-			velocityFactor = this.formation.getRole().getVelocityFactor(g);
+			if (this.formation.getRole() != null) { // Siempre y cuando la formación tenga un rol.
+				velocityFactor = this.formation.getRole().getVelocityFactor(g);
+			} else {
+				velocityFactor = 1.0f;
+			}
 		} else if (this.role != null) {
 			// Obtenemos el terreno sobre el que se encuentra el personaje.
 			Ground g = IADeVProject.getGroundOfPosition(this.getPosition());
