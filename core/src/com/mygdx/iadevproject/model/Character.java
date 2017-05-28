@@ -236,7 +236,10 @@ public class Character extends WorldObject {
 	public void updateTacticalRole() {
 		// Actualizamos el rol del personaje cuando tiene rol y cuando este está habilitado.
 		if (this.role != null && isEnabledRole()) {
-			this.role.update(this);
+			if (!this.isInFormation()) {
+				// Solamente cuando el personaje no esté en una formación, actualizamos su rol táctico
+				this.role.update(this);		
+			}
 		}
 		this.applyBehaviour();
 	}

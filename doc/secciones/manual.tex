@@ -10,10 +10,15 @@ Nuestro juego esta configurado inicialmente para el modo batalla final, aunque, 
 \begin{itemize}
  \item \textbf{Seleccionar} el personaje (o los \textbf{personajes}) a los que quiera aplicar acciones. Para seleccionar un personaje simplemente se ha de clickar sobre él con el botón izquierdo del ratón. Si se quiere seleccionar varios personajes, se debe mantener pulsada la tecla \texttt{Control-Izquierdo}, de lo contrario, solamente se seleccionará uno. Es importante destacar que solamente se pueden seleccionar varios personajes si estos pertenecen al mismo equipo. Cuando un personaje es seleccionado, dejará de hacer lo que estaba haciendo para realizar todo lo que le mande el usuario.
  
- \item Para \textbf{liberar} a los \textbf{personajes} simplemente se ha de pulsar el botón derecho del ratón en cualquier lugar.
+ \item Para \textbf{liberar} a los \textbf{personajes} simplemente se ha de pulsar el botón derecho del ratón en cualquier lugar. Cuando se libera un personaje, este vuelve a tener su rol activado, por lo que hará lo que estaba haciendo antes de que el usuario lo seleccione. 
  
  \item Tras haber seleccionado a los personajes, el programa mostrará por terminal, un listado de las posibles acciones que puede realizar. Simplemente se debe pulsar los números de aquellas acciones que se quieren realizar y seguir los pasos que indica el programa.
- \item Es importante destacar que los comportamientos que se quieran hacer, se harán para todos los objetos seleccionados. Es decir, todos los objetos seleccionados realizarán la misma acción que ha mandado el usuario.
+ 
+ \item Es importante destacar que los comportamientos que se quieran hacer, se harán para todos los objetos seleccionados. Es decir, todos los objetos seleccionados realizarán la misma acción que ha mandado el usuario. 
+ 
+ \item También, hay que tener en cuenta que cuando un personaje es seleccionado por el usuario, puede ser atacado por sus enemigos y, en consecuencia, puede morir. Cuando un personaje que está seleccionado muere, al no tener su rol activado, este personaje seguirá estando seleccionado y haciendo las acciones que el usuario quiera (pero los enemigos no lo tendrán en cuenta a la hora de atacarle, porque está muerto). Esto también se aplica a las formaciones. Cuando se deselecciona un personaje que ha muerto, al activarse su rol, este verá que está muerto y hará las acciones correspondientes a esta situación.
+ 
+ \item Una de las posibles acciones que puede realizar el usuario es crear formaciones. Para crear una formación es necesario que se seleccione, al menos, tres personajes. Además, tras crearse la formación esta se creará y no estará seleccionada por el usuario. Para seleccionarla, simplemente hay que clickar sobre cualquiera de los personajes de la formación; una vez seleccionada, se puede realizar con ella cualquiera de las otras acciones (incluso crear otra formación). Para eliminarla, es necesario que se seleccione y se deseleccione la formación.
 \end{itemize}
 
 El programa dispone de cierta funcionalidad que se puede activar/desactivar por el usuario. Esta funcionalidad es la siguiente:
