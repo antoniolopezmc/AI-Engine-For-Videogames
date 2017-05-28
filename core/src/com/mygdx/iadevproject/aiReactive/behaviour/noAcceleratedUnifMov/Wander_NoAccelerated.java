@@ -15,6 +15,12 @@ public class Wander_NoAccelerated implements Behaviour {
 	private float maxSpeed;
 	private float maxRotation;
 	
+	/**
+	 * 
+	 * @param source
+	 * @param maxSpeed Máxima velocidad lineal que se aplica en este comportamiento.
+	 * @param maxRotation Máxima velocidad angular que se aplica en este comportamiento.
+	 */
 	public Wander_NoAccelerated (Character source, float maxSpeed, float maxRotation) {
 		this.source = source;
 		this.maxSpeed = maxSpeed;

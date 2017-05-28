@@ -15,6 +15,14 @@ public class Arrive_NoAccelerated implements Behaviour {
 	private float satisfactionTargetRadius;
 	private float timeToTarget;
 	
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param target
+	 * @param maxSpeed Máxima velocidad lineal que se aplica en este comportamiento.
+	 * @param satisfactionTargetRadius Radio.
+	 * @param timeToTarget Tiempo en el que se realizará el comportamineto.
+	 */
 	public Arrive_NoAccelerated (Character source, WorldObject target, float maxSpeed, float satisfactionTargetRadius, float timeToTarget) {
 		this.source = source;
 		this.target = target;

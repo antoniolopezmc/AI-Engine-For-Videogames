@@ -57,6 +57,7 @@ public class AntiAlign_Accelerated implements Behaviour {
 	private float slowRadius;
 	private float timeToTarget;	
 
+	// GETs y SETs.
 	public Character getSource() {
 		return source;
 	}
@@ -73,6 +74,16 @@ public class AntiAlign_Accelerated implements Behaviour {
 		this.target = target;
 	}
 
+	/**
+	 * Constructor de la clase.
+	 * @param source Personaje que realiza el comportamiento (personaje fuente).
+	 * @param target WorldObject destino con el que se alinea (en la orientación opuesta) el personaje fuente. 
+	 * @param maxAngularAcceleration Máxima aceleración angular.
+	 * @param maxRotation Máxima velocidad angular.
+	 * @param targetRadius Ángulo interior (igual o más pequeño que slowRadius).
+	 * @param slowRadius Ángulo exterior (igual o más grande que targetRadius).
+	 * @param timeToTarget Tiempo en el que se realizará este comportamiento.
+	 */
 	public AntiAlign_Accelerated(Character source, WorldObject target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
 		this.source = source;
 		this.target = target;

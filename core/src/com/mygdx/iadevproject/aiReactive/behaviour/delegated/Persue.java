@@ -15,6 +15,13 @@ public class Persue extends Seek_Accelerated implements Behaviour {
 	// Tiempo máximo de predicción. En segundos.
 	private float maxPrediction;
 	
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param target Personaje al que se persigue.
+	 * @param maxAcceleration Máxima aceleración a aplicar en el comportamiento.
+	 * @param maxPrediction Tiempo máximo en el que realizar la predicción.
+	 */
 	public Persue(Character source, WorldObject target, float maxAcceleration, float maxPrediction) {
 		super(source, target, maxAcceleration);
 		this.maxPrediction = maxPrediction;

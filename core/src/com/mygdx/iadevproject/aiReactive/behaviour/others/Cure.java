@@ -24,6 +24,11 @@ public class Cure implements Behaviour {
 	// Vida que se incrementa al source.
 	private float health;
 	
+	/**
+	 * Constructor de la clase.
+	 * @param source Personaje que se cura.
+	 * @param health Vida que aumenta en cada en cada "ciclo de curación".
+	 */
 	public Cure(Character source, float health) {
 		super();
 		this.source = source;

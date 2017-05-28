@@ -58,6 +58,16 @@ public class Align_Accelerated implements Behaviour {
 	private float slowRadius;
 	private float timeToTarget;
 
+	/**
+	 * Constructor de la clase.
+	 * @param source Personaje que realiza el comportamiento (personaje fuente).
+	 * @param target WorldObject destino con el que se alinea el personaje fuente. 
+	 * @param maxAngularAcceleration Máxima aceleración angular.
+	 * @param maxRotation Máxima velocidad angular.
+	 * @param targetRadius Ángulo interior (igual o más pequeño que slowRadius).
+	 * @param slowRadius Ángulo exterior (igual o más grande que targetRadius).
+	 * @param timeToTarget Tiempo en el que se realizará este comportamiento.
+	 */
 	public Align_Accelerated(Character source, WorldObject target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
 		this.source = source;
 		this.target = target;
@@ -68,6 +78,7 @@ public class Align_Accelerated implements Behaviour {
 		this.timeToTarget = timeToTarget;
 	}
 	
+	// GETs y SETs.
 	public Character getSource() {
 		return source;
 	}

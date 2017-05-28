@@ -32,6 +32,12 @@ public class Arrive_Accelerated_WithOneRadious extends Seek_Accelerated {
 
 	private float targetRadious;
 	
+	/**
+	 * Constructor de la clase.
+	 * @param source Personaje fuente que realiza el comportamiento.
+	 * @param target WorldObject destino al que la fuente irá.
+	 * @param maxAcceleration Máxima aceleración a aplicar en este comportamiento.
+	 */
 	public Arrive_Accelerated_WithOneRadious(Character source, WorldObject target, float maxAcceleration) {
 		super(source, target, maxAcceleration);
 		// A menos que se introduzca un radio, este behaviour se comporta como un Seek Acelerado normal.
