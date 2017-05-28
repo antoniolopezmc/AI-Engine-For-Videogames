@@ -78,10 +78,23 @@ public class InputProcessorIADeVProject implements InputProcessor {
 			break;
 		case Input.Keys.X:					// Deshabilitar que haya ganador
 			IADeVProject.canBeThereWinner = false;
+			// Cuando ha habido un ganador, la variable 'paused' se pone a TRUE, para que los roles de los personajes no se actualicen y se pare
+			// el juego. De esta manera, si el usuario quiere que no haya ganador y que siga el juego, tendremos que poner esta variable a FALSE para
+			// que los roles de los personajes sigan actualizándose sin ningún problema. 
 			IADeVProject.paused = false;
 			break;
 		case Input.Keys.Z:					// Habilitar que haya ganador
 			IADeVProject.canBeThereWinner = true;
+			
+			// Cuando volvamos a habilitar el que haya un ganador, ponemos ambas variables a false.
+			// 	Si mientras el flag 'canBeThereWinner' esta deshabilitado, los puntos de moral de una base llegan a cero, 
+			//		el flag correspodiente del equipo correspondiente se cambia a true (y no salta la ventana indicando que hay un ganador).
+			//	Sin embargo, si los puntos de moral de esa misma base aumentan, EL FLAG DEL EQUIPO CORRESPONDIENTE SEGUIRÁ A TRUE, por lo que al volver a habilitar
+			//		el flag 'canBeThereWinner' saltará la ventana de que hay un ganador SIN QUE, posiblemente, LOS PUNTOS DE MORAL DE NINGUNA BASE ESTÉN A 0.
+			// --> Por tanto, hay que volver a poner estas 2 variables a false para que se vuelvan a hacer todas las comprobaciones pertinentes de si ha habido un ganador.
+			IADeVProject.FJAVIER_win = false;
+			IADeVProject.LDANIEL_win = false;
+			
 			break;
 		case Input.Keys.M:				// Habilitar debug de los comportamientos
 			IADeVProject.PRINT_PATH_BEHAVIOUR = false;
