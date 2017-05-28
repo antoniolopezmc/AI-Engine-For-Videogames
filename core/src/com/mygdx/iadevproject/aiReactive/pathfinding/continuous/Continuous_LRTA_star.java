@@ -24,6 +24,17 @@ public class Continuous_LRTA_star {
 	// COORDENADAS DEL GRID, NO SON LAS COORDENADAS REALES.
 	private int xGoal, yGoal;
 	
+	/**
+	 * Constructor de la clase.
+	 * @param map_of_costs
+	 * @param distance
+	 * @param matrix_width
+	 * @param matrix_height
+	 * @param xSource
+	 * @param ySource
+	 * @param xGoal
+	 * @param yGoal
+	 */
 	// Constructor.
 	public Continuous_LRTA_star(int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xSource, int ySource, int xGoal, int yGoal) {
 		this.map_of_costs = map_of_costs;
