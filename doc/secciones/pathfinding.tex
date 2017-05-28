@@ -10,11 +10,11 @@ Es muy importantes destacar la existencia de 2 tipos de posiciones con las que v
 
 A la hora de pasar una posición del mapa a una posición del grid, entre otras cosas, se eliminan los decimales para poder obtener una posición entera (para usar como índice en el grid ficticio). Por tanto, se podría decir que el mecanismo de búsqueda está basado en un \textbf{grid cuadrado por vértices}. Sin embargo, cuando volvemos a convertir de una posición del grid a una posición del mapa, nos interesa que el movimiento se realice por el centro del tile para evitar que el personaje se mueva justo por la separación entre un tipo de terreno y otro (justo entre un tile y otro). Por tanto, una de las cosas que se hace al transformar de una posición del grid a una posición del mapa es \textbf{sumar la mitad del lado de un tile a ambas coordenadas de la posición final}. De esta forma conseguimos que los puntos finales del mapa siempre estén en el centro de los tiles que representan el terreno. \\
 
-Para este proyecto, hemos implementado \textbf{2 tipos de Pathfinding}. Ambos se basan en el algoritmo LRTA* con espacio de búsqueda minimal. La diferencia fundamental entre ambos es que uno calcula todos los punto de golpe desde el origen al destino (pathfinding continuo) y el otro va devolviendo punto por punto y va calculando un nuevo punto cada vez que sea necesario (pathfinding punto a punto). El primero de ellos devuelve una lista completa con todos los puntos desde el origen hasta el destino y basta con ejecutarlo tan solo una vez. El segundo de ellos devuelve un único punto (aunque también en una lista) y debe ser ejecutado cada vez que queramos obtener el siguiente punto al que ir. Esto se explicará más detalladamente en el apartado correspondiente.
+Para este proyecto, hemos implementado \textbf{2 tipos de Pathfinding}. Ambos se basan en el algoritmo LRTA* con espacio de búsqueda minimal. La diferencia fundamental entre ambos es que uno calcula todos los puntos de golpe desde el origen al destino (pathfinding continuo) y el otro va devolviendo punto por punto y va calculando un nuevo punto cada vez que sea necesario (pathfinding punto a punto). El primero de ellos devuelve una lista completa con todos los puntos desde el origen hasta el destino y basta con ejecutarlo tan solo una vez. El segundo de ellos devuelve un único punto (aunque también en una lista) y debe ser ejecutado cada vez que queramos obtener el siguiente punto al que ir. Esto se explicará más detalladamente en el apartado correspondiente.
 
 \subsection{Distancias}
 
-Tal y como se ha comentado en clase, las heurísticas que se han implementado son: \textbf{distancia de Manhattan}, \textbf{distancia de Chebyshev} y \textbf{distancia Euclídea}. La información concreta y la forma de cálculo de cada una de estas distancias se especifica detalladamente en las transparencia de la asignatura. \\
+Tal y como se ha comentado en clase, las heurísticas que se han implementado son: \textbf{distancia de Manhattan}, \textbf{distancia de Chebyshev} y \textbf{distancia Euclídea}. La información concreta y la forma de cálculo de cada una de estas distancias se especifica detalladamente en las transparencias de la asignatura. \\
 
 En le código fuente de nuestro proyecto podemos encontrar la interfaz \texttt{Distance}. Esta interfaz sirve para generalizar todos los tipos de distancia concretos y tratarlos de manera homogénea. El método fundamental de todas las distancias implementadas es \texttt{getMatrixOfDistances}. Este método recibe las dimensiones que deberá tener la matriz de salida y la posición objetivo y devuelve la matriz de distancias correspondiente. \\
 
@@ -29,13 +29,14 @@ Para el caso del pathfinding continuo, el algoritmo LRTA* recibe como entrada la
 Para calcular la función \textit{f(x)} de un estado concreto, serán necesarios los siguientes elementos:
 \begin{itemize}
 	\item[-] El coste que supone realizar una acción (movernos de una celda a otra). Este valor viene definido por la constante \texttt{default\_action\_cost} de la clase \texttt{LRTA\_star}.
-	\item[-] La distancia que hay desde en estado actual hasta la posición de destino. Este valor podemos obtenerlo de la matriz de distancias.
+	\item[-] La distancia que hay desde el estado actual hasta la posición de destino. Este valor podemos obtenerlo de la matriz de distancias.
 	\item[-] El coste del terreno en la posición o estado actual en el que nos encontramos.
 \end{itemize}
 
 Estos componentes serán la base para obtener el valor de la función \textit{f(x)} de un estado concreto y, por tanto, para que el algoritmo LRTA* calcule el camino adecuado desde un origen hasta un destino. \\
 
-Además, también se han implementado diversos método necesarios para el correcto funcionamiento del algoritmo LRTA*. El primero de ellos es \texttt{generateSuccessors}. Este método recibe una posición del grid y devuelve todos sus vecinos (tanto en horizontal, como en vertical, como en diagonal). El segundo método necesario es \texttt{getSuccessorWithTheSmallestHeuristic}. Este método selecciona el vecino tal que \textit{f(x)} devuelva el menor valor.
+Además, también se han implementado diversos métodos necesarios para el correcto funcionamiento del algoritmo LRTA*. El primero de ellos es \texttt{generateSuccessors}. Este método recibe una posición del grid y devuelve todos sus vecinos (tanto en horizontal, como en vertical, como en diagonal). El segundo método necesario es \\
+\texttt{getSuccessorWithTheSmallestHeuristic}. Este método selecciona el vecino tal que \textit{f(x)} devuelva el menor valor.
 
 \subsection{Clase PathFinding}
 
@@ -53,7 +54,7 @@ Cabe destacar que al transformar las coordenadas del mapa de los puntos origen y
 
 Al contrario que pasaba con el pathfinding anterior, en este caso el constructor de la clase juega un papel más importante. En este caso, es en el constructor donde se almacenan todos los atributos necesarios (según los parámetros pasados al constructor) y donde se realiza la transformación de la coordenada inicial del pathfinding de coordenadas del mapa a coordenadas del grid. Además, puesto que en esta ocasión el pathfinding va a ser llamado más de una vez (cosa que no pasaba en el pathfinding anterior), en el constructor también se crea el objeto que representa el algoritmo LRTA* y se almacena como un atributo de la clase (para ir usando siempre el mismo objeto y no perder el avance realizado). \\
 
-Un elemento fundamental en este tipo de pathfinding es el atributo \texttt{objetivoActual}. Inicialmente, este atributo contiene el punto de partida del pathfinding y, conforme vayamos avanzando, iremos actualizando este atributo con la posición a la que debemos ir. Este caso, el pathfinding punto a punto irá devolviendo siempre la misma posición hasta que no lleguemos a ella (ver las comprobaciones iniciales del método \texttt{applyPathFinding}). Una vez que el personaje haya alcanzado el siguiente objetivo actual, el pathfinging y el algoritmo LRTA* continuarán calculando.
+Un elemento fundamental en este tipo de pathfinding es el atributo \texttt{objetivoActual}. Inicialmente, este atributo contiene el punto de partida del pathfinding y, conforme vayamos avanzando, iremos actualizando este atributo con la posición a la que debemos ir. En este caso, el pathfinding punto a punto irá devolviendo siempre la misma posición hasta que no lleguemos a ella (ver las comprobaciones iniciales del método \texttt{applyPathFinding}). Una vez que el personaje haya alcanzado el siguiente objetivo actual, el pathfinging y el algoritmo LRTA* continuarán calculando.
 
 \subsection{Pathfinding táctico}
 
