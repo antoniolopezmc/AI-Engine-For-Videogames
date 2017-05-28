@@ -72,6 +72,8 @@ Es importante destacar los siguientes puntos:
  
  \item En el estado \texttt{AttackEnemies} se ataca siempre al enemigo más cercano (de ahí que se tenga que actualizar el estado si no hemos cambiado). También el personaje intenta alejarse del objetivo a una distancia en la que él pueda atacar. Así pues permitimos que aquellos personajes que tengan una distancia de ataque mayor (los arqueros en nuestro caso), puedan sacar provecho de ello cuando se ataca. También se mira al personaje que se ataca.
  
+ \item Debido a que los mecanismos de ataque y cura se han implementado de manera diferente al resto de presonajes normales, los estados \texttt{AttackEnemies} y \texttt{CureMe} hacen uso del método \texttt{exit()} de la interfaz \texttt{State} para que, cuando se sale de alguno de estos estados, se realicen las acciones correspondientes a dejar de atacar y curar.
+ 
  \item En el estado \texttt{IAmDead} se traslada directamente el personaje a la posición de su manantial, estableciendo su posición a la posición del manantial.
  
  \item En el estado \texttt{BookWaypoint} mientras que espera a tener un waypoint libre, el personaje lo que hace es moverse de manera aleatoria (aplicando un Wander), para evitar que se quede parado.
