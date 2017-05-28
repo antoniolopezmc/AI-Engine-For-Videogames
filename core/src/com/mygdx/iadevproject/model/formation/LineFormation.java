@@ -54,10 +54,6 @@ public class LineFormation extends Formation {
 	// Importante -> Hay que tener en cuenta que el ángulo de orientación del personaje no coincide con el ángulo en las formaciones.
 	private float getStandarFormationAngle(float formationAngle) {
 		
-		// TODO IMPORTANTE
-		// Si la formación cambia bruscamente de orientación (giro de 180º), esto revienta. El ángulo de la formación seguirá siendo el mismo, pero los personajes
-		// 		ocuparán posiciones opuestas. SERÍA MEJOR REDUCIR LOS ÁNGULOS HASTA 180. VER MÁS ADELANTE.
-		// Para observar esto, hay que poner un Seek no acelerado como comportamiento de la formación.
 		if ((formationAngle >= 247.5f) && (formationAngle < 292.5f)) {
 			return 0.0f;
 		} else if ((formationAngle >= 292.5f) && (formationAngle < 337.5f)) {

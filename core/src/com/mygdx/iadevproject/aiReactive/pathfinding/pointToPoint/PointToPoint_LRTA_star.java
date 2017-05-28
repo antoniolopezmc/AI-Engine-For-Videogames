@@ -36,6 +36,16 @@ public class PointToPoint_LRTA_star {
 	// ESTE FLAG SE PUEDE IR ACTIVANDO O DESACTIVANDO SOBRE LA MARCHA.
 	private boolean tacticalInformation;
 	
+	/**
+	 * Constructor de la clase.
+	 * @param character
+	 * @param map_of_costs
+	 * @param distance
+	 * @param matrix_width
+	 * @param matrix_height
+	 * @param xGoal
+	 * @param yGoal
+	 */
 	// Constructor.
 	public PointToPoint_LRTA_star(Character character, int[][] map_of_costs, Distance distance, int matrix_width, int matrix_height, int xGoal, int yGoal) {
 		this.character = character;

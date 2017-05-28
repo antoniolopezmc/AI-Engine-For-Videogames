@@ -27,6 +27,9 @@ public class OffensiveSoldier extends Soldier {
 	private AttackEnemies attackEnemies;
 	private Win win;
 	
+	/**
+	 * Constructor de la clase.
+	 */
 	public OffensiveSoldier() {
 		lastNode = null;
 		
@@ -38,12 +41,18 @@ public class OffensiveSoldier extends Soldier {
 		win = new Win();
 	}
 
+	/**
+	 * Método de inicialización de la estructura táctica.
+	 */
 	@Override
 	public void initialize(Character source) {
 		// Los árboles de decisión no necesitan inicialización.
 		
 	}
 
+	/**
+	 * Método de actualización de la estructura táctica.
+	 */
 	@Override
 	public void update(Character source) {
 		// El árbol se va a implementar como una serie de REGLAS.
