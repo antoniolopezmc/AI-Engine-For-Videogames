@@ -22,21 +22,22 @@ En la clase correspondiente y para el caso de los waypoints de los puentes, pode
 			\item La clave (de tipo Vector3) del Map es el waypoint del puente que será reservado por el personaje.
 			\item El valor (de tipo ValueOfBridgeWaypoint) del Map está formado a su vez por 2 elementos: un booleano que indica si ese waypoint está ocupado o no (inicialmente todos estarán a false) y un Vector3 donde se almacena el waypoint vecino (el otro waypoint del mismo lado del mismo puente).
 		\end{itemize}
-		Está estructura se inicializará al principio del juego y, durante la partida, solamente se modificará el atributo booleano, pero no se añadirán ni se eliminarán elementos del Map.
+		Esta estructura se inicializará al principio del juego y, durante la partida, solamente se modificará el atributo booleano, pero no se añadirán ni se eliminarán elementos del Map.
 	\item \texttt{bridges\_CharacterAndWaypointAssociation\_team\_X} (una para cada equipo) $\rightarrow$ Esta estructura es de tipo \texttt{Map<Character, Vector3>}, inicialmente está vacía y contiene la siguiente información:
 	\begin{itemize}
 		\item La clave (de tipo Character) del Map es el personaje que ha reservado un determinado waypoint.
 		\item El valor (de tipo Vector3) del Map corresponde con el Waypoint reservado por el personaje.
 	\end{itemize}
-	En está estructura se almacenará qué personaje ha reservado un determinado waypoint y se irá modificando a lo largo de la partida.
+	En esta estructura se almacenará qué personaje ha reservado un determinado waypoint y se irá modificando a lo largo de la partida.
 \end{itemize}
 
-Hemos decidido trabajar con este tipo de estructuras para que el proceso de reserva y liberación de los waypoints de los puentes sea lo más rápido posible y no tengamos que estar recorriendo continuamente ciertas estructuras que, realmente, no debería ser necesario. Cabe destacar, que los personajes del equipo neutral no pueden tener acceso a estas estructuras ni a esta funcionalidad. \\
+Hemos decidido trabajar con este tipo de estructuras para que el proceso de reserva y liberación de los waypoints de los puentes sea lo más rápido y eficiente posible. Cabe destacar, que los personajes del equipo neutral no pueden tener acceso a estas estructuras ni a esta funcionalidad. \\
 
-Cuando un personaje va a reservar un waypoint, comprobamos que el personaje no tenga ya uno asociado (indexando al personaje en el Map \texttt{bridges\_CharacterAndWaypointAssociation\_team\_X} de su equipo). Si sí tiene un waypoint ya asociado, simplemente devolvemos ese y su vecino. Si no lo tiene, debemos recorrer la lista \texttt{bridgesWayPoints\_team\_X} de su equipo en busca de un waypoint libre. Si no hay waypoints libres, devolvemos la lista vacía. En caso contrario, se reserva el waypoint para dicho personaje. Esa reserva implica que el booleano de ocupación del waypoint pasará a valer true y a la lista de asociaciones de personaje-waypoint se le añadirá una nueva entrada. Tras dicho proceso de reserva, devolveremos una lista con el waypoint reservado y con su vecino en el puente (en el mismo lado del puente). \\
+Cuando un personaje va a reservar un waypoint, comprobamos que el personaje no tenga ya uno asociado (indexando al personaje en el Map \texttt{bridges\_CharacterAndWaypointAssociation\_team\_X} de su equipo). Si sí tiene un waypoint ya asociado, simplemente devolvemos ese y su vecino. Si no lo tiene, debemos recorrer la lista\\
+\texttt{bridgesWayPoints\_team\_X} de su equipo en busca de un waypoint libre. Si no hay waypoints libres, devolvemos la lista vacía. En caso contrario, se reserva el waypoint para dicho personaje. Esa reserva implica que el booleano de ocupación del waypoint pasará a valer true y a la lista de asociaciones de personaje-waypoint se le añadirá una nueva entrada. Tras dicho proceso de reserva, devolveremos una lista con el waypoint reservado y con su vecino en el puente (en el mismo lado del puente). \\
 
 Cuando un personaje libera un waypoint, lo primero que comprobamos es si, efectivamente, dicho personaje tenía asociado un waypoint. En caso afirmativo, modificamos el booleano de ocupación del puente (vuelve a valor false) y eliminamos la asociación entre el personaje de entrada y el waypoint que tenía reservado. \\
 
-Además de todos los métodos comentados, en esta clase también podemos encontrar diversos métodos para dibujar los waypoints de las bases de los puentes. Estos método podrán servir para mostrar información adicional e información de depuración y, además, para poder comprobar si el personaje está siguiendo el camino que debería seguir.
+Además de todos los métodos comentados, en esta clase también podemos encontrar diversos métodos para dibujar los waypoints de las bases de los puentes. Estos métodos podrán servir para mostrar información adicional e información de depuración y, además, para poder comprobar si el personaje está siguiendo el camino que debería seguir.
 
 
