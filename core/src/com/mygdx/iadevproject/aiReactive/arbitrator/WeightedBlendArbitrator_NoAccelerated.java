@@ -16,11 +16,11 @@ import com.mygdx.iadevproject.aiReactive.steering.Steering_NoAcceleratedUnifMov;
 public class WeightedBlendArbitrator_NoAccelerated implements Arbitrator {
 
 	private float maxSpeed;
-	private float maxOrientation;
+	private float maxRotation;
 	
 	public WeightedBlendArbitrator_NoAccelerated(float maxSpeed, float maxRotation) {
 		this.maxSpeed = maxSpeed;
-		this.maxOrientation = maxRotation;
+		this.maxRotation = maxRotation;
 	}
 
 	public float getMaxSpeed() {
@@ -32,11 +32,11 @@ public class WeightedBlendArbitrator_NoAccelerated implements Arbitrator {
 	}
 
 	public float getMaxOrientation() {
-		return maxOrientation;
+		return maxRotation;
 	}
 
 	public void setMaxRotation(float maxRotation) {
-		this.maxOrientation = maxRotation;
+		this.maxRotation = maxRotation;
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class WeightedBlendArbitrator_NoAccelerated implements Arbitrator {
 			velocity.scl(this.maxSpeed);
 		}
 		
-		rotation = (rotation > this.maxOrientation) ? this.maxOrientation : rotation;
+		rotation = (rotation > this.maxRotation) ? this.maxRotation : rotation;
 		
 		// Devolvemos el steering
 		steering.setVelocity(velocity);
