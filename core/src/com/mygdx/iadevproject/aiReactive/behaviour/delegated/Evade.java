@@ -8,13 +8,18 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
-//TODO IMPORTANTE -> PROBAR.
-
 public class Evade extends Flee_Accelerated implements Behaviour {
 
 	// Tiempo máximo de predicción. En segundos.
 	private float maxPrediction;
 
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param target
+	 * @param maxAcceleration Máxima aceleración a aplicar en este comportamiento.
+	 * @param maxPrediction Máximo tiempo sobre el que realizar la predicción.
+	 */
 	public Evade(Character source, WorldObject target, float maxAcceleration, float maxPrediction) {
 		super(source, target, maxAcceleration);
 		this.maxPrediction = maxPrediction;

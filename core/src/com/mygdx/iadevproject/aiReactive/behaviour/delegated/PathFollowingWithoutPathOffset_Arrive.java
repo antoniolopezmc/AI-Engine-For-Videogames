@@ -12,7 +12,8 @@ import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
 public class PathFollowingWithoutPathOffset_Arrive extends Arrive_Accelerated implements Behaviour {
-
+	// ---> Por debajo, utilizamos el Arrive acelerado.
+	
 	public static int MODO_PARAR_AL_FINAL = 0; // Cuando el personaje llega al último punto, terminamos.
 	public static int MODO_IDA_Y_VUELTA = 1; // El personaje va y viene infinitamente.
 	
@@ -33,6 +34,17 @@ public class PathFollowingWithoutPathOffset_Arrive extends Arrive_Accelerated im
 		this.modo = modo;
 	}
 
+	/**
+	 * Constructor de la clase.
+	 * @param source 
+	 * @param maxAcceleration Máxima aceleración a aplicar en este comportamiento.
+	 * @param maxSpeed Máxima velocidad lineal a aplicar en este comportamiento.
+	 * @param targetRadious Radio interior (también es el radio de "satisfacción").
+	 * @param slowRadiuos Radio exterior.
+	 * @param timeToTarget Tiempo en el que se realizará el comportamiento.
+	 * @param pointsList Lista de puntos.
+	 * @param modo Modo: Parar al final o Ida y vuelta.
+	 */
 	public PathFollowingWithoutPathOffset_Arrive(Character source, float maxAcceleration, float maxSpeed, float targetRadious,
 			float slowRadiuos, float timeToTarget, List<Vector3> pointsList, int modo) {
 		super(source, null, maxAcceleration, maxSpeed, targetRadious, slowRadiuos, timeToTarget);

@@ -23,6 +23,12 @@ public class Seek_Accelerated implements Behaviour {
 	private float maxAcceleration;
 	private int mode;
 	
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param target
+	 * @param maxAcceleration Máxima aceleración a aplicar en este comportamiento.
+	 */
 	public Seek_Accelerated (Character source, WorldObject target, float maxAcceleration) {
 		this.source = source;
 		this.target = target;

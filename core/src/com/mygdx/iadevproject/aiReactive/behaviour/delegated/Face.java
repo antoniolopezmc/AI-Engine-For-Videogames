@@ -12,6 +12,16 @@ import com.mygdx.iadevproject.model.WorldObject;
 
 public class Face extends Align_Accelerated implements Behaviour {
 
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param target
+	 * @param maxAngularAcceleration Máxima aceleración angular.
+	 * @param maxRotation Máxima velocidad angular.
+	 * @param targetRadius Ángulo interior (igual o más pequeño que slowRadius).
+	 * @param slowRadius Ángulo exterior (igual o más grande que targetRadius).
+	 * @param timeToTarget Tiempo en el que se realizará este comportamiento.
+	 */
 	public Face(Character source, WorldObject target, float maxAngularAcceleration, float maxRotation, float targetRadius, float slowRadius, float timeToTarget) {
 		super(source, target, maxAngularAcceleration, maxRotation, targetRadius, slowRadius, timeToTarget);
 	}

@@ -40,6 +40,13 @@ public class Attack implements Behaviour {
 	private float maxDistance;
 	
 	// Constructor.
+	/**
+	 * Constructor de la clase.
+	 * @param source Personaje que realiza el ataque.
+	 * @param target Personaje que recibe el ataque.
+	 * @param health Vida que se le restará al target en cada "golpe".
+	 * @param maxDistance Máxima distancia a la que se puede realizar el ataque.
+	 */
 	public Attack(Character source, Character target, float health, float maxDistance) {
 		super();
 		this.source = source;

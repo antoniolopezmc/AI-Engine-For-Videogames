@@ -16,6 +16,13 @@ public class Cohesion extends Seek_Accelerated {
 	private float threshold;
 	// Los atributos 'source' y 'maxAcceleration' están en el padre.
 	
+	/**
+	 * Constructor de la clase.
+	 * @param source Personaje que aplica el comportamiento.
+	 * @param targets Lista de WorldObject sobre los que se aplica el comportamiento.
+	 * @param maxAcceleration Máxima aceleración a aplicar en el comportamiento.
+	 * @param threshold Radio en el que se tienen en cuenta los objetivos (todos los elementos fuera de este radio no son tenidos en cuenta al aplicar el comportamiento).
+	 */
 	public Cohesion(Character source, List<WorldObject> targets, float maxAcceleration, float threshold) {
 		super(source, null, maxAcceleration);
 		this.targets = targets;

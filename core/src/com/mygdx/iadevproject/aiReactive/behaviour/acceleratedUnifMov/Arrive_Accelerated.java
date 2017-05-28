@@ -38,6 +38,16 @@ public class Arrive_Accelerated implements Behaviour {
 	private float slowRadious;
 	private float timeToTarget;
 
+	/**
+	 * Constructor de la clase.
+	 * @param source 
+	 * @param target
+	 * @param maxAcceleration Máxima aceleración a aplicar en este comportamiento.
+	 * @param maxSpeed Máxima velocidad a aplicar en este comportamineto (no confundir con la máxima velocidad del propio personaje).
+	 * @param targetRadious Radio interior.
+	 * @param slowRadious Radio exterior.
+	 * @param timeToTarget Tiempo en el que se realizará este comportamiento. 
+	 */
 	public Arrive_Accelerated(Character source, WorldObject target, float maxAcceleration, float maxSpeed, float targetRadious, float slowRadious, float timeToTarget) {
 		this.source = source;
 		this.target = target;

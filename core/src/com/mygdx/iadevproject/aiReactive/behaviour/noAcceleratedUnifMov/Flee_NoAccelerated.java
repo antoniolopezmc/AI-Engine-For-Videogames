@@ -13,6 +13,12 @@ public class Flee_NoAccelerated implements Behaviour {
 	private WorldObject target;
 	private float maxSpeed;
 	
+	/**
+	 * 
+	 * @param source
+	 * @param target
+	 * @param maxSpeed Máxima velocidad lineal que se aplica en este comportamiento.
+	 */
 	public Flee_NoAccelerated (Character source, WorldObject target, float maxSpeed) {
 		this.source = source;
 		this.target = target;

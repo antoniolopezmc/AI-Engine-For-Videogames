@@ -13,6 +13,12 @@ public class Flee_Accelerated implements Behaviour {
 	private WorldObject target;
 	private float maxAcceleration;
 
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param target
+	 * @param maxAcceleration Máxima aceleración a aplicar en este comportamiento.
+	 */
 	public Flee_Accelerated(Character source, WorldObject target, float maxAcceleration) {
 		this.source = source;
 		this.target = target;

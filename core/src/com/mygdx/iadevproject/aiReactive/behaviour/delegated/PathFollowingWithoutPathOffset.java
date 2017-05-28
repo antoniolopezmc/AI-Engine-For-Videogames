@@ -11,9 +11,10 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 
-// TODO Esto funciona. Los he probado con el Seek NO ACELERADO y funciona. Con el Seek acelerado el personaje se va a tomar por culo (porque el cambio de velocidad no es inmediato).
-// TODO Preguntárselo a Luis Daniel.
+// Esto funciona. Los he probado con el Seek NO ACELERADO y funciona. Con el Seek acelerado el personaje se va a tomar por culo (porque el cambio de velocidad no es inmediato).
+
 public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements Behaviour {
+	// ---> Por debajo, utilizamos el Seek acelerado.
 
 	public static int MODO_PARAR_AL_FINAL = 0; // Cuando el personaje llega al último punto, terminamos.
 	public static int MODO_IDA_Y_VUELTA = 1; // El personaje va y viene infinitamente.
@@ -42,6 +43,14 @@ public class PathFollowingWithoutPathOffset extends Seek_Accelerated implements 
 		this.modo = modo;
 	}
 
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param maxAcceleration Máxima aceleración a aplicar en este comportamiento.
+	 * @param pointsList Lista de punto a seguir.
+	 * @param radius Radio de "satisfacción" en cada punto (no hace falta que el personaje llegue a la coordenada exacta del punto).
+	 * @param modo Modo: Parar al final o Ida y vuelta.
+	 */
 	public PathFollowingWithoutPathOffset(Character source, float maxAcceleration, List<Vector3> pointsList, float radius, int modo) {
 		super(source, null, maxAcceleration);
 		this.pointsList = new LinkedList<Vector3>(pointsList); // IMPORTANTE -> Como la lista se va a modificar, almacenamos una copia.

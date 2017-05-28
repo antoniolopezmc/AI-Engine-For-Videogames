@@ -13,6 +13,12 @@ public class Seek_NoAccelerated implements Behaviour {
 	private WorldObject target;
 	private float maxSpeed; // IMPORTANTE -> No confundir con maxSpeed de WorldObject.
 	
+	/**
+	 * 
+	 * @param source
+	 * @param target
+	 * @param maxSpeed Máxima velocidad lineal que se aplica en este comportamiento.
+	 */
 	public Seek_NoAccelerated (Character source, WorldObject target, float maxSpeed) {
 		this.source = source;
 		this.target = target;

@@ -16,6 +16,14 @@ public class Separation implements Behaviour {
 	private float decayCoefficient;
 	private float maxAcceleration; // Aceleración máxima del personaje.
 
+	/**
+	 * Constructor de la clase.
+	 * @param source
+	 * @param maxAcceleration Máxima aceleración a aplicar en el comportamiento.
+	 * @param targets Lista de WorldObject (objetivos).
+	 * @param threshold Radio en el que se tienen en cuenta los objetivos (todos los elementos fuera de este radio no son tenidos en cuenta al aplicar el comportamiento).
+	 * @param decayCoefficient Coeficiente de repulsión.
+	 */
 	public Separation(Character source, float maxAcceleration, List<WorldObject> targets, float threshold, float decayCoefficient) {
 		this.source = source;
 		this.targets = targets;
