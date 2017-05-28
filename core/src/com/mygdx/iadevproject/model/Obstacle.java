@@ -52,7 +52,7 @@ public class Obstacle extends WorldObject {
 	
 	/**
 	 * Método 'set' para el atributo 'rotation_angularSpeed'. Siempre será 0 independientemente del parámetro introducido.
-	 * @param rotation La velocidad angular del obstáculo.
+	 * @param rotation_angularSpeed La velocidad angular del obstáculo.
 	 */
 	public void setRotation_angularSpeed(float rotation_angularSpeed) {
 		super.setRotation_angularSpeed(0.0f);

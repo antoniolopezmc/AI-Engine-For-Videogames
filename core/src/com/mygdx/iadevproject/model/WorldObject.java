@@ -129,7 +129,7 @@ public abstract class WorldObject extends Sprite {
 	
 	/**
 	 * Método 'set' para el atributo 'rotation_angularSpeed'.
-	 * @param rotation La velocidad angular del objeto.
+	 * @param rotation_angularSpeed La velocidad angular del objeto.
 	 */
 	public void setRotation_angularSpeed(float rotation_angularSpeed) {
 		this.rotation_angularSpeed = rotation_angularSpeed;

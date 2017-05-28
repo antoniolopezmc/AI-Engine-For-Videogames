@@ -325,7 +325,6 @@ public class Actions {
 	 * Método que realiza la acción de atacar al enemigo más cercano. Hace uso de las acciones
 	 * 'attack' y 'getTheNearestEnemy'.
 	 * @param source Personaje que realiza el ataque.
-	 * @param target Personaje que recibe el ataque.
 	 * @param health Salud que restará el ataque.
 	 * @param maxDistance Máxima distancia a la que el ataque se puede realizar.
 	 * @return El Map de comportamientos correspondiente a esta acción.

@@ -152,7 +152,6 @@ public class UserInteraction {
 	/**
 	 * Método que aplica el comportamiento Looking Where You Going a todos los personajes seleccionados 
 	 * hacia el objetivo 'target'
-	 * @param target Objetivo al que aplicar el comportamiento.
 	 */
 	public static void applyLookingWhereYouGoing() {
 		for (Character source : IADeVProject.selectedCharacters) {
@@ -178,7 +177,7 @@ public class UserInteraction {
 	/**
 	 * Método que aplica el comportamiento PathFinding CONTINUO a todos los personajes seleccionados 
 	 * hacia el objetivo 'target'
-	 * @param target Objetivo al que aplicar el comportamiento.
+	 * @param position Objetivo al que aplicar el comportamiento.
 	 */
 	public static void applyContinuousPathFinding(Vector3 position) {
 		if (!checkIfCorrectPosition(position)){
@@ -216,7 +215,6 @@ public class UserInteraction {
 	/**
 	 * Método que aplica el comportamiento Wander a todos los personajes seleccionados 
 	 * hacia el objetivo 'target'
-	 * @param target Objetivo al que aplicar el comportamiento.
 	 */
 	public static void applyWander() {
 		for (Character source : IADeVProject.selectedCharacters) {
