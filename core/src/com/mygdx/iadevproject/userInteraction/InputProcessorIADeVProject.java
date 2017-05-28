@@ -19,8 +19,10 @@ import com.mygdx.iadevproject.model.Character;
 public class InputProcessorIADeVProject implements InputProcessor {
 	private boolean keyPressed = false;		// Indica que se ha pulsado una tecla
 	private int lastKey;					// Última tecla pulsada
+	// Posición que se ha clickado, posición del ancla de la formación, posición al que se va hacer el pathfinding
+	// Son tres posiciones distintas porque cada una se utiliza para cada estado de la máquina.
 	private Vector3 touchPos, anchorPos, pathFindingPos;
-	private Character target; 
+	private Character target; 				// Objetivo al que se realiza la acción (se tiene como variable global porque se tiene que seleccionar antes de elegir la acción)
 	
 	/**
 	 * Enumerado que refleja el estado en el que se está procesando las acciones del usuario
@@ -36,6 +38,7 @@ public class InputProcessorIADeVProject implements InputProcessor {
 		MAKE_FORMATION				// El usuario quiere hacer una formación.
 	};
 	
+	// Estado de la máquina de estados. Por defecto: NO_SELECTED_CHARACTERS
 	private UserState state = UserState.NO_SELECTED_CHARACTERS;
 	
 	
