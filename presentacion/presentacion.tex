@@ -7,6 +7,7 @@
 \usepackage{multicol}
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
+\usepackage{color}
 
 \usepackage{pgfplots}
 \usepgfplotslibrary{dateplot}
@@ -55,6 +56,14 @@
  \end{itemize}
 \end{frame}
 
+
+\begin{frame}{Modelo -- Formaciones}
+\begin{itemize}[<+- | alert@+>]
+	\item 
+ \end{itemize}
+\end{frame}
+
+
 \section{Steerings}
 \begin{frame}{Steerings}
 \begin{itemize}[<+- | alert@+>]
@@ -86,7 +95,8 @@
  	\end{itemize}
  	\item Behaviours acelerados.
  	\begin{itemize}[<+- | alert@+>]
-  		\item Align \item Anti-Align \item Arrive con un radio \item Arrive \item Flee \item Seek \item Velocity Matching
+  		\item Align \item Anti-Align \item Arrive con un radio \href{videos/TestArrive\_Accelerated\_WithOneRadious.mp4}{\color{blue}\underline{Video}}
+  		\item Arrive \item Flee \item Seek \item Velocity Matching
  	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -95,11 +105,15 @@
 \begin{itemize}[<+- | alert@+>]
 	\item Behaviours delegados.
  	\begin{itemize}[<+- | alert@+>]
-  		\item CollisionAvoidance \item Evade \item Face \item Looking Where You Going \item PathFollowing con Arrive \item PathFollowing con Seek \item Persue \item WallAvoidance \item Wander 
+  		\item CollisionAvoidance \item Evade \item Face \item Looking Where You Going \item PathFollowing con Arrive 
+  		\item PathFollowing con Seek \href{videos/TestPathFollowingWithoutPathOffset.mp4}{\color{blue}\underline{Video}}
+  		\item Persue \href{videos/TestPersue.mp4}{\color{blue}\underline{Video}}
+  		\item WallAvoidance \item Wander 
  	\end{itemize}
  	\item Behaviours en grupo.
  	\begin{itemize}[<+- | alert@+>]
-  		\item Cohesion \item Separation
+  		\item Cohesion \href{videos/TestCohesion.mp4}{\color{blue}\underline{Video}}
+  		\item Separation \href{videos/TestSeparation.mp4}{\color{blue}\underline{Video}}
  	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -307,7 +321,7 @@
 	\item Hace uso de los mapas de influencia.
 	\item También puede hacer uso de la información táctica (\texttt{getTactialCost(ground)}) de cada rol.
 	\item Flag para que se pueda ir activando y desactivando sobre la marcha.
-	\item Video.
+	\item \href{videos/TestTacticalPathfinding\_(SIN\_COLISIONES).mp4}{\color{blue}\underline{Video}} (sin colisiones)
 \end{itemize}
 \end{frame}
 
@@ -324,7 +338,7 @@
 		\item LookingWhereYouGoing.
 		\item Wander.
 	\end{itemize}
-	\item Video
+	\item \href{videos/TestFlocking.mp4}{\color{blue}\underline{Video}}
 \end{itemize}
 \end{frame}
 
@@ -352,7 +366,7 @@
 \section{Demostración del juego completo}
 \begin{frame}{Demostración del juego completo}
 \begin{itemize}[<+- | alert@+>]
-	\item Video.
+	\item Ejecución del juego.
 \end{itemize}
 \end{frame}
 
