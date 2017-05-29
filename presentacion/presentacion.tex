@@ -44,14 +44,28 @@
 
 \begin{frame}{Modelo}
 \begin{itemize}[<+- | alert@+>]
-	\item WorldObject.
+	\item Clase abstracta WorldObject.
+	\begin{itemize}
+	 \item Hereda de Sprite (librería LibGDX).
+	\end{itemize}
 	\item Obstacle.
+	\begin{itemize}
+	 \item Hereda de WorldObject.
+	 \item Obstáculos \textbf{estáticos}.
+	\end{itemize}
+
 	\item Character.
+	\begin{itemize}
+	 \item Hereda de WorldObject.
+	 \item Personajes del mundo.
+	\end{itemize}
+
 	\item Formation:
 	\begin{itemize}[<+- | alert@+>]
+		\item Hereda de Character.
   		\item CircularFormation.
   		\item LineFormation.
-  		\item StarFormation.
+  		\item StarFormation \href{videos/TestStarFormation.mp4}{\color{blue}\underline{Video}} 
  	\end{itemize}
  \end{itemize}
 \end{frame}
@@ -59,9 +73,31 @@
 
 \begin{frame}{Modelo -- Formaciones}
 \begin{itemize}[<+- | alert@+>]
-	\item 
+	\item Patrón de diseño Composite.
+	\item Patrón de diseño Método Plantilla.
+	\item Cierta funcionalidad se delega a las formaciones concretas:
+	\begin{itemize}
+	 \item Calcular la posición de los integrantes.
+	 \item Calcular el Steering a aplicar (árbitro y lista de comportamientos ``a pelo'').
+	\end{itemize}
+
+	\item La lista de comportamientos de los integrantes no se tiene en cuenta.
+	\item El movimientos de los integrantes a sus respectivas posiciones se hace con una lista de comportamientos ``a pelo'' (utilizando un árbitro por prioridad, se explica más adelante).
  \end{itemize}
 \end{frame}
+
+\begin{frame}{Modelo -- Formaciones}
+\begin{figure}[!th]
+ \includegraphics[scale=0.38]{images/composite}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Modelo -- Ejemplo formación compleja}
+\begin{itemize}
+ \item \href{videos/TestComplexFormation.mp4}{\color{blue}\underline{Video}} 
+\end{itemize}
+\end{frame}
+
 
 
 \section{Steerings}
@@ -88,6 +124,7 @@
 	\item Interfaz Behaviour.
 	\begin{itemize}[<+- | alert@+>]
   		\item Para tratar a todos los tipos de comportamientos de manera homogénea.
+  		\item Método \texttt{getSteering()}.
  	\end{itemize}
  	\item Behaviours no acelerados.
  	\begin{itemize}[<+- | alert@+>]
@@ -123,14 +160,22 @@
 \begin{frame}{Árbitros}
 \begin{itemize}[<+- | alert@+>]
 	\item Interfaz Arbitrator.
+	\begin{itemize}[<+- | alert@+>]
+  		\item Para tratar a todos los tipos de árbitros de manera homogénea.
+  		\item Método \texttt{getSteering(behaviours)}.
+ 	\end{itemize}
 	\item Lista de comportamientos de los personajes.
 	\begin{itemize}[<+- | alert@+>]
   		\item Mapa con clave Float y valor Behaviour.
+  		\item Ordenados de mayor a menor $\rightarrow$ Más importante primero.
  	\end{itemize}
 	
 	\item Árbitro por prioridad.
 	\begin{itemize}[<+- | alert@+>]
   		\item Para comportamientos acelerados y no acelerados.
+  		\item Ejecuta los comportamientos siguiendo su orden.
+  		\item Devuelve el Steering de un comportamiento si supera cierto valor \texttt{epsilon}.
+  		\item Si llega al final, devuelve el último de la lista.
  	\end{itemize}
 	\item Árbitro por mezcla. Comportamientos acelerados.
 	\item Árbitro por mezcla. Comportamientos no acelerados.
@@ -141,23 +186,41 @@
 \begin{frame}{Interacción parte Reactiva}
 \begin{itemize}[<+- | alert@+>]
 	\item Método \texttt{applyBehaviour()}.
+	\begin{itemize}[<+- | alert@+>]
+	 \item Si el personaje no pertenece a una formación, se invoca a su árbitro.
+	 \item Se llama al método \texttt{applySteering(steering)} con el Steering devuelto.
+	\end{itemize}
+
 	\item Método \texttt{applySteering(steering)}.
+	\begin{itemize}[<+- | alert@+>]
+	 \item Si el personaje no pertenece a una formación, se invoca al método \texttt{update(steering, time)}.
+	\end{itemize}
+
 	\item Método \texttt{update(steering, time)}.
+	\begin{itemize}[<+- | alert@+>]
+	 \item Se actualizan los parámetros del personaje en función del Steering.
+	\end{itemize}
+
 \end{itemize}
 \end{frame}
 
 \section{PathFinding}
 \begin{frame}{PathFinding}
 \begin{itemize}[<+- | alert@+>]
-	\item PathFinding Continuo.
+ 
+  \item PathFinding con algoritmo LRTA* y espacio de búsqueda minimal.
+  \item Distancias Ecluidea, Chebyshev y Manhattan.
+  
+  \item PathFinding Continuo.
+  \begin{itemize}[<+- | alert@+>]
+   \item Devuelve la \textbf{lista completa} de puntos desde el origen al destino.
+   \item Solo es necesario llamarlo una vez.
+  \end{itemize}
+
+  \item PathFinding Punto-A-Punto.
 	\begin{itemize}[<+- | alert@+>]
-  		\item Clase PathFinding.
-  		\item Algoritmo LRTA*.
- 	\end{itemize}
-	\item PathFinding Punto-A-Punto.
-	\begin{itemize}[<+- | alert@+>]
-  		\item Clase PathFinding.
-  		\item Algoritmo LRTA*.
+  		\item Va devolviendo \textbf{punto por punto}.
+  		\item Se debe llamar continuamente para obtener al punto al que ir.
  	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -167,10 +230,16 @@
 \begin{frame}{Clase Character}
 \begin{itemize}[<+- | alert@+>]
 	\item Nuevos atributos.
+	\begin{itemize}[<+- | alert@+>]
+  		\item Rol táctico.
+  		\item Vida (máxima y actual).
+  		\item Equipo.
+ 	\end{itemize}
 	\item Nuevos métodos.
 	\begin{itemize}[<+- | alert@+>]
   		\item \texttt{initializeTacticalRole(role)}.
   		\item \texttt{updateTacticalRole()}.
+  		\item \texttt{getVelocityFactorOfThisCharacter()} (se explica más adelante).
  	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -258,6 +327,10 @@
 	\item Cura.
 	\item Se han implementado como Behaviours para tratarlos de manera homogénea.
 	\item Ataque y Cura en las formaciones.
+	\begin{itemize}[<+- | alert@+>]
+	 \item El ancla es el que da las órdenes de ataque y cura a los integrantes.
+	\end{itemize}
+
 \end{itemize}
 \end{frame}
 
@@ -346,7 +419,22 @@
 \begin{frame}{Interacción con el usuario}
 \begin{itemize}[<+- | alert@+>]
 	\item Selección de personajes del mismo equipo.
+	\begin{itemize}[<+- | alert@+>]
+	 \item Cuando un personaje es seleccionado, se desactiva su rol.
+	 \item En el caso de las formaciones, solamente se ha de seleccionar cualquiera de los integrantes. 
+	\end{itemize}
+    
+    \item Liberación de los personajes seleccionados.
+    \begin{itemize}[<+- | alert@+>]
+	 \item Cuando un personaje es liberado, se activa su rol.
+	 \item En el caso de las formaciones, la liberación implica que la formación se deshaga.
+	\end{itemize}
+    
 	\item Realizar ciertos comportamientos.
+	\begin{itemize}[<+- | alert@+>]
+	 \item Todos los personajes seleccionados realizan el mismo comportamiento.
+	\end{itemize}
+    
 	\item Implementado siguiendo una máquina de estados.
 	\item La terminal muestra la información sobre lo que se puede hacer (y cómo).
 \end{itemize}
