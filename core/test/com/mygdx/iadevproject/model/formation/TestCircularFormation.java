@@ -20,6 +20,7 @@ import com.mygdx.iadevproject.model.Character;
 import com.mygdx.iadevproject.model.Obstacle;
 import com.mygdx.iadevproject.model.WorldObject;
 import com.mygdx.iadevproject.model.formation.CircularFormation;
+import com.mygdx.iadevproject.waypoints.Waypoints;
 
 public class TestCircularFormation extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -40,24 +41,21 @@ public class TestCircularFormation extends ApplicationAdapter {
 	
 	@Override
 	public void create() {
-		float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
-        // Constructs a new OrthographicCamera, using the given viewport width and height
-        // Height is multiplied by aspect ratio.
-        camera = new OrthographicCamera(w, h);
-
-        IADeVProject.PRINT_PATH_BEHAVIOUR = true;
-        
-        IADeVProject.font = new BitmapFont();
-        IADeVProject.renderer = new ShapeRenderer();
-        IADeVProject.batch = new SpriteBatch();
-        font = IADeVProject.font;
-        renderer = IADeVProject.renderer;
-        batch = IADeVProject.batch;
-        
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-        camera.update();
+		IADeVProject iadevproject = new IADeVProject();
+		iadevproject.create();
+		
+		IADeVProject.PRINT_PATH_BEHAVIOUR = true;
+		// Inicializamos las estructuras para el manejo de los waypoints de los puentes.
+        Waypoints.initializeBridgesWaypoints();
+		
+		camera = IADeVProject.camera;
+		font = IADeVProject.font;
+		batch = IADeVProject.batch;
+		renderer = IADeVProject.renderer;
+		
+		// Limpiamos los objetos del IADeVProject para utilizar solamnte los que se crean en esta clase
+		// y le añadimos los obstáculos del mundo.
+		IADeVProject.worldObjects.clear();
         
         // Creamos 'fakeMouse'
         fakeMouse = new Obstacle();
