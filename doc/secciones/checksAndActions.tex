@@ -1,9 +1,0 @@
-%--------------------------------------------------------------------
-\medskip
-\section{Acciones y comprobaciones}
-Debido a que la implementación de la parte táctica de los personajes debe ser lo más expresiva posible, decidimos crear una serie de métodos que nos sirvieran de puente con la parte reactiva. De esta manera, por ejemplo, haciendo uso del método \texttt{notCollide()} un personaje ya tiene los comportamientos necesarios para que evitar las colisiones, independientemente de si está usando un comportamiento u otro. Ejemplos de algunos métodos implementados son: atacar a un enemigo, atacar al enemigo más cercano, curarme, ir hacia un determinado punto (aplicando un pathfinding), etc. Todos estos métodos (y más), nosotros los hemos llamado Acciones y se encuentran dentro del paquete \texttt{com.mygdx.iadevproject.checksAndActions} en la clase \texttt{Actions}. \\
-
-De igual manera que para obtener los comportamientos correspondientes a una determinada acción, también decidimos crear una serie de métodos que nos sirvieran de puente para la obtención de información por parte de un personaje. Por ejemplo, el método \texttt{amINearFromMyBase()}
-comprueba si el personaje se encuentra cerca de su base. Ejemplos de algunos de estos métodos son: comprobar si estoy en la base enemiga, si un personaje es del equipo contrario, si un personaje ha muerto, si ha recuperado toda su vida, etc. Todos estos métodos (y más), nosotros los hemos llamado Comprobaciones y se encuentran dentro del mismo paquete anterior en la clase \texttt{Checks}. \\
-
-En esta documentación no se exponen todas las comprobaciones y todos las acciones implementadas (la gran mayoría se muestran en los diagramas de los roles específicos). Si se quiere saber más sobre ellos, se encuentran documentados en el JavaDoc generado del proyecto.
