@@ -6,3 +6,4 @@ The developers and owners of this engine are Antonio López Martinez-Carrasco an
 
 - LinkedIn of Antonio López Martínez-Carrasco: https://www.linkedin.com/in/antonio-lópez-martínez-carrasco-9b3866112 {:target="_blank"}
 - LinkedIn of Jose María Sánchez Salas: https://www.linkedin.com/in/josé-maría-sánchez-salas-019301125 {:target="_blank"}
+- <a href="http://example.com/" target="_blank">example</a>
